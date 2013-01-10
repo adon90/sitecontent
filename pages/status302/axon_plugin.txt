@@ -1,0 +1,49 @@
+#Axon / Skyspark plugin for the Camembert IDE#
+
+WARNING: **Coming soon!**
+
+
+This is a plugin for our Open Source and Free [[camembert|Camembert IDE]].
+
+It provides many features that are specific to Skyspark and Axon development.
+
+It provides a much more productive development environment in comparison to using the web based editor of Skyspark, saving developers time and making easier to safeguard your project and leverage standard developer tools such as source control and more.
+
+More Info:
+  - [[#Screenshots]]
+  - [[#Features]]
+  - [[#Installation]] (& Free trial)
+  - [[#Purchase]]
+
+####Screenshots####
+Editing an Axon project (with sync to Skyspark).
+Note the axon documentation help pane on the right side and the "eval" field used to run remote Axon queries.
+
+{{cam_axon1.png}} 
+
+------
+Example of running an Axon/Folio query and looking at the results inline:
+
+{{cam_axon2.png}}  
+
+------
+
+####Features####
+Here are some of the main features:
+  - Download a project code(functions) from Skyspark into a local project.
+  - Makes it very easy to use any developer tools such as Source control on the project, helps safekeeping your work.
+  - Edit said code locally, efficiently. No need to rely on a potentially slow remote server.
+  - Manual AND/OR fully automated synchronization of the project from and to the Skyspark server,  so your changes get automatically pulled/pushed both ways.
+  - Built-in complete Fantom & Axon libraries documentation, that includes Fantom Axon functions, trio functions(with sources) and all tags.
+  - Full search of said documentation, finds all matching functions and tags on the fly.
+  - Eval features to run Axon/Folio queries against the server.
+  - Eval queries results (grids) can be looked at directly in the IDE and you can view record details including cut & pasting them.
+  - Synchronization log.
+  - And more ...
+
+####Installation####
+TIP: Coming soon
+
+####Purchase####
+TIP: Coming soon
+

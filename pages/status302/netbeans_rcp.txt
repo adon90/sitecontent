@@ -1,0 +1,9 @@
+#Netbeans RCP Platform Consulting and Development#
+
+We have experience with the Netbeans RCP platform including developing a [[http://fantomide.colar.net/|full feature plugin]] for the Fantom programming language from scratch.
+
+That included using the newer CSL API's and most of the editor / language API's.
+
+That plugin was released as a Free, Open source project and the sources can be accessed here:
+
+[[https://bitbucket.org/tcolar/fantomide]]

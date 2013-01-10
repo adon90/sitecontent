@@ -1,0 +1,17 @@
+#Blog#
+####12/11/12 : Announcing Camembert####
+We have released the first version of [[Camembert]], A lightweight IDE for the [[http://www.fantom.org/|Fantom]] programming language.
+
+This is a Free and Open source project.
+
+####12/26/12 : Skyspark / Fantom Mac & Linux startup scripts####
+Those are generic init scripts for starting Skyspark or any Fantom server process.
+
+They also let you run the server as a non-root user, which is safer, but note that if you want to run on port 80 you will still have to be root but you can proxy the Skyspark/Fantom server behind Apache or [[http://wiki.nginx.org/HttpProxyModule|Nginx]] to get around this.
+
+The scripts can easily be customized, juts edit the few variables at the top of the sripts.
+
+They have been tested on Debian based distros (Debian, Ubuntu, Mint) and work on Redhat, Centos and Suse as well.
+
+See the **Skyspark script** [[https://bitbucket.org/tcolar/fantomutils/src/tip/skyspark.sh|here]]
+And a more generic **Fantom server script** [[https://bitbucket.org/tcolar/fantomutils/src/eb2100d87ba1/initscript.sh?at=default|here]]
