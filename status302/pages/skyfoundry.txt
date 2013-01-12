@@ -1,0 +1,22 @@
+======SkyFoundry & Fantom Consulting and Development======
+
+We have been active in the Fantom Community since early 2008 and developed the first full featured [[http://fantomide.colar.net/ | IDE for Fantom]] and also the [[camembert|Camembert Fantom/Axon IDE]] along with many other open source Fantom projects.
+
+That's over 4 years of heavy Fantom development experience.
+
+We have also worked on several Skyfoundry / Skyspark projects.
+
+That includes work on [[http://bassg.com/energy-analytics/project-builder-plus.html|BassG ProjectBuilder+]] , an application written in the Fantom language that greatly helps managing Skyspark projects and records.
+
+We also worked on software for other clients including writing Axon functions, Sparks as well as some Skyspark extensions and connectors.
+
+We have also built standalone software communicating with a Skyspark instance over the REST API's as well as direct communication with Skyspark & Obix servers.
+
+
+Do not hesitate to [[contact]] us for your next Skyfoundry, Skyspark, Fantom or Axon project development and consulting needs. 
+
+-----
+
+{{ axon.png }}
+
+ 

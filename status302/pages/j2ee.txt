@@ -1,0 +1,20 @@
+======J2EE / Java Consulting and Development======
+
+We have been working with Java for a very long time, starting in 1997.
+
+That includes lead development on [[http://www.qarbon.com/presentation-software/viewletbuilder/ | ViewletBuilder]](formerly Leelou) starting in 1998 and attending the early Javaone events.
+
+ViewletBuilder made heavy use of applets(later flash) and was one of the first successful Java desktop application.
+The early version used AWT and later SWT.
+
+We also worked on many server side products as well, including in-house CRM type tools and the like. And ran all the company sites on java based platforms using Tomcat, Jboss, velocity, JDBC, Servlets, JSP and more.
+
+Starting in 2002 we conceived and developed [[http://www.qarbon.com/presentation-software/viewletcentral/ | viewletcentral]] a content management solution integrated with ViewletBuilder(client / server). That involved a full J2EE server & application built atop tomcat using velocity, SOAP and more. 
+
+From 2005 to 2011 we worked on heavy customization of E-commerce solutions built on the SAP ISA/CRM platform for [[https://www.pacificcoast.com/|PacificCoast.com]]. That included using the whole array of SAP Java solutions for E-Commerce: Internet sales(ISA), Pricing engine(IPC), Developer infrastructure(NWDI and custom), CRM and overall work on the SAP Netweaver patform, including some installation and administration.
+
+We also developed a Netbeans plugin for the [[http://www.fantom.org | Fantom]] programming language, which has quiet a large [[https://bitbucket.org/tcolar/fantomide | code base]].
+
+We did some work for [[http://www.teachscape.com/|Teachscape]] starting in 2011, including developing using many  modern Java frameworks and tools such as Guice, Neo4J, Maven, JQuery, MongoDB and more.
+
+So when it comes to Java we have a very long and broad experience from high tech startup projects to large scale enterprise software, both cient and server side.

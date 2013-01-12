@@ -1,0 +1,17 @@
+===Software consulting:===
+Consulting and development:
+
+  - [[skyfoundry|Fantom & Skyfoundry]]
+  - [[netbeans_rcp|Netbeans RCP]]
+  - [[j2ee|Java / J2EE]]
+  - [[webdev|Web & Mobile]] 
+  - [[sap|SAP Development (Java / CRM)]]
+  - [[lamp|Linux/Apache/NoSQL]] and more
+
+===Products:===
+  - [[Camembert]] Fantom IDE
+  - [[axon_plugin | Skyspark / Axon IDE plugin]]
+
+===Latest Blog Entries:===
+  - [[blog#12_11_12_announcing_camembert | Announcing Camembert IDE]]
+  - [[blog#12_26_12_skyspark_fantom_mac_linux_startup_scripts | Skyspark / Fantom init scripts]]

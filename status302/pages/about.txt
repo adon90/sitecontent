@@ -1,0 +1,21 @@
+======Status302 - About us======
+
+Status 302 offers software development consulting (design and implementation) 
+
+We have many years of experience writing software small and large.
+
+We can understand a project end to end with many years of experience with a variety of programming languages but also a good base knowledge of electronics, automation, mechanics and the industrial sciences as a whole, helping us understand the big picture.
+
+We also have experience in system administration, database administration and networking helping us further in being able to deal with a project from beginning to end ourselves if need be.
+
+We are located in the Seattle / Tacoma area (WA) however most our work is done remotely and we have no interest into relocating, in particular for a short assignment.
+
+Some of our areas of expertise are Fantom and SkyFoundry, the Netbeans RCP platform, J2EE developent as whole as well as modern web frameworks : HTML5, JavaScript libraries and more).
+We also have 7 years of experience implementing top notch E-commerce solutions on the SAP Netweaver platform.
+
+We strongly believe that the best solution is the simplest, but well thought out, solution. A simple solution is always easier to scale and maintain than a needlessly complex one.
+
+See the [[home | Home Page]] for more details and our services.
+
+**We speak fluently both English and French**
+
