@@ -41,11 +41,14 @@
       </table>
       </center>
   </div>
-  <div><span style="background-color:#cc99ff"><b>I provide <font color="#993333">consulting and development services</font>. See <a href='http://www.status302.com/'>Status302.com</a> for more info.</b></span></div>
+
 
   <div class="content">
-      <div id="menuButton">
-    <jot:var value="getPageContent('menu')"/>
+  <div style="padding-bottom:10px"><span style="background-color:#cc99ff"><b>I provide <font color="#993333">consulting and development services</font>. See <a href='http://www.status302.com/'>Status302.com</a> for more info.</b></span></div>
+     <div id="menuButton">
+{{#import}}
+menu
+{{/import}}
       </div>
       <div class="nb_coil">
     <div style="float:left;margin-left:80px;margin-top:10px;">
@@ -59,28 +62,10 @@
 <!-- End addThis -->
 {{/addThisEnabled}}
     </div>
-    <!--<div style="float:right;width:200px;text-align: right">
-        <jot:if eval=" ! loggedUser">
-      <a href="${loginLink}" class="iconLink" onMouseOver="buttonHelp('Login');" onMouseOut="buttonHelp('');"><img src="images/buttons/login.png" width="24" height="24" border="0"/></a>
-        </jot:if>
-        <jot:if eval="canSetup">
-      <a href="setup.do" class="iconLink" onMouseOver="buttonHelp('Global settings');" onMouseOut="buttonHelp('');"><img src="images/buttons/setup.png" width="24" height="24" border="0"/></a>
-        </jot:if>
-        <jot:if eval="loggedUser">
-      <a href="${logoutLink}" class="iconLink" onMouseOver="buttonHelp('Logout');" onMouseOut="buttonHelp('');"><img src="images/buttons/logout.png" width="24" height="24" border="0"/></a>
-        </jot:if>
-        <jot:if eval="canEdit">
-      <a href="${editPageLink}" class="iconLink" onMouseOver="buttonHelp('Edit This Page');" onMouseOut="buttonHelp('');"><img src="images/buttons/edit.png" width="24" height="24" border="0"/></a>
-      <a href="${optionsLink}" class="iconLink" onMouseOver="buttonHelp('Page Options');" onMouseOut="buttonHelp('');"><img src="images/buttons/options.png" width="24" height="24" border="0"/></a>
-        </jot:if>
-        <a href="<jot:var value="printLink"/>" target="_blank" class="iconLink" onMouseOver="buttonHelp('Print This Page');" onMouseOut="buttonHelp('');"><img src="images/buttons/printer.png" width="24" height="24" border="0"/></a>
-        <br/>
-        <span id="buttonHelpSpan" class="buttonHelpSpan">&nbsp;</span>
-        &nbsp;
-    </div>-->
+
     <div class="page">
         <div class="page_text">
-        {{ & content}}
+{{ & content}}
       <br/><br/>
       <hr/>
       <div class="toplink">
@@ -124,43 +109,6 @@
       </div>
   </div>
   <!-- end content block -->
-
-  <!-- start sidebar -->
-
-  <!--<div class="sidebar">
-      <div class="sitenav_item">
-    <div class="pager">
-        <jot:if eval="searchEnabled">
-      <form target="_blank" id="searchForm" action="search.do" accept-charset="utf-8" class="search" >
-          <input type="text" name="text" class="searchBox" value="Search form"/>
-      </form>
-      <a href="javascript:document.getElementById('searchForm').submit();" style="text-decoration:none;border:0px">
-          <img src="images/blank.png" width="170px" height="70px" border="0" alt=""/>
-      </a>
-        </jot:if>
-    </div>
-      </div>
-
-      <div class="sitenav_item">
-    <div class="toc">
-        <div class="toc_title">
-            Table Of Contents
-        </div>
-
-        <div class="toc_content">
-      <jot:loop over="pageInfos.toc" as="tocEntry">
-          <jot:loop from="0" to="tocEntry.level">
-        &nbsp;
-          </jot:loop>
-              - <a href='#<jot:var value="tocEntry.link"/>'><jot:var value="tocEntry.text"/></a><br/>
-      </jot:loop>
-        </div>
-    </div>
-      </div>
-
-  </div>-->
-
-  <!-- end sidebar -->
 
 {{ & googleAnalytics}}
 

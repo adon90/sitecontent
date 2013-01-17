@@ -1,130 +1,42 @@
+<!-- Very Minimal (but ugly) example template -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{title}}</title>
+
+      <!-- Note the variables: title, genratedDate. They will be filled in by the wiki -->
+      <title>{{title}}</title>
+      <meta name="date" content='{{generatedDate}}' />
+
+      <!-- Note that all template resources should be fetched like this (tpl/*)-->
+      <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
+
+      <!-- You will probably want to include your extra custom css here -->
+      <link rel='stylesheet' type='text/css' href='tpl/template.css' />
 
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <meta name="robots" content="index,follow" />
-      <meta name="date" content='{{generatedDate}}' />
-      <meta name="keywords" content='{{title}}, {{keywords}}'/>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-      <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
-      <link rel='stylesheet' type='text/css' href='tpl/css/bootstrap.min.css' />
-      <link rel="stylesheet" type='text/css' href='tpl/css/font-awesome.css' />
-      <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
-      <link rel='stylesheet' type='text/css' href='tpl/template.css' />
-      <script type="text/javascript" src="tpl/template.js"></script>
   </head>
-
   <body>
-  <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <a class="brand" href="#">Status302</a>
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li {{#ap}}home{{/ap}}><a href="home"><i class="icon-home"></i>Home</a></li>
-                        <li {{#ap}}about{{/ap}}><a href="about"><i class="icon-info-sign"></i>About</a></li>
-                        <li {{#ap}}portfolio{{/ap}}><a href="portfolio"><i class="icon-folder-open"></i>Portfolio</a></li>
-                        <li {{#ap}}products{{/ap}}><a href="products"><i class="icon-shopping-cart"></i>Products</a></li>
-                        <li {{#ap}}blog{{/ap}}><a href="blog"><i class="icon-file"></i>Blog</a></li>
-                        <li {{#ap}}contact{{/ap}}><a href="contact"><i class="icon-envelope"></i>Contact</a></li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
-                <!--<form class="navbar-search pull-right" action="">
-                <i class="icon-search"></i>
-                <input type="text" class="search-query span2" placeholder="Search">
-                </form>-->
-                </div>
-        </div>
+  <div>
+    <div class="top">
+      Links : <!-- Menubar example -->
+      <!-- #ap will call a wiki method that will add "class='active'" if the path matches the arg-->
+      <span {{#ap}}page1{{/ap}}><a href="page1">Page1(.md)</a></span>
+      <span {{#ap}}page2{{/ap}}><a href="page2">Page2(.txt)</a></span>
+      <span {{#ap}}page3{{/ap}}><a href="page3">Page3(.html)</a></span>
     </div>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-
-{{#import}}
-  bloglist
-{{/import}}
-                    </ul>
-                </div>
-
-{{#addThisEnabled}}
-<!-- Begin addThis -->
-<div class="addthis_toolbox addthis_pill_combo">
-  <a class="addthis_button_tweet" tw:count="horizontal"></a>
-  <a class="addthis_button_facebook_like"></a>
-  <a class="addthis_button_compact">Share</a>
-</div>
-<!-- End addThis -->
-{{/addThisEnabled}}
-
-            </div>
-            <div class="span9">
-                <div class="row-fluid">
-
-<!-- content -->
-{{ & content }}
-<!-- End content -->
-
-{{#hasComments}}
-<!-- Comments -->
-                <div class="well comments">
-                <h2> Comments </h2>
-                    <a class="button" href='addComment.do'>Add a new Comment</a>
-                <hr/>
-{{#comments}}
-                <div>
-                  <b>Post time:</b> {{date}} <b>By:</b> {{author}}<br/>
-                  <b>Title: {{title}}</b><br/>
-                  <pre>{{text}}</pre>
-                </div>
-                <hr/>
-{{/comments}}
-                <!-- Todo: Proper Ajax pagination of comments -->
-{{#moreComments}}
-                <a href="?allComments=1">View {{commentsLeft}} older comments</a>
-                <hr/>
-{{/moreComments}}
-                </div>
-<!-- End comments -->
-{{/hasComments}}
-
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <footer>
-            <p>{{ & footer}}</p>
-        </footer>
-
+    <div class="nav">
+      <!-- Example of importing a subpage-->
+      {{#import}}
+        sub
+      {{/import}}
     </div>
 
-<!-- scripts -->
-{{ & googleAnalytics}}
-
-{{#addThisEnabled}}
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username={{addThisId}}"></script>
-{{/addThisEnabled}}
-
+    <div class="content">
+     <!-- The page content, Note the use of '&' so the content does not get HTML escaped-->
+      {{ & content }}
+    </div>
+  </div>
   </body>
 </html>
 
-<!--
-Thanks to:
-  - Twitter Bootstrap - http://twitter.github.com/bootstrap/
-  - Font Awesome - http://fortawesome.github.com/Font-Awesome
--->

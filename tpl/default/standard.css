@@ -1,0 +1,43 @@
+/*
+Standard stylesheet for wiki items
+You should probably leave this aone and override what you want in template.css
+or ther CSS files
+*/
+
+.fixme{border:2px solid orange ;background-color:transparent;
+  background-image:url(/tpl/img/fixme.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.deleteme{border:2px solid orange ;background-color:transparent;
+  background-image:url(/tpl/img/delete.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.warning{border:2px solid red ;background-color:transparent;
+  background-image:url(/tpl/img/warning.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.note{border:2px solid green ;background-color:transparent;
+  background-image:url(/tpl/img/note.jpg);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.tip{border:2px solid teal ;background-color:transparent;
+  background-image:url(/tpl/img/tip.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.box{background-color: transparent;border-width:0px; border-style: solid;
+  padding:3px;}
+
+.code{overflow:auto;font-weight:bold;color:#e1fa10;background-color:#eeeeff;
+  border-width:1px;border-style: dashed;border-color: #0000ff
+  padding:4px;margin:3px;color:#000055}
+
+.code_title{background-color:#ddddff;color:#661111;font-weight:bold;}
+
+.pre{overflow-x: auto;overflow-y: auto; margin: 1px; padding: 1px}
+pre{margin-top:1px;padding-top:1px;padding-bottom:1px;margin-bottom:1px}
+
+.addthis_toolbox.addthis_pill_combo a {
+    float: left; border-bottom:0px;
+}
+.addthis_toolbox.addthis_pill_combo a.addthis_button_tweet {
+    margin-top: -2px;
+}
+.addthis_button_compact .at15t_compact {
+    margin-right: 4px;
+    float: left;
+}

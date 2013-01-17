@@ -4,7 +4,7 @@ This only contains addons/overrides to the default jotwiki.css
 
 /* jotwiki ovverides */
 body,html{font-family: "Verdana, Arial, Helvetica, sans-serif;",Arial,sans-serif; font-size: 14px; color:#111111; background-image:url('images/slate.png');}
-.content{clear:both;width: 80%;float:left;color: #111111;background-color: transparent;margin-bottom:20px}
+.content{clear:both;width: 99%;float:left;color: #111111;background-color: transparent;margin-bottom:20px}
 .nb_coil{background-image:url('images/nb_coil.png');background-repeat:repeat-y;}
 .page{margin-left:50px; padding-right: 30px;padding-top: 20px;padding-bottom: 20px;background-color: #f0f1e5;min-height:600px}
 .page_text{}
