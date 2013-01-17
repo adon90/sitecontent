@@ -1,0 +1,4 @@
+{"author":"Guest (Guest)",
+"title":"The trick -Djmx.invoke.getters=true worked",
+"text":"I have solution manager 7.1 with sapjvm6 and Visual Administrator stopped working after upgrade from SAPJVM4\n\nI used, -Djmx.invoke.getters=true, in go.bat , config tool instance, server and dispatcher and it all worked.\n\nThanks a lot",
+"ts":"2012-04-09T04:57:00-07:00 Los_Angeles"}

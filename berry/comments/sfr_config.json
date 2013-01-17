@@ -1,0 +1,20 @@
+{"author":"kyle (Guest)",
+"title":"No RIM device found",
+"text":"Ubuntu 10.04, kernel 2.6.32-41, bbtether 0.3q, OEM BB cable\n\nBlackberry Bold 9700\n\nWill run bbtether with args: ['fido']\nStarting Modem thread\n--------------------------------\nBBTether 0.3q\nThibaut Colar - 2009\nMore infos: http://wiki.colar.net/bbtether\nUse '-h' flag for more informations : 'python bbtether.py -h'.\n--------------------------------\n\nLooking for USB devices:\n\tBus 006 Device 001: ID 1d6b:0001\n\tBus 005 Device 001: ID 1d6b:0001\n\tBus 004 Device 001: ID 1d6b:0001\n\tBus 003 Device 001: ID 1d6b:0001\n\tBus 002 Device 001: ID 1d6b:0001\n\tBus 001 Device 003: ID 04f2:b008\n\tBus 001 Device 002: ID 0bda:8197\n\tBus 001 Device 001: ID 1d6b:0002\nUSB Device lookup finished\n\nNo RIM device found\nBBTether Thread completed.\n\n\nTrying to use bbtether on Toshiba A10 laptop. Tried all 4 USB ports, BB charges but is not detected.\n\nTried taking out battery and rebooting BB.\n\nI am pretty sure that I have all the required packages installed unless there is something I am missing. I installed all the packages required in the install instructions. \n\nVery frustrated, spent 3 hours reading through other posting found on google search. Seems to work out hassle free for others.\n\nNothing in lsusb or dmesg output.\n\nIf I can't get it to work, may purchase bluetooth dongle and use NetworkManager applet in Ubuntu which is also reported to work well for tethering.",
+"ts":"2012-06-22T19:04:00-07:00 Los_Angeles"}
+{"author":"Magesnz (Guest)",
+"title":"Getting a Blackberry Pearl 3G to work",
+"text":"hey all, i just bought a blackberry pearl 3g, on bell mobility in canada, wondering if anyone made it work yet, thanks in advance\n",
+"ts":"2010-07-20T21:31:00-07:00 Los_Angeles"}
+{"author":"Magesnz (Guest)",
+"title":"Need Support for Blackberry Pearl 3G",
+"text":"hey all, i just bought a blackberry pearl 3g, on bell mobility in canada, wondering if anyone made it work yet, thanks in advance\n\n",
+"ts":"2010-07-20T21:30:00-07:00 Los_Angeles"}
+{"author":"Gil Vidals (Guest)",
+"title":"tmobile switch from 2G to 3G on the fly",
+"text":"I was curious to see what would happen if I raised the speed to 3G in the middle of a 2G connection. And guess what? It worked. After connecting at 2G, I switch to 3G and run another speed test. The difference is huge; HOWEVER, it seems as though Tmobile is detecting my 3G connection and then cut me off! \n\nTmobile's doesn't allow 3G speeds for tethering. Personally, I think it is a policy decision to force users to buy into their network card that you have to pay $59 per month.\n\nDoes anyone have a way to keep the speed at 3G and somehow fool Tmobile into thinking it's a 2G connection???\n\nThanks,\nGil@Vidals.net\n",
+"ts":"2009-11-25T22:28:00-08:00 Los_Angeles"}
+{"author":"Lager_Monster (Guest)",
+"title":"Ubuntu 9.10 - Switzerland - Orange CH",
+"text":"Thanks Berry4all for making this possible.\nChange bbtether/conf/orange-chat to:\n\nTIMEOUT 10\nABORT 'BUSY'\nABORT 'NO ANSWER'\nABORT 'ERROR'\nSAY 'Starting GPRS connect script\\n'\n\n'' 'BBT_OS'\n'' 'ATZ'\nSAY 'Setting APN\\n'\nOK 'AT+CGDCONT=1,\"IP\",\"internet\"'\nABORT 'NO CARRIER'\nSAY 'Dialing...\\n'\nOK 'ATD*99***1#'\nCONNECT\n# Without ~p it does NOT continue passed Connect !!\n~p\n\n",
+"ts":"2009-11-05T09:36:00-08:00 Los_Angeles"}

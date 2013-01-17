@@ -1,0 +1,186 @@
+======Daily Stats with AWStats======
+Awstats is a nice software for stats.
+This page explains setting it up and adding a custom page to be able to see not only monthly stats but also daily stats.
+
+====Installing awstats====
+<code | Installing awstats>
+sudo apt-get install awstats
+cd /usr/share/doc/awstats/examples/
+cp apache.conf /etc/apache2/sites-available/awstats.conf
+ln -s /etc/apache2/sites-available/awstats.conf /etc/apache2/sites-enabled/
+sudo /etc/init.d/apache2 restart
+</code>
+
+Then edit /etc/awstats/awstats.conf
+and configure the basic settings, i recommanded the following settings to start with
+<code>
+# unless you have HUGE log files, yearly stats are nice.
+AllowFullYearView=3
+# start testing with DNS off, because the first time you run with it it will take ages, enable it later.
+DNSLookup=0
+</code>
+
+====Running the report====
+First we can test awstats by running a report:
+<code | awstats>
+/usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.conf
+</code>
+
+Then you can go to [[http://yourhost/cgi-bin/awstats.pl]] and see your nice report.
+
+====Custom daily reports====
+I like to see daily stats, so i had to customize/add a few features to make that usable.
+First we need to tell awstats to create those daily reports
+
+===Creating a cron job===
+First we create the little script that will run our reports:
+<code | vi /root/updatestats.sh>
+#!/bin/sh
+/usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.conf -DatabaseBreak=day
+/usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.conf -DatabaseBreak=month
+/usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.conf -DatabaseBreak=year
+</code>
+
+''chmod +x /root/updatestats.sh''
+
+Then make this script run once a day or whatever in your cron
+<code | crontab -e>
+0 2 * * * /root/updatestats.sh &
+</code>
+
+===Custom Daily links page===
+Now we have Awstats create our daily data, unfortunately awstats doesn not give you links to it (you have to manually craft the URL !)
+
+So i decided to make a small page with links for the following:
+  * current day
+  * previous day
+  * current month
+  * previous month
+  * current year
+  * last year
+  * Calendar view, of the whole current month (with daily links)
+  * Calendar view, of the whole Previous month (with daily links)
+
+Create index.cgi in the same folder as awstats.pl
+
+<code | vi /usr/lib/cgi-bin/index.cgi>
+#!/usr/bin/perl
+
+#### Thibaut Colar 07/2007 ####
+
+# The awstats config file name
+$CONFIG="awstats";
+
+### Begin program ###
+
+@now=localtime(time);
+$today_day=$now[3];
+$today_month=$now[4]+1;
+$today_year=$now[5]+1900;
+
+@yesterday=localtime(time-3600*24);
+$ytd_day=$yesterday[3];
+$ytd_month=$yesterday[4]+1;
+$ytd_year=$yesterday[5]+1900;
+
+$lastmonth=$today_month-1;
+$lastmonth_year=$today_year;
+if($lastmonth<1)
+{
+	$lastmonth=1;
+	$lastmonth_year=$today_year-1;
+}
+$lastyear=$today_year-1;
+
+print "Content-type: text/html\n\n";
+print "<html><body>\n";
+print "<a href='".getLink($today_year,$today_month,$today_day)."'>Today</a> ";
+print "<a href='".getLink($ytd_year,$ytd_month,$ytd_day)."'>Yesterday</a> ";
+print "<a href='".getLink($today_year,$today_month)."'>ThisMonth</a> ";
+print "<a href='".getLink($lastmonth_year,$lastmonth)."'>LastMonth</a> ";
+print "<a href='".getLink($today_year)."'>ThisYear</a> ";
+print "<a href='".getLink($lastyear)."'>LastYear</a> ";
+print "\n<hr/>\n";
+
+printCal($lastmonth_year, $lastmonth);
+print "\n<br>\n";
+printCal($today_year, $today_month);
+
+print "\n<hr/></body></html>\n";
+
+
+##### Methods ######
+
+sub getLink
+{
+	my($year, $month, $day)=@_;
+	$query="";
+	if($day)
+	{
+		$query="DatabaseBreak=day&day=${day}&month=${month}&year=${year}";
+	}	
+	elsif($month)
+	{
+		$query="month=${month}&year=${year}";
+	}	
+	elsif($year)
+	{
+		$query="year=${year}&month=all";
+	}	
+	return "awstats.pl?config=${CONFIG}&$query";
+}
+
+sub printCal
+{
+my($y, $m)=@_;
+open(CAL, "cal $m $y |");
+@days = <CAL>;
+close(CAL);
+
+$month = $days[0]; 
+$month=~ s/\s\s\s*//g;
+$mbg="";
+if($m==$today_month && $y==$today_year)
+{
+	$mbg="bgcolor='#ffaaaa'";
+}
+print "<table border=1><tr><td colspan=7 $mbg><a href='".getLink($y, $m)."'>$month</a></td></tr><tr>\n";
+foreach $dy (split(/ /, $days[1])) 
+{
+	print "<td>$dy</td>";
+}
+print "</tr>\n";
+shift(@days);
+shift(@days);
+foreach $line (@days)
+{
+	chomp $line;
+	$line =~ s/^\s+//;
+	$line =~ s/\s+$//;
+	print "<tr>";
+	foreach	$d (split(/\s+/, $line))
+	{
+		$bg="";
+		if($d==$today_day && $m==$today_month && $y==$today_year)
+		{
+			$bg="bgcolor='#ffaaaa'";
+		}
+		print "<td $bg><a href='".getLink($y, $m, $d)."'>$d</a></td>";
+	}
+	print"</tr>\n";
+}
+print "</table>\n";
+}
+</code>
+
+WARNING: you might have to change $CONFIG="awstats"; to whatever you called your awstats config file, if not "awstats.conf"
+
+
+Then save it and set the permissions properly.
+Ex: ''chmod 755 index.cgi'' ''chown www-data index.cgi''
+
+You can now go to [[http://yourhost/cgi-bin/awstats.pl]] and have the daily stats links.
+
+====Links====
+[[http://www.antezeta.com/awstats.html]]
+[[http://blog.katipo.co.nz/?p=34]]

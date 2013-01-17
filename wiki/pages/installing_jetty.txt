@@ -1,0 +1,48 @@
+======Installing Jetty======
+While there might be an installer/package for your operating system, it's just as simple to install jetty manually.
+It is very lightweight and just needs to be expanded somewhere and is ready to run.
+
+NOTE: They have Debian and RPM packages available as well, so you can use that if it applies to your OS.
+[[http://www.mortbay.org/]]
+
+
+=====Manual install=====
+  * **Download Jetty (Latest stable) from:**
+[[http://www.mortbay.org/]]
+  * **Extract the Jetty archive wherever you want to install it (Ex: in /opt/ or c:\)**
+
+You can then start/stop jetty like this
+/opt/bin/jetty start
+/opt/bin/jetty stop
+
+=====Jetty Configuration=====
+The standard configuration is just fine, and will run jetty on port 8080.
+If you want to change that, edit /opt/jetty/etc/jetty.xml and change 8080 for another port.
+
+=====Running as a service=====
+If you want jetty to automatically run when you start your OS, you will need a "service" setup:
+
+NOTE: If you used the .deb or .rpm jetty packages, you should already have /etc/init.d/jetty and are good to go.
+
+
+On windows, you will want to use the Jetty Win32Wrapper, see:
+[[http://docs.codehaus.org/display/JETTY/Win32Wrapper]]
+
+On other unixes, you can add this script(or similar) to your service folder (ex: /etc/init.d:)
+<code | /etc/init.d/jetty>
+#! /bin/sh
+
+case "$1" in
+       start)
+               cd /opt/jetty
+               java -Xmx256m -Xms256m -jar start.jar etc/jetty.xml &
+               echo $! > /var/run/jetty.pid
+                ;;
+       stop)
+                pid=`cat /var/run/jetty.pid`
+                kill $pid
+               ;;
+esac
+exit 0
+</code>
+

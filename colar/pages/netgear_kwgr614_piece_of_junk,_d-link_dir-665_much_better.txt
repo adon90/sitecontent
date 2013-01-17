@@ -1,0 +1,93 @@
+======Netgear KWGR614 Piece of junk, D-Link DIR-655 much better======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+Well i have had bad experience with wireless routers in general, it's hard to find one that's reliable and stable and ever harder to find open with decent management software (interface) and that can work with multiple OS.
+I have been using a DL-514 for 2-3 years, it's never been great, had to restart the thing at least once a day or the connection just got slower and slower, also every once in a while it would loose all  settings (including security) and go back to factory settings.
+
+So anyway i decided it was time to move on from that thing.
+
+So i went to Fry's and picked up the Netgear KWGR614
+
+===Netgear KWGR614===
+
+This piece of junk:
+[[http://www.netgear.com/Products/RoutersandGateways/GWirelessRouters/KWGR614.aspx]]
+
+I picked that one especially because it says "open source driver for the linux Hobbyist", i figured that meant it would work well with Linux obviously.
+Boy was i wrong.
+
+First problem, to setup the box you go to 192.168.1.1,though they try to give it a cute name like "www.routerlogin.net" which doesn't work oftentimes. 
+Anyway you go there and right of the bat you are asked if you want to use the wizzard or not, you click either ... nothing happens, after further research i found it uses broken javascript and doesn't work in FF, Safari or any other linux browser i tried.
+After research you will find on their site it says "for Internet explorer only" ... great for something that says "for the linux Hobbyist" .. assholes !
+
+After looking at the source i was able to bypass the question by going straight to: 
+http://192.168.1.1/basicsetting.htm and set the thing.
+
+After restarting it, it came forcing me to that broken wizzard page anyhow, until it decided it was done after like 8 restarts ... Piece of crap !
+
+Anyway even after it was setup, the thing just don't work any good, it's slow as hell, disconnects a lot, dns stops working after a few hours and box has to be restarted, my wife was mad because the connection was just plain terrible, even with no security/encryption it still sucked ass.
+
+Bottom line: That box completely sucks and the web interface is TERRIBLE, it seem like it was written by an intern in 1998, it uses frames and the javascript is just plain bad, uses IE only things, and even on IE lots of javascript errors, basically it seem it was hacked together by somebody who doesn't know what he was doing.
+I guess Netgear figure that out and thought.. myabe we can sell that to linux hackers and the will fix it or something ... whatever.
+
+I remember that 4 years ago i had bought another Netgear router (not even wireless) and it never worked either (at all!).
+
+**Netgear obviously doesn't care about the "Linux Hobbyist" and take them for chimps.
+I'm never buying one of their POS products anymore.**
+
+**Rating: 0.1/5**
+
+===D-Link DIR-655===
+I was planning to buy a trusted LinkSys WRT54* at a local store but they where out, so i went to Costco and they had a "top of the line" D-Link DIR-655 at a reasonable price (~115$).
+[[http://www.dlink.com/products/?sec=1&pid=530]]
+
+It's a little spendy to my taste, but it's the latest technology (N).
+Let me just say it doesn't even compare to the Netgear.
+For one the web interface is great and modern, it even seem to use a bit of Ajax, in any case they support FireFox, Safari etc... and it's just simple and works great.
+
+This box is fast ! even though it support the new "N" spec, my clients (computers) only have G cards, yet it's DEFINITELY running faster that the old router and the Netgear where.
+
+Also the connection strength is better (95% instead of 80%).
+And so far it's been very stable, it doesn't need to be restarted constantly to keep performance up.
+
+I Highly recommend this box, it's really hard to find a good wireless router in my experience !
+
+Ho well maybe you get what you pay for after all :-)
+
+**Rating: 4.5/5**
+
+===Comments===
+I got that comment from somebody who read my blog, confirming my experience.
+<code>
+Christopher M. Balz wrote:
+Being a JavaScript developer, I was lucky to be able to open the 
+trusty Venkman JavaScript debugger and work around NetGear's broken,
+ IE-only "open-source enthusiast" code to get through the install. 
+Yes, I agree, totally insulting.  I reported the bug to them.
+
+This router has resulted in a fair bit of lost work for me (I use Ubuntu),
+since it seems to keep dropping the connection.  I installed their latest firmware update
+ and it is still a piece of junk.  I had a NetGear router in the past and it worked great
+for years. 
+If a company with a good reputation can ship a POS such as this, it means the 
+company is really going downhill.
+
+I will try a D-Link DIR-665 per your recommendation.  Thanks for the post; 
+it confirmed my suspicions about this ruinous router. 
+
+Feel free to post my comments.
+</code>
+
+
+

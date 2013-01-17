@@ -1,0 +1,184 @@
+======Our New Sap Isa Developer Environment Setup======
+====Why?====
+There are a few reasons for this setup:
+  - It takes along time to setup a developer workstation for sap (can take days), so long that we fear updating our OS's by fear of breaking the SAP engine and having to waste time restoring it.
+  - Only limited, non desktop/developer friendly, OS's are supported by SAP J2EE engine.
+  - Sap j2ee engine requires high-end hardware (can't tun on laptop)
+  - Tomcat is fast, lightweight and has nice features (JSP debugging etc..)  
+
+So the goal here is a dual setup:
+  - A local patched tomcat that can run SAP B2C and B2B app for fast lightweight development on any hardware, as well as great IDE integration (profiling, debugging etc...)
+  - A full SAP NW Server in VmWare, pre-installed and pre-configured which can be easily and quickly copied/ported/replaced and runs independently of the computer OS.
+====Base system====
+  - Started by installing a "stock" Ubuntu 10.10(Maverick)
+
+  - Added software sources:
+<code>
+http://ppa.launchpad.net/me-davidsansome/clementine/ubuntu
+</code>
+
+  - Then updated/upgraded it ''sudo apt get update'' ''sudo apt-get upgrade''
+
+  - Then installed Useful tools and other necessities:
+<code>
+sudo apt-get install ant apache2 aspell-en clementine flashplugin-installer ftp geany gedit gimp ia32-libs libstdc++5 meld mercurial openssh-client openssh-server openssl pigdin strace subversion sun-java6-jdk sun-java6-source thunderbird vim virtualbox-ose visualvm wget wine inkscape dia-gnome ia32-sun-java6-bin gnumeric abiword build-essential
+</code>
+
+  - Then manually installed:
+getlibs, netbeans 6.9, Google chrome, SAP Visual admin tool, SAPGui(PlatinGui), H2, Firefox webdev toolbar
+
+Note: SapGui: saplogon needs PLATIN_JAVA pointed to an IA32 Java JVM (32bits) to work
+Visual admin needed JAVA_HOME set in ''go'' script (IA32 as well)
+Local(vmware), dev, test and prod ISA where pre-configured in visualadmin. 
+
+  - Configured printers (pz10 ,pz14)
+
+  - Video card was setup, see: [[Ubuntu Lucid Lynx on HP Z200 - Intel HD graphics]]
+
+====Ready to use vmware image of SAP engine====
+  - **Installed vmware** (workstation/player)
+  - Copied the pre-made SAP engine vmware image.
+
+It's on the sap_storage share under SAP_VMWare_images
+
+User to log with is ''sapuser'' (SAP starts on it's own so no need to login).
+
+It's a stack built like this:
+NW 7.0 SP15 + Oracle 10.2.04 + CRM Java Comps 6.0.2 on Suse SLES 11SP1 vmware edition
+
+Here are details on how this Vmware image was made:
+[[nw_7_0_server_under_suse_sles11_under_vmware_with_crm_6_0_java_apps]]
+
+**Vmware config, because we want a fixed IP address.** (192.168.21.132)
+Went in applications/system tools/Virtual network Editor and set the 192.168.21 network:
+{{ vmware.png }} 
+
+====install our customized tomcat engine====
+
+Here are some details on how this custom tomcat was made to run SAP ISA:
+[[sap_isa_on_tomcat]]
+
+Checkout Project **sap_tomcat** from our SVN server
+
+Extract the custom, patched up tomcat (sap_tomcat-6.0.20.tar.gz) to directory of choice: Example /home/me/apps/
+
+Note: java_projects folder contains custom classes and sap/tomcat patches to make it work.
+
+
+====Configured the local env====
+===Give enough memory to IDE:===
+edit in netbeans folder /conf/netbeans.conf
+add''-j-Xmx1000m'' to the netbeans_default_options line
+
+===Netbean config===
+Go to tools/server
+  - click "add server"
+  - type: "tomcat 6" 
+  - server location: path to sap_tomcat-6.0.20 folder previously extracted
+  - username/password: admin/admin
+  - Finish.
+
+===JCO===
+JCO is required to run AP (backend connection)
+
+**Install jco  2.x (NOT 3.x !)**
+we have the one for linux x86_64 in sap_tomcat/jco folder, otherwise download from https://service.sap.com/connectors/ 
+
+Go in that folder and copy the libraries into the system libaries folder:
+''sudo cp *.so /usr/lib''
+
+**Check JCO dependencies** with ''ldd /usr/lib/librfccm.so'' to find what libs are missing.
+
+On Linux Mint had to install manually: [[http://packages.ubuntu.com/dapper/i386/libstdc++2.10-glibc2.2/download]]
+
+On another box I had to install libstdc++5 (OLD):
+We have the Linux versions in the sap_tomcat/jco folder
+Otherwise you can try finding it here [[http://http://packages.debian.org/lenny/libstdc++5]]
+install it (dbl clik it or run sudo dpkg -i libstdc++5_3.3.6-18_amd64.deb)
+
+
+===PCF SSL: (not required but recommended)===
+Install the PCF certificate to not have to deal with certificate errors when using the site:
+Go in the sap_tomcat/jco folder in install the certificate:
+<code>
+sudo cp PCFAuth.crt /etc/ssl/certs/
+#(password: changeit)
+sudo /usr/lib/jvm/java-6-sun/jre/bin/keytool -import -trustcacerts -alias PCFCA -file /etc/ssl/certs/PCFAuth.crt -keystore /usr/lib/jvm/java-6-sun/jre/lib/security/cacerts 
+</code>
+
+===b2b_global=== 
+Get latest version from SVN (update)
+right click/project properties: 
+  - "Run" tab, select tomcat6, enable checbox "deploy on save"
+  - libarries/compile tab: Make sure all libraries in (b2b_global/Web-INF/lib are included)
+
+===b2c_sealy===
+Same thing as b2b
+
+===Apache Proxy===
+Because of the way our env is setup we use a proxy in front of our Sap server (vanity URL's etc...)
+Install apache and enable mod_rewrite and mod_proxy
+
+<code>
+sudo apt-get install apache2
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod rewrite
+sudo a2enmod ssl
+</code>
+
+We need to "Fix" the proxy.conf file to allow proxying:
+''sudo vi /etc/apache2/mods-enabled/proxy.conf'' -> Change "Deny from All" to "Allow from all" & save
+
+We edit /etc/hosts to add local virtual hostnames to our sites
+Also an entry for the vmware machine (localsap)
+<code | sudovi /etc/hosts>
+127.0.0.1	localhost local-b2b local-b2b-sap local-sealy local-sealy-sap local-pcoast local-pcoast-sap
+192.168.21.132  localsap
+</code>
+
+Certificates:
+<code>
+sduo mkdir /etc/apache2/ssl/
+sudo /usr/sbin/make-ssl-cert /usr/share/ssl-cert/ssleay.cnf /etc/apache2/ssl/local-sealy-sap.pem
+sudo /usr/sbin/make-ssl-cert /usr/share/ssl-cert/ssleay.cnf /etc/apache2/ssl/local-pcoast-sap.pem
+sudo /usr/sbin/make-ssl-cert /usr/share/ssl-cert/ssleay.cnf /etc/apache2/ssl/local-b2b-sap.pem
+</code>
+
+Copy pre-made proxy config and certs and restart apache:
+<code>
+sudo cp local_config/pcf /etc/apache2/sites-enabled/
+sudo /etc/init.d/apache2 restart
+</code>
+
+====Using the new developer environment====
+===How to deploy/run:===
+**Deploy To tomcat**: Just do deploy or run on the b2c/b2b project and visit  http://local-sealy/
+You can now edit and debug JSP's without any restart/deploy needed.
+
+WARNING: **The same "b2c_sealy" project is used for both b2c_pcoast and b2c_sealy sites in tomcat, you can choose which one to run by running the ant task (build.xml) called swith-to-pcoast or switch to sealy before doing the run/deploy.**
+
+
+**Deploy to SAP engine**(vmware): run ''dist'' task in of apps_b2c_sealy(or apps_b2c_ppcoast or apps_b2b_global) then deploy the Ear file with visualadmin: 192.168.21.132 50104
+
+===Links===
+Global B2B tomcat: [[http://local-b2b/]]
+Global B2B sap: [[http://local-b2b-sap/]]
+Sealy tomcat: [[http://local-sealy/]]
+Sealy sap: [[http://local-sealy-sap/]]
+PCoast tomcat: [[http://local-pcoast/]]
+PCoast sap: [[http://local-pcoast-sap/]]
+
+SAP J2ee Home: [[http://localsap:50100/index.html]]
+SAP Vanilla B2B: [[http://localsap:50100/b2b/b2b/init.do]]
+SAP Vanilla B2C: [[http://localsap:50100/b2c/b2c/init.do]]
+
+===Logs===
+All logs should show up in the Netbeans output window, and also in:
+/tmp/pcf*.log (PCF logs)
+/home/me/apps/sap_tomcat-6.0.20/bin/logs (tomcat logs)
+/home/me/apps/sap_tomcat-6.0.20/db/*trace* (H2 Database logs)
+/var/log/apache2/*.log (apache proxy logs)
+
+===Image notes===
+Changed IP, Hosts file, hostname file & chmod 444 /etc/hosts because network-manager screws it up

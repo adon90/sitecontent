@@ -1,0 +1,87 @@
+======Ikea standing Desk======
+
+Tip: **I've now also made a large Lego table of similar style, [[status302:ikea_lego_table| see here]]**
+
+
+
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32949&g2_serialNumber=1" width="300"/></html>
+
+I love working standing up, it prevents you from falling asleep in your chair and is better for your posture and keeps you more alert.
+
+I had before used a simple door and brackets to make a cheap standing desk for about 30$, that was in my "man cave".
+
+Now that my office is going to be inside the new house, I needed something nicer looking.
+
+I decided to make one from Ikea parts, there are many good ideas at [[http://www.ikeahackers.net/]] , But i came up with my own thing, as far as I know.
+
+I'm about 6'1 and that desk is the perfect height for me (~ 44"), but you could remove the "feet" to make it 4" smaller (if you are about 5'6), or use 6" or 8" feet available at Ikea instead if you are a giant ;) 
+
+**Total cost: 200$ or so**
+
+**Height: ~44"** This is good for somebody ~6' but can be made for people 5.6', 6'2 or 6'4 easily, see bellow.
+
+====The parts:====
+
+The trick is to find parts that will give you the right heigth, at first I thought i would use some Billy bookcases(41" tall) with a table top but I didn't like the look of that.
+
+So here is what I used:
+
+  - [[http://www.ikea.com/us/en/catalog/products/20054563/ | 4.75" Capita legs]] (2 packs of 4 @ 10$) - also available in 6.75" and 8.75"
+  - [[http://www.ikea.com/us/en/catalog/products/10103088/ | Expedit bookcase]]  ~ 56"x31"(1 @ 69$)
+  - [[http://www.ikea.com/us/en/catalog/products/40051196/ | Capita Brackets]] (3 packs of 2 @ 14.99$)
+  - [[http://www.ikea.com/us/en/catalog/products/50121453/ | Vika Amon table top ]] - 79" x 24" (1 @ 45$)
+  - [[http://www.ikea.com/us/en/catalog/products/30200253/ | Signum Cable management]] (2 @ 10$)
+
+I ended up using 2 smaller expedit bookcases rather than one large one because it was out of stock.
+
+Tip: You can replace the bottom feet with [[http://www.ikea.com/us/en/catalog/products/60169977/ | those casters]] if you prefer.
+
+
+Tip: You can make the desk ~5" shorter by removing the bottom feet, or 2" or 4" taller by using the longer capita legs available at Ikea. 
+
+
+Many have asked me about my monitor stand (pictured), I ordered that separately from amazon:
+[[http://www.amazon.com/gp/product/B0043H39WM/ref=oh_o02_s00_i00_details]]
+(Added a small metal plate so the tightening "screws" so it would not damage the desk) - 80 cents. 
+
+====The build: ====
+Mounted the Capita legs under the expedit bookcase (i screwed them but also applied epoxy glue for extra strength, but that's optional).
+Since i used 2 smaller expedit bookcases instead of one (out of stock),I also epoxied them together.
+
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32930&g2_serialNumber=1" width="800"/></html>
+
+Then I screwed and epoxied the angled captiva brackets on top:
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32933&g2_serialNumber=1" width="800"/></html>
+
+Then the table top goes on top:
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32935&g2_serialNumber=1" width="800"/></html>
+
+I Bolted the back 3 brackets, after drilling 3 holes in the table top. For the 3 front brackets I did NOT use the bolt assemblies of the captiva brackets, that is because 1) I did not want any bolts coming out the front part of the desk, as it's ugly and in the way 2) the 3 back bolts are plenty enough to keep it in place 3) It give a slight slant, a little lower in the front, which I find a bit more ergonomic. 
+
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32937&g2_serialNumber=1" width="800/></html>
+
+Then I added the cable management on the back. Also note n that picture how the back brackets have the bolt mounts, but the font do not.
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32939&g2_serialNumber=1" width="800"/></html>
+
+===Finished Product===
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32941&g2_serialNumber=1" width="800"/></html>
+
+With a monkey:
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32943&g2_serialNumber=1" width="800"/></html>
+
+My wife using it, note that it's too tall for her :)
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32945&g2_serialNumber=1" width="800"/></html>
+
+Now you see all the messy wires:
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32947&g2_serialNumber=1" witdth="800"/></html>
+
+Now you don't:
+<html><img src="http://colar.net/photos/main.php?g2_view=core.DownloadItem&g2_itemId=32949&g2_serialNumber=1" witdth="800"/></html>
+
+I also bought a Lak shelf to make a monitor/speaker stand, but haven't mounted it yet as there was no more 4'' capita legs available.
+I'm not sure wether i'll add it  or not, I think I like it as it is.
+
+**Update: ** 8 months later ... all is good just more junk accumulated ;)
+Also wanted to mention I typically stand about 60-70% of the time or so. Standing all day can make you a bit more tired. But I still feel I'm more effective & awake while standing.
+
+{{20121022100150.jpg}} 

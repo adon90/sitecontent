@@ -1,0 +1,38 @@
+======Stylus2X======
+I created a project called [[http://sourceforge.net/projects/stylus2x/|Stylus2X on sourceforge]]
+
+The aim of this project is to provide some applications with built-in keyboard support (virtual onscreen keyboard).
+
+=====Project Goals=====
+====Virtual Keyboards====
+This is an onscreen keyboard you can use the stylus on to simulate keystrokes, i provide to versions:
+  * one compact using little screen real-estate, to be used with the stylus.
+  * one much larger, that you can easily use with your fingers.
+
+====Built-in Apps====
+  * A shell (bash) - 90% done
+  * A music player - TBD
+  * An application launcher - TBD
+  * A GP2X monitor (battery, CPU) - TBD
+
+=====Installation=====
+  * First you will need to download python/pygame for GP2X
+[[http://archive.gp2x.de/cgi-bin/cfiles.cgi?0,0,0,0,14,917]]
+Simply open that archive and extract it to the root of your SD card (so thatthe "python" folder is at the root of the SD)
+
+  * Then download Stylus2X from [[https://sourceforge.net/project/showfiles.php?group_id=232381]] and extract it on your SD card.
+
+=====ScreenShots=====
+{{ gp2x/shot1.png }} 
+=====Credits=====
+A big thanks to those opensource/GPL apps i made good use of in this project:
+  * Python/Pygame for GP2X (for whoever ported it)
+[[http://wiki.gp2x.org/wiki/Pygame]]
+
+  * The [[http://www.noah.org/wiki/Pexpect|Pexpect package]], making the python process management much easier, as well as providing ANSI screen support for python.
+
+  * Eric Meyers, who took the time to provide a [[http://mail.python.org/pipermail/python-list/2005-March/311726.html|good example on how to use the Pexpect Ansi.py code]].
+
+  * The [[http://www.gnome.org/fonts/|Gnome BitStream VeraBD Monospace font]], which look great ona  small screen like the GP2X
+
+  * [[http://www.sacredchao.net/quodlibet/wiki/Development/Mutagen|Mutagen]], which allows easy but powerful access to music metadata in python.

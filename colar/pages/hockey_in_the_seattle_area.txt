@@ -1,0 +1,33 @@
+====== Hockey in the Greater Seattle Area ======
+**Last Updated 8/12/11**
+
+===== Major adult Ice Hockey leagues in the Seattle area=====
+The major adult leagues are:
+
+  * [[http://www.gshockey.com | the Greater Seattle Hockey League]] (Everett to Tacoma)
+
+  * [[http://www.psaha.pointstreaksites.com/view/psaha/rainier-hockey-league | The Rainier hockey league]] (Tacoma)
+
+  * [[http://www.cascadehockey.com/ | The Cascade Hockey League ]] (Lynnwood, Everett)
+
+  * [[http://www.olyview.com/ | Olympic View Hockey League]] (Mountlake Terrace)
+
+  * <del>[[http://eahl.net/ | Everett Adult Hockey League]] (Everett)</del> **Merged with the Cascade league**
+
+===== Ice Rinks / Hockey Drop-in Schedules in the Seattle area=====
+Here is a list of the rinks in the greater Seattle Area with links to the stick and puck/drop-in schedules (adult) and also maps to the rink.
+
+^Rink ^ Drop-ins schedule ^ Map ^ Rink(s) size ^
+| [[http://www.comcastarenaeverett.com/ | Everett Events Center (Everett)]] | [[http://www.comcastarenaeverett.com/IceRink/IceHockey/StickPuckSessions.ashx?p=1129 | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=2000+Hewitt+Avenue,+Everett,+WA | Map]] | 2 NHL |
+| [[http://www.lynnwoodicecenter.com | Lynnwood Ice Center (Lynnwood) ]] | [[http://www.lynnwoodicecenter.com/hockey.html | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=19803+68th+Avenue+West,+Lynnwood,+WA | Map ]] | 1 NHL |
+| [[ http://www.olyview.com/ | Olympic View Arena (Mountlake terrace)]] | N/A | [[http://maps.google.com/maps?f=q&hl=en&geocode=&time=&date=&ttype=&q=22202+70th+Ave+W.,+Mountlake+Terrace,+WA&sll=37.0625,-95.677068&sspn=26.258506,59.0625&ie=UTF8&ll=47.800443,-122.327614&spn=0.010839,0.028839&z=15&iwloc=addr&om=1 | Map]]| 1 Olympic |
+| [[http://www.kingsgatearena.com/ | Kinsgate Ice Arena (Kirkland)]] | [[http://www.kingsgatearena.com/site/?page_id=6|Schedule]] | [[ http://maps.google.com/maps?oi=map&q=14326+124th+Ave+Ne,+Kirkland,+WA | Map]] | 1 NHL |
+| [[http://www.highlandice.com | Highland Arena (Shoreline)]] | [[http://www.highlandice.com/ice_hockey.php | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=18005+Aurora+Ave+North,+Shoreline,+WA | Map ]] | 1 NHL, 1 Half. |
+| [[http://www.keyarena.com/ | Key Arena (Downtown Seattle)]] | N/A | [[http://maps.google.com/maps?hl=en&q=key+arena&ie=UTF8&ll=47.624042,-122.354136&spn=0.010876,0.028839&z=15&iwloc=addr&om=1 | Map]]| 1 NHL|
+| [[http://www.bremertonicearena.com/ | Bremerton ice rink (Bremerton)]] |[[http://www.bremertonicearena.com/ | Schedule]] | [[ http://www.bremertonicearena.com/directions.html | Map]] | 1 NHL|
+| [[http://www.castleice.com | Castle Ice Arena (Renton)]] | [[http://castleice.com/wordpress2/?p=163 | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=12620+164th+Ave+Se,+Renton,+WA| Map ]] | 1 NHL, 1 Half.|
+| [[http://www.familynightout.com | Kent Valley Ice (Kent)]] | [[http://www.familynightout.com/Hockey.html | Schedule]] | [[http://maps.google.com/maps?oi=map&q=6015+S+240th+St,+Kent,+WA | Map]] | 1 NHL|
+| [[http://www.psaha.pointstreaksites.com/view/psaha/rainier-hockey-league | Tacoma Hockey Club (Tacoma - North)]] | [[http://rhl_site.stats.pointstreak.com/players-leagues-schedule.html?leagueid=1134 | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=1918+Stewart+St,+Tacoma,+WA | Map]] | 1 NHL|
+| [[http://www.sprinker.org/ | Sprinker (Tacoma - South)]] | [[http://www.sprinker.org/ice-schedule.htm | Schedule]] | [[ http://maps.google.com/maps?oi=map&q=14824+C+Street+South,+Tacoma,+WA | Map]] | 1 NHL|
+
+

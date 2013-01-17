@@ -1,0 +1,8 @@
+{"author":"admin",
+"title":"",
+"text":"Thanks Andrew, nice to hear from you.\nI like Groovy as well, it's perfect as a Java \"helper\" and for all those \"side\" tasks and saves tons of time.\nI still prefer something statically compiled for any large projects though.",
+"ts":"2009-07-08T14:07:00-07:00 Los_Angeles"}
+{"author":"Andrew Branch (Guest)",
+"title":"Groovy Scripting",
+"text":"Interesting read, thanks for sharing your experiences...\n \nWe've been using Groovy at Qarbon for the last few years to handle scripting and automation tasks. Its a great tool for Java developers and really fun to work with. A great replacement for shell scripts or batch files that become cross platform. The Ant integration is really powerful too, using the AntBuilder class.\n\nHave just played a bit with Grails would like to research it some more one of these days.\n\nAndrew Branch\n",
+"ts":"2009-07-07T13:28:00-07:00 Los_Angeles"}

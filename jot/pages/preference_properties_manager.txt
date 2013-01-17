@@ -1,0 +1,24 @@
+======JavaOnTracks: Basic Preference/Properties manager======
+
+The class [[http://java-on-tracks.sourceforge.net/jotdoc/javaontracks/net/jot/prefs/package-summary.html|JOTPropertiesPreferences]] allows to simply load/save/read/update preferences (settings) from a property file.
+
+It's not much code, just a wrapper around the standard java Properties class.
+
+It provides methods such as:
+
+<code | functions>
+// loading in memory / saving the property file, ex:
+public void loadFrom(File f) throws IOException
+public void saveTo(File f) throws IOException
+
+// methods to get values, with possibly a defaultValue if no value exists yet, ex:
+public Boolean getDefaultedBoolean(String key, Boolean defaultValue)
+public String getDefaultedString(String key, String defaultValue)
+
+// set values
+public void setBoolean(String key, Boolean value)
+public void setString(String key, String value)
+</code>
+
+See javadoc for more infos:
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/prefs/package-summary.html]]

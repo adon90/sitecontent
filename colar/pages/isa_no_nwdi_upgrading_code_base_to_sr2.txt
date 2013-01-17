@@ -1,0 +1,881 @@
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======ISA no NWDI - Upgrading Code Base to 2004 SR2======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+We currently run on 2004s SP7, see: [[isa_2004s]] and  [[b2c no nwdi]]
+
+This explains the upgrade of the ISA (B2C/B2B) code base to SR2 (without NWDi)
+
+Also while i was at it i improved the sap_crm_java/sap_crm_libs projects and their dependencies, to remove IDE warnings (except for a few apparent errors in SAP code ?? )
+
+See here for the upgrade of the ISA engine itself: [[isa_2004s_server_-_upgrading_to_sr2_sp13_]]
+
+=====IDE=====
+I now use Netbeans 6 rather than MyEclipse, it's lightweight and more integrated, as i explained here: [[Netbeans 6 better than Eclipse]].
+
+It does not really make any differences though as all the build etc.. are done with ant still, so it would work with either IDE.
+
+=====New b2c/b2b vanilla projects=====
+As part of the upgrade we will have new project folders for:
+  * sap_crm_java
+  * sap_crm_libs
+  * vanilla_b2c
+  * b2b_vanilla
+
+We created those projects(folders) in a temporary folder, so we could then compare them to our current ones (diff) to find out what are the changes made by SAP and find the impact on our java code/JSP's.
+
+The SR2 CRM java components are found on dvd: 51032269.
+Copied on [[file://frenchie/sapcd/SAP_DVDS/2004s_SR2/51032269_java_components_crm_erp]]
+
+====Creating vanilla_b2c_new and b2b_vanilla_new====
+Browse the DVD to:  51032269_java_components_crm_erp/J2EE_OSINDEP/
+Open(unzip) SAPSHRAPP06_0.sca
+NOTE: sca files are just zip files, you can open them with winzip, 7zip, jar or other uncompress utility.
+
+
+Once you expand SAPSHRAPP06_0.sca, go to the 'deployarchives' folder.
+In this folder, we will find the two webapps of interest to us:
+  * sap.com_crm~b2c.sda
+  * sap.com_crm~b2b.sda
+
+Extract sap.com_crm~b2c.sda to a temp folder, then extract sap.com~crm~isa~web~b2c.war from the temp folder to vanilla_b2c_new
+
+Extract sap.com_crm~b2b.sda to a temp folder, then extract sap.com~crm~isa~web~b2b.war from the temp folder to b2b_vanilla_new
+
+====Creating sap_crm_libs_new====
+sap_crm_libs contains all the required libraries needed by the b2c/b2b projects, we set them as dependencies to our b2b/b2c projects and also we copy them to our b2b/b2c WEB-INF/lib project in the ant script when building the b2c/b2b war/ear files. 
+
+<code>
+mkdir /tmp/b2c
+cd /tmp/b2c
+# extract 51032269_java_components_crm_erp/J2EE_OSINDEP/SAPSHRAPP06_0.sca/sap.com~crm~isa~web~b2c.war to /tmp/b2c
+jar -xvf sap.com~crm~isa~web~b2c.war
+cd WEB-INF/lib/
+mkdir /home/thibautc/NetBeansProjects/sap_crm_libs_new
+cp * /home/thibautc/NetBeansProjects/sap_crm_libs_new
+</code>
+
+====Creating sap_crm_java_new====
+sap_crm_java is the project where we keep all of SAP source code, while it's not required it's very useful for debugging, and looking at it.
+
+We will run my existing script [[SAPSHRJAV extractor]] on the new sca's
+
+
+NOTE: i would extract only SAPSHRAPP, but it seem better now to extract the other SCA's too, to get all of SAP code, so i modified  ScaExtractor extractor accordingly.
+
+
+WARNING: the SCA's path and extract folders are hard coded in the script (main), lazy, **so change them accordingly.**
+
+
+<code>
+mkdir /tmp/scas/
+mkdir /tmp/extract/
+#copy the sca's to the temp folder
+# I copied sapcrmapp, sapcrmdic, sapcrmjav, sapcrmweb, sapipcmsa, sapshrapp, sapshrweb, sapshrjav, struts and tealeaf sca files to /tmp/scas/ (from DVD: 51032269_java_components_crm_erp/J2EE_OSINDEP/)
+# then run the extractor, took about 20mn on my machine
+java ScaExtractor
+</code>
+
+After you run SAPSHRJAV.java you will have the java code and libraries extracted to /tmp/extract  (or wherever you set the script to).
+
+copy the sources to the new sap_crm_java_new project
+<code>
+mkdirs ~/NetBeansProjects/sap_crm_java_new/src
+mv /tmp/extract/com ~/NetBeansProjects/sap_crm_java_new/src
+</code>
+
+I now added a "lib" folder to the sap_crm_java project, to add the dependencies needed by the java code, so there would not be "errors" reported by the IDE:
+
+Note: do this after upgrading the j2ee engine to SP13, to get corresponding libs:
+
+<code>
+mkdir /tmp/libs
+cp /usr/sap/ZTB/JC00/j2ee/cluster/server0/bin/**/*.jar /tmp/libs
+cp /usr/sap/ZTB/JC00/j2ee/cluster/server0/bin/**/**/*.jar /tmp/libs
+cp /usr/sap/ZTB/JC00/j2ee/j2eeclient/*.jar /tmp/libs
+cp /usr/sap/ZTB/JC00/j2ee/j2eeclient/signed/*.jar /tmp/libs
+mkdir ~/NetBeansProjects/sap_crm_java_new/lib
+cp /tmp/libs/* ~/NetBeansProjects/sap_crm_java_new/lib
+</code>
+
+====Comparing old and new projects====
+I'm using a good diff tool to do this, like csdiff on windows or Meld on linux.
+
+Meld is great because it has 3 ways compare,allowing to compare vanilla_b2c, vanilla_b2c_new and custom_b2c\webcontent all at once, as well as directly copying from one file to another the differences.
+
+So we 3 way compared vanilla_b2c_new ,vanilla_b2c and n2c_sealy/webContent
+From there we can see what changed and:
+  * copy to custom projects, changes between vanilla and new_vanilla fro files we did not customize
+  * manually work on the files we customized and that changed in vanilla(merge).
+  * remove files that where removed from vanilla
+etc...
+
+Then we did same process for b2b, sap_crm_java and sap_crm_libs until we got all the sources updated.
+
+Also compared/merged sapshrapp meta-inf with our meta-inf(apps_b2c_sealy and apps_b2b_pcf meta-inf)
+
+====IDE dependencies====
+For the IDE to be happy and find the source code as expected here are the dependencies i use:
+  * sap_crm_java lib dependencies: sap_crm_libs/*.jar sap_crm_java/*.jar
+  * sap_crm_libs dependencies: none
+  * b2c dependencies: sap-crm_libs/*.jar
+  * b2b dependencies: sap_crm_libs/*.jar
+  * custom b2c dep:  sap-crm_libs/*.jar, custom_code.jar
+  * custom b2b deps: sap_crm_libs/*.jar, custom_code.jar
+  * custom_java_code: sap_crm_libs/*.jar, custom_code/libs/*.jar   (sapjco.jar and servlet.jar)
+
+
+====Subversion branching====
+As part of the upgrade we created a branch for the old code(SP7) so we can keep maintaining that until we complete the upgrade our whole infrastructure, which takes a while.
+
+See [[Sp7 to SP13 subversion branching/merging]]
+
+==== Log of updated files during code upgrade====
+<code>
+
+=== PCF java ===
+Manullay look at extended/copied vanilla code to see if any important difference
+
+=== sap_crm_java ====
+created lib folder as explianed
+src folder -> copied over all new/updated files (manually)
+
+=== sap_crm_libs ===
+copied all new jar files from new sca file as explained
+
+=== apps b2c sealy ===
+merged:
+/home/thibautc/NetBeansProjects/apps_b2c_sealy/META-INF/SAP_MANIFEST.MF
+updated:
+/home/thibautc/NetBeansProjects/apps_b2c_sealy/META-INF/sda-dd.xml
+
+=== apps b2b pcf ===
+** Meta-inf
+merged:
+/home/thibautc/NetBeansProjects/apps_b2b_pcf/META-INF/SAP_MANIFEST.MF
+updated:
+/home/thibautc/NetBeansProjects/apps_b2b_pcf/META-INF/sda-dd.xml
+
+** Meta-Inf_CN
+merged:
+/home/thibautc/NetBeansProjects/apps_b2b_pcf/META-INF_CN/SAP_MANIFEST.MF
+updated:
+/home/thibautc/NetBeansProjects/apps_b2b_pcf/META-INF_CN/sda-dd.xml
+
+==== b2b pcf ====
+*** updated
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/cfg/catalog-site-configR3TREX.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/xcm/customer/modification/jspinclude-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/xcm/sap/modification/generic-searchbackend-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/xcm/sap/system/ipcxcmadmin-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/xcm/sap/system/subproject-xcmadmin-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/ipc-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/ipcpricing-config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/appbase/genericsearch.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/b2b/jscript/GSloadNewPage.jsp
+home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/b2b/shiptodetails1.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/b2b/header.jsp
+home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/catalog/CUAHeader_Menu.inc.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/catalog/ProductDetailISA.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/ipc/components/settings.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/ipc/customer/tiles/statusbar.jsp
+home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/ipc/tiles/instance.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/ipc/tiles/statusbar.jsp
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/mimes/catalog/stylesheet.css
+home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/test/test.html
+home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/mimes/stylesheet_ie55.css
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/ui/ShowPricingConditionPanel.jsp
+
+*** added
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/businesspartner/addresschange.jsp
+/home/thibautc/NetBeansProjects/b2b_vanilla_new/ipc/customer/tiles/statusbarWithAvailibilityCheck.jsp
+/home/thibautc/NetBeansProjects/b2b_vanilla_new/mimes/jscript/user/addressdetails_maintenance.js
+
+*** merged
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/WEB-INF/config.xml
+/home/thibautc/NetBeansProjects/b2b_pcf_new/webcontent/catalog/ProductsISA.jsp
+
+==== b2c ====
+
+****updated(from new vanilla)
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/cfg/catalog-site-configR3TREX.xml
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/doc/Version.txt
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/xcm/sap/configuration/config-data.xml
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/xcm/sap/system/ipcxcmadmin-config.xml
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/xcm/sap/system/subproject-xcmadmin-config.xml
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/ipc-config.xml
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/ipcpricing-config.xml
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/appbase/genericsearch.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/b2c/jscript/addressdetails_maintenance.js.inc.jsp
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/com/**   (whole folder)
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/dealerlocator/searchPartnerForProduct.jsp
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ecombase/documentstatus/orderstatusdetail.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/components/settings.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/customer/tiles/statusbar.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/tiles/instance.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/tiles/statusbar.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/mimes/stylesheet_ie55.css
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/test/test.html
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ui/ShowPricingConditionPanel.jsp
+
+****added(new in vanilla):
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/cfg/catalog-site-configR3TREX.xml
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/appbase/relogin/invalidsession.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/appbase/closewindow.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/appbase/empty.jsp
+home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/businesspartner/addresschange.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/catalog/EmptyQueryISA.inc.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/customer/components/customerTab.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/ipc/customer/tiles/statusbarWithAvailibilityCheck.jsp
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/mimes/jscript/user/addressdetails_maintenance.js
+
+****merged(three way manual changes):
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/WEB-INF/config.xml
+/home/thibautc/NetBeansProjects/b2c_sealy_new/webContent/mimes/b2c/stylesheet.css
+
+</code>
+
+
+=====Current projects structure=====
+
+For information here is what my projects look like:
+
+sap_crm_libs:
+<code>
+sap_crm_libs/
+|-- JAMon.jar
+|-- META-INF
+|   `-- sda-dd.xml
+|-- build.xml
+|-- commons-beanutils.jar
+|-- commons-collections.jar
+|-- commons-digester.jar
+|-- commons-fileupload.jar
+|-- commons-lang.jar
+|-- commons-logging.jar
+|-- commons-validator.jar
+|-- fdsapi.jar
+|-- jakarta-oro-2.0.8.jar
+|-- nbproject
+|   `-- project.xml
+|-- sap.com~crm~ipc~ipcbo~assembly.jar
+|-- sap.com~crm~ipc~ipccore~assembly.jar
+|-- sap.com~crm~ipc~ipcpricing~assembly.jar
+|-- sap.com~crm~ipc~ipc~assembly.jar
+|-- sap.com~crm~ipc~srv~msa~commands~assembly.jar
+|-- sap.com~crm~ipc~srv~msa~server~assembly.jar
+|-- sap.com~crm~isa~advisor~assembly.jar
+|-- sap.com~crm~isa~auctionbase~assembly.jar
+|-- sap.com~crm~isa~auctionebay~assembly.jar
+|-- sap.com~crm~isa~basketdb~assembly.jar
+|-- sap.com~crm~isa~isacat~assembly.jar
+|-- sap.com~crm~isa~isacorer3~assembly.jar
+|-- sap.com~crm~isa~isacore~assembly.jar
+|-- sap.com~crm~isa~lwc~assembly.jar
+|-- sap.com~crm~isa~personalization~assembly.jar
+|-- sap.com~crm~isa~sapxmlb~assembly.jar
+|-- sap.com~crm~isa~shopadmin~assembly.jar
+|-- sap.com~crm~isa~smartstream~assembly.jar
+|-- sap.com~crm~isa~userr3~assembly.jar
+|-- sap.com~crm~tc~appbase~assembly.jar
+|-- sap.com~crm~tc~campaign~assembly.jar
+|-- sap.com~crm~tc~catalog~assembly.jar
+|-- sap.com~crm~tc~contract~assembly.jar
+|-- sap.com~crm~tc~core~assembly.jar
+|-- sap.com~crm~tc~ecommercebase~assembly.jar
+|-- sap.com~crm~tc~pcatapi~assembly.jar
+|-- sap.com~crm~tc~persmodel~assembly.jar
+|-- sap.com~crm~tc~persrt~assembly.jar
+|-- sap.com~crm~tc~perstransform~assembly.jar
+|-- sap.com~crm~tc~scheduler~assembly.jar
+|-- sap.com~crm~tc~user~assembly.jar
+|-- sap.com~crm~tc~xcmadmin~assembly.jar
+|-- server
+|   `-- provider.xml
+|-- struts-legacy.jar
+|-- struts.jar
+`-- trexjavaclient.properties
+</code>
+
+apps_b2b_pcf:
+<code>
+apps_b2b_pcf/
+|-- META-INF
+|   |-- MANIFEST.MF
+|   |-- SAP_MANIFEST.MF
+|   |-- application-j2ee-engine.xml
+|   |-- application.xml
+|   |-- data-source-aliases.xml
+|   |-- log-configuration.xml
+|   |-- monitor-configuration.dtd
+|   |-- monitor-configuration.xml
+|   `-- sda-dd.xml
+|-- META-INF_CN
+|   |-- MANIFEST.MF
+|   |-- SAP_MANIFEST.MF
+|   |-- application-j2ee-engine.xml
+|   |-- application.xml
+|   |-- data-source-aliases.xml
+|   |-- log-configuration.xml
+|   |-- monitor-configuration.dtd
+|   |-- monitor-configuration.xml
+|   `-- sda-dd.xml
+|-- b2b_cn.ear
+|-- b2b_pcf.ear
+|-- build.xml
+`-- nbproject
+    |-- private
+    |   `-- private.xml
+    `-- project.xml
+</code>
+
+apps_b2c_sealy:
+<code>
+apps_b2c_sealy/
+|-- META-INF
+|   |-- MANIFEST.MF
+|   |-- SAP_MANIFEST.MF
+|   |-- application-j2ee-engine.xml
+|   |-- application.xml
+|   |-- data-source-aliases.xml
+|   |-- monitor-configuration.dtd
+|   |-- monitor-configuration.xml
+|   `-- sda-dd.xml
+|-- b2c_sealy.ear
+|-- build.xml
+`-- nbproject
+    |-- private
+    |   `-- private.xml
+    `-- project.xml
+</code>
+
+b2b_pcf (dirs only):
+<code>
+b2b_pcf
+|-- conf
+|-- nbproject
+|   `-- private
+|-- src
+`-- webcontent
+    |-- META-INF
+    |-- WEB-INF
+    |   |-- ccms
+    |   |-- cfg
+    |   |   |-- cic
+    |   |   |   |-- docs
+    |   |   |   |   |-- push-docs
+    |   |   |   |   |-- pushed-files
+    |   |   |   |   `-- transcript
+    |   |   |   `-- scripts
+    |   |   `-- eAuction
+    |   |       |-- schema
+    |   |       |   `-- com
+    |   |       |       |-- commerceone
+    |   |       |       |   `-- xdk
+    |   |       |       |       `-- xml
+    |   |       |       |           `-- n1_0
+    |   |       |       `-- sap
+    |   |       |           `-- dynamicpricing
+    |   |       |               `-- n1_0
+    |   |       `-- xml
+    |   |-- classes
+    |   |   `-- properties
+    |   |-- doc
+    |   |-- ipc
+    |   |-- jsps
+    |   |-- lib
+    |   |-- logs
+    |   |-- tlds
+    |   |-- version
+    |   `-- xcm
+    |       |-- customer
+    |       |   |-- configuration
+    |       |   `-- modification
+    |       `-- sap
+    |           |-- configuration
+    |           |-- modification
+    |           `-- system
+    |-- admin
+    |   |-- ccms
+    |   |-- dbmig
+    |   |-- highav
+    |   |-- kbList
+    |   |-- sample
+    |   |-- scheduler
+    |   |   `-- mimes
+    |   |-- trex
+    |   `-- xcm
+    |       |-- mimes
+    |       `-- sample
+    |-- advisor
+    |   `-- mimes
+    |-- appbase
+    |   |-- jscript
+    |   |-- layout
+    |   |-- maintenanceobject
+    |   `-- relogin
+    |-- auction
+    |   |-- bidder
+    |   |-- buyer
+    |   |-- css
+    |   |-- images
+    |   |   `-- layout
+    |   |-- jscript
+    |   |-- mimes
+    |   |   `-- images
+    |   `-- seller
+    |       `-- catalog
+    |-- b2b
+    |   |-- billing
+    |   |-- businesspartner
+    |   |-- contract
+    |   |-- css
+    |   |-- hom
+    |   |-- jscript
+    |   |-- login
+    |   |-- marketing
+    |   |-- mimes
+    |   |   |-- contract
+    |   |   |-- images
+    |   |   `-- pcf
+    |   |-- negotiatedcontract
+    |   |-- oci
+    |   |-- order
+    |   |-- pcf
+    |   |-- quotation
+    |   `-- test
+    |-- build
+    |   `-- webxml
+    |-- businesspartner
+    |-- catalog
+    |   `-- mimes
+    |       `-- isa
+    |           `-- graphics
+    |-- core
+    |-- data
+    |-- dealerlocator
+    |-- decorators
+    |   |-- hospitality
+    |   |   `-- inc
+    |   |-- inc
+    |   |-- ppl
+    |   |   `-- inc
+    |   |-- restful_nights
+    |   |   `-- inc
+    |   `-- sealy
+    |       `-- inc
+    |-- ecall
+    |   |-- jsp
+    |   |   `-- customer
+    |   |       |-- callback
+    |   |       |-- chat
+    |   |       |-- common
+    |   |       |-- email
+    |   |       |-- logon
+    |   |       `-- upload
+    |   |-- mimes
+    |   |   |-- images
+    |   |   `-- layer
+    |   `-- smartstream
+    |       `-- js
+    |-- ecombase
+    |   |-- documentstatus
+    |   `-- jscript
+    |-- helpvalues
+    |-- hightech
+    |-- ipc
+    |   |-- components
+    |   |-- customer
+    |   |   |-- components
+    |   |   |-- layouts
+    |   |   `-- tiles
+    |   |-- examples
+    |   |-- layouts
+    |   |-- lib
+    |   |   `-- images
+    |   |       |-- CampusPC
+    |   |       |   |-- Merkmale_PC
+    |   |       |   `-- Thumbnail_PC
+    |   |       |-- P-503
+    |   |       `-- WEB_PHONE
+    |   |           |-- Connection
+    |   |           |-- Options
+    |   |           `-- Screen
+    |   |-- mimes
+    |   |   |-- images
+    |   |   |   |-- background
+    |   |   |   |-- button
+    |   |   |   |-- share
+    |   |   |   |-- sys
+    |   |   |   `-- table
+    |   |   |-- scripts
+    |   |   `-- style
+    |   |-- templates
+    |   |-- test
+    |   `-- tiles
+    |-- iviews
+    |   |-- documentoverview
+    |   |-- factsalerts
+    |   |   |-- login
+    |   |   `-- mimes
+    |   |       `-- images
+    |   |-- jscript
+    |   |-- lead2basket
+    |   |-- marketingprofile
+    |   |-- setting
+    |   |-- setupguide
+    |   |   `-- cch
+    |   |       `-- mimes
+    |   |           `-- images
+    |   `-- specialoffers
+    |-- mimes
+    |   |-- admin
+    |   |-- b2b
+    |   |-- catalog
+    |   |-- images
+    |   |   |-- buttons
+    |   |   |-- table
+    |   |   `-- tree
+    |   |-- jscript
+    |   |   `-- user
+    |   `-- shared
+    |       `-- style
+    |-- pcf
+    |   |-- catalog
+    |   |-- css
+    |   |-- images
+    |   |   |-- glossary
+    |   |   |-- quicktour
+    |   |   |   |-- fx
+    |   |   |   |-- hospitality
+    |   |   |   `-- ppl
+    |   |   |-- sealy
+    |   |   `-- training
+    |   |-- login
+    |   |-- marketing
+    |   |-- pdf
+    |   |-- quicktour
+    |   |   |-- fx
+    |   |   |-- hospitality
+    |   |   `-- ppl
+    |   |-- scripts
+    |   `-- training
+    |       `-- docs
+    |-- src
+    |-- styles
+    |-- test
+    |-- ui
+    |   `-- conditionmasterdata
+    `-- user
+        |-- base
+        |-- jscript
+        `-- logon
+            `-- pcf
+</code>
+
+b2c_sealy:
+<code>
+b2c_sealy/
+|-- conf
+|-- downpages
+|   `-- images
+|-- nbproject
+|   `-- private
+|-- src
+|-- updates
+|   `-- b2c-SP8Patch5-jars
+`-- webContent
+    |-- META-INF
+    |-- WEB-INF
+    |   |-- build
+    |   |   `-- webxml
+    |   |-- ccms
+    |   |-- cfg
+    |   |   |-- cic
+    |   |   |   |-- docs
+    |   |   |   |   |-- push-docs
+    |   |   |   |   |-- pushed-files
+    |   |   |   |   `-- transcript
+    |   |   |   `-- scripts
+    |   |   `-- eAuction
+    |   |       |-- schema
+    |   |       |   `-- com
+    |   |       |       |-- commerceone
+    |   |       |       |   `-- xdk
+    |   |       |       |       `-- xml
+    |   |       |       |           `-- n1_0
+    |   |       |       `-- sap
+    |   |       |           `-- dynamicpricing
+    |   |       |               `-- n1_0
+    |   |       `-- xml
+    |   |-- classes
+    |   |   |-- compiled
+    |   |   `-- properties
+    |   |-- doc
+    |   |-- ipc
+    |   |-- jsps
+    |   |-- lib
+    |   |-- logs
+    |   |-- tlds
+    |   |-- version
+    |   `-- xcm
+    |       |-- customer
+    |       |   |-- configuration
+    |       |   `-- modification
+    |       `-- sap
+    |           |-- configuration
+    |           |-- modification
+    |           `-- system
+    |-- admin
+    |   |-- ccms
+    |   |-- dbmig
+    |   |-- highav
+    |   |-- kbList
+    |   |-- sample
+    |   |-- scheduler
+    |   |   `-- mimes
+    |   |-- trex
+    |   `-- xcm
+    |       |-- mimes
+    |       `-- sample
+    |-- advisor
+    |   `-- mimes
+    |-- appbase
+    |   |-- jscript
+    |   |-- layout
+    |   |   `-- pcf
+    |   |-- maintenanceobject
+    |   |-- pcf
+    |   `-- relogin
+    |-- b2c
+    |   |-- auction
+    |   |-- css
+    |   |-- jscript
+    |   |-- marketing
+    |   |-- mimes
+    |   |   |-- images
+    |   |   `-- pcf
+    |   |       `-- images
+    |   |           |-- headers
+    |   |           |-- pillows
+    |   |           `-- suggestions
+    |   |-- oci
+    |   |-- order
+    |   |   |-- pcf
+    |   |   `-- test
+    |   `-- pcf
+    |       |-- static
+    |       `-- warranty
+    |-- build
+    |   `-- webxml
+    |-- businesspartner
+    |-- catalog
+    |   |-- js
+    |   |-- layout
+    |   `-- pcf
+    |       |-- colortables
+    |       `-- headers
+    |-- com
+    |   `-- sap
+    |       |-- ipc
+    |       |   `-- webui
+    |       |       |-- conditionmasterdata
+    |       |       |   |-- action
+    |       |       |   |-- actionform
+    |       |       |   `-- model
+    |       |       `-- pricing
+    |       |           |-- action
+    |       |           |-- actionform
+    |       |           |-- constants
+    |       |           |-- model
+    |       |           |-- serverstub
+    |       |           |-- servlet
+    |       |           |-- taglib
+    |       |           |-- test
+    |       |           `-- utils
+    |       `-- isa
+    |           `-- auction
+    |               `-- ebay
+    |                   `-- sapxb
+    |                       |-- EBayErrors
+    |                       |-- additem
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- addtoitemdescription
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- enditem
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- fetchtoken
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getallbidders
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getapirules
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getattributescs
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getcategories
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getcategorytocs
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getebaydetails
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getebayofficialtime
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getfeedback
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- gethighestbidder
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getitem
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getitemtxns
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getlogourl
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getruname
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getsellerevents
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getsellerlist
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getsellertxns
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- getuser
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- leavefeedback
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- presentationinstrcution
+    |                       |-- relistitem
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- revisecheckoutdetails
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- reviseitem
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       |-- setreturnurl
+    |                       |   |-- req
+    |                       |   `-- resp
+    |                       `-- verifyadditem
+    |                           `-- resp
+    |-- core
+    |-- data
+    |-- dealerlocator
+    |-- ecall
+    |   |-- jsp
+    |   |   `-- customer
+    |   |       |-- callback
+    |   |       |-- chat
+    |   |       |-- common
+    |   |       |-- email
+    |   |       |-- logon
+    |   |       `-- upload
+    |   |-- mimes
+    |   |   |-- images
+    |   |   `-- layer
+    |   `-- smartstream
+    |       `-- js
+    |-- ecombase
+    |   |-- documentstatus
+    |   `-- jscript
+    |-- helpvalues
+    |-- ipc
+    |   |-- components
+    |   |-- customer
+    |   |   |-- components
+    |   |   |-- layouts
+    |   |   `-- tiles
+    |   |-- examples
+    |   |-- layouts
+    |   |-- lib
+    |   |   `-- images
+    |   |       |-- CampusPC
+    |   |       |   |-- Merkmale_PC
+    |   |       |   `-- Thumbnail_PC
+    |   |       |-- P-503
+    |   |       `-- WEB_PHONE
+    |   |           |-- Connection
+    |   |           |-- Options
+    |   |           `-- Screen
+    |   |-- mimes
+    |   |   |-- images
+    |   |   |   |-- background
+    |   |   |   |-- button
+    |   |   |   |-- share
+    |   |   |   |-- sys
+    |   |   |   `-- table
+    |   |   |-- scripts
+    |   |   `-- style
+    |   |-- templates
+    |   |-- test
+    |   `-- tiles
+    |-- jamon2
+    |   |-- css
+    |   `-- images
+    |-- mimes
+    |   |-- admin
+    |   |-- b2c
+    |   |   |-- images
+    |   |   `-- storelocator
+    |   |-- images
+    |   |   |-- buttons
+    |   |   |-- table
+    |   |   `-- tree
+    |   |-- jscript
+    |   |   `-- user
+    |   `-- shared
+    |       `-- style
+    |-- prototypes
+    |   `-- productdetails
+    |       |-- 20070412
+    |       |   `-- images
+    |       |-- 20070817
+    |       |   `-- sealy_product.do_files
+    |       |       `-- images
+    |       |-- 20071211
+    |       |   `-- sealy_product.do_files
+    |       |       `-- images
+    |       `-- 20080110
+    |-- styles
+    |-- test
+    |-- ui
+    |   `-- conditionmasterdata
+    `-- user
+        |-- base
+        |-- jscript
+        `-- logon
+</code>
+

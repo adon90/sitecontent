@@ -1,0 +1,79 @@
+====== Upgrading ISA from 2007 SP0 to SP1 ======
+
+=====Documentation=====
+
+#Got the stack here: https://service.sap.com/sp-stacks (need to allow popups)\\
+#got the 2007 SP1 stack and add the files to the basket and use the download manager to save 
+
+them and use download manager to get them\\
+# they are in /mnt/sapcd/patches\nw2004s_patches\sp07\jspm\ \\
+
+Use JSPM as explained here (or see section 2.2 of the PDF). \\
+
+List of files i have:
+<code | SP1 files>
+|-- ADSSAP14_0-10003001.SCA
+|-- BASETABLES14_0-10003462.SCA
+|-- BIMMR14_0-10002782.SCA
+|-- BIUDI14_0-10002781.SCA
+|-- BPCRM5001_0-10005558.SCA
+|-- CAF14_0-10003464.SCA
+|-- CAFUM14_0-10003472.SCA
+|-- CORETOOLS14_0-10003456.SCA
+|-- JLOGVIEW14_0-10003465.SCA
+|-- JSPM14P_2-10003470.SCA
+|-- KMKWJIKS14_0-10003021.SCA
+|-- KU60001.SAR
+|-- LMTOOLS14P_1-10003486.SCA
+|-- Linux_64
+|   |-- SAPEXEDB_133-20001347.SAR
+|   |-- SAPEXE_133-20001346.SAR
+|   `-- igsexe_13-20001389.sar
+|-- SAPBUILDT14_0-10003479.SCA
+|-- SAPCRMAPP01P_5-10005562.SCA
+|-- SAPCRMDIC11_0-10002941.SCA
+|-- SAPCRMJAV01P_5-10005563.SCA
+|-- SAPCRMWEB01P_5-10005564.SCA
+|-- SAPGRPWCN14_0-10002067.ZIP
+|-- SAPIPCMSA01P_5-10003870.SCA
+|-- SAPJEE14_0-10003469.SCA
+|-- SAPJEECOR14_0-10003466.SCA
+|-- SAPJTECHF14_0-10003468.SCA
+|-- SAPJTECHS14_0-10003467.SCA
+|-- SAPSHRAPP01P_5-10005559.SCA
+|-- SAPSHRJAV01P_5-10005560.SCA
+|-- SAPSHRWEB01P_5-10005561.SCA
+|-- SDMKIT14_0-10003463.JAR
+`-- UMEADMIN14_0-10003471.SCA
+</code>
+
+=====Patching=====
+
+Do all JSPM stuffs as sidadm. \\
+
+copy all the patch files (SAR,JAR etc ...)\\
+
+Note: I had to create those folders manually as root and then chown them to sidadm
+
+
+<code>
+mkdirhier /usr/sap/trans/EPS/in
+cp  /sapcd/PATCHES_SP\'s/2007/SP01/* /usr/sap/trans/EPS/in
+
+#also we need to copy the linux specific stuffs (kernel)
+cp /sapcd/PATCHES_SP\'s/2007/SP01/Linux_64/*  /usr/sap/trans/EPS/in
+
+chown -R sidadm /usr/sap/trans/
+</code>
+
+start (as sidadm)''go'' in /usr/sap/SID/JC01/j2ee/JSPM/ (takes a while for the gui to comeup)\\
+
+Enter the password to login the JSPM\\
+do "single packages" and choose all the packages, click next\\
+
+"go" in /usr/sap/SID/JC00/j2ee/JSPM/ \\
+
+Enter the password to login the SDM\\
+
+Ans it will continue the upgrade with all the other packages ~1 hour.
+

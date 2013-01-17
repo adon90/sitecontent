@@ -1,0 +1,177 @@
+TIP: **See the [[Fan|index of all my Fantom pages]]**
+
+======Fantom - Getting started======
+[[http://fantom.org | Fantom]] is an exciting new language that targets the Java VM and the CLR.
+It borrows it's Syntax from Java but also adds many features and syntactic sugar created or borrowed from .NET, Groovy, Python, Erlang etc...
+
+It's immediately familiar to a Java / .Net programmer but is much less painful to use (no boilerplate).
+
+This is a "getting started" document.
+=====Prerequisites=====
+You should have a properly installed Java JDK(at least 1.5) installed (or .NET CLR, but Java recommended)
+**Make sure it's a JDK not just a JRE**
+
+You can check which Java version you have by running: ''java -version'' in a console / DOS prompt
+
+  - **OSX**: Most recent OSX versions have the JDK 1.5 pre-installed, if not you can get an upgrade here:
+[[http://developer.apple.com/java/download/]]
+  - **Linux**: You can install like this ''sudo apt-get install sun-java5-jdk'', or get a JDK binary here: [[http://java.sun.com/javase/downloads/index.jsp]]
+  - **Windows**: Get a JDK installer here: [[http://java.sun.com/javase/downloads/index.jsp]]
+
+=====Installing Fantom=====
+Full instructions here: [[http://fantom.org/doc/docTools/Setup.html]]
+
+  - Downloaded the fantom zip file from [[http://fantom.org/]]
+  - Extract the zip content to a folder of your choice.
+
+for example ''c:\''(Windows), ''/home/me/''(Linux), ''/Users/me/''(OSX)
+
+This will create a fantom folder in there, for example ''/home/me/fantom-1.0.44''
+
+  - Rename the folder from 'fantom-xxx' to just 'fantom' if you wish (simpler)
+
+NOTE: **From now on, I'll refer to the fantom directory as /home/me/fantom , adjust accordingly.**
+
+
+Now you will want to add the fantom binaries to your path:
+  - **Linux / OSX**: ''export PATH=$PATH:/home/me/fantom/bin'' 
+
+you might want to add that to your ~/.bashrc so you don't have to type it again when you start a new shell.
+
+  - **Windows**: Follow those instructions [[http://fantom.org/doc/docTools/Setup.html#windows]]
+
+  - **Linux / OSX**: You will want to run (from a  shell) ''sh /home/me/fantom/adm/unixsetup'', this will fix potential permission issues, otherwise you might not be able to execute fantom commands such as 'fan', 'fansh' and so on.
+
+====Checking the 'fan' command====
+The fan command is used to run fantom code, so really it needs to be working, so we will test it.
+
+Start a shell, console or DOS prompt and run this command ''fan -version'', this should display the fan version.
+
+If that does not work(command not found), maybe the fan command is still not in your path, you could try:
+''cd /home/me/fantom/bin'' then ''fan -version'' or ''./fan -version''
+
+If still not working, see: [[http://fantom.org/doc/docIntro/HelloWorld.html#setup]]
+
+=====Trying the fantom shell (fansh)=====
+Fan provides an interactive shell called fansh, it's great for trying out code quickly.
+We will run a few commands through it to quickly test fan: 
+
+Assuming the command 'fan' was in your path, 'fansh' should be as well (otherwise ''cd /home/me/fantom/bin'')
+
+So let's start the fantom shell by typing in the shell ''fansh''.
+
+This should give you a prompt like this "**fansh>**", we are now in the fantom shell and can try some code.
+
+====Hello World (fansh)====
+Let's try a good old hello world (but fancier!)
+''fansh'' 
+**We are running the following commands IN the fansh prompt** 
+  - ''name := "John Doe"''
+After pressing "Return", fansh says "John Doe", this just tells us we created a String with value "John Doe"
+Note that because fantom does type inference we didn't have to specify that 'name' was of type String as in Java.
+  - ''Int age := 42''
+We created a Variable age with the value 42.
+We specified it was an Int, though we could have left ''Int'' off and fantom would have done type inference.
+  - ''echo("Hello $name, you are $age")''
+We tell fantom to echo(print to console) a string. fantom strings allow interpolation($variable), so it will print:
+"Hello John Doe, you are 42".  How cool is that for a Hello world :)
+  - ''exit'' Exit the fantom shell.
+=====Hello world(Script)=====
+It's also possible to create a quick fantom script - basically a .fan file with a class with a main method.
+
+TIP: A script is basically a single Class with a main() method.
+**It's important to note that a script can NOT import(using) other scripts - You should create a pod for that**
+
+
+Let's create Hello.fan:
+<code | Hello.fan>
+class Hello
+{
+  static Void main() 
+  {
+    name := "John Doe"
+    age := 42
+    echo("Hello $name, you are $age") 
+  }
+}
+</code>
+Now we can run it simply like this: ''fan Hello.fan''
+
+Note: You can make hello.fan an executable(Unix) by adding ''#! /usr/bin/env fan'' as the very first line of the file.
+On Windows you can too, but its' different: see [[http://fantom.org/doc/docTools/Setup.html#executableWindows]]
+
+
+=====Hello world(Project)=====
+The fantom shell and a quick script are is nice to try things out, but if we want to do anything serious you will want to create a real project(Pod).
+
+  - Let's create a folder where we are going to put all our fantom projects:
+For example''/home/me/fantom_projects/''
+
+  - Now we need to create the proper structure for a fantom project, let's create a project "hello" with folders as follow:
+<code | Project structure>
+fantom_projects/
+  - hello/          (Project base or "Pod")
+    - build.fan     (build file)
+    - pod.fan       (Pod meta-data)
+    - fan/          (source code written in fantom goes here)
+      -Hello.fan    (Our Hello.fan source file)
+</code>
+Note that this is the minimum structure, there could also be "java" folder for Java sources for example.
+
+  - Create Hello.fan, with the same content as we used for the [[#Hello world_Script_|script test]].
+
+  - Now we create the build file
+<code | fantom_projects/hello/build.fan>
+// Build file is a special class (declarative)
+using build                              // This uses the build pod(library)
+
+class Build : BuildPod
+{
+  new make()
+  {
+    podName = "hello"
+    summary = "A pod that likes to great you in the morning."
+    depends = ["sys 1.0""]
+    srcDirs = [`fan/`, `test/`]
+  }
+}
+</code>
+
+  - Now we can build(compile) our project:
+''cd /home/me/fantom_projects/hello/'' then ''fan build.fan''
+
+  - This should create a pod file(~jar): /home/me/fantom/lib/fan/hello.pod
+
+  - Now we can run the Application:
+''fan hello::Hello''  This means run The main() method of Class Hello of Pod hello.
+
+Tip: If you have a Main.fan class with a main method, it will be called automatically, in other words ''fan hello'' is same as ''fan hello:Main.main()''
+
+=====Trying the examples=====
+The fantom distribution comes with a nice set of example which are a great way to learn about more about fantom.
+
+Here are some examples to try out:  ''cd /home/me/fantom''
+  - **Web**: ''fan examples/web/demo.fan'' and point your browser to [[http://127.0.0.1:8080]]
+  - **FWT**: ''fan examples/fwt/demo.fan'' fantom simple UI toolkit.
+  - **JavaScript**: ''fan examples/js/demo.fan'' fantom compiled to Javascript. [[http://127.0.0.1:8080]]
+  - **Java**: ''fan examples/java/swing.fan'' an example that use Java swing from fantom.
+
+Of course you can go look at those .fan file and examine the source code and learn things.
+
+Also check out the [[http://fantom.org/doc/docCookbook/index.html|fantom Cookbook]].
+
+=====More advanced topics=====
+You can get more advanced informations from the [[http://fantom.org/|fantom site]]
+
+I also have a language reference (Cheat sheet) here: [[Fan Cheat Sheet]]
+
+=====Interacting with Java=====
+See [[http://wiki.colar.net/fan_java_ffi_example-_implement_java_interface_from_fan]]
+
+Also, see the examples in /home/me/fantom/examples/java/
+
+FIXME: TODO
+Using Fantom pods from Java
+Mixed Java/Fantom sources project (Fantom based & Java/ant based)
+
+

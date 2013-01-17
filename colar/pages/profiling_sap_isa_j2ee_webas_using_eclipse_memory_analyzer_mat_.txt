@@ -1,0 +1,163 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======Profiling SAP ISA J2EE using Eclipse Memory Analyzer======
+
+Tip: I have another page about using VisualVM which is much more convenient to use.
+[[profiling_sap_isa_j2ee_webas_with_netbeans]]
+On the other hand **VisualVM requires the SAP engine to run on Java 6.0**, which is not supported by SAP and causes a few issues, so **if you want to be safer the method described here might be best (works with JDK 1.4.2)**
+
+=====Prerequisites=====
+While this will work with Java 1.4.2, it needs to be **at least jdk 1.4.2.12**
+
+So, if you are running SAP J2EE with something older than that, you will want to upgrade.
+
+On our 64bit Linux boxes(x86_64) we use the IBM JVM 1.4.2, i was at 14.2.9 so had to upgrade it.
+
+**If you have already 1.4.2.12 or better, skip to [[#Installing Eclipse Memory Analyzer]].**
+====Upgrading the JVM to 1.4.2.12====
+Went to download the special IBM JDK build for SAP here:
+[[https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?lang=en_US&source=swg-ibmjavaisv]]
+
+and downloaded IBMJava2-SDK-AMD64-1.4.2-13.0.x86_64.tgz
+
+Then I installed it:
+<code>
+cd /usr/lib/jvm
+sudo tar xzvf /media/sap/sapcd/Others/java_installers/IBM-jvm/IBMJava2-SDK-AMD64-1.4.2-13.0.x86_64.tgz
+</code>
+
+====Make SAP use the new JVM====
+**If your JVM is in a  different path than the old version**, you will want to update the the JAVA_HOME entries in the configtool. (I didn't need to do that - path has not changed)
+<code>
+su - ztbadm
+/usr/sap/ZTB/JC00/j2ee/configtool
+./configtool
+</code>
+And under cluster/instance/*/* set JAVA_HOME to /usr/lib/jvm/IBMJava2-amd64-142/ (**in instance & dispatcher & server under ALL tabs**)
+You might also want to update jstartup/vm/home in /usr/sap/ZTB/SYS/profile/ZTB_JC00_host
+
+Then restart the J2ee ''stopsap  & startsap''
+
+=====Installing Eclipse Memory Analyzer=====
+Download the version that matches your OS from IBM: 
+[[http://www.ibm.com/developerworks/java/jdk/tools/mat.html]] 
+
+and extract it somewhere in your home folder ''ie: /home/thibautc/apps/''
+
+====IBM JVM add-on====
+Now because I use an IBM JVM i need a special add-on because IBM dumps are in a different format that Sun's.
+
+**If you have a Sun JVM, you can skip this, continue to [[#Configuring the SAP J2EE engine so it can generate Heap Dumps]]**
+
+Start the Memory Analyzer(MAT) (Make sure your user Java is 1.5 or better to run MAT)
+<code>
+cd /home/thibautc/apps/mat/
+# We give 2GB of memory to mat (it needs lots to parse SAP J2EE dump)
+./MemoryAnalyzer  -vmargs -Xmx2G
+</code>
+
+  - Download The add-on here:
+[[ftp://ftp.software.ibm.com/software/java/support/tools/mat/matdtfj.zip]]
+and save it somewhere (don't extract it)
+  - In MAT menu click Help / Software Updates / Find and Install.
+  - Select "Search for new features to install" and click Next.
+  - Select "New Archived Site" and provide matdtfj.zip then click "Finish".
+  - Click the checkbox of "matdtfj" and click "Next"
+  - Accept the license & click "Next"
+  - click "Finish" and click "Install All" to install it 
+  - When asked to restart MAT, say "Yes".
+
+=====Configuring the SAP J2EE engine so it can generate Heap Dumps=====
+
+**Use with care, and maybe don't leave on production machine !**
+
+Start the configtool
+<code>
+su - ztbadm
+/usr/sap/ZTB/JC00/j2ee/configtool
+./configtool
+</code>
+**under cluster/instance/server/general add (last)**:
+''-Xdump:system:events=user,request=exclusive+prepwalk+compact''
+
+And **click Save**.
+Then close the configtool (confirm save/apply when asked)
+
+{{ conftool9.png }} 
+
+**Restart the engine**: ''stopsap & startsap''
+
+=====Getting a Heap Dump=====
+Alright, no MAT is ready, we can go get a Heap
+
+Note: To get a useful "realistic" Heap Dump you will probably want your application/website to be used either by real people, or using a load test tool. I usually run the JMeter load tool to simulate lots of traffic on the site.
+
+
+To request a dump we need to send a SIGQUIT to the J2EE process
+
+To find the process PID you can do
+<code>
+su - ztbadm  
+ps axf | grep jlaunch | grep std_server
+</code>
+Or use **top** to find it.
+
+WARNING: **Make sure you have disk space avail**
+~4GB+ or at least 1.5x memory given to J2EE process in configtool, in /usr/sap/ZTB/JC00/j2ee/cluster/server0/
+
+
+**Now let's request the Heap Dump**:
+<code | replace 23568 by your actual jlaunch pid found with 'ps'>
+kill -3 23568       .
+</code>
+
+A Core file will be written in something like:
+/usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp
+
+When done(~5mn), **run jextract on it:**
+<code>
+cd /usr/sap/ZTB/JC00/j2ee/cluster/server0/
+/usr/lib/jvm/IBMJava2-amd64-142/jre/bin/jextract core.20090728.111307.16444.0003.dmp 
+</code>
+
+This will create a zip file: 
+/usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp
+
+NOTE: **It seems JMAT need the file to be in a folder where it can write to**, so I copy it to my user folder:
+<code>
+cp /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.122740.16444.0005.dmp.zip /home/tcolar/apps/jmat/
+</code>
+
+
+**You should remove the dumps from SAP engine path** before you forget(large):
+<code>
+rm /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp
+rm /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp.zip
+</code>
+
+**Now in JMAT go File/extract dump  and select the zip file**: 
+ex: /home/tcolar/apps/jmat/core.20090728.111307.16444.0003.dmp.zip
+
+It's going to open it (takes about 10mn)
+
+**Now you can use JMAT to analyze CPU/Memory:**
+
+{{mat3.png}} 
+
+
+{{mat2.png}} 
+
+
+{{mat.png}} 
+
+=====Links=====
+Memory Analyzer IBM page:
+[[http://www.ibm.com/developerworks/java/jdk/tools/mat.html]]
+
+Configuring SAP engine to be able to generate Heap Dumps:
+[[https://wiki.sdn.sap.com/wiki/pages/viewpage.action?pageId=33456]]
+
+Page on using MAT with an IBM JVM.
+[[http://dev.eclipse.org/blogs/memoryanalyzer/2008/10/23/troubleshooting-memory-problems-from-ibm-systems-with-memory-analyzer/]]
+

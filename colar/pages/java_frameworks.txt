@@ -1,0 +1,36 @@
+======Java Frameworks======
+Lately I've been playing a bit with [[http://www.rubyonrails.org/ | ROR]] (ruby on rails) and I have to say I fell in love with the "On Rails" part, it makes web development simple and efficient and remove all the boring and time consuming configuration part common in J2EE apps (XML).
+
+On the other hand, I'm not all that much a fan of the Ruby language itself.\\
+When it came out, I though it looked interesting, sort of combining the power of Python/Perl with some Java like features.\\
+However I don't really like using this language, I find it too "loose", and I've always preferred clearly defined syntax, and [[http://java.sun.com | Java]] is still my language of choice for this (For the same reason, I like [[http://jakarta.apache.org/velocity/ | Velocity]] for templating).
+
+I don't mean that a dynamic language is plain bad, but i have issues with them ([[#3/7/06: Static vs Dynamic languages | see next blog entry]]).
+
+So anyhow, I figured it's probably time for me to use some kind of Java framework, to get something like "Java on Rails" in the mean time.
+
+I use [[http://struts.apache.org/ | Struts]] at work, but i really did not like it, it was just another thing in the way, and requires **extensive** configuration, worst of all in many large ugly [[#3/7/06: XML Overdose | XML files from hell ]] :-) , also it's only the frameowrk it does not cver datanase/layout like  Rails does.
+
+At first i looked for that, and sure enough there seem to be 2 or 3 "Java on Rails" projects:\\
+[[http://trac.opensails.org/sails/wiki | SAILS]], [[https://trails.dev.java.net/ | TRAILS]] and [[http://jboss.com/products/seam | SEAM]]
+
+- SAILS and TRAILS seem relatively nice, but it seem as if they wanted to be too much like rails, and because of that it sort of felt a bit like "hacks" into Java, yet it's better tha nothing :-)\\
+
+SAILS seem to use it's own technologies to implement this, including it's own templating language.\\
+
+Trail on the other hand relies on Spring Hibernate and Tapestry, which seem to be good choices. I particularely like Tapestry because it keeps the HTML "standard" and can be eidted in regular editors (ie: dreamweaver).\\
+It is unrealistic to expect the developer to do the design(scary :-) ), or expect the designer to have to use notepad instead of DW (scarier :-) ).
+
+- SEAM is sort of similar to Trail and Sails, however this seem like the typical bloated framework (makes it more complicated rather than easier, seem even worst than Struts in this aspect.)
+
+- [[http://www.springframework.org/ | Springs]] seem like a good alternative to Struts, it is just the framework part though and does not cover database/presentation like rails does.
+
+- [[http://jakarta.apache.org/tapestry/ | Tapestry]] seems pretty close to what I'm looking for, it's simple yet powerful. Also it's already popular and is made from the Apache foundation, which makes some of the best software around IMO. It is not quite a "full" framework as far as i understand it, yet it seem to have most of the feature i care about anyhow. It keeps the HTML "standard", which is a huge advantage.\\
+Tapestry mainly covers layout only (though it seem to do more), but it's not a full framework either it seems.
+
+- [[http://stripes.mc4j.org/confluence/display/stripes/Home | Stripes]] really seems nice.\\ It seems like one of the the only framework that got right the RAIL concept of "convention over configuration", and it seem all simple and easy to use. Also it seem to be done the "Java way" in comparison with SAILS or TRAILS.\\
+On the other hand it does not cover presentation or database, just the framework.
+
+So anyhow Trails seem to be the best option at this time, so i'll be testing it.
+
+Here is a list of framework links: http://java-source.net/open-source/web-frameworks

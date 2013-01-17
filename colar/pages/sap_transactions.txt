@@ -1,0 +1,38 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+===== Useful SAP transactions =====
+<code>
+Notes:                        OSS1
+Catalog View:                 WWM3
+Catalog Edit:                 WWM2
+View / Edit Code:             SE37
+View / Run reports            SE38
+Logged users:                 SM50 SM51
+Active RFC's:                 SM04 SM59
+Last logins:                  ZCLST
+Sales orders:                 VA05
+Users edit/lock:              SU01 SU05
+Search data,tabl.:            SE11 SE16
+Edit tables:                  SM30
+IPC RFC/Java mapping:         SM53
+Pricing Campaigns:            CRM_MKTPL
+Email queues (flush)          SCOT
+Check TREX                    SRSE            (see scrrenshot1)
+Run ABAP Trace (+ SQL etc...) ST05
+Look at RFC traces            ST11
+Logs                          SM21
+TRexadmin                     TREXADMIN
+</code> 
+
+TIP: [[SAP CRM Transaction Codes|Click here]] for a FULL transaction code list (on CRM5.0)
+
+
+==== Finding product GUID from product ID ====
+Go to SE16, enter table Name: COMM_PRODUCT
+Click the "Table Content" icon.
+Enter the product ID (ie: 39432) in the product ID field and execute the query.
+Results will include the product GUId (ie: 3FA1109CA2F96954E1000000C7F9D707)
+
+==== Screenshot1 : SRSE ====
+{{srse.jpg}}

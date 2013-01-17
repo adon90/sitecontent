@@ -1,0 +1,9 @@
+====== B2B IPC Install Shots ======
+
+{{ipc1.jpg}}
+
+{{ipc2.jpg}}
+
+{{ipc3.jpg}}
+
+{{dataloader.jpg}}

@@ -1,0 +1,161 @@
+======Easy Imap + Smtp + Spam killer server - Linux======
+
+This uses Postfix for Smtpd, Dovecot for Imapd (SSL) and spamassasin / postgrey for spam filtering.
+
+  - Postfix does Smtpd (with SSL if wanted)
+  - Dovecot does Imap (with SSL), can do Pop3 if anybody still uses that
+  - Spamassasin does it's best at detecting / flagging spam and moving it to "Junk" folder
+  - Postgrey does greylisting, which removes a ton of spam (but add a small delay to emails delivery)
+
+===Install packages===
+<code>
+apt-get install postfix dovecot spamassasin postgrey libsasl2-modules
+</code>
+
+===Create SSl certs===
+<code>
+cd /etc/ssl/certs/
+openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
+chmod 600 smtpd.key
+openssl req -new -key smtpd.key -out smtpd.csr
+openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
+openssl rsa -in smtpd.key -out smtpd.key.unencrypted
+mv -f smtpd.key.unencrypted ../private/smtpd.key
+# what's this for? : openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
+</code>
+
+===Dovecot(Imap) config===
+<code | vi /etc/dovecot/dovecot.conf>
+# !! MAKE SURE TO COMMENT THIS OUT (protocols=none)!!
+#protocols = none   
+disable_plaintext_auth = no
+log_timestamp = "%b %d %H:%M:%S "
+log_path = /var/log/dovecot.log
+ssl = yes
+ssl_cert_file = /etc/ssl/certs/smtpd.crt
+ssl_key_file = /etc/ssl/private/smtpd.key
+# the password you set for the certificate
+ssl_key_password = mycertpassword 
+# mail will go in user_home/mail/
+mail_location = maildir:~/mail 
+mail_access_groups = mail
+auth_username_chars = abcdefghijklmnopqrstuvwxy
+protocol imap {
+  imap_client_workarounds = delay-newmail tb-extra-mailbox-sep
+# Note: Idle interval here helps with push to mobile (2mn default = phone battery drain)
+  imap_idle_notify_interval = 24 mins
+}
+auth default {
+  mechanisms = plain login
+  passdb pam {
+  }
+  userdb passwd {
+  }
+  socket listen {
+    client {
+      path = /var/spool/postfix/private/auth
+      user = postfix
+      group = postfix
+      mode = 0660
+    }
+  }
+}
+</code>
+
+===Postfix config===
+<code | vi /etc/postfix/master.cf>
+smtp      inet  n       -       n       -       -       smtpd -o content_filter=spamassassin
+smtps     inet  n       -       n       -       -       smtpd -o content_filter=spamassassin
+pickup    fifo  n       -       n       60      1       pickup
+cleanup   unix  n       -       n       -       0       cleanup
+qmgr      fifo  n       -       n       300     1       qmgr
+#qmgr     fifo  n       -       n       300     1       oqmgr
+tlsmgr    unix  -       -       n       1000?   1       tlsmgr
+rewrite   unix  -       -       n       -       -       trivial-rewrite
+bounce    unix  -       -       n       -       0       bounce
+defer     unix  -       -       n       -       0       bounce
+trace     unix  -       -       n       -       0       bounce
+verify    unix  -       -       n       -       1       verify
+flush     unix  n       -       n       1000?   0       flush
+proxymap  unix  -       -       n       -       -       proxymap
+proxywrite unix -       -       n       -       1       proxymap
+smtp      unix  -       -       n       -       -       smtp
+relay     unix  -       -       n       -       -       smtp
+        -o smtp_fallback_relay=
+showq     unix  n       -       n       -       -       showq
+error     unix  -       -       n       -       -       error
+retry     unix  -       -       n       -       -       error
+discard   unix  -       -       n       -       -       discard
+local     unix  -       n       n       -       -       local
+virtual   unix  -       n       n       -       -       virtual
+lmtp      unix  -       -       n       -       -       lmtp
+anvil     unix  -       -       n       -       1       anvil
+scache    unix  -       -       n       -       1       scache
+
+# Use spamassasin
+spamassassin unix -     n       n       -       -       pipe
+  user=spamd argv=/usr/bin/spamc -f -e
+        /usr/sbin/sendmail -oi -f ${sender} ${recipient}
+</code>
+
+<code | vi /etc/postfix/main.cf>
+daemon_directory = /usr/lib/postfix
+
+smtpd_banner = $myhostname ESMTP $mail_name
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+delay_warning_time = 4h
+
+myhostname = mail.mycomp.net
+mydomain = mycomp.net
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = mycomp.net
+mydestination = localhost, localhost.localdomain, mail.mycomp.net mycomp.net
+
+mynetworks = 127.0.0.1
+
+mailbox_command = procmail -a "$EXTENSION"
+mailbox_size_limit = 0
+recipient_delimiter = -
+inet_interfaces = all
+
+smtpd_use_tls = yes
+smtpd_tls_loglevel = 2
+smtpd_tls_cert_file = /etc/ssl/certs/smtpd.crt
+smtpd_tls_key_file = /etc/ssl/private/smtpd.key
+smtpd_sasl_auth_enable = yes
+smtpd_client_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination
+smtpd_sender_restrictions = permit_sasl_authenticated, permit_mynetworks
+smtpd_recipient_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination, check_policy_service inet:127.0.0.1:10023
+broken_sasl_auth_clients = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_security_options = noanonymous
+</code>
+
+===Postgrey config===
+<code | vi /etc/default/postgrey>
+# 1mn delay
+POSTGREY_OPTS="--inet=10023 --delay=60"
+</code>
+
+===Spamassasin config===
+Left it "stock"
+
+===Restarting and checking===
+<code>
+/etc/init.d/spamassasin restart
+/etc/init.d/postgrey restart
+/etc/init.d/postfix restart
+/etc/init.d/dovecot restart
+</code>
+
+Then Tail the logs and try Imap / SMTP and make sure there are no errors:
+<code>
+tail -f /var/log/dovecot.log /var/log/mail.err /var/log/mail.log
+</code>

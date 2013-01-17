@@ -1,0 +1,304 @@
+======Programming languages======
+Programming languages are many(hundreds) and come and go, but follow a clear evolution over time.
+Most never reach "Popular" status, yet can be the best for some particular applications.
+
+There is no perfect language, but there is most likely some really good choices for your needs.
+
+Picking the right one is a matter of need, context and personal choice, but here I'm going to discuss some of the criteria to consider.
+
+=====Considerations when picking a programming language=====
+=====Target Platform=====
+Sometimes your target platform/device might restrict greatly your choice, for example if you write software for a cell phone, that might eliminate many language that can't run there.
+
+Personally I'm a a big believer in interpreted languages which can run on many platforms as long as a virtual machine / interpreter is available, for example Java, Ruby, Python etc unless needed.
+
+Interpreted languages are now fast enough for most applications, and having to compile manually for different platforms is probably going to become extinct is the foreseeable future.
+
+====Maintainability / KISS====
+Nowadays most software is not maintained by a single person anymore.
+
+You have to keep in mind you might have to share/cooperate/integrate your code with others.
+So for this reasons **it's important that the code can be maintained & understood my many people easily**.
+
+Personally **I'm a big believer in KISS (Keep it simple stupid)**, a lot of programmers(or maybe academics) seem to thing the best languages is the one with the most features .... well maybe for playing around / theorizing ... but is it for a production software that needs to be maintained ?
+
+===Don't use something too exotic===
+New languages come out every day but you probably don't want to use something too new for anything but a pet project.
+Reason being you don't want to be the one finding the bugs, and if you need additional resources(ppl) you want them to be available.
+
+===Don't use something too complex===
+You might be an expert at a specific language, say Erlang or Perl, but can other people understand & maintain your code if needed ?
+
+**Will you find the resources to grow/maintain your software ?**
+===Readability===
+I have worked on projects with huge source base, and to me one of the keys to maintainability is **readability**.
+
+What I mean by that is I'm a big believer of "self explanatory" languages. 
+Yes code should be commented and clear(coding standards), but at the end of the day the most important is that the code itself is self explanatory, ideally you could read an unknown language and understand what it's trying to do.
+
+Personally I'm a big fan of languages with detailed syntax, that often means static/strong type though not necessarily.
+
+I'm sure it's possible to write unreadable Java code and beautiful Perl code(maybe), but in the end it's much easier to make a mess in Perl.
+
+I'm a big believer of **"only one way to type it"**, because that means when somebody else reads your code their won't be any confusion.
+
+Some dynamic/loosely typed languages are popular lately because the developer has more freedom an how to "express" themselves in the code, and while it's good for the original author, I do not believe it's good for maintainability (an other author would expect is favorite expressive blurb).
+
+===More features is not always better===
+Nowadays it seems many are debating which language is the best based on how many features it has:
+Actors, Closures, Currying, functional prog, etc.. you name it.
+
+While a lot of those are useful there is also a point where it's just adding a lot of complexity, just to save on a few lines of code (which your IDE could probably fill in).
+
+**More features also mean a larger learning curve** and that's something to consider.
+
+===Community / Documentation ===
+**It is important to use a language that has a good community and documentation**, because this is what you will turn to for help.
+So if developed by a single person, who as no time for support, that might not be a good choice.
+
+====Productivity====
+Even nowadays **many developers seem to focus on the number of lines of code it takes to write a program to determine productivity**.
+For example you hear: "This takes 100 lines in Java, only 25 in Ruby and 1(very long) in Perl".
+
+To me this is silly, because if you have a good IDE it will fill in / auto-complete most of the Java code for you, and it will result in something VERY readable. So this is all very meaningless in my opinion.
+
+Also the language itself will determine a lot about productivity.
+
+Even though I have a separate section about it, **maintainability is directly linked to productivity**. 
+
+After all **if you spend your time chasing/fixing bugs that affects your productivity.**
+
+====IDE support====
+IDE support is very important to productivity, it goes hand-in-hand with the language however as for example a static / strongly typed language will be able to help you and your IDE much more than a dynamic ever will.
+
+**The IDE support can be more important to your productivity than the language syntax itself**. 
+If it completes everything for you and can detect / fix automatically most errors for you this is priceless.
+
+Other IDE features can also be huge time savers: Debugging, profiling and so on.
+
+==== Strongly VS loosely typed & Static VS dynamic====
+I find a lot of people are confusing those terms,while they often go together (static and strongly typed) it's not always the case.
+
+  - **Strong VS Weak typing**:
+A Strongly typed language(think Scala, Java) will have the variables typed (''String[] var'') whereas a more loosely typed language will often define variable on the fly with no type such as ''$var=3'', var might be used as a number somewhere and a string some other place. The compiler or runtime will enforce the variable type to stay consistent.
+
+Then there is so called "duck typing", which is considered "strong typing", but really there is a big difference: basically you don't specify a type, just as weak typing, however the runtime will "figure one out" from the way you assign/use it, and then check that you don't use it another way later .... of course since the checks are done at runtime it doesn't have much of the benefits a strongly typed language does.
+
+So a strongly typed language is a lot more verbose, but on the other hand it provides the IDE with ways to help you(completion etc..) and the compiler (if it's static too) with ways to optimize the code.
+
+  - **Static vs Dynamic language:**
+Static languages are compiled(to native or bytecode) and either way you cut it will run faster than a dynamic, interpreted, language (to an order of 5-100x).
+
+So if performance is a real issue for you(often overrated) keep that in mind.
+
+Since it is compiled, the compiler has a chance to warn you about many possible problems/error in your code at compile time rather than runtime.
+
+So a Dynamic language will often be more concise and maybe easier to work with, but that comes with the larger risk of runtime error (which are the worst IMO)
+
+Now you can counter-balance that with very good test-coverage ... but now you are not writing less code are you?
+**Of course Test coverage is always a good thing but with a dynamic language it is basically a requirement whereas with a static language it's a nice-to-have(recommended either way).**
+Keep in mind as well that the test code itself needs to be maintained in the long term.
+
+Examples:
+Strongly typed & static: Java.
+Duck typing & Dynamic: Python, Ruby.
+
+Basically, I'm not going to tell you what to pick, since it's basically a trade-of and it's your pick.
+=====Features / API's=====
+The language "features" should not be the only driver for picking a language, after all Assembly had no features but you could still write anything with it.
+
+On the other hand whatever features you don't have to write yourself is time saved.
+
+Also depending what kind of application you are writing some might be very important, say you might need low level USB access access, or need fast mathematics(pointers?), or very low memory footprint and so on.
+
+**The built-in API's are also very important**, ideally they are compact, well documented and very clear, i believe it's one of the main reason Java became popular over C++, the API's are(where?) much simpler/cleaner.
+
+Third party libraries are also a plus, for example in Java or C you kind find libraries for just about anything, for some of the newest languages you might have to write your own.
+
+=====Procedural VS Functional=====
+As I tested some more all those languages, i realized there is also a "Clash" between believers in Procedural vs Functional languages.
+Most widely used languages are Procedural (use loops and variables that change states), and some are Functional(no var reassignment, mostly immutable obj)
+I'm not going to argue which is best because many other ppl did, but basically i think which is best depends of your use-case.
+Procedural is more verbose, but pretty easy to understand, partly because for one it's what taught in school the most.
+Personally i find that functional programming is mostly pushed by mathematician and academics, because that's what it's best at.
+I do not know of many **real world** applications written in a purely functional way. I guess Ericson does things with Erlang. I was also told that Twitter use Scala, but a look at some of that code, tells me it's not nearly all "functional" as the Scala book strongly pushes for.
+[[http://github.com/robey/kestrel/blob/498e13321442acdebf3bb9276a14c38ecf6dc5ec/src/main/scala/net/lag/kestrel/PersistentQueue.scala| Some Twitter Scala code]]
+
+**Either way I think the best languages are the ones that allow both type to be intermixed** as you wish, for example for UI stuff functional programming would be a pain, but for event handling you would be much better served by it.
+
+=====What languages am I watching/rooting for now?=====
+I've tried to write this document without too much bias, but of course I have my own opinion(of the moment).
+
+====Where am I coming from====
+My background is that I worked at Qarbon.com, a Java startup from 98 to 05 where I worked with all versions of java (since 1.0) from client to applets, to server-side.
+I now work on an SAP platform(gigantic horrific J2EE code base), but i also work on several pet projects(open sources) in Java and other languages.
+
+So while Java is my Core language, I've also used / played with Python, Groovy, Fan, Ruby, Scala, Perl, PHP, Pascal, C++, Assembly(NASM) etc...
+
+Some of the principles I believe in:
+  - **Code syntax should be very readable** and preferably can be written only one way so that almost anybody could understand/maintain it.
+  - **The IDE should be able to help me as much as possible**: often that means a static, strongly typed language.
+  - **I Never want to get runtime errors**(fewest possible), so if an IDE/compiler/Test whatever can tell me before runtime that's what I want.
+  - Despite all that **there are limits to how much cruft / boiler plate I can take**, for example Java generics are testing my limits.
+<code>
+private static Hashtable<Integer, FanTokenID> tokens=new Hashtable<Integer, FanTokenID>();
+</code>
+I LIKE verbose, but that's just over the top.
+
+I have to say that a lot of the "cruft" in Java is not in the syntax though but mostly in the API/tools that go with it. 
+
+I'm not surprised developers are turning away from gigantic XML files, J2EE, Struts, JSF and other major overhead technologies like those.
+
+**I think the main reason many developers turned to Rails/Grails from J2EE is maybe as much about the simplicity / convention over configuration than it is about Ruby & Groovy the languages**.
+
+====The "Next" Languages====
+I think the next wave of languages feature are / will be:
+  - Concise & functional syntax, it needs to be quick and powerful.
+  - Interpreted: It's just better to run on a stable, multi platform VM (The JVM is the best one right one).
+  - Better/simpler framework integration.
+  - Despite loosely typed languages recent popularity, I think there will be a return toward strongly typed languages, driven by business requirement for stability/maintainability.  (just my own opinion).
+
+Here are some of the languages I'm looking at, which could dethrone Java.
+
+I don't necessarily love all those but that doesn't mean they don't have potential:
+
+One feature I Like a lot in some of those new languages is the concept of "Actors", this is an event based API layer which allows you to write concurrent apps(most are nowadays) without having to deal with the low level thread stuff, it's simpler and safer(deadlocks anyone ?).
+
+====Scala====
+[[http://www.scala-lang.org/]]
+
+Scala is an up and coming language, for example it replaced Ruby to run Twitter.
+
+It's a static language and is VERY strongly typed(too much ?) yet it's a less verbose than Java overall.
+
+It runs on the Java VM which means a stable engine. 
+
+It's interoperability with Java and all it's Libraries is a huge plus as existing Java code/libs can be reused.
+
+It has just about every feature a language can have which is also it's biggest disadvantage in my opinion, as the barrier of entry is <del>somewhat high</del>**Very**, and code can get rather unreadable as the syntax despite being static is also quite flexible and allow pretty wild things.
+
+It has a nice new web framework called [[http://liftweb.net/|Lift]]
+
+<code | hello world in Scala>
+<<HelloWorld.scala>>=
+object HelloWorld {
+
+  def main(args: Array[String]) = {
+    Console.println("Hello, world!");
+  }
+}
+</code>
+
+That's fairly simple, on the other hand I've seen some pretty ugly(think Perlish) Scala example on the web, which made me unsure I want to use it. 
+
+You don't HAVE TO write unreadable code but Scala makes it possible.
+====Groovy====
+[[http://groovy.codehaus.org/]]
+
+Even though I've clarified my preference for static languages, I still like Groovy quite a lot. 
+To me it beats Ruby for several reasons: Better virtual machine(runtime), better syntax(in my opinion) and just like Scala it can fully interoperability with Java and all it's libraries.
+
+It also has many features not available in Java, such as closures and provides other Ruby/Python like syntactic sugar.
+Example: ''[1, 2, 3].each { item -> print " $item " }''
+
+It also comes with a nice web framework: [[http://www.grails.org/|Grails]] (Linked-in.com runs on it)
+Also with Groovy you have the option of "static typing" so if you want it, your code can have it, although other programs might not, either way it's nice to have the option.
+Many people try Groovy after Ruby, so not surprisingly most don't use the static typing.
+
+<code | Hello world groovy>
+println "hello, world"
+</code>
+
+====Python====
+[[http://www.python.org/]]
+
+I'm not sure about Python, I've done some programs using it and it's fast and efficient.
+On the other hand at times I find it a little finicky("hacky"?) and it seems to change a LOT over time.
+The syntax is nice and compact though fully dynamic, I like that the author favors "one and only one way to write it".
+It has a pretty nice runtime, maybe not on par with the JVM but probably better than Ruby's etc..., it's been around long enough and is quite stable and avail. for many platforms.
+
+While it as a simple compact syntax it has less features than some of the other languages mentioned here(like closures) but that also means it's one of the simples to learn.
+
+So maybe it will grow as developers are looking for new more productive languages, or may be it will not as they might opt for some the newest languages like Groovy, Fan or Scala.
+
+<code | hello world python>
+print "Hello, World!" 
+</code>
+
+====Ruby====
+[[http://www.ruby-lang.org/en/]]
+
+Ruby started a little revolution and I love it for that, syntactic sugar and convention over configurations where pushed by Ruby/Rails and that helps guide what came after that (Scala, Groovy etc...) 
+
+As far as the language itself, it's one of the nicest as far as dynamic language go, though I still prefer groovy, yet I never really was comfortable with it. The fact that you can write the same thing many different ways feel like a maintainability issue more than a freedom for me.
+
+The Ruby interpreter while it has made great stride still doesn't make me feel comfortable the way the JVM does, several failure stories(Twitter among others) are not helping me being confident with it.
+
+To be totally honest I also don't like the fanboy effect / shoved down my throat marketing, and like it or not I've felt that way with Ruby.
+
+Now like many languages it has to go through pain and growth and I think it's going into the right direction, just not sure whether it's the future or if it was just a stepping stone.
+
+<code | Hello world ruby>
+puts "Hello world!"
+</code>
+
+====Fantom (Fan)====
+[[http://fantom.org/]]
+
+Fantom is a newer language that takes the best of Java, C#, Scala and Groovy.
+It has the particularity to run both in the Java VM and .NET.
+
+**I actually very much like this language syntax**. 
+it's statically typed, yet concise, and can do dynamic as well when needed. (''obj.do'' vs ''obj->do'').
+
+The syntax is clear ans easy, Java like but much more concise (a bit Python like at times).
+It has mixins which are nice (Interface with impl.). 
+
+It does not have generics but I agree with the authors it's more pain than it's worth (at least the way it's implemented in Java anyway).
+
+While it can make Java/C# calls, it also comes with it's own lightweight and very clean API (net, io, string manipulation and so on), which make the Java API's look complex and clunky.
+
+Currently the language I'm most interested in.
+
+<code | Hello world>
+class Hello
+{
+  static Void main() { echo("hello world!") }
+}
+</code>
+
+====Clojure====
+[[http://clojure.org/]]
+Clojure is another newer language targeting the JVM.
+It's a pretty clean language and very well documented for a new language.
+It's dynamic & functional.
+In some way I find it's "simpler" than Scala, the number of things to learn is smaller, on the other hand it's a LISP, nicely improved, but still a LISP, so you have to get over the LISP syntax and ways before you can do anything, and I'm not sure too may people are willing to. 
+
+====Haskell / Erlang====
+[[http://www.haskell.org/]] [[http://erlang.org/]]
+
+Thy seem interesting.
+That's all I'm going to say for now because I haven't really done anything with either of them and don't want to say anything dumb (other than the other things I've already said :) )
+
+To be honest those languages seem a little too exotic(esp Haskell) to me and probably will have too big a barrier of entry for most devs ... at least until they become more popular.
+
+Those are purely functional languages .... in other word they are not so easy to learn by the "common" developer, unless that gets taught in school, which I don't think is the case(mostly).
+
+They have their own advantages, like being very good for highly concurrent apps and things of that nature, since they rely heavily on immutability and event passing (no "state" to worry about).
+
+=====Beyond Hello World - Better comparisons=====
+Hello World is pretty useless to judge a language.
+Rosetta Code is a very nice site that compares "real" Algorithm/problems implementation in multiple languages.
+
+[[http://rosettacode.org/wiki/Category:Fan]]
+
+=====Books=====
+See [[some_of_the_geek_books_i_own_like|This Page]] about some of the Books I own/like, some about those languages.
+Note: I'm still reading the Scala book, will add it there once I'm done.
+
+
+=====Hate Comments=====
+Of course almost anybody will be displeased by at least one of all the things I said here, and call me a foul.
+The real fouls are the one with no opinion.
+Go ahead, us the "Comments" link at the bottom.
+

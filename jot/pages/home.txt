@@ -1,0 +1,26 @@
+======JavaOnTracks: Home======
+====What is it ?====
+I have been developing Java based web applications, small and larges, for over 10 years.
+I have found and used(or have had to use) many tools, open-source or not, over the years, some i liked and some not so much.
+In other cases i had to write my own tools because there where not any or i did not like the existing ones.
+Of some of the tools i liked, i took some of the concepts i liked and wrote my own, often simpler, implementations.
+So JavaOnTracks is a compilations of all the tools i wrote that i think would be useful to any java web developer.
+That is in other words a "Java web developer toolbox".
+Why is it called "JavaOnTracks"? Yes it is a bit of a play on "Ruby on rails" and it does have some features like it, but it is similar to it only in a conceptual way, basically to make your life easier.
+
+What you will find in the JavaOntracks package, is a single easy to use jar file(API) with no dependencies whatsoever(well besides Java), and lots of features/utilities that would normally require many packages and configuration files to get them working.
+What you will not get, is a bloated, undocumented, overcomplicated software, requiring you to install lots of other sofware pieces to get it to work. And best of all, in my opinion, no XML files to configure whatsoever.
+
+====Who is it for ?====
+Any Java developer who likes saving time by using simple tools that work.
+In particular those who feel like other frameworks/tools are in their way rather than helping them, say for example: struts, JSF, giant XML parsers and other things of that nature ... you know what i mean :-)
+
+====What are the Features ?====
+Well, the [[Features | Features Page]] is here for that, with links to more details and the API/Javadoc.
+In a nutshell here are some of the main features:
+FIXME: list main things here
+
+
+====How much does it cost / Licence====
+JavaOnTracks is Free(open-source) 
+It his released under the "[[http://www.opensource.org/licenses/artistic-license-2.0.php | Artistic License 2.0]]".

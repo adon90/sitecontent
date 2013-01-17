@@ -1,0 +1,296 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== Fresh install of 2007s isa on ubuntu (hedgy) 64 bits  ======
+=====Introduction=====
+I use Ubuntu rather than Suse, because Suse is not a good Desktop distro and RPM just sucks.
+=====Installing Ubuntu=====
+I simply burned an Ubuntu CD (Hardy Heron x86 64 bits) and install it to my drive (regular Desktop installation)
+
+=====Fixing Ubuntu so that the SAP installer will work=====
+SAP only supports Redhat / Suse out of the box, so a few fixes where required to get Ubuntu ready for SAP.
+
+Note: make sure your /etc/hosts contains lines like those, otherwise visual admin won't work right (and maybe other things)
+<code>
+127.0.0.1       localhost localhost.localdomain
+127.0.0.1       desktop desktop.mycomp.com
+192.168.1.212     desktop desktop.mycomp.com
+</code>
+
+WARNING: **Make sure you have both 127.0.0.1 and your ip address(ex: 192.168.1.212) resolving to your hostname.
+Otherwise Install/Upgrade will fail miserably (login errors) and it's VERY hard to track down !!**
+
+
+====Dash / Bash====
+This drove me insane for a while, but the SAP installer was failing and i could not figure out why.
+Turn out that Ubuntu uses Dash as the standard shell, rather that Bash !! and because of that sapinst would fail. (said somethign stupid like 'dirname --p nos such option' )
+
+So anyhow, we fix that by setting bash as the default shell (better anyway in my opinion)
+<code>
+sudo ln -s -f /bin/bash /bin/sh
+</code>
+
+====Dependencies====
+SAP relies on older libraries and other packages.
+Here are the main things i had to install:
+<code>
+sudo apt-get install pdksh unzip original-awk csh zsh libstdc++5 libperl-dev
+</code>
+
+====SAP system settings====
+As explained in SAP notes, you should adjust some settings.
+
+<code | vi /etc/sysctl.conf>
+kernel.shmall = 1879048192
+kernel.shmmax = 1879048192
+kernel.msgmni = 128
+fs.file-max = 8192
+</code>
+
+then run ''sysctl -p''
+
+<code | vi /etc/security/limits.conf>
+* hard nofile 32800
+* soft nofile 32800
+</code>
+
+
+====Chkconfig isssue====
+During the installation SAP tries to use the Redhat?Suse specific "chkconfig" script to setup some services.
+This does not exist on debian Hardy but we can install a version of it (from Intrepid) as wellas insserv and it will then work ok.
+
+**Go to: [[http://packages.ubuntu.com/intrepid/chkconfig]] and download chkconfig** (intrepid) **and install it with GDBI** (the browser will open it with GDBI by default, just click Install")
+
+We also need to install insserv: (Suse service manager)
+
+''sudo apt-get install insserv''
+
+WARNING: **installing insserv removed the standard initscripts which might result in an unbootable system.** 
+So note which packages are removed and **make sure you reinstall them** after installing SAP and **before rebooting**. 
+For me here where the removed packages: apparmor apparmor-utils initscripts system-services ubuntu-minimal upstart-compat-sysv
+
+
+Note: On my machine, **this would fail because of a loop between urandom and umountfs**, i edited /etc/init.d/umountfs and **removed "urandom"** from Required-Start, then ran it again.
+This helped a bit: [[http://wiki.debian.org/LSBInitScripts/DependencyBasedBoot]]
+
+=====Installing java=====
+We need a 64 Bit JDK, best one to use, is IBM JDK for sap:
+
+We use the IBM jvm(64bits) (see note: 1090932 & 861215).
+This is the best VM for linux x86 64 bits.
+We download the new version here:
+[[https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?lang=en_US&source=swg-ibmjavaisv]]
+
+It will ask for an access key that is found in the sap note.
+Then downloaded latest tgz (Ex: IBMJava2-AMD64-142-SDK-1.4.2-xyz-tgz) to here:
+\\frenchie/sapcd/java_installers/IBM-jvm/IBMJava2-AMD64-142-SDK-1.4.2-xyz.tgz
+
+Then extract it to:
+/usr/lib/jvm
+
+''tar xzvf IBMJava2-AMD64-142-SDK-1.4.2-xyz.tgz /usr/lib/jvm/''
+
+=====Installing SAP=====
+====Media====
+Here are the SAP DVD's i used (from sap marketplace)
+
+We use 2007 SP1.
+We also that use maxdb as the Database, it's free and more lightweight than oracle, thus better for a developer workstation.
+
+You will need the following CD's/DVD's, as they will be requested by sapinst :
+
+551033089_8 : SAP_CRM_2007_Installation_Master_Lin64
+51033262_9 : NW_2004s_SR2_Kernel_LNX_X86
+51033265 : 2007_java_components
+51032922: MaxDB 7.7.02 Build 10 Linux X86 64
+
+They are all on my sap share:
+[[//frenchie/sapcd/SAP_DVDS/2007_SR1/]]
+and
+[[//frenchie/sapcd/Others/maxdb/maxdb_7.7.02.10/]]
+
+Installer will request those (in order):
+/mnt/sapcd/SAP_DVDS/2007_SR1/51033265_2007_java_components
+/usr/lib/jvm/IBMJava2-amd64-142
+/mnt/sapcd/Others/maxdb/maxdb_7.7.02.10/RDBMS_MAXDB_7.7.02.10__for_SCM_2007_
+/mnt/sapcd/SAP_DVDS/2007_SR1/51033262_9NW_2004s_SR2_Kernel_LNX_X86
+/mnt/sapcd/SAP_DVDS/2007_SR1/51033093_java_components
+
+====Running sapinst====
+<code>
+xhost +
+su -
+export DISPLAY=:0.0
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+cd 551033089_8/IM_LINUX_x86_64
+./sapinst
+</code>
+
+Choose a system of type:
+crm2007->sap systems->maxdb->central system->central inst
+
+choose "typical"
+
+WARNING: Update: on most of my coworker machines, selecting JCRM here would cause the installer to hang at the "Deploying Application" step after deploying the CRM packages and fail the whole installation. (i think maybe it runs out of memory - unsure)
+So: **Do not select JCRM**, instead after the installation just run JSPM and do "new packages" and deploy the CRM packages then (at least SAP-CRMAPP, SAP-CRMDIC and SAP-SHRAPP) this is quicker anyway.
+
+
+When asked for the type of install, choose the <del>JCRM java components &</del> "AS-java" **ONLY**
+Give it the CD's it's asking for when asked. (51033265_2007_java_components)
+
+Provide the path to jdk 1.4 (previously installed). Ex: /usr/lib/jvm/IBM....
+Provide the path to the JCE policy: /sapcd/Others/java_installers/Java Cryptolib ssl/ibmjce142.zip
+
+Give a system ID(ex: ZTB) and password.
+WARNING: **DO not forget those password ever, you will probably need to remember in 2 years while doing an upgrade.**
+
+MaxDb settings: Specify **"mirror logs"** as requested in Upgrade guide. Set to use 2 cpu if you have them.
+
+It will ask for the other DVD's listed above (kernel, maxdb etc..).
+
+Register into the SLD if you wish.
+
+It will also ask you for a SAP solution manager key, go get one, you will have to add your new system into SAP sol. manager and generate that key.
+
+
+===== Service packs =====
+[[Upgrading to 2007 SP1 from 2007 SP0]]
+[[Upgrading ISA to 2007 SP3]]
+
+===== Post Install =====
+
+====Reinstall packages removed by insserv====
+WARNING: **installing insserv removed the standard initscripts which might result in an unbootable system.** 
+So note which packages are removed and **make sure you reinstall them** after installing SAP and **before rebooting**. 
+<code>
+apt-get install apparmor apparmor-utils initscripts system-services ubuntu-minimal upstart-compat-sysv
+</code>
+
+
+====MaxDB stupid log system====
+Unless you tell it otherwise, MaxDB standard practice is that once the log files gets full, it will just stop operating, the best part about it:
+  * It will just stop working whenever that happens
+  * It usually will give you an error about what it was trying to do at the time rather than tell you clearly the log is full.
+
+Anyway in the case of ISA we really don't give a damn much about loosing the data in that DB, let alone the log files of the DB.
+
+So we need to tell maxdb, to automatically start the log over when they are full (~ circular log) rather than crap out.
+
+Here is how it's done:
+
+<code>
+# log as the sap user on the box, where ZTB is your instance ID and DB name
+su - ZTBadm
+# log into the db
+dbmcli -U c_J2EE -d ZTB
+#In the db shell, turn on log overwrite:
+    util_execute SET LOG AUTO OVERWRITE ON
+# it should say OK, then leave the db shell
+    exit
+#done.
+</code>
+
+====Connection to TREX server====
+Unless you configure the trex connection on the ISA box, all the B2B. B2C catalog won't work and display an error
+<code>
+The catalog that you have selected is currently unavailable, try again later.
+</code>
+
+See [[https://websmp230.sap-ag.de/sap(bD1lbiZjPTAwMQ==)/bc/bsp/spn/sapnotes/index2.htm?numm=1157686 | Note: 980678]]
+TIP: I don't understand why they don't retrieve this data from the TREX CRM connection as it did in earlier version, now(since 2007) you have to maintain this manually both on the ISA and the CRM box !
+
+Anyway, what you have to do is:
+  * Use SAGUI to connect to the CRM box and launch transaction SM59(rfc's) go to tcp/ip and find the TREX connection, and note that RFC's name (EX: TRX_RFC_XYZ)
+  * Start transaction SE37 (edit/run functions) and find "TREX_EXT_SHOW_SERVERS" and run it with those arguments: Server Type = '4', IS_ACTIVE = 'X', RFC: TRX_RFC_XYZ (use the actual RFC name you found in the previous step), run the transaction
+  * Look at the transaction results, and you should find the TREX connection settings, such as: host: trexdev.corp.com,   port: 30301, remember those
+
+Now that we got this data, we need to go put it in visual administrator:
+  * Start visual administrator and connect to the ISA server (local)
+  * Browse to SID/server/services/TREX service
+  * Select "communication.nonproxyhosts" and enter your trex server hostname here (Ex: trexdev.corp.com) and click update
+  * Select "nameserver.address" and enter a value like: tcpip://<nameserverhost>:<nameserverport>  Ex: tcpip://trexdev.corp.com:30301     click Update
+  * Select "nameserver.backupserverlist" and enter the same data (unless you do have backup trex servers) and click Update
+  * Press Save (floppy icon) and quit visualadmin
+  * Restart the sap engine (stopsap,startsap)
+
+
+====Start/Stop scripts====
+created in **/usr/local/adm** folder
+in there created **SAP-startup.sh** with content
+<code>
+gksu su - sidadm -c startsap
+</code>
+
+and created **SAP-shutdown.sh** with content
+<code>
+gksu su - sidadm -c stoptsap
+</code>
+
+Then Chmod +x those files
+
+====You can setup shortcuts for visual admin & config tool====
+Visual admin and configtool shortcuts:
+<code | vi /usr/local/adm/configtool.sh>
+# run this script with sudo: Ex: gksudo visualadmin.sh
+xhost +
+#export JAVA_HOME=/usr/lib/jvm/IBMJava2-amd64-142/
+su - sidadm -c "setenv DISPLAY :0.0;cd /usr/sap/SID/JC00/j2ee/configtool/;./configtool.sh"
+xhost -
+</code>
+
+<code | vi /usr/local/adm/visualadmin.sh>
+# run this script with sudo: Ex: gksudo visualadmin.sh
+xhost +
+#export JAVA_HOME=/usr/lib/jvm/IBMJava2-amd64-142/
+su - sidadm -c "setenv DISPLAY :0.0;/usr/sap/SID/JC00/j2ee/admin/go"
+xhost -
+</code>
+
+Then Chmod +x those files
+As it said in the scripts, you will want to run them as root (Ex: sudo visualadmin.sh) or have an icon run Ex: "gksudo visualadmin.sh"
+
+====ISA: Password expiration and number of tries====
+Sap auto-expire the password of admin after 90 days, it does so the first time you "login" after 90 days, unfortunately it seem to always be when you have important work to do like changing a setting or redeploying an app, on a production system you don't want this to happen by itself at a bad time, but should make your own policy to change that password at scheduled times.
+
+Also after 5 errors it will lock=up, and the last thing you want is the admin password to get locked up on your production system because it might take hours to fix this.
+
+Anyway this settings can be changed in the visual administrator: (set it to a big number, say 900 days)
+server->services->ume provider->ume.logon.security_policy.password_expire_days
+
+And the number of attempts: (set this high to be safe say 20)
+ume.logon.security_policy.lock_after_invalid_attempts
+
+
+====Port number====
+For historic reason and the way our firewall is setup we want the http port of the J2ee to be 50100 (50101 for https).
+So in visual admin go to:
+dispatcher->services->http provider
+and edit the "ports' line appropriately then click "update" and then the "save" icon.
+
+====Setup B2c/B2B XCM====
+
+See here on how to setup the ISA XCM server/B2B/B2C sites
+[[Saving/Loading iSA B2B/B2C XCM config]]
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+
+=====Verification=====
+You can go to:
+http://127.0.0.1:50000/sap/monitoring/SystemInfo
+
+and verify all your components are at the correct patch level.
+
+Kernel should be at 144
+MaxDB should be at 7.7.02
+Java components should be at SP15
+
+
+CRM comps at 6.0 SP2 (except crmdic: 5.0SP12)
+
+{{ 2007/Screenshot-2.png }}
+
+{{ 2007/Screenshot-3.png }} 

@@ -1,0 +1,42 @@
+====== JOT variable tag Example ======
+===== Java View =====
+<code | Java>
+	public void prepareViewData() throws Exception
+	{
+		addVariable("calendar",new GregorianCalendar());
+		addVariable("title", "My Cool Page");
+        }
+
+        public String getCustomVar()
+	{
+		return "I'm the result from the getCustomVar() function";
+	}
+</code>
+
+===== HTML view (template) =====
+<code | Template>
+<html>
+<head><title><jot:var value="title"></title></head>
+<body>
+<jot:var value="calendar"><br>
+<jot:var value="calendar.getTime().time"><br>
+<jot:var value="missing"><br>
+<jot:var value="missing" default="defaultValue"><br>
+<jot:var value="getCustomVar()"><br>
+</body>
+</html>
+</code>
+
+===== Generated HTML =====
+<code | HTML>
+<html>
+<head><title>My Cool Page</title></head>
+<body>
+java.util.GregorianCalendar[...]<br>
+10003456745<br>
+MISSING_VALUE!<br>
+defaultValue<br>
+I'm the result from the getCustomVar() function<br>
+</body>
+</html>
+</code>

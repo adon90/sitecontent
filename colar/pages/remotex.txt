@@ -1,0 +1,47 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== Remote X From Winblows ======
+
+===== SETUP =====
+  * installing cygwin
+Run the cygwin installer (setup.exe)
+Make sure to install the following packages:
+<code bash>
+install X/xorg-x11-xwin
+install net/openssh
+install editors/vim
+</code>
+
+Running in multiwindow mode make sapinst not refresh right, so we will run windowmaker instead
+edit /usr/X11r6/bin/startx
+in defaultserverargs remove -multiwindow
+run wmaker.inst to get windowmaker ready
+
+===== USAGE -old way =====
+
+  * Getting the X server started and linux connecting to it
+start cygwin shell.
+<code bsh>
+startx
+</code>
+-> new xterm starts, go into it
+<code bash>
+xhost + #(to allow remote connection)
+ssh b2ctst.pcf.com -l root
+</code>
+-> connects to b2ctst
+<code bash>
+export DISPLAY=10.10.1.194:0 #(our local machine ip, where we run cygwin/X)
+</code>
+
+You can now start any X command (ie: sterm, xload, sapinst ... etc ...)
+
+===== USAGE - new way =====
+ssh -X is safer that using Xhost + (and the xhost+ is disabled by default in some newer Xserver versions/distros)
+So we can use for example:
+
+''ssh fileserver -l toto -X''
+
+Or to run right away some commands for example:
+''ssh fileserver -l root -X 'cd /tmp; sudo ls'''

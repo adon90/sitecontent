@@ -1,0 +1,117 @@
+======Bookmarking options and custom home page======
+=====Bookmarking site/tool=====
+With my job i am in constant need of articles and docs from all over the web.
+It became quickly clear i need to manage my bookmarks, and be able to access them form anywhere.
+
+I tried a few different options overtime, i tried del.icio.us but didn't like anything about it, stupid name, stupid interface, not flexible at all.
+
+I then switched to google bookmarks which worked ok, but it is annoying there are no ways to share your bookmarks or make them public (it is required to login to see them)
+
+On the other hand many bookmarks site do not let you keep some bookmarks "private" which is a must-have for me (don't want to share temporary/sensitive work related links).
+
+Anyhow i think i found a decent bookmarking site that does what i want fairly well.
+This is [[http://www.furl.net|Furl]].
+
+After creating and validating my account, i was able to import my Google bookmarks (in the google bookmark page their is a link to export the bookmarks into an HTML file.
+Then they can be imported into Furl (tools/import).
+Sure you will still have to reorganize them after importing (keywords etc...).
+
+The one thing that is not working well is the furl toolbar, it kept opening that popup and making the browser crash when pressed.
+
+In the end what works well is to use the furl-no-pop bookmarklet:
+[[http://www.furl.net/tools.jsp]] (drag it to the firefox bookmark bar).
+
+Also Furl lets you easily display some of your links on your website, the advanced generator is flexible and powerful: 
+[[http://www.furl.net/shareSiteAdvanced.jsp#controls]]
+See how i added separate parts of my Furl bookmarks to my site here: 
+[[my bookmarks]]
+
+=====Custom home page=====
+I really really like to have my browser "Home" page very functional and lightweight.
+That means having a google search box, and my favorite links (special topic i created in Furl).
+
+So i created a basic html page like this:
+<code | home.html>
+
+<html>
+<body>
+<head>
+
+<script language="javascript">
+	var furlUserId=1238656;
+	var furlBaseUrl='iframe.html?http://www.furl.net/siteLatest.jsp?maxitems=100&sortby=title&spawn=y&bullets=y&comments=y&userid='+furlUserId;
+	var defaultTopic='2141155';
+	var defaultTopicUrl=furlBaseUrl+'&topics='+defaultTopic;
+	// Loads a furl topic.
+	function showFurlTopic(topic)
+	{
+		var furlUrl=furlBaseUrl+'&topics='+topic;		
+		document.getElementById('myspan').firstChild.nodeValue=furlUrl;
+		document.getElementById('furl').src=furlUrl;
+	}
+	function googleSearch(type)
+	{
+		document.googleForm.action="http://"+type+".google.com/"+type;
+	}
+</script>
+</head>
+<center>
+<hr>
+<!-- Google search Box -->
+<form action="http://www.google.com/search" name="googleForm" target="_blank">
+<input type="hidden" name="hl" value="en">
+<input type="text" name="q" size="55" maxlength="2048"><br>
+<input name="Web" type="submit" value="Web" onclick="javascript:googleSearch('search');">
+<input name="Maps" type="submit" value="Maps" onclick="javascript:googleSearch('maps');">
+<input name="Images" type="submit" value="Images" onclick="javascript:googleSearch('images');">
+</form>
+</center>
+<hr/>
+<!-- Furl Topic chooser -->
+<a href="javascript:showFurlTopic(defaultTopic);">Favorites</a>
+<a href="javascript:showFurlTopic('2141008');">PCF</a>
+<a href="javascript:showFurlTopic('2140938');">Geek</a>
+<a href="javascript:showFurlTopic('2140932');">Apps</a>
+<a href="javascript:showFurlTopic('2140925');">Java</a>
+<a href="javascript:showFurlTopic('2140931');">Linux</a>
+<a href="javascript:showFurlTopic('2140943');">News</a>
+<a href="javascript:showFurlTopic('2140944');">SAP</a>
+<a href="javascript:showFurlTopic('2140939');">Seattle</a>
+<a href="javascript:showFurlTopic('2140941');">Sports</a>
+<a href="javascript:showFurlTopic('2140942');">Weather</a>
+
+<hr/>
+<!-- Furl Topic Content (bookmarks) -->
+<style type="text/css" media="screen"><!--
+.furlListMain ul {margin:0;padding-left:18px;}
+.furlAttribution {margin-top:4px;} .furlListItem {line-height:1.5em;} // -->
+</style>
+<span id="myspan">&nbsp;</span><br>
+<iframe id='furl' width="950" height="600">
+</iframe>
+<hr/>
+</hr>
+</body>
+<script language="javascript">
+	document.getElementById('furl').src=defaultTopicUrl;
+</script>
+</html>
+</code>
+And set it up as my browser homepage (options/main)
+
+home.html also uses iframe.html (where we show she furl data/links)
+<code | iframe.html>
+<html>
+<body>
+<script language="javascript">
+	<!-- The Furl URL will be found after the '?' -->
+	var here=window.location.href;
+	var furlurl=here.substr(here.indexOf('?')+1,here.length);
+	
+	<!-- Loading the furl URL (javascript) into the page. -->
+  document.write('<script language="javascript" src="'+furlurl+'"/>');
+</script>	
+	
+</body>
+</html>
+</code>

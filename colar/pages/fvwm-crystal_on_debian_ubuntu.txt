@@ -1,0 +1,277 @@
+======FVWM-Crystal on Debian/Ubuntu======
+
+=====Installation=====
+<code>
+sudo apt-get install fvwm-chrystal conky rox-filer xfce4-terminal xmms thunar
+</code>
+
+Go (in gnome) to preferences / sessions-current and trash the floowing items
+preferences-sessions-current _session-metacity -> style: trash
+preferences-sessions-current _session-nautilus -> style: trash
+preferences-sessions-current _session-gnome-panel -> style: trash
+
+Apply / close
+
+Restart with fvwm:
+<code>
+killall metacity && killall gnome-panel && sleep1 && fvwm-crystal -replace
+</code>
+
+Start "gnome-session-properties" and select session-options / Save current session
+
+=====Fvwm-crystal addons and customization=====
+
+====Custom launchers for applications crystal didn't know about====
+<code |  ~/.fvwm/Applications/Internet/10~Web_browsers/90~firefox~Firefox >
+exec firefox $@
+</code>
+
+<code |  ~/.fvwm/Applications/Internet/10~Web_browsers/90~thunderbird~Thunderbird >
+exec thunderbird $@
+</code>
+
+<code | ~/.fvwm/Applications/Development/IDE/~netbeans>
+exec ~/apps/netbeans-6.0/bin/netbeans
+</code>
+
+<code |  ~/.fvwm/Applications/Internet/Others/~LinNeighborhood >
+exec gksudo LinNeighborhood
+</code>
+
+<code |  ~/.fvwm/Applications/Other/Security/~pgorilla >
+exec ~/apps/pgorilla.sh
+</code>
+
+<code |  ~/.fvwm/Applications/sap/10~sap-login >
+exec  ~/SAPClients/SAPGUI7.00rev2/bin/guilogon
+</code>
+
+And a few others, but you get the idea.
+
+====Missing icons====
+
+I created those icons and put them in  ~/.fvwm/icons/Default/22x22/apps/
+{{fvwm-22x22/firefox.png}} {{fvwm-22x22/LinNeighborhood.png}} {{fvwm-22x22/netbeans.png}} {{fvwm-22x22/pgorilla.png}} {{fvwm-22x22/sap-admin.png}} {{fvwm-22x22/sap-config.png}} {{fvwm-22x22/sap-dm.png}} {{fvwm-22x22/sap-login.png}} {{fvwm-22x22/thunderbird.png}} 
+
+And also in 32x32 size into  ~/.fvwm/icons/Default/32x32/apps/
+{{fvwm-32x32/firefox.png}} {{fvwm-32x32/LinNeighborhood.png}} {{fvwm-32x32/netbeans.png}} {{fvwm-32x32/pgorilla.png}} {{fvwm-32x32/sap-admin.png}} {{fvwm-32x32/sap-config.png}} {{fvwm-32x32/sap-dm.png}} {{fvwm-32x32/sap-login.png}} {{fvwm-32x32/thunderbird.png}} 
+
+To get the icons to show in the menu bar/title bar we also need this:
+<code | ~/.fvwm/components/styles/Application-Icons-22-32>
+Style Thunderbird-bin             MiniIcon 22x22/apps/thunderbird.png, Icon 32x32/apps/thunderbird.png
+Style Firefox-bin                 MiniIcon 22x22/apps/firefox.png, Icon 32x32/apps/firefox.png
+Style "NetBeans"*                 MiniIcon 22x22/apps/netbeans.png, Icon 32x32/apps/netbeans.png
+Style "com.sap.platin.Gui"                 MiniIcon 22x22/apps/sap-login.png, Icon 32x32/apps/sap-login.png
+Style gorilla*                 MiniIcon 22x22/apps/pgorilla.png, Icon 32x32/apps/pgorilla.png
+Style LinNeighborhood                 MiniIcon 22x22/apps/LinNeighborhood.png, Icon 32x32/apps/LinNeighborhood.png
+</code>
+
+To find the "ClasName" of an app, ie: "Firefox-bin", run that application and in the fvwm-crystal menu click Developer/Identify Window and click the application window to find the "ClassName".
+
+=====Conky=====
+Conky gives nice monitoring infos on the desktop.
+
+<code | ~/.conkyrc>
+# set to yes if you want Conky to be forked in the background
+background yes
+
+cpu_avg_samples 2
+net_avg_samples 2
+
+out_to_console no
+
+# X font when Xft is disabled, you can pick one with program xfontsel
+#font 7x12
+#font 6x10
+font 7x13
+#font 8x13
+#font 7x12
+#font *mintsmild.se*
+#font -*-*-*-*-*-*-34-*-*-*-*-*-*-*
+#font -artwiz-snap-normal-r-normal-*-*-100-*-*-p-*-iso8859-1
+
+# Use Xft?
+use_xft no
+
+# Xft font when Xft is enabled
+xftfont monospace-8
+
+own_window_transparent no
+own_window_colour hotpink
+
+# Text alpha when using Xft
+xftalpha 0.8
+
+on_bottom yes
+
+# mail spool
+mail_spool $MAIL
+
+# Update interval in seconds
+update_interval 2
+
+# Create own window instead of using desktop (required in nautilus)
+own_window no
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 5 5
+maximum_width 150
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders yes
+
+# Stippled borders?
+stippled_borders 0
+
+# border margins
+border_margin 5
+
+# border width
+border_width 2
+
+# Default colors and also border colors
+default_color white
+default_shade_color white
+default_outline_color white
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+
+gap_x 8
+gap_y 38
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer yes
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# boinc (seti) dir
+# seti_dir /opt/seti
+
+# variable is given either in format $variable or in ${variable}. Latter
+# allows characters right after the variable and must be used in network
+# stuff because of an argument
+#${font Dungeon:style=Bold:pixelsize=10}I can change the font as well
+#${font Verdana:size=10}as many times as I choose
+#${font Perry:size=10}Including UTF-8,
+#${font Luxi Mono:size=10}justo como este texto que o google traduz f? o portugu?
+# stuff after 'TEXT' will be formatted on screen
+
+TEXT
+[${color red}$nodename${color white}]
+${color #888888}Uptime: $uptime
+${color #888888}${time %b/%a/%d} ${color #00ff00}${time %k:%M:%S}
+${color #888888}Bat:${color #00ff00}${battery BAT0}
+    ${color #888888}(${battery_time BAT0}) 
+${color white}${hr 1}
+${color #ffccaa}Cpu: ${color #CCCCCC}${cpu}% Temp: ${acpitempf}F
+${color #888888}load:${color #CCCCCC}$loadavg ${color #888888}
+${color #888888}processes:${color #CCCCCC}$processes(${color #CCCCCC}$running_processes)
+${color #888888}${cpugraph 12 25 ff0000 ff00ff} 
+${color #CCCCCC}Processes        CPU%
+${color #ddaa00} ${top name 1}${top cpu 1} 
+${color #888888} ${top name 2}${top cpu 2}
+${color #888888} ${top name 3}${top cpu 3}
+${color #888888} ${top name 4}${top cpu 4}
+${color white}${hr 1}
+${color #ffccaa}Mem: ${color #CCCCCC}${memperc}% Swap: ${swapperc}
+${color #888888}${membar 10 ff0000 ff00ff} 
+${color #888888}ram :${color #CCCCCC}$mem${color #888888}/${color #CCCCCC}$memmax ${color #888888}
+${color #888888}swap:${color #CCCCCC}$swap${color #888888}/${color #CCCCCC}$swapmax
+${color #CCCCCC}Processes        MEM%
+${color #ddaa00} ${top_mem name 1}${top_mem mem 1}
+${color #888888} ${top_mem name 2}${top_mem mem 2}
+${color #888888} ${top_mem name 3}${top_mem mem 3}
+${color #888888} ${top_mem name 4}${top_mem mem 4}
+${color white}${hr 1}
+${color #ffccaa}Disks:
+${diskiograph 25 ff0000 0000ff}
+${color #888888}Root :${color #CCCCCC}${fs_used /}${color #888888}/${color #CCCCCC}${fs_size /} ${color #888888}(${fs_free_perc /}% ${color #888888} free)
+      ${fs_bar 10/}
+
+${color #ffccaa}Net:
+${color #888888}Down:      Up:
+${color #CCCCCC}${downspeed eth1} k/s ${color #888888} ${color #CCCCCC}${upspeed eth1}  k/s
+${color #888888}${downspeedgraph eth1 25,70 ff0000 0000ff} ${color #888888}${upspeedgraph eth1 25,70 0000ff ff0000}
+</code>
+
+<code | ~/.fvwm/preferences/Startup>
+# In this file you can start up applications at the beginning of the session.
+
+AddToFunc InitFunction
+
+#Launch conky
++ I Test (x conky) Exec pidof conky || exec conky
+
+# Launch gnome-settings-daemon
++ I Test (x gnome-settings-daemon) Exec pidof gnome-settings-daemon || exec gnome-settings-daemon
+
++ I Test (x xfce4-terminal) Exec pidof xfce4-terminal || exec xfce4-terminal  --geometry=83x35+3+33 --default-display=0:3
+
+vim:ft=fvwm
+</code>
+
+
+=====Tiny Conky screen=====
+Since i often have maximized apps, i cannot always see my beautiful conky monitor.
+So i now have a new tiny conky screen, with the minimal need infos(cpu & mem) along the top of the screen, between chrystal app menu and virtual desktop chooser.
+
+{{conky_small.png}} 
+
+<code | small .conkyrc config>
+background yes
+cpu_avg_samples 2
+net_avg_samples 2
+out_to_console no
+use_xft no
+xftfont monospace-8
+own_window_transparent no
+own_window_colour hotpink
+xftalpha 0.8
+on_bottom yes
+mail_spool $MAIL
+update_interval 2
+own_window no
+double_buffer yes
+minimum_size 5 5
+maximum_height 40
+draw_shades no
+draw_outline no
+draw_borders yes
+stippled_borders 0
+border_margin 1
+border_width 0
+default_color white
+default_shade_color white
+default_outline_color white
+alignment top_left
+gap_x 330
+gap_y 2
+use_spacer yes
+no_buffers yes
+uppercase no
+
+TEXT
+${color yellow}${cpu}% [${top name 1}${top cpu 1}]
+${color green}${memperc}% [${top_mem name 1}${top_mem mem 1}]
+</code>
+
+  

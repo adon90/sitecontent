@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+<url>
+  <loc>http://www.javaontracks.net/</loc>
+  <lastmod>2008-02-29T16:11:53Z</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.9</priority>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/home</loc>
+  <lastmod>2008-02-29T16:11:53Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/about</loc>
+  <lastmod>2007-12-11T20:33:53Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/configuration</loc>
+  <lastmod>2007-12-11T20:33:54Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/documentation</loc>
+  <lastmod>2008-02-29T13:47:35Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/features</loc>
+  <lastmod>2008-12-10T21:02:17Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/flow</loc>
+  <lastmod>2007-12-11T20:33:55Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/inprogress</loc>
+  <lastmod>2008-03-03T12:49:43Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jdbc_to_sql_mappings</loc>
+  <lastmod>2007-12-11T20:33:55Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_block_tag</loc>
+  <lastmod>2007-12-11T20:33:55Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_loop_tag</loc>
+  <lastmod>2007-12-11T20:33:56Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_standard_tag</loc>
+  <lastmod>2007-12-11T20:33:56Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_variable_tag</loc>
+  <lastmod>2007-12-11T20:33:57Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jotwiki_smileys</loc>
+  <lastmod>2007-12-11T20:33:57Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/log_levels</loc>
+  <lastmod>2007-12-11T20:33:57Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/sidebar</loc>
+  <lastmod>2008-12-16T16:36:21Z</lastmod>
+  <priority>0.1</priority>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/temp</loc>
+  <lastmod>2007-12-11T20:33:58Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/testing</loc>
+  <lastmod>2007-12-11T20:33:59Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/todo</loc>
+  <lastmod>2007-12-11T20:33:59Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/view_tags</loc>
+  <lastmod>2007-12-11T20:34:00Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/flatbar</loc>
+  <lastmod>2007-12-11T20:34:00Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_if_tag</loc>
+  <lastmod>2007-12-11T20:34:00Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_include_tag</loc>
+  <lastmod>2007-12-11T20:34:01Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_url_tag</loc>
+  <lastmod>2007-12-11T20:34:01Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot_form_tag</loc>
+  <lastmod>2007-12-11T20:34:02Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/style_decorators</loc>
+  <lastmod>2007-12-11T20:34:02Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/captcha_generator</loc>
+  <lastmod>2008-12-10T19:07:02Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/getting_started</loc>
+  <lastmod>2008-12-12T13:05:33Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/scheduler</loc>
+  <lastmod>2008-12-10T19:07:30Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/basic_testing_api</loc>
+  <lastmod>2008-12-10T19:07:48Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/simple_search_engine_indexer</loc>
+  <lastmod>2008-12-10T19:08:08Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/file_uploading_multipart_form_api</loc>
+  <lastmod>2008-12-10T19:04:07Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/jot utilities</loc>
+  <lastmod>2008-05-20T17:29:13Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/utilities</loc>
+  <lastmod>2008-12-10T19:11:08Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/preference_properties_manager</loc>
+  <lastmod>2008-12-10T19:09:06Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/simple_logging_api</loc>
+  <lastmod>2008-12-10T19:09:29Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/antispam_functions</loc>
+  <lastmod>2008-05-21T14:27:24Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/request_counter</loc>
+  <lastmod>2008-05-28T17:54:58Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/menu</loc>
+  <lastmod>2009-06-26T10:45:56Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/server-side_file_browsing_uploading_api</loc>
+  <lastmod>2008-12-10T19:05:01Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/db_sql_layer</loc>
+  <lastmod>2008-12-10T19:06:09Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/sidebar_top</loc>
+  <lastmod>2009-04-22T18:13:09Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/sidebar_bottom</loc>
+  <lastmod>2008-10-24T12:45:03Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/download</loc>
+  <lastmod>2010-04-23T18:36:38Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/doclet</loc>
+  <lastmod>2010-04-26T00:01:35Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/doclet_examples</loc>
+  <lastmod>2008-12-11T17:20:23Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://www.javaontracks.net/topleft</loc>
+  <lastmod>2010-08-25T12:54:41Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+</urlset>

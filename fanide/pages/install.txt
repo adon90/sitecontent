@@ -1,0 +1,49 @@
+======Installing the Fantom Netbeans IDE======
+**You can either install as a [[#install_as_a_plugin_to_an_existing_netbeans_installation|plugin]] to an existing Netbeans installation, or [[#standalone_install|standalone]].**
+
+====Standalone Install====
+Note:Make sure you have **Java 6 or newer** installed to be able to run the IDE.
+
+  - **For Linux/Unix/Windows, download:**
+Get fantom-x.y.z**.zip** from [[http://www.colar.net/fantomide/]]    
+
+  - **For OSX: **
+Get fantom-x.y.z**.app.tgz** from [[http://www.colar.net/fantomide/]]    
+
+**Extract at a location of your choice**, and then **run bin/fantomide** (bin/fantomide.exe on windows).
+
+Once the IDE is up go to **tools/options/miscellaneous/fantom options and set the path to your fantom install** (fantom home).
+
+You can now open existing projects (folders with a build.fan in them) and add fan files & edit/run them.
+
+See the [[demo]] to get started.
+
+Report issues on the [[help]] page.
+
+=====Install as a plugin to an existing Netbeans Installation=====
+
+You need **at least Netbeans 6.8 (7.x recommanded)**
+  - Open Netbeans
+  - Go to tools / plugins
+  - Go to settings tab (List of update centers), click "Add"
+  - Add -> Name: ''Fantom''    
+
+**Url for nb 7.2 - RECOMMENDED**: ''http://www.colar.net/fantomide/plugin/7.2/updates.xml''
+
+Url for nb 7.1 (last update: 6/23/2012): ''http://www.colar.net/fantomide/plugin/7.1/updates.xml''
+
+Url for nb 7.0 (last update: 12/17/2010): ''http://www.colar.net/fantomide/plugin/7.0/updates.xml''
+
+Url for nb 6.9 (last update: 12/17/2010): ''http://www.colar.net/fantomide/plugin/6.9/updates.xml''
+
+Url for nb 6.8 (last update: 6/7/2010): ''http://www.colar.net/fantomide/plugin/6.8/updates.xml''
+
+  - Press OK to save it
+  - Go to "Available plugins" Tab (sort by Name)
+  - Select the checkbox next to "Fantom" 
+  - Click "Install"
+  - Follow the wizard (Next/Install), ignore the "Not trusted" warning (Continue)
+  - Click Finish and close the plugins panel.
+  - **Restart Netbeans**
+
+Fantom support is now installed!

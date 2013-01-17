@@ -1,0 +1,195 @@
+====== Ubuntu Dapper on Dell D610C  (xubuntu)======
+
+Pretty much all worked out of the box, except the wireless.
+
+===== Setting up the internal wireless card with WPA=====
+
+I found good informations here:\\
+[[http://www.sirlab.de/linux/debian_dell_d610.html]]
+
+Basically the drivers are already there (ipw2200).
+
+Run wpapassphrase  
+<code>
+wpapassphrase [your_ssid] [your keyphrase]
+</code>
+
+This will give you a "network" block to use in your configkeyphrase]
+
+Create the config:
+
+<code>
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+eapol_version=1
+ap_scan=1
+fast_reauth=1
+
+# network block you got from wpapassphrase
+network={
+        ssid="xyz"
+        #psk="mypassphrase"
+        psk=111111112222222222333333334444444
+}
+</code>
+
+vi /etc/network/interfaces
+<code>
+auto eth1
+iface eth1 inet dhcp
+pre-up /etc/init.d/wpasupplicant start
+post-down /etc/init.d/wpasupplicant stop
+</code>
+
+Since the init.d script is not provided with xubuntu (or at least i did not get one), i created one:
+
+vi /etc/init.d/wpasupplicant
+<code>
+#!/bin/sh
+
+ENABLE=1
+DRIVER=wext
+INTERFACE=eth1
+CONFIG=/etc/wpa_supplicant.conf
+OPTIONS="-w -i ${INTERFACE} -D ${DRIVER} -c ${CONFIG}"
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)  log_begin_msg "Starting wpasupplicant..."
+        start-stop-daemon --start --quiet --pidfile /var/run/wpa.pid --name wpa --startas /sbin/wpa_supplicant -- $OPTIONS &
+        log_end_msg $?
+        ;;
+stop)   log_begin_msg "Stopping wpasupplicant"
+        start-stop-daemon --stop --quiet --pidfile /var/run/wpa.pid --name wpa
+        log_end_msg $?
+        ;;
+esac
+exit 0
+</code>
+
+Then you can (re)start the network
+
+<code>
+ifdown eth1
+ifup eth1
+</code>
+
+===== Setting up whereami =====
+I use my laptop at home(wireless, dhcp) and at work (wired, no dhcp).\\
+By using whereami the laptop can automatically pick the right network for me at boot etc ...
+
+Sadly whereami documentation is pretty poor, but here is my working setup.\\
+My setup is for 4 different  "locations", wired at work static address, wireless dhcp at home, wired dhcp(ie: dhcp at home), wireless dhcp (ie: at starbucks).
+
+First we install whereami
+<code>
+apt-get install whereami
+</code>
+
+Here are my files:
+
+/etc/whereami/detect
+<code>set DEBUGWHEREAMI 0
+
+# defaults to lan dhcp
+default wired_dhcp
+#eth0 means whe are on the LAN
+testmii eth0 lan
+
+if lan
+  # testing if we are on the work lan
+  testping 10.10.1.190 work
+  # if we get here, we are not at work, so we will try wired DHCP
+  at wired_dhcp
+else
+  # check if wireless card avail (here we have an ipw2100  card)
+  always modprobe ipw2100 w_eth1
+fi
+
+if w_eth1
+  # ok, we have a wireless card, testing if there is an Access Point avail.
+  testap scan wireless_dhcp
+fi
+
+if wireless_dhcp
+  #Ok, we found an access point, is it my Home access point ?
+  testssid myssid home
+fi
+if home
+  # if we are at home, we want to use the home settings, so unset wireless_dhcp
+  notat wireless_dhcp
+fi
+</code>
+
+/etc/whereami/whereami.conf
+<code>
+# set interfaces up/down
++lan ifconfig eth0 up
++lan ifconfig eth1 down
+-lan ifconfig eth1 up
+-lan ifconfig eth0 down
+=shutdown ifconfig eth0 down
+=shutdown ifconfig eth1 down
+
+# At home
+=home cp /etc/whereami/interfaces.home /etc/network/interfaces
+
+# At work
+=work cp /etc/whereami/interfaces.work /etc/network/interfaces
+# at work it's not dhcp, so set the resolv.conf
+=work cp /etc/whereami/resolv.work /etc/resolv.conf
+
+# Wireless dhcp (we will try the access point found)
+=wireless_dhcp cp /etc/whereami/interfaces.wireless_dhcp /etc/network/interfaces
+
+# Wired dhcp try (if logged on lan but not at work, try dhcp)
+=wired_dhcp cp /etc/whereami/interfaces.wired_dhcp /etc/network/interfaces
+</code>
+
+/etc/whereami/interfaces.home
+<code>
+auto lo
+iface lo inet loopback
+
+auto eth1
+iface eth1 inet dhcp
+pre-up /etc/init.d/wpasupplicant start
+post-down /etc/init.d/wpasupplicant stop
+</code>
+
+/etc/whereami/interfaces.work
+<code>
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.10.1.188
+netmask 255.255.0.0
+gateway 10.10.1.190
+</code>
+
+/etc/whereami/interfaces.wireless_dhcp
+<code>
+auto lo
+iface lo inet loopback
+
+auto eth1
+iface eth1 inet dhcp
+</code>
+
+/etc/whereami/interfaces.wired_dhcp
+<code>
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+</code>
+
+/etc/whereami/resolv.work
+<code>
+domain mycompany.com
+nameserver 439.429.415.43
+</code>

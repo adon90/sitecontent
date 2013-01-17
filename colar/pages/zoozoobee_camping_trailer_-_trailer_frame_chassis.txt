@@ -1,0 +1,49 @@
+======ZooZooBee camping trailer - Trailer Frame / Chassis======
+
+TIP: **This is only a part of my full trailer build, see: [[ZooZooBee, My home built Camping Trailer]]**
+
+I Have decided to use this Harbor freight Trailer:
+[[http://www.harborfreight.com/1720-lb-capacity-super-duty-48-inch-x-96-inch-utility-trailer-with-12-inch-five-lug-wheels-and-tires-94564.html]]
+
+It's a 4*8 frame rated for up to 1720# of cargo. Bought it using the 20% off coupon for ~320$.
+
+Many others have use it and it's available for in store pickup ( = free shipping)
+
+Since I'm building a 5.6*10 trailer, I modified the frame to be 4*10 by using 2 of the cross members as side extensions, as done by others, like here: [[http://www.mikenchell.com/forums/viewtopic.php?t=26296&start=0]] (Thanks Steve for answering my questions)
+
+Here are some pictures of the frame construction:
+
+One weird thing:
+
+The manual says no more than 45mph, the tire rim says no more than 55mph, and the tire rating(M) says no more than 81mph) :)
+
+===The boxes and what's in them===
+In comes as 2 boxes, about 5' x 2'.
+
+The smaller box is heavy (framing) - probably close to 150#, The larger one is lighter (wheels, bolts, electrical), maybe 80 pounds.
+<html><img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2636.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2638.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2639.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2640.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2641.jpg"></html>
+
+===Modifying the trailer to be 4' * 10'===
+I Used 2 of the cross members on the sides to take the frame length to almost 10' (about 9'9).
+
+Had two drill a few extra holes to bolt the "extensions". It was not very difficult to drill the framing.
+
+<html><img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2643.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2645.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2646.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2647.jpg"><br>
+<img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2648.jpg"></html>
+
+FIXME: Still planning some more work on the frame [Not done yet.]
+
+
+====License & Registration====
+
+Add to go to the Washington DOL and pay 43$ to get Licence, title & tabs:
+
+<html><img src="http://bitbucket.org/tcolar/teardrop/raw/fb2b04d4a04d/graphics/td/img_2651.jpg"></html>
+

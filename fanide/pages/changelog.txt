@@ -1,0 +1,270 @@
+======Fantom Netbeans IDE Changelog======
+
+**Only the major changes are listed here, for more details see:**
+[[http://bitbucket.org/tcolar/fantomidemodule/changesets]]
+
+===2.0.1(10/23/2012)===
+  - Use Netbeans 7.2.1
+  - Fixes for when using tales
+  - Basic support for Axon highlighting
+  - Fixes to the new file menus
+  - many other bug fixes
+
+===2.0.0(6/26/2012)===
+  - Uses Netbeans 7.1 as the base
+  - Upgraded all support libraries (parboiled, h2, tales, fantom 1.0.63)
+  - Faster optimized parser
+  - Faster indexing
+  - NO more"runaway" parser using all the CPU. 
+  - Many other bug fixes
+
+===1.7.5(4/26/11)===
+  - Updated to Netbeans 7.0 Final
+  - Fixed issues in Java FFI type resolution
+  - Test target does a build first
+  - Removed separate tales action (had bugs) ... now tales support is enabled by a checkbox in project properties
+  - New project level settings: JVM args, Program args and tales Support
+  - New "Indexer" tab in project options : can manually flush and update index
+  - You can now configure which java packages to be excluded from indexing (for faster indexing) 
+===1.7.4(4/4/11)===
+  - Updated to NB 7.0 RC1
+  - Removed some old dependencies
+  - Using Java 6.0 GroupLayout instead of deprecated code.
+===1.7.3 (2/22/11)===
+  - Fixed some debugger issues
+  - Templates for creating new items on right click in navigator (new Fantom file, test, folder, HTML, jS etc...)
+  - Parsing fixes when circular dependencies(would cause scanning forever / stack overflow)
+  - Fixed Java FFI completion proposals
+  - Implemented "Find in projects" and other file finding features
+  - Menu entry for copying path of any file in navigator to the clipboard
+  - Other bug fixes.
+====1.7.1 (2/3/11)====
+  - Fixed HUGE bug in indexing(pod name resolution), that caused lots of issues in 1.7.0 (1.7.0 was very broken).
+  - Indexer now shows progress during indexing (pod, jars, sources being indexed).
+  - Indexer versioning to force full re-indexing after chnages (like this bug fix)
+  - Fixed indentation and added a new "formatting" tab to Fantom options (default: 2 spaces)
+  - Fixed to facet parsing and allowing "empty" facets
+  - Fixed a NPE in certain scenarios during type resolution
+  - Updated indexing operator to use getRange rather than slice (obsolete)
+  - Fixed errors in parsing of "using" statements
+
+====1.7.0 (1/26/11)====
+**IDE enhancement:**
+  - Enhanced syntax highlighting, now can be configured under "Fonts & Colors/Syntax/Language"
+  - New Fantom option panel (standalone, not in miscellanneous anymore)
+  - Upon first start, automatically opens Fantom option panel
+  - Fixes to indexer (Means it will have to reindex everything after you upgrade)
+  - New Indexer progress indicator, so you know when it's done.
+  - Updated to Fantom 1.0.57
+  - Several other bug fixes.
+
+**Tales framework support enhancements**:
+  - Tales 0.2 support (requires Fantom 1.0.57+)
+  - Better support for embedded DSL's 
+  - Proper Highlighting/colors for embedded JavaScript and SQL - [[http://ow.ly/i/7vKM|See screenshot]]
+  - Browser opens automatically (127.0.0.1:8000) Upon starting a Tales app.
+
+====1.6.7 (1/19/11)====
+  - Released plugin for Netbeans 7.0
+  - Standalone version built on top of Netbeans 7.0 beta
+  - Bug fixes
+====1.6.6 (12/17/10)====
+  - **Enhanced completion** (propose/fill-in method parameters / closures)
+  - Fix Bug whereas new created file didn't always show up right away (issue 14)
+  - **Fixed Formatter / Indentation issues**
+  - **Hint/Fixes providers** for:
+
+    **Unresolved type** -> solutions given:
+<code>
+      add using for that item
+      add using for the item whole pod
+      create a new type with that name (class/mixin/enum)
+</code>
+    **Unresolved variable** -> solutions given
+<code>
+      create a new field
+      create a local method
+</code>
+
+This works both on the local type as well as other types.
+For field/methods creation, a "dialog" is provided to customize the creation:
+The Field/Method name is pre-filled
+The Field type is "guessed" and pre-filled if possible
+The method return type and parameter types/names are guessed / pre-filled as well
+You can customize modifiers in the dialog as well.
+Goes straight to the added field/method (open file in IDE and put cursor in right place)
+
+  - **Updated Tales framework support** (new repo)
+Set Tales home folder in the Fantom option panel.
+
+WARNING: **Requires latest tales (0.1.3), If you had previously copied tales.pod into the fantom lib folder, remove it.**
+
+
+====1.6.5 (12/3/10)====
+  - **Go to declaration**
+You can now use the "go to declaration" IDE feature, to go to a variable/type declaration(local or not) in Fantom code.
+  - **[[http://www.talesframework.org/|Tales framework]] basic integration**: 
+Create a tales project wizard, Run a tales project ("Hot" reload development mode) directly in the IDE
+  - **Completion enhancements**
+Also allowing completion after ''?.'', ''->'' and ''?->'' and Fixed a few other bugs
+
+  - Fixed indexing bug that could sometimes cause crash during initial indexing
+  - Fixed debugger issue which sometimes broke java projects debugging
+  - Fixed standalone IDE Memory problems (Netbeans permspace issues)
+  - Updated Fantom sys.jar to 1.0.56.
+====1.6.4 (08/24/10)====
+  - Fantom 1.0.54
+  - Netbeans stack 6.9.1
+  - Wizard/template to create Fantom unit tests
+  - Allowing to run Single unit test
+  - Replaced deprecated CSL jar to fix broken indentation and other features in NB 6.9.1
+====1.6.3 (06/07/10)====
+  - Fixed serious memory leak in certain scenarios of AST constructions (OOM)
+  - Based on 6.9 RC2 stack (plugin still avail for 6.8)
+  - Leaner/ faster & simpler AST construction.
+  - Various bug fixes
+====1.6.2 (05/13/2010)====
+  - Based on Netbeans 6.9 stack (plugin still avail for 6.8)
+  - Updated for Fantom 1.0.53
+====1.6.1 (04/28/10)====
+  - Fixed actions (run/debug etc..) so they work better (and improved 'ReRun' support)
+  - Several fixes for windows (paths)
+  - Debugger fixes 
+  - Improved run action so it runs on the right project
+  - Fixed multiple exceptions in some partial input scenarios
+  - Upgraded to parboiled 0.9.7.0 and updated grammar
+  - Fixed issues with java types & 'this'
+  - Moved project to bitbucket [[http://www.bitbucket.org/tcolar/]]
+  - Removed various java warnings and deprecated API uses
+
+====1.6.0 (04/19/10)====
+  - **Major rewrite.**
+  - **Now uses Parboiled instead of ANTLR**
+  - **All types are now resolved, which leads to much enhanced completion.**
+  - Updated for latest Fantom (1.0.52)
+
+====1.5.0 beta (01/12/10)====
+The main new feature of this version is **Completion**
+
+**If you previously installed as a NB plugin: There is only one all-in-one nbm now (net-colar-netbeans-fan.nbm), you should manually remove the old nbm's  to avoid conflicts (net-jot.nbm, org-antlr.nbm, fan.nbm).**
+
+**The first time you run the new version it will index Fantom and Java which will hog your CPU for ~6mn, please let that complete.**
+
+The main user feature of this release is *code completion*.
+This is quite a monster and contains many large changes to the code, and my unit-test are lacking at the moment, so it's considered beta at the moment, nevertheless it's pretty useful.
+
+Completion is requested using "CTRL-Space" (default), for example
+   Str.<CTRL SPACE>
+
+**Please le me know of any issues/wishes so I can fix them.**
+
+What's new (user perspective):
+  - Upgraded fro Netbeans 6.8
+  - Upgraded for Fantom 1.0.48
+  - Code completion, including the following
+  - Unknown/unresolved types reporting
+  - Completion of Fantom/Java FFI using statements including FanDoc popup
+  - Completion of any variables & slots with Fandoc popup, including it, this, loop variables and exception variables.
+  - Resolving most inferrred types expressions properly (except ranges, let me know if you see some that don't work properly.)
+
+What's new behind the scenes:
+  - nbm plugin all in one isntead of separate nbm for sependant libraries
+  - indexer using h2 database
+  - scoping / type resolving
+
+====1.4.3 (11/17/09)====
+  - Renamed to FantomIDE
+  - Updated for Fantom 1.0.47
+  - Fix multiple small semnatic / grammar / parsing bugs
+
+=====1.4.2 (10/1/09)=====
+  - Updated for Fan 1.0.46
+  - Debugger support for local variable with fan 1.0.46
+  - Source file formatter (Re-format the source code properly on demand - Indentation)
+  - '/*' does not autocomplete with '*/' anymore as this is used only to comment out code in Fan.
+  - Completion proposals for Pods/Types
+  - HTML Fandoc windows shows for Pod/Types proposals. 
+=====1.4.0 (8/31/09)=====
+  - Fixed Bug when creating a new project where Main class not picked up right away
+  - Fixed Bug in License Path
+
+**Fan Debugger** (port customizable in fan options)
+  - You can set Line breakpoints
+  - (Can debug/step through Fan sources, Fan distro sources, Jdk sources)
+  - Note: Fan local variables do not show details yet (Fan Open ticket #679)
+
+  - Renamed from fansuite to fanide
+  - Added proper version number to standalone IDE.
+  - Created Splash screen / logo / icons.
+  - Now using the indexer/classpath Netbeans system.
+  - Enable support for Java, Javascript and Java debugging, all useful for Fan projects.
+  - Download is now 65MB, but comes with many more features.
+
+  - Now runs internally without using fan launcher scripts
+  - You can customize fan exec options (say -Xmx256m) in Fan settings
+=====1.3.3 (8/19/09)=====
+  - Now runnable on Java 1.5
+  - Grammar bug fix: Support for Symbol literals.
+  - Grammar fix: Bug when using "pod" as part of a variable name
+  - Fixed / Enhance Parser/lexer tests and run against fan sources.
+  - Set the license (Artistic 2.0)
+
+=====1.3.2 (8/14/09)=====
+  - Test OSX build (Fix packaging issue).
+  - OSX: the netbeans generated app does not quite work (bad script / permissions)
+  - OSX/windows: The "fan options" panel does not work properly (java 1.6)
+
+=====1.3.0 (8/14/09)=====
+  - Highlight variables in interpolated stringss ''$var'' ''$ {var}''
+  - Fix a few editor/parser exceptions.
+  - Change grammar to Allow $ in "using" imports (for java FFI inner classes)
+  - Allow "run single" action only on runnable class main / scripts & build.fan
+  - Have "build", "run", "build & run", "test", "clean" etc... actions on the Pod/project itself, then hook up the NB "Run Main Project" button (build & run).
+  - Create Main class with main() in it when creating pod (optional, default) as it's easier for beginners.
+  - Add a "Main method" configurable field on pod props (defaults to podname:Main.main)
+  - Update the demo according to those new changes
+  - Research/Fix bug where new files don't show for a while (1 mn+) in files/projects ... only on some computers!
+  - Research/Fix bug where navigator collapses after clicking an item in it.
+  - Make default build target configurable (default: compile) in pod props
+
+=====8/7/09=====
+Updated for fan 0.1.45
+ - new pod grammar
+ - field access '*' instead of '@'
+ - Fixed pod creation templates (pod.fan & build.fan)
+=====8/6/09=====
+See new [[home#screen_shot|screeshot]].
+  - Step1 of semantic analysis: Color highlighting of classes, fields, methods and so on.
+  - Support for automated closing items insertion: If you type ''('' it puts ''()'' and put the caret in the middle.
+  - Fixed License import in Fan templates
+  - Automated indentation: When pressing return, it starts at the proper indentation on the next line
+  - Brace matching: Highlights the matching closing/opening brace/parenthesis...
+=====Update 7/31/09=====
+Added screencast
+Released standalone builds for Linux, Windows, mac
+Fixed Project/Fan creation wizard.
+Fixed Lexer issue with incomplete methods.
+
+=====Update 7/28/09=====
+Project can be browsed
+Fan scripts can be run
+Fan console can be used
+Packaged as Standalone IDE
+
+=====Update 7/17/09=====
+Currently working on Fan project(&pod) creation wizards.
+=====Update 7/13/09=====
+Implemented code folding for doc/comments, classes, enums, mixins, methods,constructors.
+=====Update 7/10/09=====
+Greatly improved error handling(Parser, Lexer)
+Worked some more on the AST, and now have the IDE navigator window (which lists class/methods etc...) to work.
+Next will be code folding, which should be easy since i have the AST already.
+Screenshot:
+{{ nbfan2.png }} 
+=====Update 7/7/09=====
+I now have the Parser hooked up, and it does error reporting.
+However the errors at this point are mostly coming straight from ANTLR so they can be a bit cryptic.
+=====Update 06/30/09=====
+I'm still far from done, but i now have the ANTLR grammar done, as well as the lexer integrated with Netbeans, this basically provides Syntax Highlighting.
+
+I also added error recovery to the lexer so that things like an unclosed String can be handled.

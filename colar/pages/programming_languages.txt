@@ -1,0 +1,33 @@
+======Programming Languages======
+
+  * Java
+This is my language of choice, I have been using it since it's very early stage (98) for preofessional work. Bothe as the main developer of the Application ViewletBuilder (aka Leelou) and for server projects such as http://www.viewletcentral.com/. \\
+
+I Used evrey version from 1.0 to 1.5 (5.0), and i like this language very much, my favorite thing being how "clean" is the Syntax. It is very easy to read wether it is your code or someone else.\\
+Of course i also like the fact that it's platform independant (in most cases) and has tons of libraries available nowadays.
+
+What I don't like is that it became bloated, and uses XML waaaaaaay too much, and i don't like XML much [[#3/7/06: XML Overdose | see next blog entry]]
+
+Web application development now seems bloated when compared to things like Ruby on Rails, however I'm not quite a fan of Ruby either (yet), so i will experiment with java frameworks such as TRAIL or SAILS for now.
+
+  * C/C++
+Those are good languages of course, but i don't like the syntax of them, it easily becomes are to read.\\
+Sure it's faster than java , but i rearely need speed that bad, and if i do ther is always plain assembly :-)
+
+  * Assembly
+Well, i haven't use this much lately, but if i want to do low level fast stuffs, this would still be the language of choice.
+
+  * JSP / PHP /ASP
+Server Pages, i just plain don't like, it leads you to mix code with design and is neither good for the developer nor the designer.\\
+I always prefer using MVC/templating system insead such as Servlet+Velocity or Tapestry for example.
+
+  * Perl
+Well perl is ... like the best language ever to write a one line of code powefull script.....\\
+... but the worst language ever to try to make sense of that line 6 month later :-)
+
+  * Ruby
+Well, as I said I was impressed by Ruby on Rails, but I have mixed feelings about Ruby itself, it's a nice, powerfull and terse language, but  i find the syntax too "loose", resulting in code that can look very different from one person to another. Personally i don't like this.\\
+I'm now using it for one of my sites (ROR) but so far i haven't felt comfortable with the syntax, though i've been impressed by how short and powerful the code can be.
+
+  * Other
+I've tried other languages here and there, but they didn't impress me much apparently, cause i can't think of them right now :-)

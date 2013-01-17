@@ -1,0 +1,101 @@
+======JavaOnTracks: Search Engine / Indexer======
+
+This is a simple file based indexer / search engine.
+It is intended to index plain text pages (you could strip other format first), and index them per keywords (3+ letters) and then search through the results and sort/score them.
+
+It is intended to be lightweight and faster than doing an on-the-fly "grep".
+It should me able to index small to medium documents repositories, such as WIKI pages, any other text files.
+
+It should support documents in any language(unicode).
+
+=====How does it work=====
+You use the JOTSimpleSearchEngine class to index some documents(files).
+It will create an "index" in the given folder(wherever you want the index to go: Ex: /tmp/index
+The index structure is as such:
+<code | index example>
+/tmp/index
+  /tmp/index/6D (folder for keywords starting by 'C' whose unicode value is 6D( dummy example))
+    /tmp/index/6D/6A.txt (file for keywords starting by 'CA' whose unicode value is 6A( dummy example))
+</code>
+Example of an index file content:
+<code | 6A.txt>
+cat 1:35 2:7
+car 3:27 4:28 4:28 4:29
+</code>
+This tells us, that "cat" is found in doc1, line 35 and doc2, line 7.
+and that "car" is found in doc3, line 27 and doc4, line28(twice) and line29
+
+The "document" index can be found in /tmp/index/index.txt
+<code | example index.txt>
+#number, timestamp, document unique id (ex: file path) 
+1 1190307716000 /tmp/file1.txt
+2 1190307716000 /tmp/file2.txt
+</code>
+
+=====Example / How to use it =====
+First thing you would want to do is to add documents to your index.
+<code | Indexing documents>
+            JOTSimpleSearchEngine engine = new JOTSimpleSearchEngine(new File("/tmp/index/"));
+            File fol = new File("/tmp/textfiles/");
+            File[] files = fol.listFiles();
+            for (int i = 0; i != files.length; i++)
+            {
+                if (files[i].isFile())
+                {
+                    int nbkeywords = engine.indexFile(files[i]);
+                    // or if you want to use something different than the file path as the uniqueId, and only index if file was modified since last indexing
+                    //int nbkeywords=indexFile(files[i], uniqueId, onlyIfModified);
+                    System.out.println(files[i].getAbsolutePath() + " : new keywords:" + nbkeywords);
+                }
+            }
+            //Example for removing a file from the file
+            //engine.removeFile(new File("/tmp/textfiles/file1.txt"), null);
+</code>
+
+Here we make a search using the defaultSorter (sorts according to a score & hits), see JavaDoc for more infos.
+Score is 0-10, if all the keywords are found, it will be maximumscore, if half of them, half score etc...
+Hits, is the total number of hits for all the kwywords in the document.
+<code | sorted/scored search>
+            String query = "  java sap track nwdi"; // example keywords to search for
+            String[] keywords = engine.parseQueryIntoKeywords(query);
+            // test sorted search query
+            JOTSearchSorter defaultSorter = new JOTDefaultSearchSorter();
+            JOTSimpleSearchEngine engine = new JOTSimpleSearchEngine(new File("/tmp/index/"));
+            JOTSearchResult[] results2 = engine.performSearch(keywords, defaultSorter);
+            for (int i = 0; i != results2.length; i++)
+            {
+                System.out.println("Score: " + results2[i].getScore() + " hits: " + results2[i].getHits() + " for: " + results2[i].getID());
+            }
+</code>
+
+
+Note: **You can easily make your own sorting algorithm, by making your own sorter (implement JOTSearchSorter).**
+
+
+If you want even more control you can perfom a "Raw Search", completely unfiltered and unsorted.
+<code | raw search>
+            String query = "  java sap track nwdi";// // example keywords to search for
+            String[] keywords = engine.parseQueryIntoKeywords(query);
+            JOTSimpleSearchEngine engine = new JOTSimpleSearchEngine(new File("/tmp/index/"));
+            JOTRawSearchResult[] results = engine.performRawSearch(keywords);
+            for (int i = 0; i != results.length; i++)
+            {
+                String keyword = results[i].getKeyword();
+                String[] keys = results[i].getMatchingIds();
+                for (int j = 0; j != keys.length; j++)
+                {
+                    Integer[] lines = results[i].getResultsForId(keys[j]);
+                    String lns = "";
+                    for (int k = 0; k != lines.length; k++)
+                    {
+                        lns += lines[k].toString() + ",";
+                    }
+                    System.out.println("Keyword:  " + keyword + " lines: " + lns + " in:" + keys[j]);
+                }
+            }
+
+</code>
+
+=====JavaDoc=====
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/search/simpleindexer/package-summary.html]]
+

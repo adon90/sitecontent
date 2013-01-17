@@ -1,0 +1,59 @@
+====== Basic setup to get started with JSP development ======
+
+===== Install Eclipse =====
+Get eclipse here:\\
+http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops/R-3.1.2-200601181600/eclipse-SDK-3.1.2-win32.zip
+
+and install (unzip) it in c:\eclipse
+
+===== Install Tomcat =====
+Get tomcat here:\\
+http://apache.tradebit.com/pub/tomcat/tomcat-5/v5.0.28/bin/jakarta-tomcat-5.0.28.exe
+
+Run the installer, and install tomcat in c:\tomcat
+
+===== Install a tomcat plugin for eclipse =====
+
+We use the sysdeo plugin, there are many others
+
+Go to http://www.sysdeo.com/eclipse/tomcatplugin \\
+Download http://www.sysdeo.com/sysdeo/content/download/393/4930/file/tomcatPluginV31.zip \\
+Unzip It inside c:/eclipse/plugins/
+
+===== Configuring the plugin =====
+Start eclipse\\
+go in window/customize perspective/commands   and check (enable)  "Tomcat"
+
+in eclipse go in window/preferences/tomcat
+Choose your version of tomcat (ie: 5.x)
+And set "Tomcat home" to where you installed tomcat (ie: c:\tomcat)
+
+===== Creating a web project =====
+Go to file/new/project  then  select java/tomcat project, define a oproject name (ie: test)
+
+===== Testing a project =====
+Now you should see the project in "package explorer"\\
+expand it
+
+Go to file/new/project  then  select java/tomcat project, define a oproject name (ie: test)
+
+Now you should see the project in "package explorer"\\
+expand it
+
+Right click on th project and select new/other/web/JSP,  choose a name (ie: index.jsp)
+The index.jsp will open in eclipse
+
+Modify it, for example add a line inside body as such:
+<code>
+The Current time is <%=new java.util.Date() %>
+</code>
+Save the file
+
+Click on the "start tomcat" icon in the eclipse menubar, so that it picks up this new project
+
+Go see the results at http://127.0.0.1:8080/test/
+
+Make some other changes to the JSP, see the results right away by refreshing the browser page.
+
+Get a book and start testing the examples and playing with it.
+

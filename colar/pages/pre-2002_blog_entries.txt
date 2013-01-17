@@ -1,0 +1,262 @@
+======Pre-2002 Blog Entries======
+
+=====04/05/99	Not enough environement space in dos=====
+to give more More environment space, add that in autoexec.bat
+<code bash>
+Shell = C:\COMMAND.COM C:\ /E:2048 /P
+</code>
+
+=====08/11/00=====
+
+>Bonjour,
+>j'ai install?JSP 1.0 et le JDK 1.2.1 et maintenant j'acc?e correctement
+>aux servlettes. Mais lorsque je tente d'acc?er ? une page JSP, j'ai
+>l'erreur suivante :
+>
+>java.lang.NoClassDefFoundError: sun/tools/javac/Main
+
+	Il faut ajouter dans ton CLASSPATH l'acces au fichier tools.jar qui doit etre dans le repertoire lib de ton install du JDK1.2.1 Si tu utilises Apache/JServ tu peux aussi ajouter une ligne repositories=[ton chemin pour JDK1.2.1]/lib/tools.jar dans le fichier de conf de la zone des servlets JSP 
+
+
+=====07/09/99	Avoid image flickering in java - double buffering=====
+
+see code + example 11/28/99	Mak modification to an image using an image filter in java
+see code 
+
+
+=====08/21/00	Config dns solaris 7/8=====
+
+* Config ip, netmask
+Ajouter a la fin de /etc/rootusr: \\
+	ifconfig hme0 inet 192.168.1.17 netmask 0xffffff00 \\
++ ds /etc/netmasks	 ip / netmask \\
+* config gateway: \\
+ajouter a la fin d /etc/initd/inetinit: \\
+	route add default 192.168.1.1 \\
+* config dns: \\
+ajouter ds /etc/resolv.conf: \\
+	domain darea.fr \\
+	nameserver 212.198.0.66 \\
+	nameserver 212.198.0.67 \\
+verifier que "dns" est ds /etc/nsswitch.files \\
+	hosts: files dns \\
+
+
+=====01/18/01	Install a solaris package=====
+On Ultra5 / solaris 8
+<code bash>
+cd /var/spool/pkg
+cp /somewhere/somefolder/packagename.gz .
+gunzip packagename.gz
+pkgadd -D packagename .
+</code>
+
+=====02/21/01	Make an applet work on unix when the browser is called from a java application=====
+On Linux/Solaris with netscape This script launches netscape with a null classpath in the environement this is importanat to have a null classpath, because otherwise when wve a null classpath, because otherwise when when launching netscape on unixes from a hen when launching netscape on unixes from a java app, netscape have java classes in his classpath, then it makes security exception when watching an applet using the same code (loading the jar from hard disk instead of from the web), and accessing viewlet on the web)
+
+<code bash>
+#!/bin/sh
+CLASSPATH=
+export CLASSPATH
+#$1 passes the argument (page to open)
+COMMAND="/usr/bin/netscape $1"
+exec $COMMAND
+</code>
+
+=====02/23/01	Make a windows 2000 boot disk=====
+
+Insert the Windows 2000 CD-ROM in the CD-ROM drive.
+Click Start, and then click Run.
+In the Open box, type drive:\bootdisk\makeboot a:, where drive is the letter of your CD-ROM drive, and then press ENTER.
+
+
+=====03/05/01	Solaris C Error: Alarm Clock=====
+C program on solaris crash with this message "Alarm Clock"
+To fix uses code like this:
+<code c>
+void ALARMhandler(int sig)
+{
+signal(SIGALRM, SIG_IGN);
+
+// stuffs to do on alarm
+printf("An alarm signal just arrived ...\n");
+// end of alram actions
+
+alarm(0);
+signal(SIGALRM, ALARMhandler);
+}
+</code>
+
+alarm(0) resets the alarm clock.
+Handler use signal() to ignore, and again to reinstall the handlers before exiting. 
+
+
+=====03/28/01	Java Problematic Thread with VB (unix)=====
+It is stupid, the problem is just that some files (/tmp/screenshot*) are locked by another user. (fixed in 2.5.6) just delete them as root. 04/08/11	Transfering Qmail, qmail-pop3d, courier-imap and sqwebmail
+This consist of installing Qmail, qmail-pop3d, courier-imap and sqwebmail and transfering existing Communigate accounts (just use mbox2MailDir) on a new server.
+Because it's a big topic, it have it's own page. 
+
+
+=====04/12/01	Creating an announcement list with ezmlm & qmail (only choosen guys post)=====
+(using my modified version ezmlm-idx-welcome.tgz wich adds the -W tag to ezmlm-manage to remove welcome message.)
+go on the mail server install ezmlm-idx-welcome-xxx
+<code bash>
+	cd /usr/local/src/qmail/
+	tar xzvf ezmlm-idx-welcome-xxx
+	cd ezmlm-idx-xxx
+	make
+	make setup
+	[cp /usr/local/bin/qmail-manage /usr/bin]
+</code>
+switch to "postmaster" user
+
+<code bash>
+su - postmaster
+</code>
+
+Then create the list
+
+	ezmlm-make -om -5 postmaster@colar.net ~/list ~/.qmail-list postmaster-list colar.net
+
+Set it so that only moderator can post (and need to confirm : avoid guy with fake moderator address to post)
+
+	vi ~/new/editor
+		(add the "-P" switch to the qmail-store command )
+
+Remove subscription confirmation and welcome message.
+
+	vi ~/new/manager
+		(add the "-SW" switch to the qmail-manage command )
+
+Add the moderator (guy alowed to post)
+
+	ezmlm-sub ~/new/mod postmaster@colar.net
+
+Add peoples
+
+	ezmlm-sub ~/new toto@titi.fr
+
+04/19/01	Adding RAV antivirus to qmail
+
+	cd /usr/local/src/qmail
+	cp rav-xxx .
+	tar xzvf rav-xxx 
+	cd rav-xxx
+
+stop qmail
+
+	cd "Rav For Qmail"
+	rpm -Uvh rav*.rpm 
+	vi /usr/local/nav8/formail/ravmd.config
+	/etc/rc.d/init.d/ravmail start
+
+start qmail
+
+
+=====04/24/01	Smb.conf to allow public access (within firewall)=====
+See This smb.conf file 
+
+
+=====04/28/01	Cron edition memo=====
+To edit the cron job:(through vi)
+
+<code bash>
+crontab -e
+</code>
+
+a crontab entry looks like that:
+
+05 08-17 01,015 * * /some/where/script
+
+The 6 entries are as such:
+
+- minute of the hour (0-59)
+- hour of the day (0-23)
+- day of the month (0-31)
+- month of the year (1-12)
+- day of the week (sunday=0) (0-6)
+- script to start
+
+
+For example the previous example means:
+Launch /some/where/script each hour past 5 minutes between 5am and 5pm, the 1st and 15th of each month.(each day of the week). 
+
+
+=====05/07/01	Qmail-poplock instalation (with pop3d)=====
+The email server I installed was an open-relay meaning that anyboddy could use it to send mail to anybody (ie: for spamming).
+The problem being that we want employes outside of the intranet to be able to send mail, and that smtp doesn't provide a login/password system.
+However reading mail (pop/imap), require a password, so why not keep this authentification (ip) in a databse and only allow those ip to relay (send) with our mail server.
+That's what this cool program does.
+The instalation is pretty easy, however making it work with qmail-pop3d requires a bit of hacking.
+
+The Instalation:
+Follow the install file + following small stuffs:
+
+1) tar xzvf smtp-poplock-2.05xxx.tgz
+cd smtp-poplock-xxx
+
+2) make install
+
+3) Cancel(don't know) that and it worked add authorization login modules logpopauth-pre and logpopauth-post to /service/pop3d/run (see INSTALL file)
+
+4)configure the login tool
+
+I'm in the case a) for my imap logs but c) for my pop3 logs, so I use a pipe with the two logs files in my /etc/smtp-poplock.conf configuration file.
+
+7) added readlog to init scripts. (copied readlog in /var/run/readlog/run and remove second argument in supervise calls in /etc/rc.d/init.d/readlog)
+
+8) add relaylock as a wrapper to qmail-smtp. (case a)
+
+9) check rcpthost - was ok (should accept your company domains only)
+I use tcpserver so cutting public realying was done by changing /etc/tcp.smtp and then reconstructing the database with
+tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp < /etc/tcp.smtp
+
+10) create log parsing sub :
+That was th most difficult, since i needed to check two different files with two different format.
+I add to make some regular expression with the help of this page So see the modification in my /etc/smtp-poplock.conf file, the first regexp is for my tcpserver imap logs and the second regexp for the pop3d syslog. (those regexp seems to work but i din't test them much yet).
+
+11) Testing
+Test that employes can send (check if they are in the db with the "shallowed" command)
+Check that public relaying is disabled (< ahref="http://www.abuse.net/realy.html">here is a page to test that).
+12) if uptime shows >1.0 load then remove '&' in qmail-smtp/run qmail-send/run pop3d/run 
+
+=====05/15/01	Unlocking a CD which doesn't want to be umounted (unix)=====
+Find the process locking it: fuser -mav /dev/cdrom Then kill the process and eject. 04/30/02	Installing apache with jserv php4 and spider trap
+One of the main problem here is that mod_rewite HAVE to be compiled statically(not a module) in apache, otherise any rewritrule results in a sigfault
+Procedure:
+
+<code bash>
+rpm -Uvh postgresal-devel-xxx.rpm
+cd apache-1.3.24
+./configure
+cd ../php-4.0.5
+./configure --with-pgsql --with-apache=../apache1.3.24
+make
+make install
+cd ../apache-1.3.24
+./configure --prefix=/u1/data/apache1.3.24 --activate-module=src/modules/php4/libphp4.a --enable-module=rewrite --enable-module=so
+make
+make install or  cp src/httpd .....
+</code>
+
+=====05/15/01	Unlocking a CD which doesn't want to be umounted (unix)=====
+Find the process locking it: fuser -mav /dev/cdrom Then kill the process and eject. 
+
+
+=====04/30/02	Installing apache with jserv php4 and spider trap=====
+One of the main problem here is that mod_rewite HAVE to be compiled statically(not a module) in apache, otherise any rewritrule results in a sigfault 
+Procedure:
+
+<code bash>
+rpm -Uvh postgresal-devel-xxx.rpm
+cd apache-1.3.24
+./configure
+cd ../php-4.0.5
+./configure --with-pgsql --with-apache=../apache1.3.24
+make
+make install
+cd ../apache-1.3.24
+./configure --prefix=/u1/data/apache1.3.24 --activate-module=src/modules/php4/libphp4.a --enable-module=rewrite --enable-module=so
+make
+make install or  cp src/httpd .....
+</code>

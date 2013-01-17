@@ -1,0 +1,48 @@
+====== JAVA/SQL mappings supported by JOT ======
+<code java>
+        public static final String TYPE_VARCHAR="VARCHAR";
+	public static final String TYPE_DECIMAL="DECIMAL";
+	public static final String TYPE_BIT="BIT";
+	public static final String TYPE_TINYINT="TINYINT";
+	public static final String TYPE_SMALLINT="SMALLINT";
+	public static final String TYPE_INTEGER="INTEGER";
+	public static final String TYPE_BIGINT="BIGINT";
+	public static final String TYPE_FLOAT="FLOAT";
+	public static final String TYPE_DOUBLE="DOUBLE";
+	public static final String TYPE_TIMESTAMP="TIMESTAMP";
+	public static final String TYPE_DATE="DATE";
+	public static final String TYPE_TIME="TIME";
+
+		types.put(String.class.getName(),TYPE_VARCHAR);
+		types.put(BigDecimal.class.getName(),TYPE_DECIMAL);
+		types.put(Boolean.class.getName(),TYPE_BIT);
+		types.put("boolean",TYPE_BIT);
+		types.put(Byte.class.getName(),TYPE_TINYINT);
+		types.put("byte",TYPE_TINYINT);
+		types.put(Short.class.getName(),TYPE_SMALLINT);
+		types.put("short",TYPE_SMALLINT);
+		types.put(Integer.class.getName(),TYPE_INTEGER);
+		types.put("int",TYPE_INTEGER);
+		types.put(Long.class.getName(),TYPE_BIGINT);
+		types.put("long",TYPE_BIGINT);
+		types.put(Float.class.getName(),TYPE_FLOAT);
+		types.put("float",TYPE_FLOAT);
+		types.put(Double.class.getName(),TYPE_DOUBLE);
+		types.put("double",TYPE_DOUBLE);
+		types.put(Timestamp.class.getName(),TYPE_TIMESTAMP);
+		types.put(Date.class.getName(),TYPE_DATE);
+		types.put(Time.class.getName(),TYPE_TIME);
+
+
+
+</code>
+
+++++ Fold test |
+dfdsfsf
+sf
+dsdsfdsfsf
+fdsfdsfs
+ffdsfsf
+++++
+
+dfsf

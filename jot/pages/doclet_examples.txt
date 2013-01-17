@@ -1,0 +1,16 @@
+======JOTDoc Examples======
+**JavaOnTracks (JOT) Doclet examples**
+
+Note: If you are looking for the tool to generate those docs (doclet), see here:
+[[http://www.javaontracks.net/doclet]]
+
+
+  * **JavaOnTracks** [[http://www.colar.net/jotdoc/javaontracks/| view API]] - ([[http://www.colar.net/jotdoc/jot.tgz|Download]])
+  * **JDK1.6** [[http://www.colar.net/jotdoc/jdk1.6/index1.html | core API]] | [[http://www.colar.net/jotdoc/jdk1.6/ | Full API]] - ([[http://www.colar.net/jotdoc/jdk1.6.tgz|Download]])
+  * **Ant 1.7** [[http://www.colar.net/jotdoc/ant/| view API]] - ([[http://www.colar.net/jotdoc/ant.tgz|Download]])
+  * **Struts 1.5** [[http://www.colar.net/jotdoc/struts/| view API]] - ([[http://www.colar.net/jotdoc/struts.tgz|Download]])
+  * **Sitemesh 2.3** [[http://www.colar.net/jotdoc/sitemesh/| view API]] - ([[http://www.colar.net/jotdoc/sitemesh.tgz|Download]])
+
+TIP: The **Download links**, let you download the whole generated javadoc for viewing on your local machine.
+
+

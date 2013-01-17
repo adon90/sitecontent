@@ -1,0 +1,232 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======SAP CRM5.0 / ISA / TREX Performance settings======
+
+**This covers Post-Install setting & performance enhancements needed for a live production site (CRM / B2B / B2C / TREX)**
+
+Out of the box SAP settings often greatly limit performance /  scalability of the B2B / B2C sites, very few concurrent users are supported by default .... which is kinda odd for a company that sells it's software mostly to huge companies.
+
+Anyway here are some of the settings that needed tweaking.
+
+=====Unix: Soft/hard resources limits (Note #797084)=====
+On most Unix boxes running SAP, the number of file descriptors need to be increased.
+For example on Suse Linux with ISA, we set those values to 32800 (default can be as low as ~4000)
+
+Number of "file descriptors"
+Edit: /etc/security/limits.conf
+and add/edit the following lines to it:
+<code | /etc/security/limits.conf>
+*              hard     nofile    32800
+*              soft     nofile     32800
+</code>
+
+These changes take effect after you log off and log back on again, or just reboot.
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+
+=====Unix: Not enough shared memory=====
+Also while the sap rpm / installer should have done it for you, after a system upgrade you might loose this:
+
+<code | /etc/sysctl.conf>
+#....
+kernel.shmall = 134217728
+kernel.shmmax = 134217728
+#.....
+</code>
+
+Reboot, or:
+<code>
+sudo echo 1073741824 > /proc/sys/kernel/shmmax
+sudo echo 1073741824 > /proc/sys/kernel/shmall
+</code>
+
+=====Java settings (mostly for ISA)=====
+====Unix randomizer====
+On some UNIX Java uses /dev/random as the random number generator, this is not good, because this can run out of number easily and then "block" for a while, causing significant delay during java execution.
+Use /dev/urandom instead which will not block but generate random number as needed.
+
+Edit /usr/lib/java/jre/lib/security/java.security and replace **/dev/random** by **/dev/urandom** if present
+& reboot.
+
+====Java Memory====
+A production ISA box will need a lot more memory than the default configuration:
+
+Setup the JVM settings (using configtool) according to this note: 861215
+
+In the configtool:
+  * Select the **"instance node"** and set **heap size to 256M or more**.
+  * For **instance/dispatcher** set something a bit less than you need in instance, **heap size: 200M**
+Java Parameters could be like those
+<code | dispatcher java params>
+........
+-XX:NewSize=57M
+-XX:MaxNewSize=57M
+-Xms200M
+-Xgcpolicy:gencon -Xms200m -Xmx200m -Xmn70m -verbose:gc
+........
+</code>
+  * For **instance/Server**, this is the most important one, **should be at least 1GB**, if possible >2GB for a production system: **heap size: 2048M**
+<code | server java parameters>
+......
+-Xms2048m
+-XX:NewSize=171m
+-XX:MaxNewSize=171m
+-XX:NewRatio=3
+-XX:MaxPermSize=256M
+-XX:PermSize=256M
+-Xgcpolicy:gencon -Xms2048m -Xmx2048m -Xmn400m -verbose:gc -Xtrace -Xsoftrefthreshold3 
+......
+</code>
+
+=====JDBC connections=====
+One of the first performance issue to popup in our prod B2C system was the JDBC value, with the way it was set by default, it would hang very easily.
+If you got more than 10 users at once (within ~1mn, spike in traffic), it would reach the maximum and Hang the site for a while until they got released (~2+ mn). 
+Also the renewal time was longer than the timeout, causing users to get error (timeout) before it even tried to release / get a new connection.
+By adjusting the settings(see bellow) we got to a point where we can support about a 30 user burst in 2 mn.
+
+TIP: We ran out of JDBC connection fairly quickly under load because it opens a connection per site user, and those connections stay open for a while (~10mn).
+
+So we changed the vales like this in the visual admin:
+server->services->JDBC connector->Properties:
+    * connectionLifetime: 150
+Default of 600 is kinda long time to keep it alive.
+    * maxTimetowaitConnection: 150 
+We want that to be relatively short, so connection don't stay opened forever and can be cleanup faster
+    * maximumConnections: 50 
+We changed this from 10, as 10 is reached **VERY** easily during a traffic spike.
+    * runCleanupThreadInterval: 120 
+I want this to run often so unneeded connections don't stay open too long for nothing.
+Also wanted to set this **lower than maxTimetowaitConnection**, so it gets a chance to cleanup before timing out.
+
+TIP: live status can be monitored here(Visual Admin):
+server->services->JDBC connector->Runtime->data sources->monitoring
+
+
+=====ISA to CRM gateway connections=====
+Another quickly reached bottleneck with B2C, was the number of connections to the sap CRM box/gateway, the default of 100 was very quickly reached (~ 50 user sessions), sessions last 30 minutes, after that is reached it would throw exceptions and hang the site etc...
+By changing the gateway (CRM side) to a max of 2000 and the ISA side to 1900, we are able to support ~1000 user sessions.
+
+We would get errors like this **"max no of 100 conversations exceeded"**: after ~50 users
+<code | out of RFC gateway connections>
+com.sap.isa.businessobject.BORuntimeException: com.sap.mw.jco.JCO$Exception: (102) RFC_ERROR_COMMUNICATION: Connect to SAP gateway failed
+Connect_PM  TYPE=A ASHOST=xxxxxx SYSNR=xx GWHOST=xxxxx GWSERV=sapgw01 PCS=1
+
+LOCATION    CPIC (TCP/IP) on local host with Unicode
+ERROR       max no of 100 conversations exceeded
+
+TIME        Thu Jan 31 15:54:16 2008
+RELEASE     700
+COMPONENT   CPIC (TCP/IP) with Unicode
+VERSION     3
+RC          466
+MODULE      r3cpic_mt.c
+LINE        10713
+COUNTER     13
+</code>
+
+To fix that we have to add an environment variable, see sap notes: 314530 & 316877
+We set ours to 1900, a bit less than the 2000 set as the max number of gateway connections on the CRM box itself.
+
+Add on line 3 of /home/t2cadm/.sapenv*.csh
+<code | /home/t2cadm/.sapenv*.csh>
+# after 'setenv DIR_LIBRARY '
+setenv CPIC_MAX_CONV 1900
+# rest of file
+</code>
+
+Then restart the j2ee server
+
+=====CRM memory notes=====
+By experience, you need about 1MB of memory per user session on the ISA side, and about 4MB!! per user session on the CRM side.
+
+We use a session timeout of 4 hours, so with 4BG of memory available on the CRM side that would allow for a max of 1000 users during that time span (with default session timeout of 30mn, it would allow 4000).
+
+TIP: You can check the CRM sessions memory use in transaction **ST02**
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+
+=====ISA: SSL certificates=====
+That's not really a performance thing, but you will want to check the SSL certificate are valid or you might have problems, especially since the ones coming with ISA are shipped expired.
+
+See: [[sap_j2ee_ssl_keys]]
+
+=====ISA: Password expiration and number of tries=====
+Sap auto-expire the password of admin after 90 days, it does so the first time you "login" after 90 days, unfortunately it seem to always be when you have important work to do like changing a setting or redeploying an app, on a production system you don't want this to happen by itself at a bad time, but should make your own policy to change that password at scheduled times.
+
+Also after 5 errors it will lock=up, and the last thing you want is the admin password to get locked up on your production system because it might take hours to fix this.
+
+Anyway this settings can be changed in the visual administrator: (set it to a big number, say 9000 days)
+server->services->ume provider->ume.logon.security_policy.password_expire_days
+And the number of attempts: (set this high to be safe say 20)
+ume.logon.security_policy.lock_after_invalid_attempts
+
+TIP: If the password does expire changing it in NWA/visual admin often fails.
+Best is to go to the configtool->userstore and change the admin password there (and restart the j2ee)
+
+
+=====Log / Trace etc.. settings ISA / VMC etc...=====
+TIP: Having logging/traces enabled at a high level (debug/traces) makes performance much slower, on a production ystem you will want to set those such as only error/critical entries get logged.
+
+
+See note: 1089043
+  * You will want to make sure price analysis is disabled: (in the isa shop admin XCM)
+
+  * ISA log levels: on a prod server you want to set the log level to ERROR or higher, for example the "DEBUG" makes the site almost unusable.
+To check or change the trace level, proceed as follows:
+Log on to the visual administrator.
+Choose Server(s) -> Services -> Log Configurator.
+On the 'Runtime' tab page, choose the 'Locations' view.
+Select the node ROOT LOCATION->com->sap->isa.
+On the right-hand side of the screen, change the severity to 'ERROR'.
+Save these settings for all server nodes.
+
+  * VMC log level: same idea as for ISA: ERROR level or higher.
+Ensure that in transaction SM53, the trace level for the category com->sap->vmc->rfc is set to ERROR/INFO.
+
+  * CRM traces: make sure no traces are enabled on the CRM box: ST05 / ST11 etc...
+
+=====IPC settings=====
+Pricing can be very slow wit the IPC, which runs inside a java vm pool (VMC) on the CRM box.
+It can be very beneficial to increase the IPC default VM settings, which are low by default.
+See note: 102539
+
+For example, use transaction RZ10 to set those settings:
+<code | IPC VMC settings>
+eg2/max_extend_size_MB = 32
+vmcj/option/ps = 780M
+vmcj/option/gc/sharedWaterMark = 74
+vmcj/option/percentageCopyOnlySC = 13
+vmcj/option/percentageSharedClasses = 19
+vmcj/property/vmc.cachesize = 13
+</code>
+
+Mostly it gives more memory to the VMC/IPC and set the garbage collection better than standard (it would run when almost no memory was available making the GC itself very slow, and causing delay on the site while it is running)
+
+=====ISA: XCM settings=====
+You will want to make sure your JCO etc... settings in XCM are adequate:
+See: [[saving_loading_isa_b2b_b2c_xcm_config]]  
+
+=====Consistent Long page load time on ISA=====
+It could be a RFC call always failing and spending time before a timeout.
+We had that problem with IPC_REMOTE_CONNECTION_100 being called while it should not have been, this RFC was unset (not supposed to be used and set to timeout after 20 seconds, causing the user page on the B2C site to be delayed that long. 
+This can be found looking carefully at all the logs (SM21, NWA log etc...)
+
+=====Finding problems, fixing issues=====
+You will want to look at the logs (ISA at http://server:50100/nwa/) and CRM: SLG1, ST01, ST05 , SM21, SM53(IPC) and look for errors etc...
+You can also run traces if needed: ST05, ST11 ...
+
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+

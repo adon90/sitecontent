@@ -1,0 +1,148 @@
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Thank you very much\n",
+"ts":"2012-09-25T01:24:00-07:00 Los_Angeles"}
+{"author":"Rafael Santos (Guest)",
+"title":"It Worked",
+"text":"It worked with a BB Storm and Ubundu 11.10 and Vodafone Portugal. I'm not using it right now because with this method I just have download speeds of 512kbps and with the connection made by Bluetooth I have downloads speeds around 1.5mbps, but good job and thanks\n",
+"ts":"2012-05-10T05:23:00-07:00 Los_Angeles"}
+{"author":"Dar?o (Guest)",
+"title":"Thanking from Spain",
+"text":"3 new configs for 3 spanish companys: Movistar, Simyo and Pepephone\n",
+"ts":"2012-04-27T19:38:00-07:00 Los_Angeles"}
+{"author":"Alexei Znamensky (Guest)",
+"title":"Thank You!!",
+"text":"Many thanks from Brazil!!\n",
+"ts":"2012-01-13T18:48:00-08:00 Los_Angeles"}
+{"author":"xcubx (Guest)",
+"title":"Works properly",
+"text":"Hi, i'm using on 8520 with movistar Venezuela. It Works!\n",
+"ts":"2011-06-08T22:06:00-07:00 Los_Angeles"}
+{"author":"Arthur (Guest)",
+"title":"Torch 9800 with VIVO provider working",
+"text":"Hi, thank you for Berry4All. I'm laughing while typing this and browsing at stupid 1.6Mbps with a Torch through VIVO provider.\n",
+"ts":"2011-03-13T00:39:00-08:00 Los_Angeles"}
+{"author":"Megaflea.net (Guest)",
+"title":"o2 uk",
+"text":"works for o2 uk, using ubuntu 10.10?\n\nI modified the tmobile and tmobile-chat  settings \n\nusername mobileweb\npassword password\napn mobile.o2.co.uk\n\nthanks\n",
+"ts":"2011-03-11T21:38:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Thanks from Kuala Lumpur",
+"text":"Works like a charm on ubuntu 10.04 (desktop & netbook editions - Pearl 8100)\n",
+"ts":"2011-03-09T20:14:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Thanks, this work very well with MTN in South Africa by just changing the APN to \"internet\" in the att scripts. It works on 2g as well as 3g :)\n",
+"ts":"2011-02-10T05:02:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Curve 8530",
+"text":"I am in the same boat as the person below title: Virgin Mobile USA?  So uh anyone? I see it connects with Sprint script well it gets to the dialing of #777 and then things go south. Does this help any? I live out in the country in the midwest (central IL) so my bb is my connection half the time due to Frontier not maintaining the phone lines. Ok so they bought them that way but when your land line goes down (and dsl) randomly for days the BB is my rock. Ok well I hope some one has a fix. Thank you everyone involved with this project. Oh would donating some money get me a fix? lol no seriously.  BrashRooster\n",
+"ts":"2010-12-02T14:24:00-08:00 Los_Angeles"}
+{"author":"ZijianCao (Guest)",
+"title":"8800 is ok",
+"text":"8800\n0.3m\nin China\nit's works!\nthank you!",
+"ts":"2010-11-29T19:59:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Config settings for Movistar Colombia (BB 9700)",
+"text":"I'm just sending the contents of the files needed to work berry4all in Movistar Colombia Network.\n\nIt works perfect on a Blackberry Bold 9700 (in 2G mode only)\n\nmovistarco\n==========\n\n\n#460800\n115200\ndefaultroute\nnoipdefault\n#nomultilink\nipcp-restart 7\nipcp-accept-local\nipcp-accept-remote\nlcp-echo-interval 0\nlcp-echo-failure 99\nnopcomp\nnoaccomp\n#noauth\nnomagic\nnoccp\ncrtscts\npap-timeout 20\npap-restart 20\nlcp-restart 10\nnovj\nuser \"movistar\"\npassword \"movistar\"\nusepeerdns\n\n#debug debug debug\n# does not exist in all pppd versions (osx)\nreplacedefaultroute\n\nconnect \"/usr/sbin/chat -f conf/movistarco-chat\"\n\n\n\nmovistarco-chat\n===============\n\nTIMEOUT 10\nABORT 'BUSY'\nABORT 'NO ANSWER'\nABORT 'ERROR'\nABORT \"NO DIALTONE\"\nABORT VOICE\nABORT RINGING\n\nSAY 'Starting GPRS connect script\\n'\n\n'' 'BBT_OS'\nOK 'ATZ'\nOK 'AT+CGDCONT=1,\"IP\",\"internet.movistar.com.co\"'\nABORT 'NO CARRIER'\nSAY 'Dialing...'\nOK 'ATD*99#'\nCONNECT\n~p\n",
+"ts":"2010-07-30T00:20:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"o2 network support???",
+"text":"I live in the UK and use O23g for Blackberry contract, is there a conf file for this I can put into bbtether/conf folder? It is not mentined ont he list of supported networks. \n",
+"ts":"2010-06-21T13:15:00-07:00 Los_Angeles"}
+{"author":"admin",
+"title":"From admin",
+"text":"Thanks Carl, I received the gift card and it covered exactly a one year magazine subscription.\n",
+"ts":"2010-05-12T12:19:00-07:00 Los_Angeles"}
+{"author":"admin",
+"title":"Donation",
+"text":"I added on this page a link to my amazon wishlist, if that is a better option.\n",
+"ts":"2010-05-09T01:10:00-07:00 Los_Angeles"}
+{"author":"Carl (Guest)",
+"title":"PayPal: Refusing money since 2007",
+"text":"I tried to donate money, but PayPal won't take it unless I create a PayPal account, which I refuse to do.  Can you accept my donation some other way?\n",
+"ts":"2010-05-09T00:58:00-07:00 Los_Angeles"}
+{"author":"mkm_dz (Guest)",
+"title":"Amazing work",
+"text":"Youve done an amazing piece of software, works flawslessly. thx a lot\n",
+"ts":"2010-05-01T14:08:00-07:00 Los_Angeles"}
+{"author":"Phantom1024 (Guest)",
+"title":"Works on Verizon Blackberry Tour",
+"text":"This software is amazing. I just plug in my blackberry, ran the program as root and hit connect from the main menu and I was able to connect to the internet.\n",
+"ts":"2010-04-22T17:26:00-07:00 Los_Angeles"}
+{"author":"Horatius (Guest)",
+"title":"Storm with Dell Mini 10v running Mint",
+"text":"On Vacation, works like a G**dam* champ with the mini!  I mean, I worked out the config file and launched it, and it just worked.\n\nCan't created a launcher yet, either because of rights or because the working path isn't actually in the path, I'm still working that out.  But kudos to you guys, this works with minimal effort.",
+"ts":"2010-04-20T02:52:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Thank you for your hard work and time put into providing berry4all. Works great using Ubnuntu 9.10 Netbook Remix/Acer Aspire One/Blackberry 8520&8900/t-mobile USA.\n",
+"ts":"2010-03-02T12:16:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"BOLD 9700",
+"text":"My BOLD 9700 appears to be working now in 2G mode.  The trick for me was removing an extra dash in the cfg file 'tmobile-epc-chat'.\n\nOld line: OK 'AT+CGDCONT=1,\"IP\",\"epc.t-mobile.com\"'\nnew line: OK 'AT+CGDCONT=1,\"IP\",\"epc.tmobile.com\"'\n\nI noticed this was an issue when checking the APN setting on my phone in the advanced:TCP/IP screen which also had epc.tmobile.com without the dash.",
+"ts":"2010-02-27T01:36:00-08:00 Los_Angeles"}
+{"author":"Doc (Guest)",
+"title":"Thank you!!!",
+"text":"Works great, thanks much!\n",
+"ts":"2010-01-25T19:43:00-08:00 Los_Angeles"}
+{"author":"Jeremiah (Guest)",
+"title":"Thank You",
+"text":"The biggest hangup to me being able to use Ubuntu instead of Vista was the ability to tether with my blackberry.  After updating my blackberry device software I no longer got the \"Cannot find Endpoint\" and now I'm rolling on the internet and writing this using my tethered blackberry.\n\nThe next few times I buy stuff off of Amazon I will use your banner.",
+"ts":"2010-01-18T01:54:00-08:00 Los_Angeles"}
+{"author":"Jon (Guest)",
+"title":"Thank you, thank you, thank you!!",
+"text":"This is so easy to install and use!  Thank you so much!  I am tethering with my BB curve 8320 on T-mobile.  I changed \"rules\" so I don't have to run as ROOT, and I hid the directory by renaming to \".bbtether\" so I don't have it cluttering the default view of my home directory.  Works like a charm!  Only improvement would be a neat launcher so I can just click in from my desktop and go, without having to open a terminal session.  In all, a fantastic little app!  Almost as easy to use as BB Desktop 5.0 for Windows - almost.\n\nCheers,\n\nJon",
+"ts":"2010-01-13T13:17:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Tmobile Bold 9700 Speed at 1031 Kbps / 94 Kbps",
+"text":"I struggled to get barry4all to work until I lowered the speed of my network connection on my blackberry down to 2G. After that I could use berry4all.\n\nI was curious to see what would happen if I raised the speed to 3G in the middle of a 2G connection. And guess what? It worked. After connecting at 2G, I switch to 3G and run another speed test. The difference is huge; HOWEVER, it seems as though Tmobile is detecting my 3G connection and then cut me off! \n\nTmobile's doesn't allow 3G speeds for tethering. Personally, I think it is a policy decision to force users to buy into their network card that you have to pay $59 per month.\n\nDoes anyone have a way to keep the speed at 3G and somehow fool Tmobile into thinking it's a 2G connection???\n\nThanks,\nGil@Vidals.net\n",
+"ts":"2009-11-25T22:26:00-08:00 Los_Angeles"}
+{"author":"Dave R. (Guest)",
+"title":"This is great!",
+"text":"I've been searching for an easy way to do this.  Worked first time like a charm.  Really impressed and appreciate it!  Thanks a lot!\n",
+"ts":"2009-11-23T13:11:00-08:00 Los_Angeles"}
+{"author":"E (Guest)",
+"title":"Excellent!",
+"text":"I have looked off and on for a way to tether my blackberry to my Ubuntu laptop. Found lots of ways to try. ;)\n\nThis put it all together in a simple/neat package that just works. Great job!\n\n0.3j - BB Tour w/tethering (BES) - Ubuntu 9.04",
+"ts":"2009-09-21T18:02:00-07:00 Los_Angeles"}
+{"author":"Travis (Guest)",
+"title":"My 2 cents.",
+"text":"Does this program mean it can tether for free?  What I gather is that you can get on the data only stream and use it, not bugging the internet side at all.\n",
+"ts":"2009-09-17T00:22:00-07:00 Los_Angeles"}
+{"author":"Admin (Guest)",
+"title":"To Netlurker",
+"text":"Thanks very much for the wishlist gift, my kids love it !\n",
+"ts":"2009-08-18T12:10:00-07:00 Los_Angeles"}
+{"author":"Netlurker (Guest)",
+"title":"Thanks",
+"text":"Thanks, working with my Curve 8900 and Ubuntu 9.04.  Wishlist item on it's way.\n",
+"ts":"2009-08-03T13:00:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"8830",
+"text":"I seem to have gotten on ok with an 8830.\nHowever, I don't seem to be getting properly attached to a \nnameserver. Do I need to establish pppd scripts that \nberry4all will use?\nthx",
+"ts":"2009-07-31T13:01:00-07:00 Los_Angeles"}
+{"author":"R.Kuszinger (Guest)",
+"title":"thanks - great",
+"text":"It is the first piece of software that was able to turn my Bold (BB9000) to a modem. Gentoo Linux, 2.6.29 kernel. Service provider: T-mobile Hungary.\n\nI'll try to mail you that config and chat files.\n\nthanks\nRobert\n",
+"ts":"2009-07-18T07:40:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Amazing!!",
+"text":"Thank you so very much for this.  It works like a charm.  \nDetails:\nSprint Simply Everything Plan\nBlackberry 8830\nGentoo Linux\n\nFor some reason with my blackberry (8830), I have to force bbtether to scan every time (the -s switch).  \n\nAlso, if you get an error message like this:\n\"couldn't set tty to ppp discipline\"\nCheck to make sure you have the PPP Async module built and modprobed.\n\nCheers!",
+"ts":"2009-07-13T00:31:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Thanks!",
+"text":"Thank-you!  Works great with ubuntu 9.04 & bb curve 8320.\n",
+"ts":"2009-05-21T14:20:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Thanks!!",
+"text":"Thanks for the awesome package. It works for me with:\n\n- Ubuntu Jaunty (9.04) Netbook Remix\n- Kernel 2.6.28-11\n- BB Curve 8310\n\nVictor Mendon?\nhttp://wazem.org/",
+"ts":"2009-04-30T10:35:00-07:00 Los_Angeles"}
+{"author":"LuminiTe (Guest)",
+"title":"Slackware and Blackberry 8130 With Verizon",
+"text":"Working well with slackware 12.2 and blackberry 8130 on verizon thank you so much now i can be RID of windows forever :)\n",
+"ts":"2009-04-17T22:00:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Works excellent with my BB Curve 8330 from Verizon - although it must run as root.  Thank you VERY MUCH for your work on this - now I don't need to depend on a windows laptop when traveling! (Ubuntu 8.10 Intrepid ibex)\n\nJoe",
+"ts":"2009-04-08T15:04:00-07:00 Los_Angeles"}

@@ -1,0 +1,202 @@
+====== Installing Trails ======
+
+===== Java / Ant =====
+
+Follow the guide here:\\
+[[http://today.java.net/pub/a/today/2005/06/23/trails.html | Trails Article]]
+
+Install java 1.5\\
+ans set JAVA_HOME correctly\\
+
+Install ant1.6\\
+and set ANT_HOME correctly\\
+
+===== Tomcat 5.5 =====
+Install tomcat **5.5** \\
+
+Note: on debian I had installed both pakages tomcat5 and tomcat5-admin,
+However This did not work, i was getting this error:
+
+<code>
+/home/thibautc/test2/build.xml:146: 
+FAIL - Encountered exception java.io.IOException: 
+java.lang.IllegalArgumentException: 
+Context path is required
+</code>
+
+After further research, I realized debian had installed Tomcat 5.0 and not 5.5.\\
+Rails **requires 5.5** so i had to install that.\\
+I did not find Debian packages for this, so did it manually:
+
+Download from here:\\
+http://tomcat.apache.org/download-55.cgi
+
+Those packages:\\
+apache-tomcat-5.5xxx.tar.gz\\
+apache-tomcat-5.5xxx-admin.tar.gz\\
+apache-tomcat-5.5xxx-deployer.tar.gz
+
+Then, install them
+<code>
+tar xzvf apache-tomcat-5.5xxx.tar.gz
+tar xzvf apache-tomcat-5.5xxx-admin.tar.gz
+tar xzvf apache-tomcat-5.5xxx-deployer.tar.gz
+#need to install tomcat somewhere
+mv apache-tomcat-5.5xx /usr/share/tomcat5
+# set TOMCAT_HOME=/usr/share/tomcat5
+# ie: /etc/profile etc ...
+</code>
+In theory also chown -R tomcat5 /usr/share/tomcat5 \\
+however in my case it would not run unless I was root \\
+probably some permissions issue, anyhow for now i'll be a pig and run it as root :-) until i figure it out.
+
+and make sure to start tomcat ! 
+
+===== Eclipse + Plugins =====
+
+If you don't have eclipse yet, install it:\\
+Download from \\
+http://www.eclipse.org/downloads/ \\
+
+And install && choose a  workspace location\\
+
+Then install Some useful Eclipse plugins:
+Click in Evlipse "help"/"software update"/"find and install", "search for new features to install"\\
+new remote site : Spindel plugin: http://spindle.sourceforge.net/updates \\
+new remote site : Ajdt Plugin: http://download.eclipse.org/technology/ajdt/31/update \\
+Click finish\\
+choose a miror\\
+and select to install spindle and ajdt\\
+accept the license\\
+click install all.\\
+
+get doclipse here : http://www.beust.com/doclipse/ \\
+And unzip in eclipse_home/plugins/
+
+Restart Eclipse after this.
+
+===== Install Trails =====
+get latest trails here\\ 
+https://trails.dev.java.net/servlets/ProjectDocumentList \\
+and extract it somewhere (! in eclipse workspace)\\
+<code>
+cd /home/thibautc
+unzip trails-0.8.zip
+</code>
+
+===== Creating the project =====
+go in there (/home/thibautc/trails) and run : 
+<code>
+ant create-project
+> basedir: /home/thibautc
+> project name: trailstest
+</code>
+
+Go in /home/thibautc/trailstest\\
+edit "build.properties" 
+<code>
+tomcat.home=/usr/share/tomcat5
+# default is usually 8080, on my debian it's 8180 because it found tomcat4 on 8080
+tomcat.url=http://localhost:8080
+manager.username=trails
+manager.password=pass
+</code>
+
+Edit {tomcat_home}/conf/tomcat-users.xml (as root) and make sure to define a trails user/password matching the one defined in tomcat-users:
+<code>
+<user name="trails" password="pass"
+      roles="standard,manager" />
+</code>
+
+===== Creating and deploying the project =====
+Start Eclipse\\
+Click "new", "Project", "java project"\\
+Name: trailstest\\
+Choose "Existing location": /home/thibautc/trailstest
+
+Open the "java" perspective (window/perspective/others/java)\\
+in package explorer, right click on "trailtests" and open the "properties"\\
+go to "java build path" / "sources", add the "src" folder.\\
+also in the tapestry section, check "is a tapestry project" (optional)\\
+
+In Eclipse "window"/"preferences":\\
+in the "java",  "compiler" section, select "java 1.5"  (1.4 won't do with annotations)\\
+Also in "Ant", "Runtime", "Classpath", "Ant home entries", "add jars" and add "trailstest/lib/apt-ant.jar" (not sure this is needed anymore)\\
+Make sure here that "Ant Home" is set correctly (to ant 1.6).
+
+Then do "New", "Class" and call it Recipe so the class gets created.\\
+
+Enter this for the Recipe.java code: \\
+
+Note: **Don't copy this colored code from here, it somehow won't compile! ** \\
+However, you can click [[http://www.colar.net/recipe.txt | here]] to copy it in plain text, which will work.\\
+
+<code java>
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratorType;
+import javax.persistence.Id;
+
+@Entity
+public class Recipe
+{
+    private Integer id;
+    
+    private String title;
+    
+    private String description;
+    
+    private Date date;
+
+    @Id(generate=GeneratorType.AUTO)
+    public Integer getId()
+    {
+        return id;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+    
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+    
+}
+</code>
+and Save.
+
+Open the "ant" view, and add trailstest/build.xml\\
+Then run the "deploy" target (dbl click)\\
+
+Open http://127.0.0.1:8080/trailstest/
+
+~~DISCUSSION~~

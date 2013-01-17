@@ -1,0 +1,35 @@
+======Simple Linux Firewall with Lokkit======
+
+Most Linux distros have ipchains or iptables available however writing your own rules is kindof a pain.
+There are multiples tools to help with this.
+Here i'm gonna use "[[http://linux.about.com/cs/linux101/g/lokkit.htm|Lokkit]]".
+
+It's very small and simple.
+If you are on a desktop it has a web interface (Gnome), and if you are on a server, you can configure it from the console with it's n-curse based interface.
+
+  * Installation (Debian)
+''sudo apt-get install lokkit''
+
+  * Setting up the rules
+We use "-n" which mean "don't start the firewall", so we can review the firewall first and not lock ourselves out by accident like idiots.
+''lokkit -n''
+You will want to keep the setting to high, and click "customize to enable the services you need, for example on a web server maybe SSH, WWW, 443(https), 25: mail smtp, 993(imap) etc ...
+
+Then we can checkout the generated rules and make sure it seems ok
+''vi /etc/default/lokkit''
+
+TIP: Just in case, you might want to add an entry to the crontab so that it shuts down the firewall in 5mn, just in case the firewall locks you out:
+''crontab -e''
+<code>
+#sa it's 1:58 right now, so stop it at 2:05.
+05 02 * * * /etc/init.d/lokkit stop
+#....
+</code>
+
+
+Ok now we can start the firewall, and test it (make sure whatever should be opened is).
+''/etc/init.d/lokkit start''
+
+WARNING: If all goes well, don't forget to remove the crontab entry !
+''crontab -e''   remove the line: 05 02 * * * /etc/init.d/lokkit stop
+

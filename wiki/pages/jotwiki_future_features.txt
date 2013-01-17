@@ -1,0 +1,100 @@
+====== JotWiki Features ======
+=====Active development=====
+
+^ Category ^ Description ^ Priority ^ Completion ^ Version ^
+|Bug|Allow links within page (#link)|medium|100%|0.1.3|
+|JOT|Handle DB Model changes detection/update process|high|90%|0.1.4|
+||Provide a button in setup page to vacuum the DB and reset search index|||0.1.4|
+||Search engine feed page (RSS)|//low//|0%|0.1.4|
+||Edit page preview|medium|0%|0.1.4|
+||Put all text resources in property file ~ international|medium||0.1.4|
+||Jot/Jotwiki logo / nicer buttons|||0.1.4|
+||backlinks creation & orphan pages detection|||0.1.4|
+|JOT|Decorator/wrapper/Styles support||0%|0.1.5|
+
+=====Planned=====
+^ Category ^ Description ^ Priority ^ Completion ^ Version ^
+|Admin features| Rebuild DB (backlinks) |low|0%||
+|JOT|Standalone mode (builtin basic "j2ee" server)||||
+||Option to delete/archive content backups.|medium|0%||
+||Host Blocking||||
+||Option to revert a page from an older backup|//low//|0%||
+||Internationalization of texts (properties)|//low//|0%||
+||Cache processed page on filesystem|medium|0%||
+||Cache most used processed page in memory cache (cache size)|medium|50%||
+||Preview Feature|//low//|0%||
+||Append only feature (permission), for discussions etc ...|medium|0%||
+||Spellcheck|//low//|0%||
+||Sectional Edit|medium|||
+||Colorize code (java, html, jottemplate ...)|//low//|0%||
+||Delete page (and attached media ??)|medium|0%||
+||Save backlinks in DB|medium|0%||
+||Renaming documents / updating links automatically||||
+||WYSIWYG editor (Applet ?)||||
+||Custom regexp for parser||||
+||Builtin stats (views/referers/top editor etc ...)||||
+||User generated forms. Basic forms with storage in html and/or DB (same as dicusssions?) ?||||
+|idem|Add Option to make simple user-created forms with email/CSV/page/builtin DB store|low|||
+||blog type page / calendar||||
+||poll type page / calendar||||
+||template CSS editor - make own style||||
+||template builder (boxes??)||||
+|JOT|monitoring feature, live sessions, transaction time tracking ...|medium|||
+
+=====Completed=====
+^ Category ^ Description ^ Priority ^ Completion ^ Version ^
+||Make an example lightweight template: PCF )|//low//|100%||
+||Env variable JOTWIKI_HOME for alternative data folder location|high|100%|0.1.2|
+||Namespace links space1:page1|//low//|100%|0.1.2|
+||Timeout warning|//low//|100%|0.1.2|
+||create initial documentation|high|100%|0.1.2|
+||make installation smooth and easy / template(s) installation|high|100%|0.1.2|
+||Release 0.1.2 and launch site|high|100%|0.1.2|
+||Search feature|high|100%|0.1.2|
+|Other|Spam prevention (encoded email addresses)|100%|medium|0.1.2|
+||retest in IE (upload file does not work)||100%|0.1.2|
+||Discussions blocks (add only)|||0.1.2|
+||Image code / security system(Captcha) for editing/discussion to prevent robots||100%|0.1.2|
+||create/edit users/profiles|medium|100%|0.1.0|
+||Actual page author|high|80%|0.1.0|
+||Save author in DB|high|80%|0.1.0|
+||Flush locks from db every X seconds|high|100%|0.1.0|
+||Edition lock, only one user can edit at a time|high|100%|0.1.0|
+||If locked while editing, show message, backup under temp file|high|100%|0.1.0|
+||On save and or cancel edit, flush edition locks||100%|0.1.0|
+||JOT: scheduler, cron type does not appear to work|**very high**|100%|0.1.0|
+||Remove backup logs after X days(7)||100%|0.1.1|
+||Remove backup of pages (oldpages) after X days(60)||100%|0.1.1|
+||Remove backup of temp conflict files after X days(7)||100%|0.1.1|
+||AddThis publisher ID variable.|||0.1.0|
+||Google analytics builtin||100%|0.1.0|
+||Google sitemap|high|100%|0.1.0|
+||Upload image/file|high|100%|0.1.0|
+||colar.net pixel for stats.|||0.1.0|
+||Manage pages/files/images (delete)|//low//|100%|0.1.0|
+|Editor|Buttons/javascript to automatically create a Title, smiley, code/note block etc ..|//low//|100%|0.1.1|
+||setup pages & update login form|high|100%|0.1.0|
+||setup namespaces & options|high|100%|0.1.0|
+||Link within a page like #section1 or page1#section1 space1:page1#section|high|100%|0.1.0|
+||Robot.txt file|medium|100%|0.1.0|
+||robots.tx: block edit.do login.do setup.do?|medium|100%|0.1.0|
+||after login, return to last page|high|100%|0.1.0|
+||Section/Namespace in separate folder, with own sidebar/title etc...|medium|100%|0.1.0|
+||Code block title (optional)|medium|0%|0.1.0|
+||Make breadcrums and page links "nice" url's (/blah)|medium|100%|0.1.0|
+||Open External links in new window|medium|100%|0.1.0|
+||Printer friendly layout|medium|100%|0.1.0|
+||templates: add links to jowwiki.net jot.net colar.net (required??)|medium|100%|0.1.0|
+||Add buttons for diggthis, furl, spurl, del.icio.us, technorati, stumbleuppon... Use addthis.com button instead|low|||
+||Add real page name (no _)/ page main header for page title / metadata|high||0.1.0|
+||Allow user templates (per namespace)|high|100%|0.1.1|
+|Other|Show a version somewhere (admin page / view setup jotwiki.net|high|100%|0.1.0|
+page)|high|100%|0.1.0|
+|Bugs|Bold with only 1 char inside fails ie: **B**||100%|0.1.0|
+||After loging in, we go to view.do, should go to /home||100%|0.1.0|
+||editing/saving page in other template fails.||100%|0.1.0|
+||Seem to be a bug if page name as secial chars such as . or /|||0.1.0|
+||inside of code blocks is being parsed, shouldn't|**high**||0.1.0|
+|View page|Table of Content|high|100%|0.1.0|
+|Design fixes|login page| high |100%|0.1.0|
+

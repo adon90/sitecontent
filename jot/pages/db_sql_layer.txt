@@ -1,0 +1,79 @@
+======JavaOnTracks: DB - SQL Layer======
+This is the "lower level" layer of the DB API, it uses JDBC has it's base and handles the SQL database connections and provides a pooling mechanism, as well as the the low level "raw" SQL queries.
+
+WARNING: **Usually you should use the "[[DB Persistance Layer]]" layer rather than this directly, unless you want to use SQL only (and not the JOT built-in file based DB) / and/or you want to make custom advanced SQL queries which the maintenance layer does not support.**
+
+
+The javadoc is here:
+[[http://www.colar.net/jotdoc/net/jot/db/package-summary.html]]
+
+=====Creating a DB Pool=====
+A pool of connections will be created and manages (connections are added/dropped as needed according to config), also if a connection appears to hang (stays open to long), it will eventually be terminated.
+
+Basically you have to have a JOTDBJDBCSetup object, then create a JOTDBManager instance, and load the Db config in it 
+<code | setup object>
+// usually you would read the values form a property file or something
+            JOTDBJDBCSetup setup = new JOTDBJDBCSetup();
+            setup.setUpgraderClass("com.me.MyUpgrader");
+            setup.setURL("jdbc:postgresql://127.0.0.1:5432/mydb");
+            setup.setPassword('abc123');
+            setup.setDriver("org.postgresql.Driver");
+            setup.setUser('me');
+            setup.setMaxConnections(20);
+            setup.setUnicode(Boolean.FALSE);
+            setup.setEncoding(null)
+
+// load the DB with this setup
+            JOTDBManager.getInstance().loadDb("MYDB", setup);
+</code>
+
+WARNING: You should call shutdown() when your application doesn't need the DB anymore/shutdowns, so that the pool of DB connections is released correctly. **JOTDBManager.getInstance()shutdown() **
+
+
+=====Querying the DB=====
+
+WARNING: Note here the difference between update() and query() , **the update() method should be used when NO RESULTS are expected**, such as an INSERT, **whereas query() should be called when results are expected**.
+**If you use query() for a query that returns no results such as an INSERT, you might get some "no result" exception with some DB drivers** (some version of postgres did this).
+
+
+The JOTDBManager provides the DB interaction(query) functions, here are the main ones:
+  * **query(JOTTaggedConnection con, java.lang.String query, java.lang.Object[] params) **
+
+Ex: ''String[] params={"john","Doe"};JOTDBManager.getInstance().query(con, "INSERT INTO TEST VALUES(?,?)",params);''
+
+  * **query(JOTTaggedConnection con, java.lang.String query) **
+**It's MUCH safer to use query(con,query,objects[]) as that handles quotes etc.. in variables**
+
+Ex: ''JOTDBManager.getInstance().query(con, "INSERT INTO TEST VALUES('john','doe)");''
+
+  * **update(JOTTaggedConnection con, java.lang.String query, java.lang.Object[] params) **
+
+Ex: ''String[] params={"john","Doe"};JOTDBManager.getInstance().query(con, "INSERT INTO TEST VALUES(?,?)",params);''
+
+  * **update(JOTTaggedConnection con, java.lang.String query) **
+**It's MUCH safer to use update(con,query,objects[]) as that handles quotes etc.. in variables**
+
+Ex: ''JOTDBManager.getInstance().query(con, "INSERT INTO TEST VALUES('john','doe)");''
+
+  * **tableExists(java.lang.String storageName, java.lang.String table) **
+Checks whether a table already exists or not (**might not with on all DB's**)
+
+
+<code | Example DB queries>
+    JOTTaggedConnection con = getInstance().getConnection("MYDB");
+ 
+    String params={"J'ohn,"Doe"};
+    JOTDBManager.getInstance().update(con, "INSERT INTO TEST VALUES(?,?)",params);
+    
+    params={"john"};
+    ResultSet rs=JOTDBManager.getInstance().query(con, "SELECT * from TEST WHERE user = ?",params);
+    // use the ResultSet
+
+    JOTDBManager.getInstance().releaseConnection(con);
+</code>
+
+WARNING: Don't forget to release the connection to the pool once you don't need it !
+.
+''JOTDBManager.getInstance().releaseConnection(con);''
+
+

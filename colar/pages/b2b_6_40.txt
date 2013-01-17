@@ -1,0 +1,426 @@
+======Installation of PCF B2B on J2EE 6.40 + IPC3.0 + ISA3.1======
+
+=====2 Hardware Requirements =====
+
+Windows 2003 server, 2GB ram+, 20GB HD +
+
+=====3 Java=====
+
+See Sreenshots for this step: [[Shots B2B Java]]
+
+**3.1 Microsoft VM 5.x** \\
+The Microsoft VM is required because the IPC startup scripts (services) have hard link to it, and those services won’t start without it.\\
+Install Microsoft java VM (5.0+) / reboot \\
+\\Thor.pcf.com\is\SAPDownloads\ISA640\ msjavx86.exe
+
+**3.2 Java 1.3** \\
+Install jdk 1.3.1_16(This will be use by the IPC only)\\
+\\Thor.pcf.com\is\SAPDownloads\j2sdk-1_3_1_16-windows-i586.exe\\
+Note: install in c:\jdk1.3…… (Default)\\
+
+**3.3 Java 1.4** \\
+Install jdk1.4.2_09  (this will be the default java env)\\
+\\Thor.pcf.com\is\SAPDownloads\j2sdk-1_4_2_09-windows-i586-p.exe\\
+Note install in c:\jdk1.4…..(Default)
+
+Set JAVA_HOME to java 1.4
+
+ADD java1.4\bin to PATH 
+
+Note: On windows 2003, after the first reboot, windows shut down javaw as a security treat !! (Don’t get me started :-) ) \\
+Anyway, **disable “DEP”** so it won’t block java from running anymore and reboot.
+
+=====4 Install the IPC Webshops=====
+
+Copy “Shops” folder.  (Note: make sure “PricingProcedure” is set to 1 in xml files)\\
+Copy the folder \\Thor.pcf.com\is\SAPDownloads\ISA640\Shops onto C:\  (to have c:\shops)\\
+Note: **SHOPS on Thor might not be up to date**, get the latest from wherever it is (ie: production)
+
+=====5 Install JCO=====  
+
+See Sreenshots for this step: [[Shots B2B JCO]]
+
+Extract JCO 2.0 from \\
+\\Thor.pcf.com\is\SAPDownloads\JCOx\2_0_10\sapjco-ntintel-2.0.10.zip \\
+into c:\usr\sap\jco (create the folder)
+
+Add the JCO jar (sapjco.jar) to the classpath
+ 
+Add the JCO folder to the path
+ 
+Copy librfc32.dll from the JCO folder into c:\winnt\system32 (replace **ONLY** if newer).
+
+Note : **Had to add sapjco.jar to the sap "system" library folder as well** \\ c:\usr\sap\J2E\jcoo\j2ee\cluster\server0\bin\system, otherwise the j2ee server cannot find it.  Do this after installing the central instance and patches
+
+=====6 Oracle=====
+**6.1 Installing Oracle** \\  
+
+See Sreenshots for this step: [[Shots B2B OraInst]]
+
+Start the Oracle installer:\\
+Z:\SAPDownloads\CD51030122\ORA92_1\NT\I386\**sapserver.cmd  (NOT SETUP.exe)** \\
+**Install in the folder (c:\oracle\Z03\920_32) -> NON DEFAULT** \\
+Where Z03 will be the SAP J2EE instance number, 920 is the oracle version and 32 stands for 32 bits.
+
+Choose NO to “create a database”
+ 
+Start the installation, when it asks for CD2, CD3 just browse to it (on Thor):\\
+When the network configurator start just choose “typical configuration ”
+
+**6.2 Installing the Oracle patch (9.2 patch 7)** \\  
+
+See Sreenshots for this step: [[Shots B2B OraPatch]]
+
+Unzip the patch from: \\
+\\Thor.pcf.com\is\SAPDownloads\Oracle patches\9.2.0.7 win32\P4163445_92070_WINNT.ZIP \\
+in a local folder (ie: c:\ora_patches\)
+
+First you need to shutdown the Oracle services before applying the patch
+
+Start the setup.exe (might have to start it from the command line – had to once)
+
+Make sure you give it the correct oracle path
+
+Reboot or at least restart the oracle services you stopped.
+
+Note: Had to change OracleTSNListener service to "automatic" rather than manual (should be by default, but once it did not)
+
+=====7 SAP Central Instance for Oracle (WebAS, etc …)=====
+
+**7.1 Install the central instance** \\  
+
+See Sreenshots for this step: [[Shots B2B Central Inst]]
+
+Start the installer from:\\
+\\thor\SAPDownloads\D51031148\IM01_NT_I386\SAPINST\NT\I386\sapinst.exe \\
+Choose the Sap NW/Java system/Oracle/Central system/default installation
+
+The installer will log you off and back on, this is normal.\\
+Then it will ask for the java DVD, either use the actual DVD, or browse to it on Thor (it will need to be mapped as a network drive)\\
+Ie: \\Z:\IS\SAPDownloads\D51030724
+
+Keep the default settings, however instance name and database SID have to be changed and be unique (here we use Z03)
+ 
+Set the master password, do not forget this password, it will be both the DB, java etc… password.
+
+Installation will start running, this takes a looooong time, go take a break  (2h+)
+
+Note: “Start SAP j2EE engine” takes about 40mn, this is normal, all the java app are being compiled.
+
+Note: It is useful to create shortcuts on the desktop to the admin tool, deploy tool and log viewer
+
+Note: If you get an IGS server error: (should not)\\
+Setup the IGS (image server that create graphs): \\
+go into c:\usr\sap\j2ee\jc00\igs\conf and:\\
+- copy gfwchart.tpl into gfwchart\\
+- copy xmlchart.tpl into xmlchart\\
+(igs http status on port 40080)\\
+
+**7.2 Installing the SAP Central Instance Patches** \\  
+
+See Sreenshots for this step: [[Shots B2B Central Patch]]
+
+The patches are in: \\Thor.pcf.com\is\SAPDownloads\J2EE\j2eepatch14
+Copy them locally.
+Note: list of patch files (in order)\\
+-SAPINST14_0-20000118.SAR\\
+-CTRLORA14_0-20000118.SAR\\
+-J2EERT14_0-10001982.SAR\\
+-J2EERTOS14_0-20000118.SAR\\
+-IGS_11-10002111.SAR
+
+Use Sapcar.exe to extract all those SAR files **in THAT order** \\
+(sapcar –xvf  ….) \\
+Then go into SAPINST-CD\SAPINST\NT\I386 and run sapinst.exe\\ 
+Do “import support package”.\\
+It will ask to select the instance profile.\\
+Browse to c:\usr\sap\Z03\SYS\profile and select Z03_JC00_[hostname]
+
+On the next screen it will ask you the passwords, enter the Master password defined during the install in both field.
+
+Note: it might give a warning that the swap size is to small, ignore it.
+
+Upgrade will run, take another break :-)
+
+Copy the sapjco.jar as explained at the end of Step 5.
+
+**When upgrading to SP14 using Oracle 9.2.0.7 there is a problem and the j2ee engine don’t get patched correctly while other components do**.\\
+See note #884678\\
+Here is what to do:\\
+Stop the sdm by running\\
+<code>
+c:\usr\sap\Z03\JC00\SDM\program\stopserver.bat
+</code>
+Go to c:\usr\sap\Z03\JC00\SDM\program\lib\util\slutil \\
+And rename slutil.jar into slutil_old\\
+Then copy the new one in place\\
+\\Thor.pcf.com\is\SAPDownloads\ISA640\sp14_fix\slutil.jar \\
+Go to c:\usr\sap\Z03\JC00\SDM\program\lib\ \\
+And rename slutilapi.jar into slutilapi_old \\
+RUN: 
+<code>sdm.bat systemcomponentstate “mode=sync”</code>
+Restart the SDM \\
+<code>c:\usr\sap\Z03\JC00\SDM\program\startserver.bat</code>
+Start the SDM tool \\
+<code>c:\usr\sap\Z03\JC00\SDM\program\remotegui.bat</code>
+press the connect button and enter the password to connect to the local machine\\
+Go to the deployement Tab and press the “+” icon.\\
+And browse to the 
+\\Thor.pcf.com\is\SAPDownloads\ISA640\sp14_fix\slutil.sda \\
+And press “next” twice and then “start deployment” and complete the deployment, then close the SDMtool.\\
+Then restart the J2EE engine with the MMC.
+
+=====8 Prepare the IPC tables in the Oracle Database=====
+
+**8.1.1 Creating the database** \\  
+
+See Sreenshots for this step: [[Shots B2B IPC DB]]
+
+Full guide is in 
+\\Thor.pcf.com\is\SAP_docs\IPC\IPC40_Sr_V216.pdf (step 6.3.4.213) \\
+Here is the short version:
+
+Start the Oracle configuration assistant (start menu)\\
+Choose “create new database”\\
+Choose “Transaction processing”\\
+Enter “IPC” for the database name\\
+Choose “dedicated Server mode”\\
+Choose “Unicode” for the db character set\\
+Choose “UTF8” for the national set\\
+Press “Finish” to create the database.\\
+
+At the end of the DB creation it will ask for password, use the same as the master password for simplicity. Then press exit.
+
+**8.1.2Creating Table space and User** \\  
+
+See Sreenshots for this step: [[Shots B2B IpC Tables]]
+
+Start the oracle Enterprise Manager console (in start/programs/oracle menu)\\
+Choose “launch standalone”\\
+Click navigator / add database to tree\\
+Enter the database info:\\
+-hostname: The machine hostname or ‘localhost’\\
+-Port: enter ‘1521’ (Or could be 1527)\\
+-ID: enter the database SID (in this example we used “IPC”)\\
+
+The DB will appear in the tree, click on it to connect to it.\\
+The login panel will appear. Enter “system” as the username. Enter the master password in the password field, leave “connect as” on “normal”.
+ 
+Open the Storage branch\\
+Right click on “Tablespace” and choose Create\\
+Enter “IPC” for the name\\
+Leave the size to “5MB”\\
+Click the “pen icon” (edit data file)\\
+Leave file size on 5MB\\
+In the storage tab: choose “automatically extend” and choose increment=”1MB”\\
+Click “Create”\\
+The tablespace is created.\\
+
+Now, create the IPC user:\\
+Open the security section\\
+Right click on “user”\\
+Choose “create”
+ 
+
+For the user name enter “IPC”\\
+Choose a password (ie: “ipc”)\\
+Choose “IPC” as the default tablespace\\
+Go to the “Role” tab\\
+Double click “DBA” to add it to the roles\\
+Press “Create”
+ 
+
+Done.
+
+**8.2 Install the IPC server** \\ 
+
+See Sreenshots for this step: [[Shots B2B IPC Install]]
+
+For ISA 3.1Patch6, the IPC MUST be 30sp16 (according to SAP note).\\
+Download the IPC installer from here 
+\\Thor.pcf.com\is\SAPDownloads\ISA640\ipc30sp16
+(both files) into the a local folder.\\
+Also copy \\Thor.pcf.com\is\SAPDownloads\sapcar.exe in the same folder.
+
+Open a command shell and go inside the folder and run:\\
+Sapcar.exe –xvf  SAPINST_1-10001213.SAR\\
+Sapcar.exe –xvf  IPC30SP16_1-10001213.SAR
+
+This will have extracted the installer.\\
+Go in the  SAPINST\NT\I386 folder and run SAPInst.cmd
+
+The installer will ask where the files are please browse to CRMIPC30
+
+On the next screen you need to change both Paths:\\
+-Change the installation path to c:\usr\sap\\
+-Change The java path to the java1.3 path (**important**)
+
+On the next screen, choose to install IPC, cat is not necessary but leave on anyway.
+
+Installation will run and complete.
+
+-set IPC services to “Automatic”  (by default they are set to manual), the dispatcher and server services. Dataloader should stay on “manual”
+
+Edit the bat files of IPC, and add JAVA_HOME=c:\jdk1.3.1_16 at the top of each (especially dataloader.bat) so that it will run on 1.3 as recommended.
+
+**8.3 Configuring the IPC and initial download** \ 
+
+See Sreenshots for this step: [[Shots B2B IPC Config]]
+
+**Copy classes12.zip from C:\oracle\Z01\920_32\jdbc\lib into C:\usr\sap\ipc\lib**
+This is the Oracle driver, IPC won’t work without it !!
+
+Start the IPC administrator (from the start menu).\\
+Go to the “server” tab\\
+Verify the settings, no changes are necessary, but you might want to set the password, and set the log files to c:\usr\sap\ipc\ .... .log rather than “my documents”.
+ 
+
+Go to the “Database” tab.\\
+Click “add”.\\
+Select “R/3 system”.\\
+Enter the r/3 server name (ie:“Cujo”) as the alias\\
+Uncheck the “load balanced” box.\\
+Enter the application server name (cujo.pcf.com)\\
+Enter the system Number (05)\\
+Enter the IPC user name (ipclogin)\
+Enter the IPC password (*****) ask Thibaut or Lisa for it.\\
+Enter “001” for the client Number.
+ 
+
+Once it’s added, press OK to close the db info panel.\\
+Note: Back on the main panel, click on the added R/3 server and click “Login” to check it works.\\
+Now we need to add the local database (Oracle)\\
+Press “Add” again\\
+Select “database”\\
+Enter “Oracle” for the alias\\
+Enter “Localhost” for the server\\
+Choose “Oracle” as the system\\
+Enter the database name (IPC)\\
+Enter the db port (1521 or 1527)\\
+Enter the db user name (ipc)\\
+Enter the db user password (ipc)\\
+Enter “001” as the client\\
+Press “ok” to create it\\
+
+Press “Save” to save all those settings.
+
+Select “Oracle” to select the database.\\
+Then click “**Create Tables**” to initialize the IPC tables.
+
+You should then get a message that the tables where created successfully.
+ 
+
+Click “Ok”
+Click “Login” to login into the Oracle database.
+
+Click on “Pricing engine parameters”\\
+Click “default” to auto fill the parameters\\
+Click “transaction tax engine”\\
+Uncheck “TTE Enabled” otherwise there will be errors and warning later.
+ 
+
+Press “Save” and then exit the administrator.
+
+
+**Copy the materials and conditions from Thor**\\ \\thor.pcf.com\IS\SAPDownloads\ISA640\conditions or production (latest) into c:\usr\sap\ipc\lib\properties 
+
+Start the dataloader from the c:\usr\sap\ipc\bin\
+ 
+
+Click “Add”
+Choose source database “cujo” , client “001”, target db “oracle” target client “001”, **RFC destination “IPC”**.
+ 
+
+Click “Details” next to product data\\
+Select user-defined and browse to c:\usr\sap\ipc\lib\properties\materials.txt
+ 
+
+Click “Details” next to condition records\\
+Select user-defined and browse to c:\usr\sap\ipc\lib\properties\conditions.txt
+ 
+
+Press “Ok”
+
+Then click “Start initial” to load the IPC data (this takes 10mn or so).
+
+Once it completed, exit the dataloader.
+
+Start the “IPC Administrator” once again.\\
+Go to the “database” section\\
+Click on “cujo”\\
+Then click on “Login”\\
+Click on “oracle”\\
+Then click on “Login”\\
+Click on “Pricing Engine Conf”\\
+Then click on “document parameters”\\
+Choose the pricing procedure “PCFB2B”\\
+Choose “USD” for the currencies\\
+Language “EN”, country “US”\\
+Then press “Save”
+ 
+
+Then go to “Document header Attributes”\\
+Set BURKS to PCU1\\
+Set VKORG to US01
+
+Save and exit the Administrator tool
+
+Note: It’s possible to test the IPC conditions got loaded correctly in the database with a query like this: “select * from ipc.cncv_a_SAP032 where MATNR=925” in Oracle.
+
+**Reboot to get IPC etc… restarted.**
+
+=====9 Post install Steps=====
+
+See Sreenshots for this step: [[Shots B2B Post-Install]]
+
+Had to add jarm.jar (recent version \\thor.pcf.com\IS\SAPDownloads\ISA640\jarm.jar ) into c:\usr\sap\J2E\jcoo\j2ee\cluster\server0\bin\system, ISA uses that jar, however it as been removed/obsolete in J2EE 6.40 (was provided with 6.20)
+
+Restart the J2ee engine or reboot after installing this
+
+License:\\
+Start the Visual Administrator and login to the default (localhost)\\
+Go to server/services/Licensing adapter\\
+Copy the system Id and hardware key, then go to http://service.sap.com/licensing or ask Bob to get the license key.\\
+Once you get the license file fromSAP, save it locally into c:\usr\sap\Z03\license.txt.\\
+Then go back into “licensing adapter” and do “install license from file”, browse to the license file.
+
+Java crypto setup (required for SSL etc …)
+
+AIK SSL or turn off secure thingy -> note 796540 ….\\
+See also \\
+http://help.sap.com/saphelp_nw04s/helpdata/en/f1/2de3be0382df45a398d3f9fb86a36a/frameset.htm \\
+(which does it using the SDA) And \\
+https://websmp201.sap-ag.de/~form/sapnet?_FRAME=CONTAINER&_OBJECT=012006153200000280532003
+
+Get the crypto library CAR from\\
+\\thor\IS\SAPDownloads\Java Cryptolib ssl \\
+Extract the CAR file using sapcar.exe –xvf \\
+Copy all the jar files into C:\usr\sap\Z03\SYS\global\security\lib\engine \\
+
+**DELETE the old iaik_jce_export.jar** \\
+in the same folder or **it won’t work**  \\
+
+Not sure if this is required or not: \\
+-- \\
+Download the JCE unlimited strength policy files from sun\\
+Copy from \\thor\IS\SAPDownloads\Java Cryptolib ssl\jce_policy-1.5.0.zip\\
+And extract it.\\
+Then copy the jar files into [JAVA_HOME]\lib\security\\
+--
+
+**Remove C:\j2sdk1.4.2_09\jre\lib\jce.jar (or rename jce.back) or it will not work**\\
+because it conflicts with IAIK. \\
+
+Go in the config tool,  and set startup mode to ALWAYS for dispatcher/SSL and save.
+
+Note: The provided SSL certificates are expired, to use SSl successfully, we need to create new ones.\\
+See separate doc here:\\
+\\thor.pcf.com\IS\SAPDownloads\ISA640\doc\upgradingsslkeys.doc \\
+
+Restart the J2EE engine
+
+=====10 Landscape Diagram=====
+
+{{20060203100425710-2-system_new.png}}
+
+~~DISCUSSION~~

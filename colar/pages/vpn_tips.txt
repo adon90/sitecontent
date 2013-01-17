@@ -1,0 +1,13 @@
+====== VPN Tips ======
+
+  * Solution for a connection from IPCop to qarbon's Cisco router/vpn (9600)\\
+http://www.colar.net/qarbon/vpn/v1-ipcop2netscreen5/
+
+  * Solution for a connection from IPSec to qarbon's Cisco router/vpn (9600)\\
+http://www.colar.net/qarbon/vpn/v2-ipsec2netscreen5/
+
+  * Solution using the software "vtun" on both ends.\\
+http://www.colar.net/qarbon/vpn/v3-vtun2vtun/
+
+
+~~DISCUSSION~~

@@ -1,0 +1,172 @@
+{"author":"M. Roscio (Guest)",
+"title":"No answer from modem",
+"text":"Tried with both 0.3k and 0.3q, Ubuntu 11.10, BB 8520 by TIM.\nSame problem as posted on 1st Apr 2012 by Vishrut, except that my BB doesn't ask for a password.\nUncommenting \"debug\" in conf/tim adds a message line:\nScript /usr/sbin/chat -f ./conf/tim-chat finished (pid 3783), status = 0x1\nPid changes, status always 0x1.\nPlease feel free to ask for more info.\nregards\nmroscio@tin.it\n",
+"ts":"2012-09-29T05:02:00-07:00 Los_Angeles"}
+{"author":"MikeC (Guest)",
+"title":"Verizon Blackberry 9930",
+"text":"Installed the prereqs, as noted on the install page, on Ubuntu Lucid 10.04, connected my BB as USB drive, then ran 0.3q of bbtether (sudo berry4all.sh). Set File > Preferences, ran Device > Scan, disconnected and rebooted the BB (with a battery pull, as indicated.) berry4all has worked every time since.  Thanks for all your work on this!\n",
+"ts":"2012-06-12T21:22:00-07:00 Los_Angeles"}
+{"author":"admin",
+"title":"For 11.04",
+"text":"Try this:\nJust an FYI regarding Debian 6.0 (x64): I found that Berry4All stopped working when I switched from Ubuntu to Debian. Managed to track the problem down to the pppd config file. Debian 6.0 seems to require absolute paths to the chat scripts. Changing the file path fixed the problem.\n\nLet me know if that works.",
+"ts":"2011-05-18T21:23:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"For those of you using Mobilicity in Canada, copy the generic file generic and generic-chat and rename both mobilicity and mobilicity-chat.  The network name is www.davewireless.com\n",
+"ts":"2011-05-18T19:42:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Does not work with Ubuntu/Kubuntu 11.04(natty)\n",
+"ts":"2011-05-18T19:39:00-07:00 Los_Angeles"}
+{"author":"Jason (Guest)",
+"title":"Fix it, pls",
+"text":"so it cannot work with libusb-1.0.8... Thanks...\n",
+"ts":"2011-04-30T02:26:00-07:00 Los_Angeles"}
+{"author":"JParker (Guest)",
+"title":"run with sudo!",
+"text":"For those of you getting the error \"operation not permitted\".  The simple resolution is to run berry4all.sh with sudo.\n\n> sudo ./berry4all.sh",
+"ts":"2011-04-16T00:34:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"anybody had any luck with boost Writing data size: 4\n\tModem -> [0x41 0x54 0x48 0xd ] [ATH.]\n\tModem <- [0x41 0x54 0x48 0xd ] [ATH.]\n\tModem <- [0xd 0xa 0x4f 0x4b 0xd 0xa ] [..OK..]\nWaiting for PPPD shutdown to complete.\nPPPD finished\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x23 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [....#...........]\n\tModem -> [0x71 0x67 0x7d 0x20 0x3c 0xcd 0x74 0x7d 0x78 0x56 0x34 0x12 ] [qg} <.t}xV4.]\nWriting data size: 12\n\tModem -> [0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x23 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [....#...........]\n\tModem -> [0x42 0x42 0x54 0x8 0x31 0xd1 0x21 0x29 0x78 0x56 0x34 0x12 ] [BBT.1.!)xV4.]\nStopping modem thread\nread: 10\nModem thread Stopped\nDisconnected\nReleasing interface\nbbtether completed.\nBBTether Thread completed.\nWill run bbtether with args: ['att-alternative', '-v']\nStarting Modem thread\n--------------------------------\nBBTether 0.3m\nThibaut Colar - 2009\nMore infos: http://wiki.colar.net/bbtether\nUse '-h' flag for more informations : 'python bbtether.py -h'.\n--------------------------------\n\nLooking for USB devices:\n\tBus 005 Device 001: ID 1d6b:0001\n\tBus 004 Device 001: ID 1d6b:0001\n\tBus 003 Device 001: ID 1d6b:0001\n\tBus 002 Device 001: ID 1d6b:0001\n\tBus 001 Device 005: ID 0fca:8004\n\tBus 001 Device 001: ID 1d6b:0002\nUSB Device lookup finished\nUsing saved EP data: 0, 130, 2, 131, 3\n\nUsing Data Endpoint Pair:0x82/0x2\nUsing Modem pair: 0x83/0x3\n\nClaiming interface 0\n\t-> [0x0 0x0 0xc 0x0 0x5 0xff 0x0 0x0 0x0 0x0 0x4 0x0 ] [............]\n\t<- [0x0 0x0 0x14 0x0 0x6 0xff 0x0 0x0 0x8 0x0 0x4 0x0 0x4 0x0 0x0 0x0 ] [................]\n\t<- [0xe2 0x66 0x65 0x32 ] [.fe2]\n\t-> [0x0 0x0 0xc 0x0 0x5 0xff 0x0 0x0 0x0 0x0 0x2 0x0 ] [............]\n\t<- [0x0 0x0 0xd0 0x1 0x6 0xff 0x0 0x0 0xc4 0x1 0x2 0x0 0xc 0x0 0x6 0x0 ] [................]\n\t<- [0xc4 0x1 0x0 0x0 0x10 0x0 0x7 0x5 0x4 0xf 0x0 0x5 0x52 0x49 0x4d 0x20 ] [............RIM ]\n\t<- [0x42 0x6c 0x61 0x63 0x6b 0x42 0x65 0x72 0x72 0x79 0x20 0x44 0x65 0x76 0x69 0x63 ] [BlackBerry Devic]\n\t<- [0x65 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 ] [e...............]\n\t<- [0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 ] [................]\n\t<- [0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x65 0x63 0x5f 0x61 ] [............ec_a]\n\t<- [0x67 0x65 0x6e 0x74 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x46 0x65 0x62 0x20 ] [gent........Feb ]\n\t<- [0x31 0x36 0x20 0x32 0x30 0x31 0x30 0x0 0x0 0x0 0x0 0x0 0x31 0x37 0x3a 0x34 ] [16 2010.....17:4]\n\t<- [0x31 0x3a 0x32 0x33 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x1 0xff 0xff ] [1:23............]\n\t<- [0x5 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0xb0 0x0 0x0 0x0 0xa 0x0 0x0 0x0 ] [................]\n\t<- [0xc4 0x0 0x0 0x0 0x40 0x0 0x0 0x0 0x4 0x0 0x0 0x0 0x10 0xc5 0x0 0xc ] [....@...........]\n\t<- [0x0 0x0 0x2 0x0 0x0 0x0 0x0 0x0 0x2 0x0 0x2 0x0 0x1 0x9 0x2 0x92 ] [................]\n\t<- [0x3 0x2 0x4 0x9 0x7 0x30 0xb 0x1 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [.....0..........]\n\t<- [0x4a 0x56 0xbe 0x92 0x14 0x0 0x1 0x0 0x1d 0xc 0x0 0x0 0x0 0x0 0x0 0x0 ] [JV..............]\n\t<- [0xd0 0x7 0x0 0x0 0x18 0xc 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 ] [................]\n\t<- [0x19 0x8 0x0 0x0 0x2 0x0 0x0 0x0 0x1a 0x8 0x0 0x0 0x7f 0x7 0x0 0x0 ] [................]\n\t<- [0x20 0xc 0x0 0x0 0x80 0x7 0x0 0x0 0xbf 0x7 0x0 0x0 0x1e 0xc 0x0 0x0 ] [ ...............]\n\t<- [0xc0 0x7 0x0 0x0 0xd0 0x7 0x0 0x0 0x9 0x8 0x0 0x0 0x34 0x2 0x2a 0x3a ] [............4.*:]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\n\t<- [0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff ] [................]\nPin: 0x326566e2\nDescription: RIM BlackBerry Device\nSystem: Linux,2.6.32-29-generic,#58-Ubuntu SMP Fri Feb 11 19:00:09 UTC 2011,i686\n\nModem pty: /dev/pts/1\nInitializing Modem\nWriting data size: 12\n\tModem -> [0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\nWriting data size: 12\n\tModem -> [0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\nWriting data size: 12\n\tModem -> [0x1 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\n\tModem <- [0x4 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 ] [................]\n\tModem <- [0x1 0x0 0x0 0x0 0x1c 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\nread: 28\nNo password requested.\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [................]\n\tModem -> [0x42 0x42 0x54 0x8e 0xd 0xa2 0x8 0x2d 0x78 0x56 0x34 0x12 ] [BBT....-xV4.]\nsession pack sent\nModem Started\nWill try to start pppd now, (/usr/sbin/pppd) with config: att-alternative\nStarting Modem thread\n********************************************\nModem Ready at /dev/pts/1\n Use ^C to terminate\n********************************************\npppd options in effect:\ndebug\t\t# (from command line)\nnodetach\t\t# (from command line)\ndump\t\t# (from command line)\nnoauth\t\t# (from conf/att-alternative)\nuser \t\t# (from conf/att-alternative)\npassword ??????\t\t# (from conf/att-alternative)\n/dev/pts/1\t\t# (from command line)\n115200\t\t# (from conf/att-alternative)\nlock\t\t# (from /etc/ppp/options)\nconnect /usr/sbin/chat -f conf/att-chat\t\t# (from conf/att-alternative)\nnocrtscts\t\t# (from conf/att-alternative)\nmodem\t\t# (from /etc/ppp/options)\nnoaccomp\t\t# (from conf/att-alternative)\nasyncmap 0\t\t# (from /etc/ppp/options)\nnomagic\t\t# (from conf/att-alternative)\nmtu 1492\t\t# (from conf/att-alternative)\nnopcomp\t\t# (from conf/att-alternative)\npassive\t\t# (from conf/att-alternative)\nlcp-echo-failure 999\t\t# (from conf/att-alternative)\nlcp-echo-interval 0\t\t# (from conf/att-alternative)\nlcp-restart 10\t\t# (from conf/att-alternative)\nhide-password\t\t# (from /etc/ppp/options)\npap-restart 20\t\t# (from conf/att-alternative)\npap-timeout 20\t\t# (from conf/att-alternative)\nipcp-accept-local\t\t# (from conf/att-alternative)\nipcp-accept-remote\t\t# (from conf/att-alternative)\nnoipdefault\t\t# (from conf/att-alternative)\nipcp-restart 7\t\t# (from conf/att-alternative)\ndefaultroute\t\t# (from conf/att-alternative)\nproxyarp\t\t# (from /etc/ppp/options)\nusepeerdns\t\t# (from conf/att-alternative)\nnoccp\t\t# (from conf/att-alternative)\nnobsdcomp\t\t# (from conf/att-alternative)\nnoipx\t\t# (from /etc/ppp/options)\nStarting GPRS connect script\nPPP data: BBT_OS\nStarting session\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x23 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [....#...........]\n\tModem -> [0x42 0x42 0x54 0x8e 0xd 0xa2 0x8 0x2d 0x78 0x56 0x34 0x12 ] [BBT....-xV4.]\n\nPPP data: ATZ\nWriting data size: 4\n\tModem -> [0x41 0x54 0x5a 0xd ] [ATZ.]\n\tModem <- [0x41 0x54 0x5a 0xd ] [ATZ.]\n\tModem <- [0xd 0xa 0x4f 0x4b 0xd 0xa ] [..OK..]\n\nPPP data: AT+CGDCONT=1,\"IP\",\"wap.cingular\"\nWriting data size: 33\n\tModem -> [0x41 0x54 0x2b 0x43 0x47 0x44 0x43 0x4f 0x4e 0x54 0x3d 0x31 0x2c 0x22 0x49 0x50 ] [AT+CGDCONT=1,\"IP]\n\tModem -> [0x22 0x2c 0x22 0x77 0x61 0x70 0x2e 0x63 0x69 0x6e 0x67 0x75 0x6c 0x61 0x72 0x22 ] [\",\"wap.cingular\"]\n\tModem -> [0xd ] [.]\n\tModem <- [0x41 0x54 0x2b 0x43 0x47 0x44 0x43 0x4f 0x4e 0x54 0x3d 0x31 0x2c 0x22 0x49 0x50 ] [AT+CGDCONT=1,\"IP]\n\tModem <- [0x22 0x2c 0x22 0x77 0x61 0x70 0x2e 0x63 0x69 0x6e 0x67 0x75 0x6c 0x61 0x72 0x22 ] [\",\"wap.cingular\"]\n\tModem <- [0xd ] [.]\n\tModem <- [0xd 0xa 0x45 0x52 0x52 0x4f 0x52 0xd 0xa ] [..ERROR..]\nread: 52\n\nConnect script failed\nPPP data: ATD*99#\nWriting data size: 8\n\tModem -> [0x41 0x54 0x44 0x2a 0x39 0x39 0x23 0xd ] [ATD*99#.]\n\tModem <- [0x41 0x54 0x44 0x2a 0x39 0x39 0x23 0xd ] [ATD*99#.]\nread: 8\n\tModem <- [0xd 0xa 0x4e 0x4f 0x20 0x43 0x41 0x52 0x52 0x49 0x45 0x52 0xd 0xa ] [..NO CARRIER..]\nread: 14\nError: [Errno 11] Resource temporarily unavailable\n******************************************************\n\nShutting down\nPlease WAIT for shutdown to complete (up to 30s)\nOtherwise you might have to reboot your BB !\n******************************************************\nWriting data size: 4\n\tModem -> [0x41 0x54 0x48 0xd ] [ATH.]\n\tModem <- [0x41 0x54 0x48 0xd ] [ATH.]\n\tModem <- [0xd 0xa 0x4f 0x4b 0xd 0xa ] [..OK..]\nWaiting for PPPD shutdown to complete.\nPPPD finished\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x23 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [....#...........]\n\tModem -> [0x71 0x67 0x7d 0x20 0x3c 0xcd 0x74 0x7d 0x78 0x56 0x34 0x12 ] [qg} <.t}xV4.]\nWriting data size: 12\n\tModem -> [0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x78 0x56 0x34 0x12 ] [........xV4.]\nWriting data size: 28\n\tModem -> [0x0 0x0 0x0 0x0 0x23 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0xc2 0x1 0x0 ] [....#...........]\n\tModem -> [0x42 0x42 0x54 0x8e 0xd 0xa2 0x8 0x2d 0x78 0x56 0x34 0x12 ] [BBT....-xV4.]\nStopping modem thread\nread: 10\nModem thread Stopped\nDisconnected\nReleasing interface\nbbtether completed.\nBBTether Thread completed.\n",
+"ts":"2011-03-19T03:15:00-07:00 Los_Angeles"}
+{"author":"WINDer (Guest)",
+"title":"Wind Mobile",
+"text":"You need to run it as root.\n",
+"ts":"2011-02-27T03:11:00-08:00 Los_Angeles"}
+{"author":"Nikita (Guest)",
+"title":"Wind mobile",
+"text":"tried editing the ATT alternative file as someone suggested and this is what terminal spit out. What am I doing wrong?\nReading prefs from /home/kitah/.bbtether.conf\nWill run bbtether with args: ['att-alternative', '-v']\nStarting Modem thread\n--------------------------------\nBBTether 0.3m\nThibaut Colar - 2009\nMore infos: http://wiki.colar.net/bbtether\nUse '-h' flag for more informations : 'python bbtether.py -h'.\n--------------------------------\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nThis might will only work as root!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nLooking for USB devices:\n\tBus 008 Device 002: ID 045e:00e1\n\tBus 008 Device 001: ID 1d6b:0001\n\tBus 007 Device 001: ID 1d6b:0001\n\tBus 006 Device 001: ID 1d6b:0001\n\tBus 005 Device 001: ID 1d6b:0001\n\tBus 004 Device 002: ID 08ff:2810\n\tBus 004 Device 001: ID 1d6b:0001\n\tBus 003 Device 001: ID 1d6b:0001\n\tBus 002 Device 003: ID 0fca:8004\n\tBus 002 Device 001: ID 1d6b:0002\n\tBus 001 Device 003: ID 04f2:b159\n\tBus 001 Device 001: ID 1d6b:0002\nUSB Device lookup finished\n\nFound RIM device (8120)\nException in thread Thread-1:\nTraceback (most recent call last):\n  File \"/usr/lib/python2.6/threading.py\", line 532, in __bootstrap_inner\n    self.run()\n  File \"/home/kitah/Downloads/bbtether/bb_gui.py\", line 655, in run\n    self.bbtether.start(self.options, self.args)\n  File \"/home/kitah/Downloads/bbtether/bb_tether.py\", line 84, in start\n    berry.read_endpoints(options.interface)\n  File \"/home/kitah/Downloads/bbtether/bb_data.py\", line 41, in read_endpoints\n    bb_usb.read_bb_endpoints(self,interface)\n  File \"/home/kitah/Downloads/bbtether/bb_usb.py\", line 118, in read_bb_endpoints\n    bb_messenging.log(\"\tManufacturer:\"+handle.getString(berry.iManufacturer,100))\nUSBError: error sending control message: Operation not permitted\n\n",
+"ts":"2011-02-15T14:10:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Iusacell",
+"text":"Hi i would like to see the data for iusacell tethering.\n\n\nThank you very much",
+"ts":"2011-01-23T23:20:00-08:00 Los_Angeles"}
+{"author":"Alvy1 (Guest)",
+"title":"My 2 cents.",
+"text":"Does anyone know if this will work with (verizon) BB 9630? If so, I would like to insall it on Ubuntu 10.10 netbook. thanks and have a great weekend!\n\nWillie...",
+"ts":"2011-01-14T16:28:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"bb9630 works",
+"text":"works great with ubuntu 8.04 and bb tour (verizon). \n\nonce installed and the verizon config file was edited, to reflect my phone_number@vzw3g.com, all was sweet.\n\nAlthough, I had to search for the berry4all.sh file to get it started (found in my case in: home/user/berry4all/src/bbtether/) ....\n\ncheers",
+"ts":"2010-11-26T22:18:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"NEED IUSACELL COMPANY DATA FOR THETERING, TKANKS\n",
+"ts":"2010-11-21T01:17:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"\n",
+"ts":"2010-10-28T13:06:00-07:00 Los_Angeles"}
+{"author":"Haddog (Guest)",
+"title":"Thanks for the great App!",
+"text":"Thanks for the great app. Using berry4all (bbtether-0.3l.tgz) with BB 8310 Curve, ATT Wireless, Ubuntu 10.04 LTS/Netbook Edition. Works great!\n",
+"ts":"2010-10-09T18:42:00-07:00 Los_Angeles"}
+{"author":"Jon (Guest)",
+"title":"Cant seem to get this installed.",
+"text":"Can someone help me?  I tried to install the libraries using sudo apt-get install, but it couldnt find py-usb or wxpython, no matter what permutaton of the name I used.  Further, once I downloaded the script, I had no idea what to do with it.  It just downloaded as an archive.  I extracted all that to my home file, but there seems to be no executable or install file.   Totally lost... any help will be appreciated.\n",
+"ts":"2010-09-21T22:21:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Ok, so I figured out how to use the gui -BUT; Now I get this output when attempting to connect the modem:\n[code]\nLooking for USB devices:\n\tBus 003 Device 001: ID 1d6b:0001\n\tBus 002 Device 001: ID 1d6b:0001\n\tBus 001 Device 004: ID 0fca:8004\n\tBus 001 Device 001: ID 1d6b:0002\nUSB Device lookup finished\n\nFound RIM device (8120)\nException in thread Thread-6:\nTraceback (most recent call last):\n  File \"/usr/lib/python2.6/threading.py\", line 532, in __bootstrap_inner\n    self.run()\n  File \"/home/komputor/bbtether (2)/bb_gui.py\", line 655, in run\n    self.bbtether.start(self.options, self.args)\n  File \"/home/komputor/bbtether (2)/bb_tether.py\", line 84, in start\n    berry.read_endpoints(options.interface)\n  File \"/home/komputor/bbtether (2)/bb_data.py\", line 41, in read_endpoints\n    bb_usb.read_bb_endpoints(self,interface)\n  File \"/home/komputor/bbtether (2)/bb_usb.py\", line 118, in read_bb_endpoints\n    bb_messenging.log(\"\tManufacturer:\"+handle.getString(berry.iManufacturer,100))\nUSBError: error sending control message: Operation not permitted\n\nCan someone please help me out here???",
+"ts":"2010-09-15T20:46:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Can someone please tell me how the gui works, where it was downloaded, and how to use it??  I have downloaded all of the libs and the python wxgtk2.8 deal and I am still LOST :(  Not a newbie to linux, but just a newbie to this app.\nI am running Ubuntu 10.04 Lucid in the United States.  If anyone has insight please email me at turntablist80@gmail.com.\nAgain, thanks in advance to anyone that can help me out :)",
+"ts":"2010-09-15T20:27:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"I have it working on my Dell mini 9 running OSX using a USB cable.  If you need info, email me at aero07@hushmail.com\n",
+"ts":"2010-06-18T20:21:00-07:00 Los_Angeles"}
+{"author":"Phil (Guest)",
+"title":"v0.3l runs perfectly with BB Storm 9500 and Jolicloud with O2 (German)",
+"text":"... only change username to \"\", password to \"\" and the APN to \"\" and I'm happy.\n\nHowever, I've a question. What makes berry4all RIM-specific? Or what must I do, if I want to run it with a Sony Ericsson X10 mini via USB? Does this work?\n\nThanks a lot!!!\n\nPhil",
+"ts":"2010-06-02T13:31:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"I have used this program and it works fine. Its a bit annoying that linux cant see this as a modem\n",
+"ts":"2010-05-13T14:29:00-07:00 Los_Angeles"}
+{"author":"Sprint Suxe (Guest)",
+"title":"seems this sw is a pos",
+"text":"i have yet to read a person that it worked on a BB . now the d/l link is not working.  Whats the deal?  Any updated news\nAnyone know where to get tether for blackberry it works",
+"ts":"2010-05-12T09:36:00-07:00 Los_Angeles"}
+{"author":"Dundy (Guest)",
+"title":"thethering BB 9500 on Win7 x64 problems",
+"text":"I have spent 3-4 days, trying to get thethering working. I have installed most recent DM. I saw that people were having problems using BT connection for tethering BB. So I disabled Bluetooth on the BB, removed the paired BT (BB) device from the PC. Now the Control Panel / Devices doesn?t show any exclamation mark. However, when I start DM, it doesn?t show IP modem option, this is what I see (might be called differently in English version)\n\nBB Media Sync, Application Loader, Restore / Recovery, Transferring data from one BB to the other, Synchronization.\n\nShould IP modem be shown as well? It doesn?t show for me. I dunno why, I even installed the USB / Modem drivers from RIM site:\n\nBlackBerry - Software Downloads 2\n\nI tried using manual tethering settings based on this site:\nhttp://www.l0pht.com/dildog/bb-win-tether/index.html\n\nThe most basic problem I face is that when I get to this point ?You'll get a dialog that looks like this (this dialog doesn't have COM4, because i wrote this tutorial after installing the modem...)? ? this window that?s shown on the webpage I never get. When I click next, it just installs modem, and list of devices shows Standard 33600 bps modem with a yellow exclamation mark next to it. I cannot edit properties, and I cannot chose port. All this, even though Virtual Serial Ports are available shown in Step 2.\n",
+"ts":"2010-03-31T16:37:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"fedora 11 x86_64, blackberry bold 9700, usb tether. The device is seen usb side. It appears to be seen by B4A as it claims a ppp0 device is connected etc. I see no ppp0 anywhere on the system. Ultimately is just times out never receiving an IP, never showing Modem Mode on the phone, and no ppp0 device or similar ever appearing. Right after it times out one of the CPU cores goes to 100% and will continue at that until I tell it Modem->Disconnect even though it reports its already disconnected. Ive seen no 'errors' in messages, in the verbose output nor the likes of AVC denials etc. Not sure whats wrong but my 2 cents is F11 x86_64 + 9700 == doesnt work.  Any suggestions?\n",
+"ts":"2010-01-28T16:46:00-08:00 Los_Angeles"}
+{"author":"Dave (Guest)",
+"title":"Sprint?",
+"text":"I try and get this working over usb with my BB Curve 8830.\nIt keeps failing. Any ideas?\n",
+"ts":"2010-01-25T20:22:00-08:00 Los_Angeles"}
+{"author":"egrep (Guest)",
+"title":"Nexus one?",
+"text":"This worked great on Ubuntu Linux and a bb tour. I am now playing with my Nexus. It is unlocked, and the usb port is in dev debug mode. The computer sees the nexus as being from Google, but \"No RIM device found\" I will search for a config file that might let me try different connect strings. I am on a unlimited 3G plan, and need not get the carrier to enable tethering [as far as I know ;-]. I am running PDANet tethering software and it says it is ready... Let the fun begin. Thanks! steve at pirk dot com\n",
+"ts":"2010-01-22T18:41:00-08:00 Los_Angeles"}
+{"author":"sam (Guest)",
+"title":"vodafone uk",
+"text":"Great work!\nFor those who use vodafone uk, the following worked for me\nfile name \"conf/vodafone\"\n------------------------\n\n# was tested as working by Me\n#460800\n115200\nnoipdefault\ndefaultroute\n#nomultilink\nipcp-restart 7\nipcp-accept-local\nipcp-accept-remote\nlcp-echo-interval 0\nlcp-echo-failure 99\nnopcomp\nnoaccomp\n#noauth\nnomagic\nnoccp\ncrtscts\npap-timeout 20\npap-restart 20\nlcp-restart 10\nnovj\nuser \"web\"\npassword \"web\"\nusepeerdns\n\n#debug debug debug\n# does not exist in all pppd versions (osx)\nreplacedefaultroute\n\nconnect \"/usr/sbin/chat -f conf/vodafone-3g-chat\"\n\n\n-------------------------------------\n\nfilename : \"conf/vodafone-3g-chat\"\n\n--------------------------------\nTIMEOUT 10\nABORT 'BUSY'\nABORT 'NO ANSWER'\nABORT 'ERROR'\nSAY 'Starting GPRS connect script\\n'\n\n'' 'BBT_OS'\n'' 'ATZ'\nOK 'AT+CGDCONT=1,\"IP\",\"internet\"'\nABORT 'NO CARRIER'\nSAY 'Dialing...\\n'\nOK 'ATD*99#'\nCONNECT\n~p\n\n\n\n-----------------\n\nHappy surfing\n\nSam",
+"ts":"2009-12-03T08:13:00-08:00 Los_Angeles"}
+{"author":"admin",
+"title":"Installing without internet connection",
+"text":"This is pretty difficult, if you can use a wired connection to install berry4all once and for all that would be way easier (Installing berry4all is trivial but the apt-get dependencies are much more painful).\nIf you want to do it without connection at all, you can try this:\nhttp://basicubuntu.blogspot.com/2009/02/install-on-ubuntu-without-internet.html\n\n",
+"ts":"2009-11-30T11:43:00-08:00 Los_Angeles"}
+{"author":"atom427 (Guest)",
+"title":"My 2 cents.",
+"text":"could we maybe get some instructions that involve downloading thru windows and using a usb flash drive and such. some of us only have or blackberry as our internet and cant use a terminal command to download because we have no internet during the whole process. =)\n",
+"ts":"2009-11-28T23:51:00-08:00 Los_Angeles"}
+{"author":"cappie (Guest)",
+"title":"Response to AaronL about Ubuntu 9.10x64, Blackberry 8330m, Sprint",
+"text":"I used the same procedure with bbtether.py with Ubuntu 9.10X32, bb 8330, and Verizon. Reboot the bb via shutdown and remove battery for 1 min. When bb comes back, ensure network connection before trying again with the command $sudo python bbtether.py verizon \n",
+"ts":"2009-11-12T14:03:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"how",
+"text":"im a newb to linux. how do you install and run berry4all after you download?  someone please help\n",
+"ts":"2009-11-07T15:16:00-08:00 Los_Angeles"}
+{"author":"Skylar Saveland (Guest)",
+"title":"Great piece!",
+"text":"Very nice, I linked from http://skyl.org/links/ !  woot!\n",
+"ts":"2009-11-05T14:16:00-08:00 Los_Angeles"}
+{"author":"jolson (Guest)",
+"title":"8330 on sprint",
+"text":"Has anyone had any luck connecting to the sprint network? I keep on getting the:\nScript /usr/sbin/chat -v -V -f conf/sprint-chat finished (pid xxx), status = 0x3\nConnect Script Failed\nError:[Errno 11] Resource temporarily unavailable\n",
+"ts":"2009-11-02T17:41:00-08:00 Los_Angeles"}
+{"author":"AaronL (Guest)",
+"title":"So close, and yet so far...",
+"text":"Ubuntu 9.10x64, Blackberry 8330m, Sprint\n\nI was able to install everything perfectly using your instructions, and I'm fairly inexperienced with Linux.  It does find my BB, and connects to the modem interface, but never connects.  Here is a log:\n\nWill run bbtether with args: ['sprint']\nStarting Modem thread\n--------------------------------\nBBTether 0.3j\nThibaut Colar - 2009\nMore infos: http://wiki.colar.net/bbtether\nUse '-h' flag for more informations : 'python bbtether.py -h'.\n--------------------------------\n\nLooking for USB devices:\n\tBus 002 Device 001: ID 1d6b:0002\n\tBus 001 Device 006: ID 0fca:8004\n\tBus 001 Device 004: ID 05ac:1209\n\tBus 001 Device 001: ID 1d6b:0002\n\tBus 004 Device 001: ID 1d6b:0001\n\tBus 003 Device 002: ID 062a:6301\n\tBus 003 Device 001: ID 1d6b:0001\nUSB Device lookup finished\nUsing saved EP data: 0, 135, 9, 140, 15\n\nUsing Data Endpoint Pair:0x87/0x9\nUsing Modem pair: 0x8c/0xf\n\nClaiming interface 0\nPin: 0x30ad24f4\nDescription: RIM BlackBerry Device\nSystem: Linux,2.6.31-14-generic,#46-Ubuntu SMP Tue Oct 13 16:47:28 UTC 2009,x86_64\n\nModem pty: /dev/pts/2\nInitializing Modem\nNo password requested.\nsession pack sent\nStarting Modem thread\nModem Started\nWill try to start pppd now, (/usr/sbin/pppd) with config: sprint\n********************************************\nModem Ready at /dev/pts/2\n Use ^C to terminate\n********************************************\nStarting GPRS connect script\nPPP data: BBT_OS\nStarting session\n\nOK\nPPP data: AT&F\nPPP data: ATZ\nConnect script failed\nError: [Errno 11] Resource temporarily unavailable\n\nCan you advise as to what might be going wrong here?",
+"ts":"2009-10-18T04:56:00-07:00 Los_Angeles"}
+{"author":"kuszinger (Guest)",
+"title":"me again",
+"text":"I haved to moved to a new laptop as the old one broken. I copied my home dir including berry4all. This is another distro. However, when I started beyyr4all it just worked with my previous settings. Changind distros is not self evident in general, but it was no. Thanks.\nDistro: Sabayon 4.2\nHW: ASUS K50IJ\nBerry: Bold 9000\nT-mobile hu 30GB internet plan",
+"ts":"2009-08-13T03:57:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"almost there",
+"text":"thanks for the application...will help a lot once i get it working.  \n\neverything installed and it sees my 8830 but when I try to connect modem i get the following error:\nCould NOT unload module berry_charge ! (must be in use)\nYou should probably blacklist it\ncreate a file as root called: /etc/modprobe.d/blackberry\ninside it write 'blacklist berry_charge' (without the quotes)\nsave it, then unplug the blackberry\nrun  \"sudo /etc/init.d/udev restart\"\nreplug the blackberry and try again\n\nfollowed instructions but still no dice..any thoughts?",
+"ts":"2009-07-17T22:19:00-07:00 Los_Angeles"}
+{"author":"MTeller (Guest)",
+"title":"Install?",
+"text":"I'm probably just missing it, but after downloading and extracting the files to my computer, what am I supposed to do?  I'm brand new to Linux, so the jargon on the install page means nothing to me.  If you have a link or help file of some sort that explains installation step-by-step, it would be much appreciated.\n   Matthew Teller",
+"ts":"2009-07-16T02:41:00-07:00 Los_Angeles"}
+{"author":"rootboy (Guest)",
+"title":"Failed finding end of line(timeout)",
+"text":"I keep getting:\n\n/usr/sbin/pppd: In file conf/verizon: unrecognized option '-f'\nFailed finding end of line(timeout) for: \nError: [Errno 11] Resource temporarily unavailable\n\nI have the network interface(s) shut down (running route shows that nothing is up).\n\nI've looked all over the net, but I can't get it to work. Any ideas?\n\n\nThanks!\n",
+"ts":"2009-07-16T02:38:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"cannot get this installed on my asus linux netbook.\nmust be doing something wrong",
+"ts":"2009-07-05T21:30:00-07:00 Los_Angeles"}
+{"author":"K_Man (Guest)",
+"title":"Thank You",
+"text":"Thank you so much. Install this on my Dell Mini 12 running Ubuntu and it works great (using Sprint). \n",
+"ts":"2009-05-11T23:37:00-07:00 Los_Angeles"}
+{"author":"Steve (Guest)",
+"title":"Easy as...",
+"text":"Installed on Ubuntu 9.04 with an 8330 on sprint.  Followed your simple instructions and worked right away!  Thanks\n",
+"ts":"2009-05-01T16:25:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Works excellent with my BB Curve 8330 from Verizon - although it must run as root.  Thank you VERY MUCH for your work on this - now I don't need to depend on a windows laptop when traveling!\n",
+"ts":"2009-04-08T15:01:00-07:00 Los_Angeles"}

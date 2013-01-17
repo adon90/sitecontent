@@ -1,0 +1,16 @@
+======Static vs Dynamic Languages======
+Or Ruby/ROR vs Java (kinda)
+
+I don???t mean that a dynamic language is not good, in fact I love how time saving it is, and i don???t have too much issues with the fact that typo will only be found during "test" because i???m used to always test my code before putting in production anyhow.
+
+The problem I have with Languages like Perl or Ruby, is that a developer can write the same thing 50 different ways (syntax), you could think it???s a freedom for the developer, but when you work on large projects with other developers or try to read somebody esle project, i think it???s plain bad.
+
+Other developers might write in a different ???syntaxic style??? than you do, and it make it hard to read/edit for you, which is likely to lead to misunderstanding and bugs.
+
+In java for example, it???s almost always easy to read somebody else code, because of the strong syntax enforcing and typing in general.
+
+So i would not mind a language like Ruby but that does ???dictate??? the syntax, such a laguage probably exists, i guess i should look at Caml, Smalltalk or maybe Python, but in any case this is the main thing i don???t like about Ruby.
+
+Regardless of this I have started using ruby on a new website I built, just to learn and be able to verify if i keep the same opinion overtime, and YES it definitely took much less time it would have with plain Java.
+
+Now, i need to experimant with java & TRAIL, SAILS or Tapestry and see how that compares.

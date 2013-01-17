@@ -1,0 +1,44 @@
+=====Installing JOTwiki in an alternate location=====
+If /opt/jotwiki or c:\jotwiki do not work for you, you will need to do the following steps during [[Installation]].
+
+=====Configuring your app server so that it finds JOTWIKI_HOME=====
+You need to have your app server set the JOTWIKI_HOME java property
+
+====Jetty====
+edit: [JETTY_HOME]/etc/jetty.xml
+**Add** (under '<Configure id="server ....>)
+Of course replace /my/custom/folder/jotwiki by the actual folder you want to use.
+<code | ./etc/jetty.xml>
+    <Call class="java.lang.System" name="setProperty">
+                <Arg>JOTWIKI_HOME</Arg>
+                <Arg>/my/custom/folder/jotwiki</Arg>
+    </Call>
+</code>
+
+Then restart jetty
+
+====Tomcat====
+===Linux:===
+edit: [TOMCAT_HOME]/bin/catalina.sh
+Add (first line after top comments):
+Of course replace /my/custom/folder/jotwiki by the actual folder you want to use.
+
+''JAVA_OPTS="$JAVA_OPTS -DJOTWIKI_HOME=/my/custom/folder/jotwiki"''
+
+restart tomcat
+===Windows===
+edit: [[TOMCAT_HOME]/bin/catalina.bat
+Add (first line after top comments):
+Of course replace /my/custom/folder/jotwiki by the actual folder you want to use.
+
+''set JAVA_OPTS="-DJOTWIKI_HOME=/my/custom/folder/jotwiki"''
+
+restart tomcat
+
+=====Running the installer witha  custom location=====
+When running the installer, you will have to tell it where jotwiki is to be installed.
+Instead of running install.bat or install.sh, open a console/dos prompt, go in the installer folder and execute
+Of course replace /my/custom/folder/jotwiki by the actual folder you want to use.
+
+''sudo java -DJOTWIKI_HOME=/my/custom/folder/jotwiki Install''
+

@@ -1,0 +1,12 @@
+====== Jabber Howto ======
+
+This explains how to connect to the Qarbon jabber server.
+
+  * Using the "Exodus" Client:\\
+http://www.colar.net/qarbon/jabber/exodus_viewlet_swf.html
+
+  * Using the "Rhymbox" Client:\\
+http://www.colar.net/qarbon/jabber/rhymbox_viewlet_swf.html
+
+
+~~DISCUSSION~~

@@ -1,0 +1,204 @@
+======Support SAP B2B/B2C Java basket Database in Tomcat======
+WARNING: **This is ONLY A PART of the [[SAP ISA on Tomcat]] doc.**
+
+
+To allow use of the Java Basket in [[SAP ISA on Tomcat]], we need to provide access to a database.
+
+Standard SAP supports Oracle, MaxDB and DB{2,4,6} as well as partial(incomplete) support for MySql
+
+In my scenario of using a lean environment and none of those datbases are lean, do I implemened support for the excellent, lightweight(1MB), file based [[http://www.h2datbase.com | H2 database]].
+
+Note: I also implemented support for [[http://www.mysql.com|MySql]], but haven't tested it much yet.
+
+====What's needed====
+  - The B2B / B2C projects need a properly defined database configuration(datasource)
+  - The Database need to be created an pre-filled with tables (usually installed as part of the Netweaver install)
+
+====Define the Data Source in B2C/B2B projects====
+Since we need this only in the local tomcat environemnt and not deployed to the real SAP engine it goes in our local_web_patches folder (See [[SAP ISA on Tomcat]] fro more infos)
+
+Add the datasource to ''local_web_patches/META_INF/context.xml''
+
+We define the datasource ''SAP/CRM/b2c'' (standard SAP name) to use the H2 database (data stored in flat files in $catalina.home/db/sapb2c)
+
+Make sure you use the proper **Context path** for your application (ie: /b2c)
+
+You might want to adjust the ''url'', especially the path you want for the DB files. 
+
+<code | local_web_patches/META_INF/context.xml>
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/b2c_dev">
+    <Resource name="SAP/CRM/b2c"
+             auth="Container"
+             type="javax.sql.DataSource"
+             factory = "com.sap.sql.jdbc.internal.DriverDataSource"
+             maxActive="100"
+             maxIdle="30"
+             maxWait="10000"
+             description="SAP B2C JDBC"
+             loginTimeout="60"
+             driverClassName="org.h2.Driver"
+             classname="org.h2.Driver"
+             url="jdbc:h2:file:$catalina.home/db/sapb2c;TRACE_LEVEL_FILE=3"
+             username="sa"
+             user="sa"
+             password=""
+             />
+             <!-- Alternative Config for MySql (not tested fully)
+             driverClassName="com.mysql.jdbc.Driver"
+             classname="com.mysql.jdbc.Driver"
+             url="jdbc:mysql://localhost:3306/sapb2c"/
+             username="sapb2c"
+             user="sapb2c"
+             password="password"
+             -->
+</Context>
+</code>
+
+We also need to create a DataDource alias: (local_web_patches/META_INF/data-source-aliases.xml)
+<code | local_web_patches/META_INF/data-source-aliases.xml>
+<?xml version="1.0"?>
+<data-source-aliases>
+	<aliases>
+		<data-source-name>
+       $ {com.sap.datasource.default}   <!-- NOTE: remove the space between $ and { -->
+    </data-source-name>
+		<alias>
+       SAP/CRM/b2c
+    </alias>
+	</aliases>
+</data-source-aliases>
+</code>
+====Setup for H2(Recommended)====
+Download H2 from [[http://www.h2datbase.com/]]
+
+Extract H2 in your home folder (or wherever you like)
+
+Copy the H2 jar to the custom tomcat sap_libs: 
+
+''cp /home/thibautc/h2/bin/h2-1.3.148.jar /home/me/sap_tomcat-6.0.20/sap_libs/''
+
+Note: jddi.jar, antlr.jar and opensqlsta.jar need to be present in /home/me/sap_tomcat-6.0.20/sap_libs/
+
+====OR Setup for MySQL (not tested much)====
+
+**I highly recommend using H2 instead**
+
+Create a SAP B2C database and user
+<code>
+sudo apt-get install mysql-client mysql-server (set a root password)
+mysql -u root -p
+> create database sapb2c;
+> grant usage on *.* to sapb2c@localhost identified by 'password';
+> grant all privileges on sapb2c.* to sapb2c@localhost ;
+>exit
+</code>
+
+Copy the mysql jar into tomcat sap_libs folder
+<code>
+sudo apt-get install libmysql-java
+cp /usr/share/java/mysql-connector-java-5.1.10.jar /home/thibautc/sap_tomcat-6.0.20/sap_libs/
+</code>
+
+====Creating Required ISA tables==== 
+ISA won't run without it's tables in the database (usually installed as part of the Netweaver install)
+
+===Extracting the table definitions from The SAP CRM Dictionary===
+Those tables definitions are stored in the CRMDIC (dictionary) in a specific SAP format ... so I wrote a Fantom script which parses the dictionary and creates the tables from it.
+It also deals with the BC_DDDBTABLERT table (table Metadata) which is required as well.
+
+Install the Fantom SDK if you don't have it yet (you need Java 6+ installed):
+See: [[Fantom - Quick Install]]
+
+If not done yet, fetch my saptomcat project(need mercurial): <code>
+hg clone https://bitbucket.org/tcolar/saptomcat
+</code>
+
+Compile the netColarSapWebshop project:
+<code>
+cd saptomcat/projects/netColarSapWebshop/
+fan build.fan
+</code>
+
+Find the SAPCRMDIC sca file and run this command against it to create a SQL script from the dictionary:
+<code>
+fan netColarSapWebshop::SapCrmDicToSql /home/me/SAPCRMDIC12_0-10002941.SCA > dic.sql
+</code>
+
+===Injecting the tables in the Database===
+Now that we have the SQl script ready, we can inject it into the database
+
+**For H2**:
+<code | H2>
+java -cp ~/h2/bin/h2-1.3.148.jar org.h2.tools.RunScript -url jdbc:h2:~/sap_tomcat-6.0.20/db/sapb2c -user sa -script dic.sql
+</code>
+
+For MySql(**not tested much**):
+<code | MySql>
+mysql -u sapb2c -p'password' sapb2c
+> source ~/dic.sql
+> exit
+</code>
+
+====Patches to SAP fro H2/MySql support====
+The SAP OpenSql jar does not contain support for H2 and only "incomplete" support for MySql. so we need to provide some support and some patches (doesn't seem to be able to do it without a few patches)
+
+You should have downloaded the project "sap-patches" as part of sap-tomcat.
+This contains support for MySql and H2 I made (java files) and explainations on patching SAP source I can't provide .
+
+Go in sap-tomcat/projects/sap-patches/
+**Look at the text files** under src/com/sap/sql /**
+
+**For each of those retrieve the matching java source file(place it in the same folder) and make the modifications specified**.
+
+The sources in questions are in opensqlsta.jar.
+If you don't have the sources, you can decompile the jar using a Java decompiler such as [[http://java.decompiler.free.fr/?q=jdgui| JD-GUI]]
+
+Now you can **compile the patches**
+<code>
+cd sap-tomcat/projects/sap-patches/
+ant dist
+</code>
+
+**Copy the patches to the the custom tomcat sap_local_libs folder:**
+<code>
+cp dist/local-sap-patches.jar ~/sap_tomcat-6.0.20/sap_libs_local/
+</code>
+
+FYI: To compile you need to place the proper libraries in the sap-tomcat/projects/sap-patches/lib folder, at least those(Possibly more):
+<code>
+logging.jar
+trex.jc_api.jar
+com.sap.security.api.jar
+opensqlsta.jar
+</code>
+
+TIp: If you get a ClassNotFound exception, you can use my fantom script to find the jar (in any folder full of jars/sca's)
+Example: ''fan netColarSapWebshop::ClassFinder  /somefolder/ SomeClass.class''
+
+
+====H2 Logging / Console====
+You can trace the DB activity like this(you can djust trace level in context.xml url):
+
+''tail -f /home/me/sap_tomcat-6.0.20/db/sapb2c.trace.db'' 
+
+One nice thing with H2 is it's **web based console** which is very nice to browse/query the tables.
+
+Start the H2 console:
+''java -jar /home/me/apps/h2/bin/h2-1.3.148.jar''
+
+It will start the console in your browser
+Enter the proper URL (as defined in context.xml), example:
+<code> 
+driver: org.h2.Driver
+url: jdbc:h2:~/sap_tomcat-6.0.20/db/sapb2c
+user: sa
+password: (blank)
+</code>
+
+You will get a Nice UI like this:
+
+WARNING: H2 by default allows only one client per datbase, so don't forget to disconnect the DB in the console when running tomcat/sap or it won't be able to connect!
+
+
+{{ h2.png }} 

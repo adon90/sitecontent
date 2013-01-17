@@ -1,0 +1,141 @@
+======Ubuntu Draper on Evo N610C======
+
+=====VPN=====
+I could not get vpnc to work, so i used the cisco client (non free) that we own at my company.
+
+To compile the cisco vpn client i apparently had to compile a kernel.\\
+it seems headers + buildtools was not enough\\
+I would get this error: scripts/mod/modpost: No such file or directory\\
+
+====Install kernel====
+<code>
+apt-get install linux-kernel-dev linux-sources linux-headers build-essential
+
+cd /usr/src/linux
+#copying the default ubuntu config
+cp /boot/config-2.6.15-25-38 .config
+make menuconfig  
+# just exit/save right away, config is ok already.
+
+#on my machine ZD12111 would fail to compile, so edit .config and comment it out
+#CONFIG_USB_ZD1211=N
+
+make  
+</code>
+ 
+# will run for 1hour +
+
+====Install Cisco client====
+<code>
+tar xzvf vpnclient-xxxx.tgz
+cd vpnclient
+./vpn_install
+#start at boot -> yes
+</code>
+
+====Install gvpndialer====
+This is a nice gui to the cisco vpn client (provides gnome icon etc ...) \\
+Download gvpn-dialer: https://sourceforge.net/projects/gvpn-dialer/ \\
+get the rpm (we will use alien to convert it into a .deb)
+
+<code>
+sudo apt-get install alien
+sudo alien gvpn-dialerxxx.rpm
+sudo dpkg -i gvpndialer_1.1-2_i386.deb
+#there is a missing libpcre.so.0 just linking it to .so.3 fixes it
+cd /usr/lib
+sudo ln -s libpcre.so.3 libpcre.so.0
+</code>
+
+start it.\\
+edit preferences (set cisco client path and profile path)\\
+create icon somewhere ('gksudo gvpndialer')
+
+
+=====Wireless network=====
+
+====Getting the driver to work====
+
+My card (Airlink AWLC3025) was not working right, after long search i found that the acx driver was not working properly, and also it was conflicting with ndiswrapper, so i choose to disable the acx driver.
+
+vi /etc/modprobe.d/blacklist
+<code>
+blaclist acx
+</code>
+
+then install the windows card driver
+<code>
+ndiswrapper -i /tmp/tnet1130.inf
+</code>
+
+unplug and then plug back the card, it then should work.
+
+====Setting the interfaces and using whereami====
+I switch back and forth from home(wireless) to (work) wired, with "whereami" i can configure bothe network and get it to switch automaticaly to whichever is detected
+
+See infos about whereami here:\\
+http://www.ubuntuforums.org/showthread.php?t=24994&highlight=wireless+connect+automatically
+
+<code>
+apt-get install whereami
+</code>
+
+Here is my setup:
+/etc/whereami/detect.conf
+<code>
+default wireless
+testmii eth0 lan
+
+if lan
+	set INTERFACE eth0
+	at wired
+	notat down
+fi
+</code>
+
+/etc/whereami/whereami.conf
+<code>
++wired setresolver nameserver 199.249.215.3
++wired cp /etc/network/interfaces.work /etc/network/interfaces
++wired /etc/init.d/networking restart
++wireless setresolver nameserver 190.168.0.1
++wireless cp /etc/network/interfaces.home /etc/network/interfaces
++wireless /etc/init.d/networking restart
+</code>
+
+/etc/network/interfaces.work
+<code>
+auto lo
+iface lo inet loopback
+
+iface eth0 inet static
+address 10.10.1.188
+netmask 255.255.255.0
+gateway 10.10.1.190
+auto eth0
+</code>
+
+/etc/network/interfaces.home
+<code>
+auto lo
+iface lo inet loopback
+
+iface wlan0 inet static
+wireless-mode managed
+wireless-txpower 15
+wireless-sens 2
+wireless-essid xxxxx
+wireless-key 123456.....
+address 192.168.0.109
+netmask 255.255.255.0
+gateway 192.168.0.1
+auto wlan0
+</code>
+
+=====System suspend/Hibernate=====
+Hibernate works great out of the box
+
+Suspend does not work, i never got it to work on this machine with any distro.\\
+With ubuntu it goes to sleep, but can't be wake back up.
+
+I give up on that, hibernate is good enough for me.

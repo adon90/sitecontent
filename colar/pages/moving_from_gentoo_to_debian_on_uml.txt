@@ -1,0 +1,77 @@
+
+Note: When installing gallery (or othe rapache2 depnedat programs) it gives an error, and hangs while trying to rsetart apache (at the end of apt-get)
+This is a knon issue.
+
+Restarting apache by hand fixes it.
+
+Installing Postfix\\
+http://www.fatofthelan.com/articles/articles.php?pid=22 \\
+Here is a local copy, in case it goes down: [[postfix article copy]]
+
+WARNING: Watch out when doing the addition to /etc/postfix/master.cf, the article code is missing the <tabs> which will make the code fail.
+
+Copy this code instead:
+
+<code>
+smtp-amavis unix - - n - 2 smtp
+	-o smtp_data_done_timeout=1200
+	-o disable_dns_lookups=yes
+
+127.0.0.1:10025 inet n - n - - smtpd
+	-o content_filter=
+	-o local_recipient_maps=
+	-o relay_recipient_maps=
+	-o smtpd_restriction_classes=
+	-o smtpd_client_restrictions=
+	-o smtpd_helo_restrictions=
+	-o smtpd_sender_restrictions=
+	-o smtpd_recipient_restrictions=permit_mynetworks,reject
+	-o mynetworks=127.0.0.0/8
+	-o strict_rfc821_envelopes=yes
+	-o smtpd_error_sleep_time=0
+	-o smtpd_soft_error_limit=1001
+	-o smtpd_hard_error_limit=1000
+</code>
+
+To bypass the firewall at work (which blocks port 993 but not port 443 - http ssl) i also listen for imap on 443 (don't do this if you have a web server with SSL running !!), so that i can connect to imap on 443 from work.
+/etc/courier/imap-ssl
+SSL_PORT 993,443
+/etc/init.d/courier-imap-ssl restart
+NOTE: add to kill some hang courier-tcp process to be able to rseatrt and pickup the new port ! (tip: telnet 127.0.0.1 443 to test)
+
+Also i changed in main.cf:
+<code>
+recipient-delimiter = -
+</code>
+so that addresses like me-* are received by me.
+
+For user aliases, edit /etc/aliases and then run \\
+<code>newaliases</code>
+
+
+gallery, pure-ftpd, redir, dokuwiki, wget 
+
+switching debian from stable to testing:\\
+replace all "stable" by "testing" in /etc/apt/sources.list\\
+also added to /etc/apt/sources
+<code>deb http://secure-testing.debian.net/debian-secure-testing etch/security-updates main contrib non-free</code>
+To get latest updates (ie: latest clamav)
+
+
+apt-get update\\
+apt-get upgrade\\
+
+
+
+download the jdk from sun here:\\  (j2se self extracting file):\\
+http://java.sun.com/javase/downloads/index.jsp
+
+apt-get install java-package
+fakeroot make-jpkg jdk-xxxxxxx.bin  (as regular user in regular user folder)
+dpkg -i <created-package-name>.deb
+
+if you had other java present run:\\
+update-alternatives --config java\\
+and choose the jdk from sun.
+
+ant, jetty ?

@@ -1,0 +1,56 @@
+======Tethering With Blackberry On Linux New======
+
+WARNING: Under Construction
+
+
+<code>
+# reboot bberry (maybe)
+sudo bcharge
+sudo bcharge 
+# yes twice !
+sudo XmBlackberry
+# look up modem , ie: device /dev/pts/4
+sudo pppd nodetach call tmobile
+</code>
+
+<code | vi /etc/ppp/peers/tmobile>
+pty "/home/thibautc/XmBlackBerry/gprs_protocol_fix/gprs_protocol_fix /dev/pts/10"
+115200
+noipdefault
+defaultroute
+nomultilink
+ipcp-restart 7
+ipcp-accept-local
+ipcp-accept-remote
+lcp-echo-interval 50
+lcp-echo-failure 999
+modem
+noauth
+nocrtscts
+usepeerdns
+novj
+user guest
+password guest
+debug debug debug
+replacedefaultroute
+
+connect "/usr/sbin/chat -v -f /etc/ppp/chatscripts/tmobile"
+disconnect "/usr/sbin/chat -v -f /etc/ppp/chatscripts/tmobile-disconnect"
+</code>
+
+<code | vi /etc/ppp/chatscripts/tmobile>
+TIMEOUT 10
+ABORT 'BUSY'
+ABORT 'NO ANSWER'
+ABORT 'ERROR'
+SAY 'Starting GPRS connect script\n'
+
+""'ATZ'
+SAY 'Setting APN\n'
+OK 'AT+CGDCONT=1,"IP","wap.voicestream.com"'
+
+ABORT 'NO CARRIER'
+SAY 'Dialing...\n'
+OK 'ATD*99***1#'
+CONNECT
+</code>

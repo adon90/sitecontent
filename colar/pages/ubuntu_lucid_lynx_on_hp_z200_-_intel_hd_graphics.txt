@@ -1,0 +1,196 @@
+======Ubuntu Lucid Lynx on HP Z200 - Intel HD graphics======
+
+It mostly worked out of the box, except that xorg would only offer me some crappy resolutions (max 1370x768 or so) and be unable to detect my display, so I had to make my own xorg.conf.
+
+Here is some of the process:
+
+===== Manually configuring the screen (xorg.conf)=====
+
+Note: **You have to be careful when manually setting xorg.conf, you could potentially damage your monitor, although that mostly applies to CRT monitors (LCD's are safer)**
+
+
+My video card is a built-in Intel graphics HD (in processor), the driver for that on linux is i915 (which worked fine) ... **however it can't detect the display correctly though that chip**, so it only offers lame "safe" *VGA resolutions.
+
+Note: Interestingly If I add a PCI graphic card and plug the same display to it, then it DOES detect the monitor fine
+
+
+====Getting infos about the graphic card and monitor====
+<code>
+lspci | grep Graphic
+    00:02.0 VGA compatible controller: Intel Corporation Core Processor Integrated Graphics Controller (rev 02)
+</code>
+
+My monitor is a Dell 23" widescreen (E2310HC)
+
+First we need to know what the monitor can do, you can use (LCD monitor)
+
+''sudo dccprobe''
+
+This will tell you a lot about the monitor and what what it can do.
+
+It is best to check the manufacturer specs if available, for example for me it was available at:
+[[http://support.dell.com/support/edocs/MONITORS/E2010H/en/ug/about.htm]]
+
+====Setting up the sync/refresh rates====
+Anyway, from the manufacturer specs and/or dccprobe output we need to find the **Horisontal Sync rates** and **Vertical refresh rates**
+
+In my case: 30-83   &  50-76
+So we want to add those to the "Monitor" section of /etc/X11/Xorg.conf
+
+Tip: See my whole /etc/X11/xorg.conf at the end of this post (you might have to create that file if it doesn't exist yet on your system)
+
+
+<code>
+	HorizSync 	30-83
+	VertRefresh	50-75
+</code>
+
+====Setting up the resolution modes====
+From the manufacturer specs and/or dccprobe you should know what resolutions are available (at which refresh rate), so we want to add the one we are interested in in the Screen/Display section.
+
+In my case:
+<code>
+        Modes	"1920x1080@60" "1600x900@75" "1152x864@75" "1024x768@75"
+</code>
+
+NOTE: The way Ubuntu works now, I think that is only used by the login screen, once in X this is not used (it seems to use the results from the ''xrandr'' command instead)
+
+====Setting up ModeLines====
+After setting the previous settings I was able to get "better" refresh rates (up to ~1700*1200) but not the best possible ones and some odd ones.
+
+''xrandr'' was able to guess those better resolutions using refresh/sync rates we provided but it's not enough infos to get it all "right"
+
+So we need to specify ModeLines to get the optimal setup.
+
+Luckily there is a cool tool to find out Modelines, ''cvt''
+So use CVT to find the modeline for each resolution we are interested in
+
+For example 1920x1080 @ 60Hz:
+
+''cvt 1920 1080 60''
+
+Repeat for each resolution, then we can add the Modeline entries to the Monitor section:
+<code>
+Modeline "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+Modeline "1600x900_75.00"  151.25  1600 1704 1872 2144  900 903 908 942 -hsync +vsync
+Modeline "1152x864_75.00"  104.00  1152 1224 1344 1536  864 867 871 905 -hsync +vsync
+</code>
+
+====Restart X windows====
+You can either kill the "gdm" process or simply reboot.
+
+Now we have all the nice resolutions available
+
+{{ resolution.png }} 
+
+====My xorg.conf====
+
+WARNING: **Do not just copy that "As is" the refresh rates and modelines might not work and even DAMAGE your screen, adjust those as explain in this post**
+
+
+<code | xorg.conf>
+Section "ServerLayout"
+	Identifier     "X.org Configured"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Mouse0" "CorePointer"
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+	ModulePath   "/usr/lib/xorg/modules"
+	FontPath     "/usr/share/fonts/X11/misc"
+	FontPath     "/usr/share/fonts/X11/cyrillic"
+	FontPath     "/usr/share/fonts/X11/100dpi/:unscaled"
+	FontPath     "/usr/share/fonts/X11/75dpi/:unscaled"
+	FontPath     "/usr/share/fonts/X11/Type1"
+	FontPath     "/usr/share/fonts/X11/100dpi"
+	FontPath     "/usr/share/fonts/X11/75dpi"
+	FontPath     "/var/lib/defoma/x-ttcidfont-conf.d/dirs/TrueType"
+	FontPath     "built-ins"
+EndSection
+
+Section "Module"
+	Load  "dri"
+	Load  "record"
+	Load  "extmod"
+	Load  "dbe"
+	Load  "glx"
+	Load  "dri2"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Keyboard0"
+	Driver      "kbd"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Mouse0"
+	Driver      "mouse"
+	Option	    "Protocol" "auto"
+	Option	    "Device" "/dev/input/mice"
+	Option	    "ZAxisMapping" "4 5 6 7"
+EndSection
+
+Section "Monitor"
+	Identifier   "Monitor0"
+	VendorName   "Dell"
+	ModelName    "23'' widescreen"
+
+### Start manual config 1 #################################
+	HorizSync 	30-83
+	VertRefresh	50-75
+	Option          "DPMS"
+	Modeline "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+	Modeline "1600x900_75.00"  151.25  1600 1704 1872 2144  900 903 908 942 -hsync +vsync
+	Modeline "1152x864_75.00"  104.00  1152 1224 1344 1536  864 867 871 905 -hsync +vsync
+### End manual config 1 ###################################
+
+EndSection
+
+Section "Device"
+        ### Available Driver options are:-
+        ### Values: <i>: integer, <f>: float, <bool>: "True"/"False",
+        ### <string>: "String", <freq>: "<f> Hz/kHz/MHz"
+        ### [arg]: arg optional
+        #Option     "AccelMethod"        	# [<str>]
+        #Option     "DRI"                	# [<bool>]
+        #Option     "ColorKey"           	# <i>
+        #Option     "VideoKey"           	# <i>
+        #Option     "FallbackDebug"      	# [<bool>]
+        #Option     "Tiling"             	# [<bool>]
+        #Option     "Shadow"             	# [<bool>]
+        #Option     "SwapbuffersWait"    	# [<bool>]
+        #Option     "XvPreferOverlay"    	# [<bool>]
+        #Option     "DebugFlushBatches"  	# [<bool>]
+        #Option     "DebugFlushCaches"   	# [<bool>]
+        #Option     "DebugWait"          	# [<bool>]
+        #Option     "HotPlug"            	# [<bool>]
+	Identifier  "Card0"
+	Driver      "intel"
+	VendorName  "Intel Corporation"
+	BoardName   "Core Processor Integrated Graphics Controller"
+	BusID       "PCI:0:2:0"
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Card0"
+	Monitor    "Monitor0"
+	SubSection "Display"
+		Viewport   0 0
+		Depth     16
+### Start manual config 2 #################################
+		Modes	"1920x1080@60" "1600x900@75" "1152x864@75" "1024x768@75"
+### Start manual config 2 #################################
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     24
+### Start manual config 2 #################################
+		Modes	"1920x1080@60" "1600x900@75" "1152x864@75" "1024x768@75"
+### Start manual config 2 #################################
+	EndSubSection
+EndSection
+</code>
+
+

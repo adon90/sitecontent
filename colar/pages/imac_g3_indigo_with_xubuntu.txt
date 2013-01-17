@@ -1,0 +1,226 @@
+======Xubuntu on Imac G3======
+{{imac.jpg}}
+My 2+ years old daughter needs a computer (so she won't play with mine).
+I wanted something sturdy, cool for kids and compact/practical for her.
+I did not care for something **way** fast, just something that's clean, works well and can run linux.
+
+I figured one of those "classic" all in one Imac would be just the thing, it looks like a toy anyhow :-)
+Seriously it's a standalone unit with all that's needed to me built-in.
+
+So i decided to go and look for an Imac on ebay, but the specs where not always precise and/or the listing person was not sure it even worked.
+I figured it would suck to pay 50$ for shipping for a 75$ computer and have to retuen it.
+
+Then i looked on Craiglist and ... ho so lucky ... i found a great one (newer with nice hardware) 20 miles away for only 90$.
+
+=====Hardware=====
+It's an Imac Indigo G3 400Mhz, it had upgrades such as 60GB HD and 320MB of ram !
+I especially liked the extra ram cause 320MB is great for running linux.
+
+See original specs here: [[http://www.everymac.com/systems/apple/imac/stats/imac_400_indigo.html]]
+
+It came with the original keyboard with the annoying little arrow keys, as well as the original mice, promptly discarded for a 3 buttons I/R specimen i had on hand.
+
+It came with OSX (10.3), which surprisingly ran pretty well, but i want to use some free kiddy software and more speed from it, so it was time to install linux.
+
+Another thing i added are some external speakers because the built-in speakers sound terrible, not sure if they are busted, if it's a Linux thing, or if those speakers where just crappy out of the box.
+
+=====OS: Xubuntu=====
+I choose [[Xubuntu]], because it's nice and lightweight (Ubuntu based with XFCE), so it runs nice and fast on the Imac.
+
+====Installation====
+I Downloaded the PPC image of xubuntu [[http://cdimage.ubuntu.com/xubuntu/releases/edgy/release/|Edgi ISO]] and burned it on a CD.
+Update: you could now get the newer Feisty ISO:[[http://cdimage.ubuntu.com/ports/releases/feisty/release/| Feisty ISO]]
+
+Then i booted it on the mac, the CD would start and then it would try to start Xubunut (LiveCD), which would fail (blank screen) because teh xorg.conf file needed tweaking.
+
+Press: CTRL-ALT-F1 (together) to get to the text console
+then fix xorg.conf by changing the Screen refresh rate and commenting out the DRI driver
+<code | sudo vi /etc/X11/xorg.conf>
+HorizSync 58-62
+VertRefresh 43-117
+#Load "dri"
+</code>
+Save the file/exit vi   (ESCAPE : x)
+
+Now we need to restart GDM to restart Xwindows with the new settings
+''sudo killall -HUP gdm''
+That should send you to the now working Xubuntu desktop. (you **might** have to press ALT-F7)
+
+Once there you can click on the "Install to disk" icon, and follow the instructions (erase all disk etc ...)
+
+After installation completes you will reboot on your brand new installation of Xubuntu.
+
+====Upgrade====
+We will want to upgrade the packages to the latest version:
+<code | upgrade>
+sudo apt-get update
+sudo apt-get upgrade
+</code>
+
+You can also try to upgrade to "Feisty Fawn" but at time of this writing that fails.
+<code | Dist Upgrade>
+sudo update-manager -c
+</code>
+
+
+====Sound problems====
+Sound would either not play, or the mixer not work right.
+You need to unmute in the mixer to hear anything, also it was not working right until instaling all this:
+<code | Sound>
+apt-get install alsa-base alsa-utils gstreamer0.10-alsa libpt-plugins-alsa libsdl1.2debian-alsa alsa-oss
+</code>
+
+====Video problems with SDL fullscreen====
+Many games for my daughter use the SDL library(pygame based), however on the Imac when games using SDL start in fulls screen, it would just turn the screen all black and there is nothing you could do.
+The application is running but you see nothing, even if you kill the application the screen stays black, so you have no choice but to kill your X session.
+
+This was due to the X config (no DRI etc..)
+By reneabling DRI and using the ATI driver (Imac use an ATI Rage card), it got fixed.
+Here is the working xorg.conf file:
+<code | /etc/X11/xorg.conf>
+Section "Files"
+FontPath        "/usr/share/X11/fonts/misc"
+FontPath        "/usr/share/X11/fonts/cyrillic"
+FontPath        "/usr/share/X11/fonts/100dpi/:unscaled"
+FontPath        "/usr/share/X11/fonts/75dpi/:unscaled"
+FontPath        "/usr/share/X11/fonts/Type1"
+FontPath        "/usr/share/X11/fonts/CID"
+FontPath        "/usr/share/X11/fonts/100dpi"
+FontPath        "/usr/share/X11/fonts/75dpi"
+# paths to defoma fonts
+FontPath        "/var/lib/defoma/x-ttcidfont-conf.d/dirs/TrueType"
+FontPath        "/var/lib/defoma/x-ttcidfont-conf.d/dirs/CID"
+EndSection
+
+Section "Module"
+Load    "GLcore"
+Load    "i2c"
+Load    "bitmap"
+Load    "ddc"
+Load    "dri"
+Load    "extmod"
+Load    "freetype"
+Load    "glx"
+Load    "int10"
+Load    "type1"
+Load    "vbe"
+EndSection
+
+Section "InputDevice"
+Identifier      "Generic Keyboard"
+Driver          "kbd"
+Option          "CoreKeyboard"
+Option          "XkbRules"      "xorg"
+Option          "XkbModel"      "pc104"
+Option          "XkbLayout"     "us"
+EndSection
+
+Section "InputDevice"
+Identifier      "Configured Mouse"
+Driver          "mouse"
+Option          "CorePointer"
+Option          "Device"                "/dev/input/mice"
+Option          "Protocol"              "ImPS/2"
+Option          "Emulate3Buttons"       "true"
+Option          "ZAxisMapping"          "4 5"
+EndSection
+
+Section "Device"
+Identifier      "Generic Video Card"
+#       Driver          "fbdev"
+Driver          "ati"
+Option          "UseFBDev"              "true"
+EndSection
+
+Section "Monitor"
+Identifier      "Generic Monitor"
+Option          "DPMS"
+#       HorizSync       28-51
+#       VertRefresh     43-60
+HorizSync       60-60
+VertRefresh     43-117
+EndSection
+
+Section "Screen"
+Identifier      "Default Screen"
+Device          "Generic Video Card"
+Monitor         "Generic Monitor"
+DefaultDepth    24
+SubSection "Display"
+Depth           1
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+SubSection "Display"
+Depth           4
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+SubSection "Display"
+Depth           8
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+SubSection "Display"
+Depth           15
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+SubSection "Display"
+Depth           16
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+SubSection "Display"
+Depth           24
+Modes           "1024x768" "800x600" "640x480"
+EndSubSection
+EndSection
+
+Section "ServerLayout"
+Identifier      "Default Layout"
+Screen          "Default Screen"
+InputDevice     "Generic Keyboard"
+InputDevice     "Configured Mouse"
+EndSection
+
+Section "DRI"
+Mode    0666
+EndSection
+</code>
+
+After changing this restart X (kill -HUP gdm) or simply reboot.
+Then fullscreen works great !
+
+====Playing/Importing CD's====
+I installed rhythmbox / sound juicer, which are two tools providing a music library (a bit like iTunes)
+''sudo apt-get install rhythmbox soundjuicer mp3lame''
+
+Start rhythmbox to play music, use sound-juicer to convert CD's to mp3/ogg/flac/whatever
+
+====Playing videos====
+I use vlc, mplayer, xine just to have more options, in most case VLC is my player of choice because it will play just about anything.
+''sudo apt-get install mplayer xine-ui vlc''
+
+Also i had existing videos for my daughter (ripped DVD i own), however those wouldn't play on this low end machine (they where divx which requires too much processing power), so i used transcoce to convert them to SVCD format(not much CPU needed), which plays great on the imac (cpu ~80%). 
+
+Here is the command i used to convert the divx avi(or anything ffmpeg can read) into an SVCD mpeg:
+<code | Convert To SVCD>
+ffmpeg -i "original.avi" -target ntsc-svcd "svcd.mpeg" 
+</code>
+
+=====Kiddy Software=====
+Here are the Educational Software i use for my daughter
+  * [[http://sourceforge.net/project/showfiles.php?group_id=6865|Gcompris]]: good educational suite with multiple languages
+  * [[http://childsplay.sourceforge.net/|Childsplay]]: similar to gcompris
+  * [[http://www.pysycache.org/|pysycache]]: learning to use the computer, did not work right so far.
+  * Tuxpaint
+  * Ktuberling - potato guy
+  * Hangman
+
+=====Conclusion=====
+Overall i'm pretty impressed by this machine, for how old it is, it's pretty snappy.
+It's not a powerhouse but it runs really smooth.
+
+=====Links=====
+[[https://wiki.ubuntu.com/PowerPCFAQ]]
+[[http://www.everymac.com/systems/apple/imac/stats/imac_400_indigo.html]]
+[[http://sourceforge.net/project/showfiles.php?group_id=6865]]
+[[http://childsplay.sourceforge.net/]]
+[[http://www.pysycache.org/]]
+[[http://cdimage.ubuntu.com/ports/releases/feisty/release/]]

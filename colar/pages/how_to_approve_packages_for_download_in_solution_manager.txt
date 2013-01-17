@@ -1,0 +1,23 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======How to approve packages for download in SAP solution manager======
+
+This describes how to download files that require approval from your SAP download basket, or how to waste 1 hour just to download a simple file !
+
+When adding packages to the SAP download basket (Ex: SP stack), some might be blocked and require approval in Solution Manager, here is what to do after the packages where added to the download basket (and stuck)
+
+  * Log into solution manager, then start "solution operation"
+  * Choose a landscape/system then click "maintenance optimizer" (**does NOT work with java GUI**)
+  * Go in change management / Maintenance optimizer
+  * Either pick an existing transaction or create a new one "create new maintenance transaction"
+  * If you create a new one, It will start a **very slow** web based process: Choose a landscape & version (ie: "crm 2007") and create a transaction as you see fit (doesn't really matter if accurate)
+  * **Back in the SapGui**, press continue, until you hit **step 3** (see screenshot)
+  * Click **"Confirm files in download basket"**
+  * It will list files that are in your download basket, click "select all" (or pick whichever files you want)
+  * Click "confirm download"
+  * You can now download the package(s) using the sap download manager, or through the web based "Download basket"
+
+Now you can close this and start the SAP download manager to download all the packages.
+
+{{ solman.png }} 

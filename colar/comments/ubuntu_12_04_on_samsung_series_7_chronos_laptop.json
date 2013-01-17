@@ -1,0 +1,48 @@
+{"author":"Mauro (Guest)",
+"title":"Kworker workaround",
+"text":"Last news on kworker issue here: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/887793\n",
+"ts":"2013-01-07T14:45:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Ubuntu on the Samsung Chronos 700Z7C-S02",
+"text":"I just bought the Samsung Series 7 Chronos 700Z7C-S02. It comes with the Optimus graphics (Intel HD 4000 and a 1GB nVidia 650m).\n\nThe main reason I can't use Ubuntu 12.10 on the 700Z7C at the moment is because of the fan noise - one of the cores on the i7 is being thrashed (constantly sitting at around 80%) which results in the fans whirring away at full blast (this still isn't loud). This is a known issue, something to do with the phc-intel kernel module. Details of the bug can be found here:\n\nhttps://bugs.launchpad.net/ubuntu/+source/linux/+bug/887793\n\nTo get the keyboard backlight working, I followed the instructions here:\n\nhttp://forum.notebookreview.com/samsung/673525-keyboard-backlight-ubuntu-12-04-chronos-7-np700z7c.html\n\nI really hope the phc-intel kernel module problem is fixed soon, it's a blocker for me at the moment (I don't like putting this beautiful laptop under a constant stress test).\n\nOh, on another note, I was pleasantly surprised by the Intel HD 4000 on-chip graphics with Linux! Everything just worked with a fresh Ubuntu 12.10 install, including the mini DisplayPort and a secondary monitor running at 2560 x 1440. Dragging windows around is pixel perfect (very smooth). I look forward to using Ubuntu 12.10 (or better still, Elementary OS Luna) as the primary operating system on this beautiful laptop.",
+"ts":"2013-01-01T20:38:00-08:00 Los_Angeles"}
+{"author":"Mauro (Guest)",
+"title":"NP700Z7C",
+"text":"Hi, I'm an half-happy owning of the 17\" (np700z7c). After 12.10 install/update thing I can't make it work are:\n- subwoofer\n- battery duration (2 hour and half)\n- Keyboard backlight\n- installation on 16 GB ssd\n\nAny thought?",
+"ts":"2012-12-22T04:25:00-08:00 Los_Angeles"}
+{"author":"Montefuscolo (Guest)",
+"title":"My 2 cents.",
+"text":"thanks! now I have a decent mouse on my debian :)\n",
+"ts":"2012-11-29T04:54:00-08:00 Los_Angeles"}
+{"author":"Andrew (Guest)",
+"title":"Brilliant help .... but",
+"text":"This page has made all the difference to getting me going with my new machine. \n\nOne minor niggle is the gpointing-device-settings widget has its settings overwritten every time you restart the machine. I have not been able to find where thes settings are kept let alone tweak them to make them permanent - any thoughts on a cure?",
+"ts":"2012-11-12T13:20:00-08:00 Los_Angeles"}
+{"author":"Andy (Guest)",
+"title":"My gratitude",
+"text":"Thank you so much for this, installing the full ATI driver using your code helped me so much. Now my cinnamon UI works again and the fan doesn't run too much. Before that, I had to choose between a noisy fan or a decent UI. Finally, I have both!\n",
+"ts":"2012-10-06T16:30:00-07:00 Los_Angeles"}
+{"author":"Gabor (Guest)",
+"title":"Re2: Ubuntu 12.04 on Samsung series 7 Chronos laptop",
+"text":"There is another question, it's about my Mageia 2 distro.\nEverything works well, the only thing what really bothers me is that the HDD seems like turning on and off every 5 sec all the time, and there is no change even if I turn off the power management.\n\nI have not used the SSD for anything, I just ignored it during the Mageia installation, and of course I have a Windows - Linux dual boot, too.\n\nAll good ideas will be highly appreciated!\nThanks!\nGab\n\n\nP.s.: I'm just a regular used, not a developer.\n\n",
+"ts":"2012-09-30T23:32:00-07:00 Los_Angeles"}
+{"author":"Gabor (Guest)",
+"title":"Re: Ubuntu 12.04 on Samsung series 7 Chronos laptop",
+"text":"I really like my 7 Chronos, and I have been thinking about Ubuntu too, but because of the UI, I have decided for Mageia 2. Ine is for sure, Ubuntu have a better hardware support, but,,, Try Mageia 2, it's awesome.\n\nHave a little problem with the hybrid HDD.\nThanks!\n\nGabor",
+"ts":"2012-09-30T23:21:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Touchpad",
+"text":"Hello,\n\nI can't get the file \"http://people.canonical.com/~cndougla/enable-clickpad.sh\"\nand the other one to get touchpad to work properly... It tells me that the files are not aviable on the website. Can someone re upload it please ? Thank you, and very nice tutorial by the way, very useful :)",
+"ts":"2012-09-24T09:17:00-07:00 Los_Angeles"}
+{"author":"Renee (Guest)",
+"title":"My 2 cents.",
+"text":"I just wanted to say THANK YOU for this. I would not have been able to get this laptop if I hadn't found your guide. I know just about enough to consistantly break ubuntu while trying to fix things. (Doesn't stop me from trying, though...) So this saved my butt. \n(Just a side note... my laptop came with Nvidia Optimus, not the ATI Radeon. I have no idea why this is different.)",
+"ts":"2012-09-01T03:31:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Re: Few Questions",
+"text":"Hello Jayneil,\n\n1. I cannot answer you that\n2. The fan is almost on because people dont install the AMD graphics driver. Installing them makes the laptop quite.\n3. Currently there are limitations in X11. Hot swap is not supported. But its currently being worked on [see http://airlied.livejournal.com/]. But as I see that the laptop battery will last longer when using the dedicated graphics card as it underclocks itself when not used. Using the RC6 powersave modes for the integrated intel card makes you save more power. Because currently the intel uses more power when rc6 is activated and the card is used but less when its idling.",
+"ts":"2012-08-29T08:15:00-07:00 Los_Angeles"}
+{"author":"Jayneil (Guest)",
+"title":"Few Questions",
+"text":"I am planning to buy this laptop soon and install Ubuntu 12.04 on it. So, I had a few questions:\n\n1. This laptop also has speakers + subwoofer. Are you able to access all the speakers including the sub woofer?\n2. Are there any heating issues in this laptop?I heard the fan is continuously running on.\n3. What about graphic switching from ATI to discrete? Is there any way I can make that process automatic like in Windows?\n",
+"ts":"2012-07-20T00:45:00-07:00 Los_Angeles"}

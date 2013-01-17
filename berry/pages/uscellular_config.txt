@@ -1,0 +1,113 @@
+======Berry4All US Cellular Config======
+
+Thanks to P.K. Carlisle for providing those infos:
+
+> I can confirm that the following settings for U.S. Cellular work.  This
+> is divided into 3 parts: ppp settings, dialing script, notes I gathered
+> along the way.
+> Regards, 
+> PKC
+
+===PPPD script===
+WARNING: please update the user and password in following script.
+
+<code | conf/uscc>
+# berry4all script and settings -- US Cellular
+# by P.K. Carlisle 2009-11-03
+# Tested and working on U.S. Cellular with a Blackberry 8330 Curve
+230400
+noipdefault
+defaultroute
+#nomultilink
+ipcp-restart 7
+ipcp-accept-local
+ipcp-accept-remote
+lcp-echo-interval 0
+lcp-echo-failure 999
+nopcomp
+noaccomp
+pap-timeout 20
+pap-restart 20
+lcp-restart 10
+nomagic
+noccp
+#noauth
+crtscts
+usepeerdns
+novj
+# does not exist in all pppd versions (osx)
+#replacedefaultroute
+#US Cellular will supply the user login nnnnnnnnnn
+user nnnnnnnnnn@uscc.net
+#US Cellular will supply the user password nnnnnnnnnn
+password nnnnnnnnnn
+#uncomment this command for test mode only
+#dryrun
+connect "/usr/sbin/chat -f /home/myhome/bbtether/conf/uscc-chat"
+</code>
+===Chat script===
+<code | conf/uscc.chat>
+# berry4all script and settings -- US Cellular
+# by P.K. Carlisle 2009-11-03
+# Tested and working on U.S. Cellular with a Blackberry 8330 Curve
+'' 'BBT_OS'
+'' 'AT&F'
+OK 'ATZ'
+OK 'ATI'
+SAY 'Dialing...\n'
+OK 'ATDT#777'
+CONNECT
+# Without ~p it does NOT continue past CONNECT
+~p
+</code>
+===More notes===
+berry4all script and settings -- US Cellular
+by P.K. Carlisle 2009-11-03
+Tested and working on U.S. Cellular with a Blackberry 8330 Curve
+
+This was tested and working November, 2009 with
+
+  - a US Cellular Blackberry Curve 8330 OS version 4.5.0.138
+  - OpenSUSE 11.1
+  - kernel 2.6.27.90-135 default
+  - Gnome 2.24.1
+  - Python 2.6.0-2.21.1
+  - ppp 0.3.23-5.2
+  - barry-gui 0.14-24.1
+  - barry-util 0.14-24.1
+  - libbarry0 0.14-23.1
+  - barry-opensync 0.15-cvs20090410
+  - berry4all 0.3j
+
+(all of these barry apps might not be necessary to making the Berry run as modem)
+**Note from berry4all author: It's better not to have them as they might conflict**
+
+* The berry4all FAQs suggests updating /etc/resolv.conf with a nameserver.
+I agree, with one twist:
+If you will occasionally use the PC with wired high speed internet OR a different
+internet access method other than the Berry, replace the name server in 
+/etc/resolv.conf as follows:
+#try opendns
+nameserver 208.67.222.222
+
+This name server is for OpenDNS.  Registration is free.  Using the wired 
+high speed ISP's nameserver will make the Berry fail to resolve host names, 
+BUT using the mobile provider's nameserver will makes the wired high speed
+connection fail the same way.  Both will use OpenDNS with equal facility.
+
+* US Cellular has no way to automatically check data usage at present.  You have to call tech support and ask for a usage update.
+
+* The bump up to the premium (5GB) limit is $15 extra on top of $25 BIS data.
+
+* Don't expect any tech support help for Linux from US Cellular tech support.
+
+* US Cellular does not support any other phones as modems.
+
+* US Cellular's dial up process for berry-as-modem is a passthrough according
+to Us Cellular tech support, meaning that they don't know nuthin' about nuthin'.
+Therefore, the defaults listed for Windows' Desktop Manager at blackberry.com
+might be a generally good resource for tweaking settings.
+
+* Tradition dictates that I post this while tethered with the Berry, so I did.
+
+Regards.

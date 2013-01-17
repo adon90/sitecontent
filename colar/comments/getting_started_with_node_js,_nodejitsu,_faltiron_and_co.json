@@ -1,0 +1,4 @@
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"if you'd install nodejs from source (git clone, ./configure --prefix=$HOME/local), you'de be able to 1. easily keep it up to date, change versions, but also, avoid using sudo and simply install npms globably as a regular user. Makes life much easier.6\n",
+"ts":"2012-08-26T05:32:00-07:00 Los_Angeles"}

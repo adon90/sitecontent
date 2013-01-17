@@ -1,0 +1,8 @@
+{"author":"Guest (Guest)",
+"title":"Netbeans FAN Plugin Error",
+"text":"I get this error when using your Netbeans Fan plugin:\n\nsys::ParseErr: TimeZone not found: Australia/Victoria\n        at fan.sys.ParseErr.<init>(ParseErr.java:53)\n        at fan.sys.ParseErr.make(ParseErr.java:39)\n        at fan.sys.ParseErr.make(ParseErr.java:36)\n        at fan.sys.TimeZone.fromStr(TimeZone.java:83)\n        at fan.sys.TimeZone.fromStr(TimeZone.java:49)\n        at fan.sys.TimeZone.fromJava(TimeZone.java:588)\n        at fan.sys.TimeZone.<clinit>(TimeZone.java:542)\n        at fan.sys.DateTime.<clinit>(DateTime.java:933)\n        at fan.sys.Sys.<clinit>(Sys.java:482)\n        at fan.sys.Repo.<clinit>(Repo.java:221)\n        at fan.sys.Pod.readFPod(Pod.java:143)\n        at fan.sys.Pod.doFind(Pod.java:60)\n        at fan.sys.Pod.find(Pod.java:41)\n        at fanx.util.TypeParser.find(TypeParser.java:88)\n        at fanx.util.TypeParser.load(TypeParser.java:68)\n        at fan.sys.Type.find(Type.java:38)\n        at fanx.tools.Fan.executeType(Fan.java:101)\n        at fanx.tools.Fan.execute(Fan.java:39)\n        at fanx.tools.Fan.run(Fan.java:241)\n        at fanx.tools.Fan.main(Fan.java:279)",
+"ts":"2009-09-06T07:20:00-07:00 Los_Angeles"}
+{"author":"Caoyuan (Guest)",
+"title":"My 2 cents.",
+"text":"Pretty cool!\n",
+"ts":"2009-07-01T08:20:00-07:00 Los_Angeles"}

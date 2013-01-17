@@ -1,0 +1,49 @@
+======ISA 2007 / 7.0 Post-Install Config & Setup======
+
+====Get a license====
+Start the admintool and go to the license adaptor and get the hardware key
+then go to service.sap.com/licensekey to get the key and install it in visual admin.
+
+====Recommanded Settings====
+Setup the JVM settings (using configtool) according to this note: 861215
+Server:
+<code>
+-Xgcpolicy:gencon -Xms2048m -Xmx2048m -Xmn400m -verbose:gc -Xtrace -Xsoftrefthreshold3 
+ (-Xsoftrefthreshold1 if sp<5)
+</code>
+
+Dispatcher:
+<code>
+-Xgcpolicy:gencon -Xms200m -Xmx200m -Xmn70m -verbose:gc
+</code>
+
+====Start/Stop scripts to start/stop SAP j2ee:====
+
+created in **/usr/local/adm** folder
+in there created **SAP-startup.sh** with content
+<code>
+su - t2cadm -c startsap
+</code>
+
+and created **SAP-shutdown.sh** with content
+<code>
+su - t2cadm -c stoptsap
+</code>
+
+Note: For Oraclke only:
+Added to /etc/init.d/boot.local
+<code>
+su - orat2c -c "/oracle/T2C/101_64/bin/lsnrctl start"
+</code>
+
+Then chmod +x all three files
+
+====SSL certificates====
+ISA comes with expired SSL certificates which causes lots of issues later, renew/ the certificates using this doc:
+[[http://wiki.colar.net/sap_j2ee_ssl_keys]]
+
+====Performance enhancements====
+See: sap_crm5_0_isa_trex_performance_settings
+
+====B2B / B2C XCM config / upload ====
+Saving/Loading iSA B2B/B2C XCM config

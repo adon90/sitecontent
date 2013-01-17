@@ -1,0 +1,34 @@
+======Memory leak in IsaLocation======
+
+After researching a Memory leak for a while here is the pearl I found in SAP code:
+
+<code>
+public class IsaLocation {
+  private static List allocatedClasses= new ArrayList();
+// ......
+ public IsaLocation() {
+  }
+ 
+  /**
+   * <p>The method to retrieve the logging object. The name should
+   * contain the packagename and classname. 
+   * @param name - the name of the current location.
+   */
+  public static IsaLocation getInstance(String name) {
+  	    try {
+			Class clazz = IsaLocation.class.getClassLoader().loadClass(name);
+			allocatedClasses.add(clazz);
+		} catch (ClassNotFoundException e) {
+			if(log.isDebugEnabled())
+			    log.debug("Add class " + name + " failed ", e);
+		}
+        return new com.sap.isa.core.logging.sla.IsaLocationSla(name);
+  }
+// more code 
+</code>
+
+IsaLocation.getInstance() is called a gazillion times since it's the logger implementation.
+Look at the getInstance method ... no sh$% it is leaking memory ... who writes this stuff ?
+
+I told them and they fixed it now, note #1398828
+The fix is to comment out ... well you know what ... doh !

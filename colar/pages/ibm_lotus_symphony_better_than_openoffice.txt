@@ -1,0 +1,57 @@
+======IBM Lotus Symphony better than OpenOffice======
+
+On Linux, there is no MS Word ... oftentimes I'm plenty happy with something simple such as Abiword, but every now and then somebody / some site requires a document in word(.doc) format.
+
+Abiword can deal with basic word document but it can't handle many of the advanced features.
+
+The main option until now was to use OpenOffice ... but it seem it has become more and more bloated and slow overtime and lately mine doesn't want to save .doc files and crash while opening some of them.
+
+There now is a new alternative: [[http://symphony.lotus.com/software/lotus/symphony/home.nsf/home|IBM Lotus Symphony]] and it seem to be a winner because:
+
+  - It's faster than OpenOffice, not super fast(based on eclipse), but definitely faster than OpenOffice.
+  - It seem to be lighter and simpler to use (nice UI).
+  - It works on almost all platforms (Linux, OSX, Windows) which is a big plus.
+  - It seem the compatibility with other formats is VERY good (PDF, MsWord, OpenOffice, RTF etc...).
+  - It does Text processing(~Word), Spreadsheets(~Excell) and Presentation(~Powerpoint).
+  - Plugins: Various plugins can be installed/developed, for example there is an "export to html" plugin that does a VERY good job.
+
+=====Download=====
+Just go to [[http://symphony.lotus.com/software/lotus/symphony/home.nsf/home]] and proceed to "download".
+
+Pick the installer for your platform.
+
+Note: You will have to sign-in / register with IBM (free) which is a bit of an annoyance.
+
+
+=====Installation & Use=====
+  - For Windows and OSX just run the installer.
+
+  - For Linux just install the package using your distro package installer (example gdebi-gtk on debian/Ubuntu)
+
+====Linux 64 bits Installation ====
+Unfortunately there is no 64 bits package to download, so installation on a 64 bits Debian based is a bit more tricky:
+
+  - Download in your home folder the **[[http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2009-11-02+07%3A06%3A55.609917R&S_TACT=104CBW71&S_CMP=|Lotus Symphony 32 bits package]]**
+  - Install the 32 bits compatibility libraries:
+<code>
+sudo apt-get install libstdc++5 ia32-libs
+</code>
+  - Install manually libxkb
+<code>
+cd ~
+mkdir libxkb
+cd libxkb
+wget "http://ftp.us.debian.org/debian/pool/main/libx/libxkbfile/libxkbfile1_1.0.5-1_i386.deb"
+sudo dpkg -X libxkb*.deb .
+sudo cp usr/lib/libxkbfile.so.1.0.2 /usr/lib32/libxkbfile.so.1
+</code>
+  - Install Lotus Symphony
+<code>
+cd ~
+sudo dpkg -i --force-architecture symphony*.deb
+</code>
+
+Note: On the first run it asks to accept the License in an xterm window (hu?) rather than a proper UI Window.
+
+
+{{symphony.jpg}} 

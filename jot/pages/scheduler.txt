@@ -1,0 +1,69 @@
+======JavaOnTracks: Scheduler======
+The scheduler allows you to schedule jobs to run at interval(every n minutes) or at specific times (cron like) in your application.
+
+Here is how to use it:
+
+====Creating a job====
+To create a job, you need to implement JOTScheduledItem
+
+Example Job:
+<code | Scheduled Job Example>
+public class MyJob implements JOTScheduledItem
+{
+    public void run()
+    {
+	// here you will add the "meat" of your job, say deleting some files etc ....
+	// new File("/tmp/mytempFile").delete();
+    }
+
+    public boolean skipRun()
+    {
+	// you could return true in certain cases if you want to skip the job for some reason
+        return false;
+    }
+
+    public boolean forceRun()
+    {
+	// return true to force a run ASAP even though it's not matching the schedule
+        return false;
+    }
+
+    public void runCompleted()
+    {
+	// if you want something to be done after a run is completed, you can add it here
+    }
+
+}
+</code>
+
+====Registering the job in the scheduler====
+<code | Example 1: a job that runs every 10 mn>
+	// whether to run once right away, or wait for schedule match.
+        Boolean runNow = true;
+        JOTSchedulingOptions siteMapOptions = new JOTSchedulingOptions();
+        siteMapOptions.setRunEvery(10,runNow);
+        JOTScheduler.getInstance().registerItem(new MyJob(), siteMapOptions);
+</code>
+<code | Example 2: a job that runs on the hour>
+	// wether to run once right away, or wait for schedule match.
+        Boolean runNow = false;
+	// this means every hour (see javadoc of JOTSchedulingOptions for schedule format infos.)
+        String schedule = "* * * 1 0";
+        JOTSchedulingOptions siteMapOptions = new JOTSchedulingOptions();
+        siteMapOptions.setRunNow(runNow.booleanValue());
+        siteMapOptions.setRunAt(schedule);
+        JOTScheduler.getInstance().registerItem(new MyJob(), siteMapOptions);
+</code>
+
+**You should only register each job once, usually when initializing your (web)application.**
+
+====Starting the scheduler====
+<code | Starting the scheduler>
+            JOTScheduler.getInstance().start();
+</code>
+
+WARNING: You should only start the scheduler once ! Usually when initializing your (web)application.
+
+
+=====JavaDoc=====
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/scheduler/package-summary.html]]

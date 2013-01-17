@@ -1,0 +1,21 @@
+======JOTWiki Templates======
+
+=====Making your own Templates=====
+If you want to make your own template, please see this page:
+[[JOTWIKI - Creating a template]]
+
+=====Downloading Templates=====
+Here you will find some extra templates that can be used in jotwiki.
+
+Simply download the zip file and extract it into /opt/jotwiki/templates or c:\jotwiki\templates\
+
+WARNING: Make sure you download the template version matching your jotwiki installation
+
+===PCF===
+The template we use at the company i work for.
+
+{{ pcf.png }} 
+
+Download for jotwiki 0.1.2: {{templates/pcf_v1.zip}} 
+
+

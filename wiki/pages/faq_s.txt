@@ -1,0 +1,22 @@
+======Frequently asked questions and other tips======
+
+=====Finding the cause of a problem=====
+The log files are your friend:
+Look at /opt/jotwiki/logs/jotwiki.log it most likely as useful information about what the problem is.
+
+TIP: You can go to the "global preferences" and adjust the logging informations, it might be usefull to enable "debug" and "trace" etc.. temporarily to get more informations about the problem. 
+
+=====Debian failure to read/write from the jotwiki data folder=====
+FIXME: Explain issues with debian / java policies.
+
+=====Rerunning the initial setup screens / resetting the admin password=====
+Once you have complete the original informations, those screen won't show anymore.
+If you loose your admin password or somehow break your setup, you can rerun the initial setup by creating a file called "runsetup.txt' in /opt/jotwiki or c:\jotwiki, and restarting the application server.
+Then go right away to the webapp (Ex: http://yoursever:8080/jotwiki/) and setup jotwiki.
+
+=====Getting more help=====
+
+If you want to report a BUG or request a feature: [[https://sourceforge.net/tracker/?group_id=198228&atid=964636]]
+Post your help requests / questions on the forum: [[https://sourceforge.net/forum/?group_id=198228]]
+
+

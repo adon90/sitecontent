@@ -1,0 +1,128 @@
+======Home made rink (in Spokane)======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+I was originally planning to make the rink outside on my backyard, but despite having 5 acres it's all rolling and my only 2 flat areas where 1) gravel 2) over the septic tank, so none would have done well.
+
+I tried another area last winter but it' so unleveled it was almost impossible.
+
+In the end one day it cam to me i have this huge shop (50*40) with a flat concrete floor that i barely use in winter.
+
+So i used half of it to make a small but easy rink (30*16), this is good for me because what i want is practice by lousy shot, my skating being already pretty good.
+
+The shop as many advantages: it's lighted, protected from rain and snow and concrete pad means 1 inch of ice on top of it is solid, also i have water hookup in there. The inconvenient is that it does not get as cold inside as outside but by opening the door at night only this is actually good.
+
+Anyway since January 4 it's finally skatable after a very mild winter start.
+
+Here are 2 pics:
+
+{{20060203171111982-0-rink2.jpg}}
+
+{{20060203171113449-1-rink.jpg}}
+
+
+=====Materials used=====
+
+I used whatever boards i had on hand to make the perimeter, there are 10*2 12*4 and 10*4's all 4-8 inches high.
+
+I used 6 mil poly sheeting from home depot for the liner, i originally doubled it, but that was a mistake at this caused wrinkles/air bubbles and had to remove one layer later. About 20$ for 40*20 sheet.
+
+I used Some orange plastic construction fencing for stopping the pucks, this is a great find: cheap and strong though it won't make your yard prettier :-). 18$ for 100'*4' high roll.
+
+Net: i use a net from Garth sport, it's a regular size net (6*4) that can be modified in 2 small (3*2) goals for a quick 1 on 1 game. I think it was around 50-75$.
+
+Water: i have a well so it's mostly free :-)
+
+=====Mistakes I made and solutions:=====
+
+
+  * Error 1: 
+
+Filled all 3 inches at once -> this never froze all the way even with temps in the 10's at night ... this can't be solved since the ice is floating and insulating the water bellow, that would only be fixed by temperatures bellow 0F for several days, since it takes at least that to freeze this deep. -> Add to break the ice, empty the rink and restart from scratch, this was a tough decision but totally worth it as the rink would probably still be unskatable now otherwise.
+
+  * Error 2:
+
+Filled with ?? inch the base, this is good but must wait for temps in the 10's for this to freeze well and not try to make a base if it's not this cold.
+
+  * Error 3:
+
+Boards where touching heated bathroom wall, despite insulation it would warm the water there and not freeze very well. -> solution: added foam insulation and air gap between boards and heated wall.
+
+  * Error 4:
+
+When breaking the ice to remove it, walking on it, the sharp ice pieces poked some holes inn the liner, they are minor but next time don' do this, also next time will use a trap rather than a cheap poly liner that is not durable (6 mil)
+
+  * Error 5:
+
+Tried adding depth daily by adding water every evening, problem is water was sipping though the sides and i got floating ice again :-( -> solution: poked a hole at the low end bottom to drain the water that gave me a good base finally. THEN used wet snow to make a border all along the boards and let it freeze, that made a good seam and had not have water go under the ice since this.
+
+  * Error 6:
+
+Trying to build depth in the morning or when temps above 25, this results in shell ice (unfrozen water under the new ice or air pockets) -> solution: to fix the shell ice either wait for colder temps to freeze the res. For air pockets break the ice and fill the hole with wet snow. Let freeze. Best time to resurface is late evening so that it freeze well and no shell ice the next morning.
+
+  * Error 7:
+
+The hole i pocked on the lower side (by the outside door) did let the water run outside nicely, but after a while an ice dam formed and the water started to flow inside the shop .. not good. Solution: used warm water to make a path for the water though the ice/snow dam. Note: this would not work if temps are too low or the snow dam to tall.
+
+=====Tips=====
+
+
+  * 1
+
+Use of a fan in the shop helps the water freeze faster it seem, the fan should not be directed at the water as water in motion won't freeze, but i guess the fan circulating the air helped cycling the cold air on the ice surface and possibly created a wind child effect.
+
+  * 2
+
+Only surface / add depth in the evening if temps are forecast to be below 20-25F, also only add less than ?? inch at once.
+
+  * 3
+
+If very cold it's best to add 1/8 inch every two hours rather than 1+ inch at once as this might create shell ice.
+
+  * 4
+
+When taping a poly liner, do it before winter, hot glue, caulk and duck tape all work very poorly in cold weather (don't stick). If you have no choice then you should use a heat gun to warm the tape/caulk to make it stick but it takes longer and is tricky.
+
+  * 5
+
+Don't put your rink over a septic tank, it won't freeze well and could damage the  tank as well.
+
+  * 6
+
+Don't waste your time trying to build the base unless you get at least 1 nights bellow 0, 2 night bellow 10, or 5 nights bellow 20 in a row, all with highs bellow 30. i tried and that always resulted in wasted tie and sometimes wasted rink as well
+
+  * 7
+
+I live near Spokane, WA and despite this winter being the mildest in years, i finally got a good rink, alas a little late, but that means you don't need to live in Fairbanks to make a rink, if you have average high bellow 32 in the winter month it can be done.
+
+  * 8
+
+Oh yeah, the last but not least, spend time to setup the area where you will place your rink and make it level, if you spend a week finding/building a level area to build the rink in summer, you will save several weeks of work/frustration in winter outside trying to fix water runoff, busted boards and other leaks, and your rink will freeze faster and stronger as well.
+
+  * 9
+
+Last note: unless you often have temps bellow 0, i would not recommended having more than 3 inches of water at least for a start because it just won't freeze well, and floating ice is not nearly as strong as ice resting on a frozen ground.
+
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>

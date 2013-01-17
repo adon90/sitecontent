@@ -1,0 +1,972 @@
+====== SAP rants ======
+
+Well i've had to use SAP software at my new job. My main job is to install and customize the ISA (internet sales) application to the company need.
+
+We are doing so on the ramp-up version (2004s) ... ramp-up translate into anyhting between "release candidate" and "experimental".
+
+Here is a list of some of the rants i have:
+
+
+
+
+=====ISA Architecture:=====
+The old version of ISA was struts/ JSP frame based which was plain bad because customizing a design based on frame is a nightmare, and frame are just not good in general and nobody uses them anymore. I never liked struts as it is one of the most complex/over-engeneered frameworks and overuses XML. JSP obviously is ugly as it does not separate cleanly the view from the controller, and obviously customizing a mix of JSP/HTML is a nightmare.
+
+So anyway, they moved to new technology ... unfortunately they picked the worst ones ...
+They removed the frames ... great .. unfortunately they picked --JSF-- (Turn out it is not JSF, but some kind of completely undocumented technology) as the replacement ... basically adds a layer of crazy XML to the JSP mess .. making the whole thing even dirtier.
+
+SAP claimed JSP creates a clean separation between the code and design yet you look at any of the ISA pages and it's a garble of code with a few HTML tags in it.
+
+They could also have taken the occasion to base the page on CSS, but instead mostly kept an old style HTML mix.  
+
+They kept using struts and their sort of JSF, but as if it was not bloated enough added their own layer, with what they call "XML extension".
+
+It would be all so much simpler if they where using a "clean" MVC system such as wicket (and many others). Then of course maybe it would be too easy for people to customize their site without having to hire SAP consultants :-)
+
+The worst part of all this, is that now since they did not use CSS or a clean MVC model, we hav to dig into their code -heavy jsp's to insert our design manually (which is  pain), but even worse is the fact that when they will change those JSP's (to fix bugs in the logic that should not be there in the first place), we will have to find those changes and merge them in manually.   YUK !!
+
+Here is an example of what they call "clean separation between the code and design" ... basket.inc.jsp
+
+===== SAP JSP Example =====
+<code jsp>
+<%@ taglib uri="/isa" prefix="isa" %>
+<%@ taglib prefix="isacore" uri="/isacore" %>
+
+<%@ page import="com.sap.isa.isacore.action.b2c.*" %>
+<%@ page import="com.sap.isa.isacore.action.b2c.order.*" %>
+<%@ page import="com.sap.isa.isacore.action.*" %>
+<%@ page import="com.sap.isa.isacore.action.order.*" %>
+<%@ page import="com.sap.isa.businessobject.header.*" %>
+<%@ page import="com.sap.isa.businessobject.marketing.*" %>
+<%@ page import="com.sap.isa.businessobject.item.*" %>
+<%@ page import="com.sap.isa.businessobject.*" %>
+<%@ page import="com.sap.isa.catalog.webcatalog.*" %>
+<%@ page import="com.sap.isa.core.util.*" %>
+<%@ page import="com.sap.isa.businessobject.BusinessObjectManager" %>
+<%@ page import="com.sap.isa.core.SessionConst,com.sap.isa.core.UserSessionData" %>
+<%@ page import="com.sap.spc.remote.client.object.IPCItem" %>
+<!-- *** Only temporarily!!! *** -->
+<%@ page import="com.sap.isa.core.*" %>
+<%@ page import="com.sap.isa.businessobject.order.*" %>
+<%@ page import="com.sap.isa.businessobject.item.*" %>
+<%@ page import="com.sap.isa.isacore.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.sap.isa.core.xcm.config.*" %>
+<%@ page import="com.sap.isa.isacore.uiclass.b2c.order.BasketB2CUI" %>
+
+<!-- *** End temp *** -->
+<%@ page errorPage="/appbase/jspruntimeexception.jsp" %>
+
+<%@ include file="brandOwnerScenario.inc" %>
+<%@ include file="/b2c/messages-declare.inc.jsp" %> 
+
+<%  BasketB2CUI ui = new BasketB2CUI(pageContext); 
+
+    String accessText = "";  
+
+    String s = "";
+    ItemList items =
+            (ItemList) request.getAttribute(B2cConstants.RK_BASKET_ITEM_LIST);
+    // construct item hierarchy, implementing item-relationship predicates like isSubNode, isRootConfigurable, etc.
+    ItemHierarchy itemHierarchy = new ItemHierarchy(items);
+
+    // also we need to get the BOM
+    UserSessionData userSessionData =
+                                    UserSessionData.getUserSessionData(request.getSession());
+
+    BusinessObjectManager bom = (BusinessObjectManager) userSessionData.getBOM(BusinessObjectManager.ISACORE_BOM);
+
+    SalesDocument salesDoc = bom.getBasket();
+
+    HeaderSalesDocument  header = (HeaderSalesDocument) request.getAttribute(B2cConstants.RK_BASKET_HEADER);
+
+    // indicator for possibly not deliverable fields
+    boolean isFreightValueAvailable = salesDoc.isFreightValueAvailable();
+    boolean isTaxValueAvailable = salesDoc.isTaxValueAvailable();
+    boolean isNetValueAvailable = salesDoc.isNetValueAvailable();
+    boolean isGrossValueAvailable = salesDoc.isGrossValueAvailable();
+
+    // --BEGIN-- brand owner scenario stuff
+    boolean checkoutDisabled = false; // may be set to true, if not all items have a reseller, or no reseller is specified at all
+    String checkoutKey = "b2c.order.basket.link.checkout";
+    String chkoutHint = "";
+
+    String basketId = "";
+    String checkoutButtonName = "checkout" ;
+
+    PartnerListEntry headerSoldFromEntry = null ;
+    Address headerSoldFromAddress = null;
+    String headerSoldFromAddrStr = "";
+
+    String sumColSpan     = "3" ;
+    String srchSoldFromButKey  = "";
+    Shop shop = bom.getShop();
+
+   if (isBrandOwnerScenario) {
+       checkoutKey = "xbut_b2c.brndowner.chkout.res";
+
+       basketId = salesDoc.getHeader().getSalesDocNumber();
+       headerSoldFromEntry = salesDoc.getHeader().getPartnerList().getSoldFrom();
+
+       sumColSpan = "4";
+
+       if (headerSoldFromEntry != null) {
+           sumColSpan = "5";
+           isSoldFromSet = true;
+           headerSoldFromAddress = headerSoldFromEntry.getPartnerAddress(bom.createBUPAManager());
+           headerSoldFromAddrStr = headerSoldFromEntry.getPartnerNameAndCity(bom.createBUPAManager());
+           srchSoldFromButKey = "xbut_b2c.brndowner.srchres.bak";
+       }
+       else {
+           isSoldFromSet = false;
+           checkoutDisabled = true;
+           srchSoldFromButKey = "xbut_b2c.brndowner.srchres";
+           chkoutHint = "b2c.brndowner.chkt.nores1";
+       }
+
+       if (shop.isOciBasketForwarding()) {
+           checkoutButtonName = "checkoutoci" ;
+       }
+    }
+    // --END-- brand owner scenario stuff
+
+		/*
+		 * The first time this jsp is called, the attribute is set to true.
+		 * This is used to indicate that basket has been displayed directly in the
+		 * scenario when the access to the shop is made directly from the static HTML
+		 * page generated to enable web crawlers to search for products in the catalog
+		 */
+		userSessionData.setAttribute(B2cConstants.BASKET_LOADED_DIRECT,"true");        
+%>
+        <script type="text/javascript"> 
+          // remove all items from the basket
+          function clearBasket() {
+              document.location.href = "<isa:webappsURL name="b2c/maintainBasket.do?empty=true" />";
+          }
+
+          function selectSoldFrom(itemKey, productId, product, quantity) {
+              var url ="<isa:webappsURL name="/dealerlocator/searchdealer.do">
+                             <isa:param name="comeFromBasket" value="true"/>
+	                    </isa:webappsURL>";
+
+              if (itemKey != '') {
+                  url = "<isa:webappsURL name="/dealerlocator/partnerlocator.do"/>?itemTechKey=" + itemKey + "&productGUID=" + productId + "&product=" + product + "&productQuantity=" + quantity + "&comeFromBasket=true";
+              }
+              document.location.href = url;
+          }
+        </script>
+
+		<script src='<isa:webappsURL name="appbase/jscript/ipc_pricinganalysis.jsp"/>' 
+				type = "text/javascript">
+		</script>
+        
+    <div class="module">
+      <div class="module-name"><isa:moduleName name="b2c/order/pcf/basket.inc.jsp" /></div>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tbody>
+          <tr>
+            <td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+            <td>
+              <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tbody>
+                  <tr>
+                    <td width="23" class="navPath">
+                    	<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/dec_ecke_navPath.gif") %>" alt="" width="23" height="26" border="0">
+			<% accessText = WebUtil.translate(pageContext, "b2c.order.bskt.moduleHead.bskt", null); %>
+			<%
+			if(ui.isAccessible())
+			{
+			%>
+			<a 
+				href="#grp1E nd"
+				id="grp1Begin"
+				title="<isa:translate key="access.grp.begin" arg0="<%=accessText%>"/>" 
+			></a>                    	
+			<%
+			}
+			%>
+                    	
+                    </td>
+                    <td width="2000" class="navPath"><span><isa:translate key="b2c.order.bskt.moduleHead.bskt"/></span></td>
+                  </tr>
+<!-- show all messages at the top when in accessibility mode -->
+<%
+if(ui.isAccessible())
+{
+%>
+<%-- error handling --%>
+<%-- print out a localized errors --%>
+<%@ include file="/b2c/messages-begin.inc.jsp" %>
+<isa:message id="errortext" name="<%= B2cConstants.RK_BASKET %>" type="<%=Message.ERROR%>"  ignoreNull="true">
+<%
+addMessage(Message.ERROR, errortext);
+%>
+</isa:message>
+<isa:message id="errortext" name="<%= B2cConstants.RK_BASKET %>" type="<%=Message.WARNING%>" ignoreNull="true">
+<%
+addMessage(Message.WARNING, errortext);
+%>
+</isa:message>
+<!-- show all messages on the top when in accessbility mode -->
+<isa:iterate id="item" name="<%= B2cConstants.RK_BASKET_ITEM_LIST %>" type="com.sap.isa.businessobject.item.ItemSalesDoc">
+	<isa:message id="errortext" name="item" type="<%=Message.ERROR%>">
+	<%
+	addMessage(Message.ERROR, errortext);
+	%>
+	</isa:message>
+	<isa:message id="errortext" name="item" type="<%=Message.WARNING%>">
+	<%
+	addMessage(Message.WARNING, errortext);
+	%>
+	</isa:message>
+</isa:iterate>
+<isa:message id="errortext" name="<%=MaintainBasketB2CBaseAction.RC_SAVEORDERMESSAGES %>" type="<%=Message.ERROR%>" ignoreNull="true">
+<% 
+addMessage(Message.ERROR, errortext); 
+%>
+</isa:message>
+<%
+if(!messages.isEmpty())
+{
+%>
+					<tr>
+						<td><%@ include file="/b2c/messages-end.inc.jsp" %><br></td>
+                    </tr>
+
+<%
+}
+}
+%>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+<!-- Brandowner scenario Start -->
+       <% if (isBrandOwnerScenario) {
+                String step =isSoldFromSet? "3" : "1";
+       %>
+          <tr>
+             <td width="8"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+             <td>
+                <table border="0" cellspacing="0" cellpadding="0">
+                   <tbody>
+                      <tr><td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                          <td><br><%@ include file="/dealerlocator/step_by_step.inc.jsp" %><br></td> 
+                      </tr>
+                      <!-- soldfrom data -->
+                      <% if (isSoldFromSet && !isSoldFromChangeableOnLineItem) { %>
+                      <tr><td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                            <td><span><isa:translate key="b2c.brndowner.ressel"/></span><br><br></td>
+                      </tr>
+                      <tr><td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                          <td width="100%">
+                            <table cellSpacing=0 cellPadding=0 width="100%" border="0">
+                                <tbody>
+                                   <tr><td><div class=bold><b><span><%=JspUtil.encodeHtml(headerSoldFromEntry.getPartnerName(bom.createBUPAManager()))%></span></b></div><br></td></tr>
+                                   <tr><td><span><%=JspUtil.encodeHtml(headerSoldFromAddress.getStreet())%></span><br></td></tr>
+                                   <tr><td><span><%=JspUtil.encodeHtml(headerSoldFromAddress.getCity())+" "+JspUtil.encodeHtml(headerSoldFromAddress.getPostlCod1())%></span><br></td></tr>
+                                   <tr><td><span><%=JspUtil.encodeHtml(headerSoldFromAddress.getCountryText())%></span><br></td></tr>
+                                   <tr><td><span><%=JspUtil.encodeHtml(headerSoldFromAddress.getRegion())%></span><br><br></td></tr>
+                                </tbody>
+                            </table>
+                          </td>
+                      </tr>
+                      <% } %>
+                  </tbody>
+                </table>
+             </td>
+          </tr>
+          <tr>
+             <td width="8"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+             <td>
+                <table border="0" cellspacing="0" cellpadding="0">
+                   <tbody>
+                      <tr>
+                          <% // if there is only one item in the basket, search on headerlevel for a partner that can deliver the item
+                             String  itemKey = "";
+                             String  itemProduct = "";
+                             String  itemProductId = "";
+                             String  itemQuantity = "";
+                             if (salesDoc.getItems().size() == 1) {
+                                 itemKey = salesDoc.getItems().get(0).getTechKey().getIdAsString();
+                                 itemProductId = salesDoc.getItems().get(0).getProductId().getIdAsString();
+                                 itemProduct = salesDoc.getItems().get(0).getProduct();
+                                 itemQuantity = salesDoc.getItems().get(0).getQuantity();
+                             }
+                          %>
+                          <%
+			 		   	  	 accessText = WebUtil.translate(pageContext, srchSoldFromButKey, null);
+                          %>
+                          <td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                          <td><input title="<isa:translate key="access.link" arg0="<%=accessText%>" arg1=""/>" class=FancyButtonGrey onclick="selectSoldFrom('<%=itemKey%>','<%=itemProductId%>','<%=itemProduct%>','<%=itemQuantity%>')" type=button value="<isa:translate key="<%=srchSoldFromButKey%>"/>" name=soldfromsearch></td>
+                      </tr>
+                  </tbody>
+                </table>
+             </td>
+          </tr>
+          <tr><td colspan="2">&nbsp;</td>
+          </tr>
+          
+          <% 
+             if (showAvailabilityInfos && isSoldFromSet) { 
+             // show availibility legend only when partner is selected
+          %>
+          <tr>
+             <td width="8"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+             <% if (ui.isAccessible) { %>
+		         <a href="#end-table-legend" title="<isa:translate key="b2c.acc.avail.info.link"/>"></a> 
+		     <% } %>
+		     <td tabindex="0">
+               <table border="0" cellspacing="0" cellpadding="0">
+                   <tbody>
+                      <tr class="odd" height="16">
+                        <td class="whiteCell"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                        <td><div class=bold><b><span><isa:translate key="b2c.brndowner.lght.legend"/></span></b></div></td>
+                        <td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="60" height="1" border="0"></td>
+                        <td>&nbsp;</td>
+
+                      <% int colNum = 0;
+                         String path = null;
+                      %>
+                      <isa:iterate id="legTrafficLight" name="<%= B2cConstants.RK_CCH_TRAFFICLIGHTS %>" type="java.lang.String[]">
+                        <% path = "b2c/mimes/images/" + legTrafficLight[0]; 
+                           if (colNum == 3) {
+                               colNum = 0; 
+                        %>
+                        </tr>
+                        <tr class="odd" height="16">
+                           <td class="whiteCell"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                           <td>&nbsp;</td>
+                           <td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="60" height="1" border="0"></td>
+                           <td>&nbsp;</td>
+                        <% } %>
+                           <td align="right">&nbsp;&nbsp;&nbsp;<%=legTrafficLight[1]%>&nbsp;&nbsp;</td>
+                           <td align="middle"><img height=12 alt="<%=legTrafficLight[1]%>" title="<%=legTrafficLight[1]%>" src="<%= WebUtil.getMimeURL(pageContext, path) %>"  border=0></td>                        
+                        <% colNum++; %>
+                      </isa:iterate>
+                      <% if (colNum != 0) { 
+                         while (colNum < 3) {%>
+                             <td colspan="2">&nbsp;</td>
+                         <%  colNum++;
+                         } %>
+                      </tr>
+                      <% } %>
+                  </tbody>
+                </table>
+             </td>                
+              <% if (ui.isAccessible) { %>
+		           <a name="end-table-legend" title="<isa:translate key="b2c.acc.avail.info.end"/>"></a>
+		      <% } %>
+          </tr>
+         <% }
+         } %>
+<!-- Brandowner scenario End -->
+          <tr>
+            <td width="8"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+            <td><br>
+              <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                      <tr>
+                         <td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="23" height="1" border="0"></td>
+                         <td width="100%">
+<!-- messages -->
+                          <% if (salesDoc.getMessageList().size() > 0 && !ui.isAccessible()) { %>
+                           <table border="0" cellpadding="4">
+<%-- error handling --%>
+<%-- print out a localized errors --%>
+<%@ include file="/b2c/messages-begin.inc.jsp" %>
+<isa:message id="errortext" name="<%= B2cConstants.RK_BASKET %>" type="<%=Message.ERROR%>">
+<%
+addMessage(Message.ERROR, errortext);
+%>
+</isa:message>
+<isa:message id="errortext" name="<%= B2cConstants.RK_BASKET %>" type="<%=Message.WARNING%>">
+<%
+addMessage(Message.WARNING, errortext);
+%>
+</isa:message>
+<%
+if(!messages.isEmpty())
+{
+%>
+								<tr>
+									<td><%@ include file="/b2c/messages-end.inc.jsp" %><br></td>
+                               </tr>
+                           
+<%
+}
+%>
+                           
+                           </table>
+                           <br>
+                           <% } %>
+<!-- basket Start -->
+                      <form method="post" action="<isa:webappsURL name="b2c/maintainBasket.do?fallback=update" />">
+                      
+						<%@ include file="/b2c/order/campaignsHeaderB2C.inc.jsp" %> 
+<% 
+	ItemList table1_items = (ItemList) request.getAttribute(B2cConstants.RK_BASKET_ITEM_LIST);
+	// Accessibility requirement
+	int table1_col_nro = 6;
+	if (isBrandOwnerScenario) { 
+		if (isSoldFromSet && showAvailabilityInfos) {
+			table1_col_nro = table1_col_nro + 1;
+		}
+		if (isSoldFromSet && isSoldFromChangeableOnLineItem) {
+			table1_col_nro = table1_col_nro + 1;
+		}
+	}
+	String table1_col_cnt = Integer.toString(table1_col_nro);
+	String table1_row_cnt = Integer.toString(table1_items.size());
+	String table1_title = WebUtil.translate(pageContext, "b2c.ordr.basket.table1", null);
+	if (ui.isAccessible())
+	{
+%>
+	<a id="beginTable1"
+		href="#endTable1"
+		title="<isa:translate key="access.table.begin" arg0="<%=table1_title%>" arg1="<%=table1_row_cnt%>" arg2="<%=table1_col_cnt%>" arg3="1" arg4="<%=table1_row_cnt%>"/>">
+	</a>
+<%
+	}
+%>
+                          <table border="0" cellspacing="0" cellpadding="3" class="list" summary="<%=table1_title%>">
+                          <thead>
+                            <tr>
+                              <th scope="col"><isa:translate key="b2c.order.bskt.tabHead.quantity"/></th>
+                              <th scope="col"><isa:translate key="b2c.order.basket.tableHead.unit"/></th>
+                              <th scope="col"><isa:translate key="b2c.order.basket.tableHead.image"/></th>
+                              <th scope="col"><isa:translate key="b2c.basket.tableHead.productNum"/></th>
+                              <th scope="col"><isa:translate key="b2c.ordr.bskt.tabHead.prodDesc"/></th>
+                            <%-- d032611, no net values in b2c
+                              <th><isa:translate key="b2c.order.basket.unitPrice"/></th>
+                            --%>
+                              <th scope="col"><isa:translate key="b2c.order.bskt.tblHead.totPrice"/></th>
+                              <% if (isBrandOwnerScenario) { %>
+                                  <% if (!isSoldFromSet) { %>
+                                      <th>&nbsp;</th>
+                                  <% } %>
+                                  <% if (isSoldFromSet && showAvailabilityInfos) { %>
+                                      <th scope="col"><isa:translate key="xcol_b2c.brndowner.avail"/></th>
+                                  <% } %>
+                                  <% if (isSoldFromSet && isSoldFromChangeableOnLineItem) { %>
+                                      <th scope="col"><isa:translate key="xcol_b2c.orderlist.order.rsllr"/></th>
+                                      <th>&nbsp;</th>
+                                  <% } %>
+                              <% }
+                                 else { %>
+                                  <th>&nbsp;</th>
+                              <% } %>
+                              <th>&nbsp;</th>
+                              <% if ((ui.isManualCampaignEntryAllowed() || ui.isHeaderCampaignListSet()) && ui.isAnyItemAffected()) { %>
+                                  <th>&nbsp;</th>  
+                              <% } %>
+                            </tr>
+                          </thead>
+                          <tbody>
+              <!-- store all businesspartner informations -->
+                           <% Iterator bpIt = header.getPartnerList().getList().entrySet().iterator();
+                              Map.Entry partnerEntry = null;
+                              int bpCount = 1;
+
+                              while (bpIt.hasNext()) {
+                                  partnerEntry = (Map.Entry) bpIt.next();
+                           %> <input type="hidden" name="businessPartnerRole[<%= bpCount %>]" value="<%= (String) partnerEntry.getKey() %>">
+                              <input type="hidden" name="businessPartnerTechKey[<%= bpCount %>]" value="<%= JspUtil.removeNull(((PartnerListEntry) partnerEntry.getValue()).getPartnerTechKey()) %>">
+                              <input type="hidden" name="businessPartnerId[<%= bpCount %>]" value="<%= JspUtil.removeNull(((PartnerListEntry) partnerEntry.getValue()).getPartnerId()) %>">
+                            <%    bpCount++;
+                             }
+                            %>
+                            <% int     line = 0;
+                               String  searchSoldFromForItem = "";
+                               PartnerListEntry itemSoldFromEntry = null ;
+                               String  itemSoldFromAddrStr = "";
+                               TechKey itemSoldFromTechKey;
+                               String ipcItemId = "";
+                            %>
+                            <isa:iterate id="item" name="<%= B2cConstants.RK_BASKET_ITEM_LIST %>"
+                                         type="com.sap.isa.businessobject.item.ItemSalesDoc">
+                              <%
+                              String techKey = item.getTechKey().getIdAsString();
+                              String product = JspUtil.encodeHtml(item.getProduct());
+                              String productId = item.getProductId().getIdAsString();
+                              String quantity = JspUtil.encodeHtml(item.getQuantity());
+                              String removeItem = "b2c/maintainBasket.do?remove=" + techKey;
+                              String configurable = "";
+                              String configItem = "";
+							  TechKey parentId = item.getParentId();
+                              int margin = 0;
+                              ui.setItem(item);
+                              String substMsgColspan = ""+table1_col_nro+2; 
+                              
+                              if (item.isConfigurable() == true) {
+                                  configurable = "true";
+                                  configItem = "/b2c/itemconfiguration.do?" +  ItemConfigurationBaseAction.PARAM_ITEMID + "=" + techKey + "&" + ItemConfigurationBaseAction.PARAM_B2C_BASKET + "=" + true;
+                              }
+
+                              if (isBrandOwnerScenario) {
+
+                                  itemSoldFromAddrStr = "";
+                                  itemSoldFromEntry = item.getPartnerList().getSoldFrom();
+
+                                  if (isSoldFromSet && itemSoldFromEntry != null) {
+                                      itemSoldFromEntry = item.getPartnerList().getSoldFrom();
+                                      itemSoldFromTechKey    = itemSoldFromEntry.getPartnerTechKey();
+                                      if (itemSoldFromTechKey.equals(headerSoldFromEntry.getPartnerTechKey())) {
+                                          itemSoldFromAddrStr = headerSoldFromAddrStr;
+                                      }
+                                      else {
+                                          itemSoldFromAddrStr = itemSoldFromEntry.getPartnerNameAndCity(bom.createBUPAManager());
+                                      }
+                                  } else if (!shop.isOciBasketForwarding() && (parentId == null || parentId.getIdAsString().equals(""))) {
+                                      checkoutDisabled = true;
+                                  }
+                                  searchSoldFromForItem = "/dealerlocator/partnerlocator.do?itemTechKey=" + techKey + "&productGUID=" + productId + "&product=" + product + "&productQuantity=" + quantity + "&comeFromBasket=true";
+                              }
+                              %>
+							  <%@ include file="/ecombase/prodsubstmsg.inc.jsp" %>                              
+                              <tr class="odd">
+                                   <% if (!itemHierarchy.isSubItem(item)) { %>
+                                       <td>
+                                       <input class="textInput" type="text"  maxlength="8" name="quantity[<%= line %>]"
+                                         value="<%= JspUtil.encodeHtml(item.getQuantity()) %>" size="4">
+                                   <% } else {
+                                       int itemLevel = itemHierarchy.getLevel (item);
+                                       for (int i = 1; i < itemLevel ; i++) { // increase margin according to item level
+                                            margin += 10;
+                                       } %>
+                                       <td style="margin: 0px; padding: 0px;" nowrap>
+                                       <img style="margin-left: <%= margin %>px; padding: 0px; border: 0px; vertical-align: middle"
+                                       src="<%=WebUtil.getMimeURL(pageContext, "b2c/mimes/images/arrow_secNav.gif") %>"
+                                       alt="<isa:translate key="b2b.order.displ.alternative.pos" arg0="<%= s + line %>"/>"
+                                       title="<isa:translate key="b2b.order.displ.alternative.pos" arg0="<%= s + line %>"/>"
+                                       border="0">
+
+                                       <%= JspUtil.encodeHtml(item.getQuantity()) %>
+                                   <% } %>
+
+                                  <%-- hidden field for oldquantity value --%>
+                                  <input type="hidden" name="oldquantity[<%= line %>]" value="<%= JspUtil.removeNull(item.getOldQuantity()) %>">
+
+                                  <input type="hidden" name="techKey[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(techKey) %>" >
+                                  <input type="hidden" name="pcat[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getPcat().getIdAsString()) %>" >
+                                  <input type="hidden" name="contractKey[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getContractKey().getIdAsString()) %>" >
+                                  <input type="hidden" name="contractItemKey[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getContractItemKey().getIdAsString()) %>" >
+                                <%--
+                                  <input type="hidden" name="ipcDocumentId[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getIpcDocumentId().getIdAsString()) %>" >
+                                  <input type="hidden" name="ipcItemId[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getIpcItemId().getIdAsString()) %>" >
+                                --%>
+                                  <input type="hidden" name="productId[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getProductId()) %>" >
+                                  <input type="hidden" name="product[<%= line %>]"
+                                         value="<%= JspUtil.encodeHtml(JspUtil.removeNull(item.getProduct())) %>" >
+                                  <input type="hidden" name="parentId[<%= line %>]"
+                                         value="<%= JspUtil.removeNull(item.getParentId()) %>" >
+                                  <!-- store all businesspartner informations for line item -->
+                                 <% Iterator itemBpIt = item.getPartnerList().getList().entrySet().iterator();
+                                    Map.Entry itemPartnerEntry = null;
+                                    int itemBpCount = 0;
+
+                                    while (itemBpIt.hasNext()) {
+                                        itemPartnerEntry = (Map.Entry) itemBpIt.next();
+                                     %> <input type="hidden" name="itemBusinessPartnerRole[<%= line %>][<%= itemBpCount %>]" value="<%= (String) itemPartnerEntry.getKey() %>">
+                                        <input type="hidden" name="itemBusinessPartnerTechKey[<%= line %>][<%= itemBpCount %>]" value="<%= JspUtil.removeNull(((PartnerListEntry) itemPartnerEntry.getValue()).getPartnerTechKey()) %>">
+                                        <input type="hidden" name="itemBusinessPartnerId[<%= line %>][<%= itemBpCount %>]" value="<%= JspUtil.removeNull(((PartnerListEntry) itemPartnerEntry.getValue()).getPartnerId()) %>">
+                                     <%    itemBpCount++;
+                                    }
+                                %>
+                                </td>
+                                <td> <% if (item.getPossibleUnits() != null) { 
+							                if (item.getPossibleUnits().length==1)  { %>
+								               <%= JspUtil.removeNull(item.getUnit()) %><input type="hidden" name="unit[<%= line %>]" value="<%= JspUtil.removeNull(item.getUnit())%>"/>	
+							             <% } else { %>
+								              <select name="unit[<%= line %>]">
+								              <% String sel;
+								                 for (int j = 0; j < item.getPossibleUnits().length; j++) {
+                                                     sel="";
+								                     if (item.getUnit() != null && item.getUnit().equals(item.getPossibleUnits()[j])) {
+                                                         sel="selected";
+								                     } 
+								               %>
+									                 <option <%= sel %> value="<%= item.getPossibleUnits()[j] %>"><%= item.getPossibleUnits()[j] %></option>
+								              <% } %>
+								              </select>
+							            <% }
+						                } %>
+                                </td>
+                                <td>
+                                  <% if (item.getCatalogProduct().getThumb().length() != 0) { %>
+                                     <a href="<isa:webappsURL name="b2c/productdetail.do"/><%=ShowProductDetailAction.createDetailRequest(item.getProductId(), "basket") %>">
+                                     <img src="<%= item.getCatalogProduct().getThumb() %>" alt="" width="60" height="60" border="0">
+                                     </a>
+                                  <% } else  { %>
+                                       &nbsp;
+                                  <% } %>
+                                </td>
+                                <td scope="row"> <%= item.getProduct() %> </td>
+                                <td>
+                                  <% if (item.getParentId().isInitial()) { %>
+                                     <a href="<isa:webappsURL name="b2c/productdetail.do"/><%=ShowProductDetailAction.createDetailRequest(item.getProductId(), "basket") %>">
+                                     <%= JspUtil.encodeHtml(item.getDescription()) %> </a>
+                                      <% if (item.isConfigurable() == true) { %>
+                                           &nbsp;<a href="<isa:webappsURL name="<%= configItem %>"/>"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_config.gif") %>" width="19" height="21" border="0" alt="<isa:translate key="b2c.order.basket.alt.config"/>" title="<isa:translate key="b2c.order.basket.alt.config"/>">
+                                                 </a>
+                                          <%-- inline display of product configuration --%>
+                                          <% boolean showDetailView = false;  %>
+                                          <%@ include file="/b2c/itemconfiginfo.inc.jsp" %>                                       
+                                      <% } 
+                                    } else { %>
+                                     <%= JspUtil.encodeHtml(JspUtil.encodeHtml(item.getDescription())) %>
+                                  <% } %>                                 
+                                </td>
+                                <td align="right"><%= JspUtil.encodeHtml(item.getGrossValue()) %> <%= JspUtil.encodeHtml(item.getCurrency()) %>
+                                <isacore:ifShopProperty property = "pricingCondsAvailable" value ="true">
+                                <% if (header.getIpcDocumentId() != null ) { 
+                                    if (item.getExternalItem() != null) {
+                                        ipcItemId = ((IPCItem) item.getExternalItem()).getItemId(); 
+                                    }
+                                    else {
+                                        ipcItemId = item.getTechKey().getIdAsString();
+                                    }
+                                %>
+                                    &nbsp;<a href="#" onclick="displayIpcPricingConds(  '<%= JspUtil.removeNull(header.getIpcConnectionKey()) %>',
+		                                                                                '<%= JspUtil.removeNull(header.getIpcDocumentId().getIdAsString()) %>',
+        		                                                                        '<%= JspUtil.removeNull(ipcItemId) %>'
+                		                                                                )"> <isa:translate key="b2b.order.display.ipcconds" /> </a>
+                                <% } %>
+                                </isacore:ifShopProperty>
+                                </td>
+                
+                             <% if (isBrandOwnerScenario) { %>
+                               <% if (!isSoldFromSet) { %>
+                                   <td><span class="icon">
+                                   <% if (item.getParentId().isInitial()) { %>
+                                          <a href="<isa:webappsURL name="b2c/addproducttodocument.do"/><%=GetTransferItemFromProductAction.createAddRequest(item.getCatalogProduct(),1,"cualeaflet") %>">
+                                             <img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_leaflet.gif") %>" alt="<isa:translate key="b2c.product.jsp.addToLeaflet"/>" title="<isa:translate key="b2c.product.jsp.addToLeaflet"/>"width="16" height="16" border="0">
+                                          </a>
+                                   <% } else { %>
+                                       &nbsp;
+                                   <% } %>
+                                   </span></td>
+                                <% }
+                                else {                                     
+                                    String trafficLight[] = null;  // default is no availabilty sign
+                                    int avail = item.isAvailableInPartnerCatalog();
+                                    String iconWidth = "41";
+
+                                    if (avail == item.NOT_AVAILABLE_AT_PARTNER) {
+                                        trafficLight = shop.getTrafficLight(Shop.EV_NOT_IN_ASSORTMENT);
+                                        iconWidth = "13";
+                                        if (!shop.isOciBasketForwarding()) {
+                                            chkoutHint = "b2c.brndowner.chkt.nores2";
+                                            checkoutDisabled = true;
+                                        }
+                                    }
+                                    else if (showAvailabilityInfos && avail == item.AVAILABLE_AT_PARTNER) {
+                                        trafficLight = shop.getTrafficLight(item.getScheduleLines());
+                                    }
+                                    else if (showAvailabilityInfos ) {
+                                        trafficLight = shop.getTrafficLight(Shop.EV_NO_INFO);
+                                    }
+                                 %>
+                                 <% if (!itemHierarchy.isSubItem(item) && trafficLight != null) {
+                                        String path = "b2c/mimes/images/" + trafficLight[0]; %>
+                                        <td align=center>
+                                         <img height=13 alt="<%=trafficLight[1]%>" title="<%=trafficLight[1]%>" src="<%= WebUtil.getMimeURL(pageContext, path) %>" width=<%=iconWidth%> border=0>
+                                        </td>
+                                 <% } %>
+                                  <% if (isSoldFromChangeableOnLineItem) { %>
+                                      <td><%=itemSoldFromAddrStr%></td>
+                                      <td><% if (!itemHierarchy.isSubItem(item)) { %>
+                                                <a href="<isa:webappsURL name="<%= searchSoldFromForItem %>"/>" >
+                                                   <img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/search.gif") %>" width="15" height="14" border="0" alt="<isa:translate key="xtol_b2c.brndowner.srch.hint"/>" title="<isa:translate key="xtol_b2c.brndowner.srch.hint"/>" >
+                                                </a>
+                                          <% }
+                                             else { %>
+                                             &nbsp;
+                                          <% } %>
+                                      </td>
+                                 <% } 
+                                 } 
+                              }
+                              else {%>
+                              <!-- else if brandownerscenario -->
+                                <td><span class="icon">
+                                    <% if (item.getParentId().isInitial()) { %>
+                                        <a href="<isa:webappsURL name="b2c/addproducttodocument.do"/><%=GetTransferItemFromProductAction.createAddRequest(item.getCatalogProduct(),1,"cualeaflet") %>">
+                                           <img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_leaflet.gif") %>" alt="<isa:translate key="b2c.product.jsp.addToLeaflet"/>" title="<isa:translate key="b2c.product.jsp.addToLeaflet"/>" width="16" height="16" border="0">
+                                        </a>
+                                   <% } else { %>
+                                       &nbsp;
+                                   <% } %>
+                                </span></td>
+                               <% } %> <!-- end else if brandownerscenario -->
+                               
+                               <td>
+                                   <% if (item.getParentId().isInitial()) { %>
+                                       <a href="<isa:webappsURL name="<%= removeItem %>"/>" >
+                                         <img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_delete.gif") %>" width="16" height="16" border="0" alt="<isa:translate key="b2c.order.basket.alt.remove"/>" title="<isa:translate key="b2c.order.basket.alt.remove"/>" ></a>
+                                   <% } else { %>
+                                       &nbsp;
+                                   <% } %>
+                                </td>
+                                <%@ include file="/b2c/order/campaignsItemB2C.inc.jsp" %>
+                              </tr>
+<%-- error handling --%>
+<%-- print out a localized errors --%>
+<%@ include file="/b2c/messages-begin.inc.jsp" %>
+                              <isa:message id="errortext" name="item" type="<%=Message.ERROR%>">
+<%
+addMessage(Message.ERROR, errortext);
+%>
+                              </isa:message>
+                              <isa:message id="errortext" name="item" type="<%=Message.WARNING%>">
+<%
+addMessage(Message.WARNING, errortext);
+%>
+                              </isa:message>                              
+<%
+if(!messages.isEmpty()&& !ui.isAccessible())
+{
+%>
+                                <tr>
+                                  <td colspan="99">
+                                    <div>
+                                      <%@ include file="/b2c/messages-end.inc.jsp" %> <br>
+                                    </div>
+                                  </td>
+                                </tr>
+<%
+}
+%>                              
+
+                              <% // Don't move this anywhere else, or the jsp won't work
+                              line++;
+                              %>
+                            </isa:iterate>                          
+                            <% if (isNetValueAvailable) { %>
+                            <tr>
+                              <td colspan="5" align="right" class="whiteCell">
+                                <b><span><isa:translate key="b2c.order.basket.label.netPrice"/></span></b>
+                              </td>
+                              <td class="odd" align="right">
+							  	<span><%= JspUtil.encodeHtml(header.getNetValue()) %> <%= JspUtil.encodeHtml(header.getCurrency()) %></span>
+                              </td>
+                              <td class="whiteCell" colspan="<%= sumColSpan%>">&nbsp;</td>
+                            </tr>
+                            <% } %>
+                            <% if (isTaxValueAvailable) { %>
+                            <tr>
+                              <td colspan="5" align="right" class="whiteCell">
+                                <b><span><isa:translate key="b2c.order.basket.valueAddedTax"/></span></b>
+                              </td>
+                              <td class="odd" align="right">
+							  	<span><%= JspUtil.encodeHtml(header.getTaxValue()) %> <%= JspUtil.encodeHtml(header.getCurrency()) %></span>
+                              </td>
+                              <td class="whiteCell" colspan="<%= sumColSpan%>">&nbsp;</td>
+                            </tr>
+                            <% } %>
+                            <% if (isGrossValueAvailable) { %>
+                            <tr>
+                              <td colspan="5" align="right" class="whiteCell">
+                                <b><span><isa:translate key="b2c.order.basket.lbl.grossPrice"/></span></b>
+                              </td>
+                              <td class="odd" align="right">
+							  	<span><%= JspUtil.encodeHtml(header.getGrossValue()) %> <%= JspUtil.encodeHtml(header.getCurrency()) %></span>
+                              </td>
+                              <td class="whiteCell" colspan="<%= sumColSpan%>">
+                              <%-- commented out
+                              <a href="<isa:webappsURL name="b2c/maintainBasket.do?checkout=true" />" class="FancyLinkGrey"><isa:translate key="b2c.order.basket.link.checkout"/></a>
+                              --%>&nbsp;
+                              </td>
+                            </tr>
+                            <% } %>                            
+                            <!-- start of buttons section -->
+                            <tr>
+                              <td colspan="11" class="whiteCell">
+	<%
+		if (ui.isAccessible())
+		{
+	%>
+		<a id="endTable1" href="#beginTable1" title="<isa:translate key="access.table.end" arg0="<%=table1_title%>"/>"></a>
+	<%
+		}
+	%>              
+<%
+	String updateBtnTxt = WebUtil.translate(pageContext, "b2c.order.basket.button.update", null);
+	String emptyBtnTxt = WebUtil.translate(pageContext, "b2c.order.basket.link.empty", null);
+	String continueBtnTxt= WebUtil.translate(pageContext, "b2c.order.basket.contShopping", null);
+	String saveBtnTxt = WebUtil.translate(pageContext, "b2c.order.basket.button.save", null);
+	String checkoutBtnTxt = WebUtil.translate(pageContext, checkoutKey, null);
+%>
+                              
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                  <tbody>
+                                    <tr width="100%">
+                                      <td colspan="2">
+                                        <input type="submit"  name="update" value="<isa:translate key="b2c.order.basket.button.update"/>" class="FancyButtonGrey"
+                                        	   title="<isa:translate key="access.button" arg0="<%=updateBtnTxt%>" arg1=""/>">
+                                        <img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="1" height="20" border="0">
+                                      </td>
+                                    </tr>
+                                    <tr width="100%">
+                                      <td>
+                                        <input class="FancyButtonGrey" type="button" value="<isa:translate key="b2c.order.basket.link.empty"/>" onclick="clearBasket()"
+                                        	   title="<isa:translate key="access.button" arg0="<%=emptyBtnTxt%>" arg1=""/>">
+                                      </td>
+                                      <td align="right">
+                                        <input class="FancyButtonGrey" type="button" name="continueShopping" value="<isa:translate key="b2c.order.basket.contShopping"/>" class="FancyButtonGrey" onclick="self.location.href='<isa:webappsURL name="b2c/catalogForward.do"/>'"
+                                        	   title="<isa:translate key="access.button" arg0="<%=continueBtnTxt%>" arg1=""/>">
+                                      </td>
+                                    </tr>
+                                    <tr width="100%">
+                                      <td>
+                                    <%
+                                       if (shop.isTemplateAllowed()) {
+                                      %>
+                                        <input type="submit" name="savebasket" value="<isa:translate key="b2c.order.basket.button.save"/>" class="FancyButtonGrey"
+                                        	   title="<isa:translate key="access.button" arg0="<%=saveBtnTxt%>" arg1=""/>">
+                                        &nbsp;
+                                        <input class="textInput" type="text" name="description" value="<%=JspUtil.encodeHtml(JspUtil.removeNull(request.getAttribute(B2cConstants.SAVE_BASKET_DESCRIPTION))) %>">
+                                    <% } %> 
+                                      </td>
+                                      <td align="right">
+                                    <%
+                                       if (salesDoc.isValid() || isBrandOwnerScenario) 
+									   { 
+									   		String doCheckout="";
+									   		if (checkoutDisabled || !salesDoc.isValid())
+												doCheckout = "disabled";
+									%>
+                                        <input type="submit"  name="<%= checkoutButtonName %>" <%=doCheckout%> value="<isa:translate key="<%=checkoutKey%>"/>" class="FancyButtonGrey"
+                                         	   title="<isa:translate key="access.button" arg0="<%=checkoutBtnTxt%>" arg1="<%=doCheckout%>"/>">
+                                        
+                                       <% if (checkoutDisabled && chkoutHint.length() > 0) { %></br><span><isa:translate key="<%=chkoutHint%>"/><span><% } %>
+                                     <% } %>
+                                      </td>           
+                                    </tr>                                  
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                            <!-- end of buttons section -->
+                          </tbody>
+                        </table>
+                          <%
+                          String orderNumber = (String) userSessionData.getAttribute("savedordernumber");
+						  orderNumber = JspUtil.encodeHtml(orderNumber);
+                          String errSaveOrder = (String) userSessionData.getAttribute(MaintainBasketB2CBaseAction.RC_ERRORSAVEORDER);
+						  errSaveOrder = JspUtil.encodeHtml(errSaveOrder);
+                          if (orderNumber != null && orderNumber.trim().length() >0) { %>
+                              <font color=green><b>
+                              <span>
+                              <isa:translate key="b2c.order.basket.message.saved"
+                                             arg0="<%= orderNumber %>" />
+                              </span>
+                              </b></font>
+                              <br>
+                       <% }
+                          else if (errSaveOrder != null && errSaveOrder.trim().length() >0) { %>
+                              <font color=red><b>
+                              <span>
+                              <isa:translate key="b2c.order.basket.msg.notsa"/>
+                              </span>
+                              </b></font>
+                              <br>
+                         <%-- error handling --%>
+                         <%-- print out a localized errors --%>
+                         <%@ include file="/b2c/messages-begin.inc.jsp" %>
+                         <isa:message id="errortext" name="<%=MaintainBasketB2CBaseAction.RC_SAVEORDERMESSAGES %>" type="<%=Message.ERROR%>">
+                                    <% addMessage(Message.ERROR, errortext); %>
+                          </isa:message>
+                              <% if(!messages.isEmpty() && !ui.isAccessible()) { %>
+                                </br>
+                                    <%@ include file="/b2c/messages-end.inc.jsp" %>
+                        <% } 
+                           }
+                           // delete all ession context aatributes
+                           userSessionData.removeAttribute("savedordernumber");
+                           userSessionData.removeAttribute(MaintainBasketB2CBaseAction.RC_ERRORSAVEORDER);
+                           userSessionData.removeAttribute(MaintainBasketB2CBaseAction.RC_SAVEORDERMESSAGES);
+%>
+                      </form>
+<!-- basket End -->
+                    </td>
+                        </tr>
+                </tbody>
+              </table>
+				<% accessText = WebUtil.translate(pageContext, "b2c.order.bskt.moduleHead.bskt", null); %>
+				<% if(ui.isAccessible()) { %>
+				<a 
+					href="#grp1Begin"
+					id="grp1End"
+					title="<isa:translate key="access.grp.end" arg0="<%=accessText%>"/>" 
+				></a>
+				<% } %>	
+		        <a 
+		        	href="#" title= "<isa:translate key="b2c.soldToAddress.jsp.btnarea"/>" accesskey="<isa:translate key="b2c.soldToAddress.jsp.btnkey"/>"
+		        ><img 
+		        	src="<%=WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="<isa:translate key="b2c.soldToAddress.jsp.btnarea"/>" title="<isa:translate key="b2c.soldToAddress.jsp.btnarea"/>" border="0" width="1" height="1"
+		        ></a>                          
+            </td>
+          </tr>
+          <tr>
+            <td width="8"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="8" height="1" border="0"></td>
+            <isacore:ifShopProperty property = "cuaAvailable" value = "true" >
+              <%
+              Boolean cuaFound = (Boolean)request.getAttribute("cuafound");
+              if (cuaFound != null && cuaFound.booleanValue()) {
+              %>
+                <td colspan="2">
+                  <%-- cua as include --%>
+                  <%@ include file="/b2c/marketing/cuabasket.inc.jsp" %>
+                </td>
+              <% } %>
+            </isacore:ifShopProperty>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</code>
+
+
+=====NWDI =====
+
+You are now almost required to use the NWDI for development, while the concept of the NWDI is ok, at this time the implementation seem very flowed to me.
+
+DTR: First they had to write their own version of a source repository and force you to use it.\\
+There are many stable and reliable source repositories software out there (CVS, SVN etc ...), why create a new one ?\\
+At this time it's not quite reliable and not much documented.\\
+Personally if i'm using a source repository i want it to be stable, trusted and easy to use, that is why i much rather use something like subversion.\\
+With the DTR if something does not go write, there is not enough doc on fixing it.\\
+It is also missing many "must have" features, such as recursive delete.
+
+CBS: The build service is also pretty buggy, if you have  a large project it will often fail (probably out of resource) and be left in a broken state, forcing you to sometime restart from scratch.
+
+CMS: The CMS will deploy to the servers for you and allow you to "transport" to the dev, test and prod systems.
+This is allright but during active development this s a pain, as you have to go through all those layers (DTR, CMS and CBS) just to test your changes ... and that makes testing anyhting a very slow process.
+
+Also if multiple developers are doing active development, they all test them on the dev server which becomes a choke point.
+
+Also in general we wasted a ton of time trying to get this product ti behave and we encountered so many problems and issues on top of lack of documentation that we finally made the decision to simply not use it, and since our pace of development has improved exponentially.
+
+=====Developer Workplace =====
+SAP came up with their own version of Eclipse, of course it's more limited than the plain version.
+
+It is based on an old 2.1 version of Eclipse
+
+Also they blocked installation of plugins, this is just stupid.\\
+Why even use Eclipse if you don't leverage all the existing plugins ?
+
+It misse tons of modern features available in Eclipse plugins such as a powerful JSP editor (with error checks)
+
+It is very bloated and slow (probably because of things we don't use such as visual composer etc ...)
+
+Even though it comes with a local J2EE engine, using the NWDI prevents you from easily deploy/test on it, intead you have to deploy to the dev server to test anything (with multiple developers this is silly)

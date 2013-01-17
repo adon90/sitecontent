@@ -1,0 +1,98 @@
+======Selectively converting Subversion repository to Mercurial======
+====Intro====
+I've hosted many of my projects on my under subversion for a while(Berry4All, FantomIDE and many more)
+
+Some of them on my own server, some others on sourceforge.
+
+I've now decided it was time to move to a Distributed SCM and I picked Mercurial.
+
+Note: Why not git ? 
+Nothing against git but I liked BitBucket over GitHub, my work firewall does not like gitHub and I use Netbeans which as builtin Mercurial support - end of story
+
+====Existing setup====
+So anyway my current projects where on subversion but **my existing repository was far from perfect because**:
+  - I had put all my projects in one repo (creating repos in SVN is too much work - I'm lazy)
+  - I had committed a lot of binaries and other files that should not belong in the repo (ignoring files is annoying and I'm lazy)
+  - Some of my projects have the proper "tag/branch/trunk" structure and some didn't - I'm lazy and didn't know any better early on.
+
+====Goals====
+So because of the existing setup **I wanted to accomplish the following**:
+  - Keep the SVN history (obviously)
+  - Convert each project in my single SVN repo to individual Mercurial projects (Cause that's the proper way)
+  - Filter out the stuff I should not have committed (binaries etc..) because it does not belong there and it would take too much space on BitBucket
+  - Push the new projects to BitBucket
+
+====Let's do it====
+I choose to use the "hg convert" tool because: It's built-in Mercurial and it allows some filtering.
+
+===Cloning the repo===
+Unless your repo is really tiny (mine was about 1GB wit about 1700 commits), using 'hg convert' from a remote repo will be **extremely slow** so, it will be much better to have a local mirror of the repo to work with.
+
+Note: You probably don't want people to commit stuff while you are doing this to keep your mirror in sync.
+
+
+To create a mirror we will use 'svnsync'
+<code | Local mirror of the SVN repo>
+# Lets' ceate the mirror somewhere
+cd /tmp
+svnadmin create myrepo-mirror
+echo '#!/bin/sh' > myrepo-mirror/hooks/pre-revprop-change
+chmod +x myrepo-mirror/hooks/pre-revprop-change
+
+# Now let's synchronize our mirror from the svn server root
+svnsync init file://`pwd`/myrepo-mirror http://your.svn.server/svn/
+svnsync sync file://`pwd`/myrepo-mirror
+</code>
+
+===Converting Part of the SVN repo into a mercurial project===
+If you had a  "perfect" svn repo, ou can just convert the whole thing like this:
+
+''hg convert colar-mirror myrepo.hg'' (myrepo.hg folder will contain your Mercurial project)
+
+**But in my case with my 'bad' SVN repo I wanted to convert separate "parts" of my existing repo into individual project, and also filter out some files.**
+
+So for this I will use two options of 'hg convert'
+
+  - ''--config convert.svn.trunk=somePath''
+This allow to specify what is the project root, can be any subfolder of the repo.
+
+  - ''--filemap filemap.txt''
+This allows filtering some files (completely from any version of the history)
+
+So first I created my filter: filemap.txt file:
+<code | Example filemap filter>
+# Those files/folders should never have been commited
+exclude dist
+exclude javadoc
+exclude resources/doclet/NetBeansProjects
+</code>
+
+Now I can convert the project like this
+''hg convert --config convert.svn.trunk=Project1 --filemap filemap.txt colar-mirror Project1.hg''
+
+**or** for a project that had the proper branch/tag/trunk structure:
+
+''hg convert --config convert.svn.trunk=Project2/trunk --filemap filemap.txt colar-mirror Project2.hg''
+
+===Pushing the new mercurial project to a repo (BitBucket)===
+Now we can push the converted project to a Mercurial repo:
+<code | Publishing the project to a repo>
+cd Project1.hg
+hg push http://bitbucket.org/myuser/project1
+</code>
+
+====Mercurial basics for Subversion user====
+Because Mercurial is distributed it works a bit differently than SVN, while most command are the same for example:
+  -''svn add'' -> ''hg add''
+Commit and Updates are a two step process:
+  - ''svn commit'' -> ''hg commit'' then ''hg push''
+  - ''svn update'' -> ''hg pull'' then ''hg update'' **OR SHORTCUT** ''hg pull -u''
+
+Anyway here is a nice page for users switching from SVN to HG:
+[[http://nedbatchelder.com/text/hgsvn.html]]
+
+====Links====
+hg convert: [[http://mercurial.selenic.com/wiki/ConvertExtension]]
+
+Guides for users switching from SVN to HG:
+[[http://nedbatchelder.com/text/hgsvn.html]]

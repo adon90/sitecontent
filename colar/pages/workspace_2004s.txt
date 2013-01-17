@@ -1,0 +1,175 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== Installation of Sap Dev. Workplace 2004s ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+Installation of Developer workplace 2004s on windows XP
+
+NOTE: Patching workplace(to 2004 SP6) was very tricky, there are undocumented things that need to be done, or patch will fail, and installation will be broken.\\
+Follow the patching instructions very closely.
+
+=====Requirements=====
+
+Install jdk 1.4.2_09 from sun. and set JAVA_HOME and add the java bin folder to PATH (env variables)
+
+WARNING: Due to an installer bug on dvd (51031374), **you need to set your timezone to germany (GMT+1) or it will fail during the java dump import**.
+
+If you have an old (broken) old version you want to remove, see here:\\
+[[Workplace 2004s uninstall]]
+
+=====Installation=====
+
+cd E:\sapcd\51031374_dev_ws_04s\IM_WINDOWS_I386
+run sapinst.exe
+
+DB instance name: ztb
+
+Destination folder: c:\JDT7
+
+When it asks for maxdb cd, browse to : \\
+E:\sapcd\51031410_maxdb_760
+
+Then it will ask for the kernel dvd:
+\\E:\sapcd\51031391_2004s_kernel7_lin_win
+
+When it asks for the JCE files:\\
+E:\sapcd\Java Cryptolib ssl\jce_policy-1_4_2.zip (retrieved from sun)
+
+Confirm the parameters ... then the installer will start running. for 1hour+.
+
+Once done, **REBOOT** (needed)
+
+=====Post-install=====
+
+====Recommanded memory settings:====
+
+Actually default for workplace where fine (1GB)
+
+====License====
+
+Start the admintool and go to the license adaptor and get the hardware key
+then go to http://service.sap.com/licensekey to get the key and install it in visual admin.
+
+====SLD====
+
+Start the admin tool and go in server/SLD data supplier/ http settings\\
+Host: jdiprod.pcf.com\\
+Port: 50100\\
+User: SLDUSER\\
+Pass: xxxx\\
+and Save\\
+
+Then do the same for CIM settings
+
+Then click the "lightning" icon to register in the SLD.
+Then quit admintool.
+
+====MaxDb GUI tool====
+
+It is practical to install the maxdb GUI (dbmgui) to be able to check/administrate maxdb.
+
+You can get it here:
+http://dev.mysql.com/downloads/maxdb/7.6.00.html
+
+====MAXDB settings====
+
+Maxdb logs quickly grow 100% full, and then need to be backed up or the system does not work properly.
+
+This is an annoyance and we don't need this much logging on workplace.
+
+So run the maxdb gui tool, put the db in "admin" mode and go to config / log settings, and choose "overwrite mode".\\
+This will use the log file in loop, ie: once full it restarts at the beginning.
+
+WARNING: **On top of being an annoyance, those log will fill during applicatrion of the service pack, this will cause the jspm patching to fail, leaving the system in an unusable system !, need full reinstall !**
+
+**So DO This right away.**
+
+
+==== Dev Studio fix ====
+In dev studio go in window/preferences
+
+Then go in java/compiler
+
+NOTE: Make sure it is set to use **1.4** for the java compliance mode (since we develop for CRM5 which requires 1.4), on my machine it defaulted to 1.3 which caused all kind of issues later.
+
+=====Installing the service packs=====
+
+==== Documentation ====
+Get the doc here:\\
+https://websmp202.sap-ag.de/maintenanceNW2004s \\
+See [[\\frenchie\sapdocs\2004s\nw2004s_SP_stack_guide_spxx.pdf]]
+
+See note 879289 (support package guide note) \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=879289&_NLANG=E | here ]]
+
+and note 891983 (JSPM: Central SAP Note SAP NetWeaver? 2004s) \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=891983&_NLANG=E | here ]]
+
+#Got the stack here: https://service.sap.com/sp-stacks (need to allow popups)\\
+#For workplace we need to get usage "Java AS" + "EP portal"
+#got the nw2004s stack and add the files to the basket and use the download manager to save them \\
+#Also saved the sp stack definition (XML), saved as 2004SPxx_worplace.xml
+
+Note: make sure you have downloaded all the packages required\\
+and use download manager to get them\\
+#they are in \\frenchie\patches\nw2004s_patches\spxx\jspm
+
+==== SUNJCE problem ====
+WARNING: I had a problem, during the JSPM step, the error was \\
+**"com.sap.engine.frame.core.configuration.ConfigurationException: The SunJCE provider may have been tampered."**
+
+**This problem is very annoying, because it will make the patching fail every time, because the j2ee engine will fail restarting etc ...**
+
+See [[https://websmp110.sap-ag.de/~form/sapnet?_FRAME=CONTAINER&_OBJECT=012003146900000583172005 | this note]] about it.\\
+Problem: SDM is finding another (different) sunjce_provider.java in the path
+
+Solution: Have "%JAVA_HOME%\bin" **first** in the path of ztbadm\\
+
+log off windows & **log back on as ztbadm**\\
+
+WARNING: edit the **PATH** env variable, and add "%JAVA_HOME%**\bin**" very first
+
+Log off windows & Log back as you.\\
+then **restart the instance**
+
+NOTE: You can verify the used path after starting the SDM in this log file: C:\usr\sap\ZTB\JC01\work\dev_sdm
+
+==== Preparation ====
+WARNING: You MUST have done the [[#MAXDB settings | maxdb log settings modif]] or patch will fail badly ! \\
+
+WARNING: You MUST also do the [[#SUNJCE problem | JCE error fix]] or patch will fail.
+
+Make sure the **J2EE can start properly** before running the upgrade, or the upgrade might fail.
+
+copy all the patch files (SAR,JAR etc ...): \\
+  * copy \\frenchie\sapcd\patches\nw2004s_patches\spxx\jspm* to c:\usr\sap\trans\EPS\in\\
+  * copy \\frenchie\sapcdpatches\nw2004s_patches\spxx\jspm\windows\* to c:\usr\sap\trans\EPS\in (without the folder) \\
+
+NOTE: I had to create the c:\usr\sap\trans\EPS\in folder manually
+
+Also it is recommended to copy the latest sapcar executable in there\\
+
+If upgrading from SP4 or lower (SP4) we need to update/fix the JSPM first, see my [[worplace 2004s sp6 | SP6 doc]] for that.
+
+
+====Patching====
+  * Upgrade to SP6  [[Worplace 2004s sp6]]
+  * Upgrade to SP7  [[Worplace 2004s sp7]]
+
+===== Using Workplace =====
+
+see [[Using SAP developer Worplace]]
+
+~~DISCUSSION~~

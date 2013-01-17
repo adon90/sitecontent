@@ -1,0 +1,47 @@
+======Frameworks Opinions======
+Ok, it all started with this document:\\
+[[http://virtuas.com/articles/webframework-sweetspots.html | java framework sweetspots]] \\
+First i have to say thanks for this document, it's nice to see what everybody as to say and compare the different approaches (ie: PR vs geek :-) )
+
+There is a discussion about this whole matter here:\\
+http://raibledesigns.com/page/rd?entry=java_web_frameworks_sweet_spots#comments\\
+and i also already gave my 5cents here:\\
+[[http://sourceforge.net/mailarchive/message.php?msg_id=15215455 | Wicket mailing list]]
+
+Ok, so why do i think i have a say, well i have been using java on a server side for a long time, since the first version of JSP, and i have done that in different environments: for personal projects, for a small high tech startup, for a large company.
+
+Way back there was JSP's and while that was nice to finally have a nice server side language for java, it also became apparent rapidly that it wasn't very efficient.\\
+Pages would soon be filled with code, designers would edit them, and break the logic.
+
+Ok, i know what you will say, if the page was full of code, it's the developer fault, he didn't do a good MVC job, well maybe, but then JSP allowed him to do so.
+
+Later i worked on another project where i had full implementation choice, so i choose what i thought was best at the time, Velocity.\\
+Velocity is not a framework, just a presentation layer i guess, but working with velocity was an improvement, it made the process much better, there was almost no logic in the presentation layer (HTML/CSS), and the little there was was understandable by the designer.\\
+So it was easily possible for marketing/designer to maintain the site content without much developer interaction.\\
+
+One small drawback of velocity, is that it still did not produce completely valid HTML, and it required a little work to get it to display correctly in a tool like Dreamweaver.
+
+At my current job we use SAP, the version we where using was based on struts, JSP's and frames, and it was pretty much impossible to work with.\\
+I ever liked struts, a framework should help you have less work not more. HTML frames sucks obviously., everybody know this by now.
+
+We are now working with the brand new version of the SAP stack, unfortunately they decided to use JSF as the frameowrk.\\
+While they removed the frames, the pages are now even more full of logic and are a nightmare to work with whether you are a developer or a designer.
+
+Here is an example of the main "product page" (Vanilla as provided from SAP) and that's not even the worst page.\\
+[[SAP JSF JSP example]]
+
+Sure SAP might be more to blame that whoever designed JSF for this, but my point is that if they where using Wicket or even Tapestry they just could NOT have done this (mixing logic and view).
+
+My personal belief and experience is that the "company process" is much better when developer are left to code in their IDE, designer to "design" on their mac and marketing to do whatever they do on windows :-) \\
+And this process only works correctly if the presentation layer is kept clean of code (ie: HTML is clean and can be edit in "designer" tools such as DW. 
+
+Often this does not happen and the developer gets to work on the design/HTML, but this is not a good process, this only happens because the technology required it.\\
+The developer will probably not be able to reproduce **Exactly** what the designer wanted, they will argue, need meetings etc ... and in the end neither will be happy.
+
+My other belief is that simple things are always better than unnecessarily complex ones.
+
+It seem to me that the authors of Wicket, Stripes (and maybe Tapestry) think mostly the same way i do, whereas authors of JSF apparently do not, so that's how i base my choice.
+
+Now if only they could spend more time working on the framework, and less time arguing that would be even better :-)
+
+In any case if you ask me, lots of options is always a good thing (well i don't if know we need 75 frameworks, but i rather have 75 than just 1).

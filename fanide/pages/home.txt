@@ -1,0 +1,43 @@
+TIP: **See the [[default:Fan|See my other pages/doc about Fantom here]]**
+
+======Fantom IDE - FantomIDE======
+
+WARNING: I still maintain this IDE once in a while, but I'm not using it much anymore.
+I now use the pure Fantom IDE, called [[status302:camembert | Camembert]] I've been developing recently.
+
+
+=====Netbeans based Standalone IDE / Plugin for the Fantom Language=====
+This can be installed **as a plugin** to an existing Netbeans installation or as a **standalone IDE** for the **[[http://www.fantom.org|Fantom]] language** (based on Netbeans)
+
+It contains out of the box **support for Fantom as well as Java, Javascript, CSS, HTML, XML, Subversion, Mercurial**.
+
+====Features====
+Highlighting, Completion(types, methods, implicit it block vars) with inline Fandoc, Navigation(Go to declaration), Debugging(Fantom  Java mixed), Navigator(Methods/fields pane), Formatting, Build/Run actions, Tales support, support for embedded languages(Javascript, HTML etc...), Hints(create method, add import etc..), Indexing(fast search), Semantic/error detection and highlighting, New file templates(class, mixin etc..).
+
+On top of that you benefit from all the great built-in Netbeans features such as git/mercurial support, extra plugins availability and so on.
+
+Also any **other features** you need, say hudson support **are just a few clicks away under tools/plugins**.
+====Screen shot====
+You can also check a demo "screencast("movie") in the [[demo|demo section]].
+
+{{ fannb.png }} 
+====Infos====
+I have written the Grammar/Lexer/Parser using the [[http://www.antlr.org/|ANTLR]] tool (together with the great ANTLRWorks debugger).
+**Update:** Replaced ANTLR with parboiled (Mrach 2010)
+
+On the Netbeans Side i'm using the brand new (NB 6.7) CSL API (Language support).
+
+Learning ANTLR has been a challenge as well as the new CSL API, which is not yet much documented.
+
+However [[http://blogtrader.net/dcaoyuan/entry/erlang_plugin_for_netbeans_in2|Caoyuan's Blog]] and help has been immensely useful (Thank you !)
+
+Many thanks to Geertjan Wielenga as well, for all the [[http://blogs.sun.com/geertjan/entry/welcome_to_me| useful tutorials / blog entries]] he made available.
+
+And all the authors of the other NB plugins I've been looking at.
+
+====Used Libraries====
+The following opensource libraries are bundled:
+  -<del>ANTLR-runtime : Used to parse source files (grammar)</del>
+  - Parboiled: Used to parse source files (grammar)
+  - JavaOnTracks: My own java frameworks. I use some templating and database features.
+  - H2: I use this database for Indexing source code (completion etc...)

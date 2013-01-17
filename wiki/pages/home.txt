@@ -1,0 +1,46 @@
+======JOTWiki: Home======
+====What Does it do ?====
+JOTWiki is a "[[http://en.wikipedia.org/wiki/Wiki | Wiki]]", it allows you to create, edit, and link web pages easily without having to learn a difficult language like HTML.
+
+====Who is it for ?====
+Anybody who wants to:
+  * Have a website that can be edited on the fly without technical difficulties.
+  * Have a simple collaboration site, to share ideas, texts and documents in a central, always-online location
+
+====What are the Features ?====
+===Administration / Security===
+  * **No Dependencies**, all in one, all you need is a java application server.
+  * **Easy administration**: Web based administration screens, no need to fiddle with xml files and/or command-line.
+  * **Templates support**, so you can easily choose or make a nice look for your pages.
+  * Support for **multiple namespaces**, allowing you to have multiple "sites", with different looks and permissions within the wiki.
+  * **Full support for profiles, users and permissions**, allowing to allow or disallow any features per user (also support guests / unlogged users)
+  * **Captcha feature** (Image code verification) to prevent automated posts/comments by robots(Spam).
+  * **Mail server support**, to send you copy of posted comments automatically.
+  * **Automatic encryption of email addresses** to prevent Spam.
+  * **Built-in database** - No need to mess with configuring a separate DB.
+  * **Pages are save in plain text** on the file system, so they are easy to access, And older copies of pages are automatically backed up.
+  * **Automatic cleanup** of old files and logs (configurable)
+ 
+===Use===
+  * **Easy to use**, you can create and edit page in your browser in a simple edition pane with icons. [[screenshots#editPane]]
+  * Powerful, yet simple Syntax.
+  * **Automated edition locks**, so only one user can edit a page at a time, avoiding data loss.
+  * **Support(optional) comments** for your pages, so users can add comments.
+  * **Support(optional and configurable) for adding/Uploading images and files** to your pages easily.
+  * **Breadcrumbs feature**, so your users know what pages they have been through.
+  * **Source Code block support**, so you can easily add some source code in your page and it will be rendered in a nice box(uninterpreted).
+  * **Support for simple Boxes** to highlight Tips, warning etc...
+  * **Printer stylesheet**, so your page will print nicely.
+  * Basic mantis integration, if you want to link to your [[http://www.mantis.org | Mantis bug system]]
+
+===Indexing / Searching / Tracking===
+  * **Built-in search engine**, which will index automatically your content and provide a search form to users.(optional)
+  * **Built-in google sitemap generator**, so your content will be easily and efficiently indexed.
+  * **Built-in support for Google web-analytics**, just enter your Google Analytics ID.
+  * **Built-in support for [[http://www.AddThis.com/ | AddThis]]**, allowing users to easily add your pages to social-network sites.
+
+====How much does it cost ? (free)====
+JOTWiki is Free(open-source) **for non-commercial uses.**
+It his released under the "[[http://www.gnu.org/licenses/gpl-3.0.txt | GPL 3.0]]" for non-commercial uses.
+
+See [[License]] for more informations.

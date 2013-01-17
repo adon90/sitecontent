@@ -1,0 +1,109 @@
+====== JOT loop tag Example ======
+
+===== Java View =====
+<code | Java>
+	public void prepareViewData() throws Exception
+	{
+		String[] loopObject={"loopO1","loopO2","loopO3"};
+		Country us=new Country("US");
+		us.addCity(new City("Seattle"));
+		us.addCity(new City("Los Angeles"));
+		Country france=new Country("France");
+		france.addCity(new City("Paris"));
+		france.addCity(new City("Lille"));
+		Country germany=new Country("Germany");
+		germany.addCity(new City("Munich"));
+		germany.addCity(new City("Berlin"));
+		Country[] countries={us,france,germany};
+
+		addVariable("loop1", loopObject);
+		addVariable("countries", countries);
+                addVariable("number",new Integer(5));
+        }
+</code>
+
+
+
+
+===== HTML view (template) =====
+<code | Template>
+<html>
+<body>
+<jot:loop over="loop1" as="l1">
+<jot:var value="l1"/>
+</jot:loop>,
+<hr>
+<table border=1>
+<jot:loop over="countries" as="country">
+<jot:loop over="country" as="city" counter="cpt2">
+<tr>
+  <td>
+    <jot:var value="country"/>
+  </td>
+  <td>
+    <jot:var value="cpt"/>:<jot:var value="cpt2"/>-<jot:var value="city"/>
+  </td>
+</tr>
+</jot:loop>
+</jot:loop>
+</table>
+<hr>
+<jot:loop from="0" to="number">
+<jot:var value="cpt"/>,
+</jot:loop>
+<br>
+<jot:loop from="number" to="0" counter="mycpt">
+<jot:var value="mycpt"/>,
+</jot:loop>
+</body>
+</html>
+</code>
+
+
+===== Generated HTML =====
+<code | Html>
+<html>
+<body>
+0,1,2,3,4,5,
+<hr>
+<table border=1>
+<tr>
+<td>
+US
+</td>
+<td>
+0:0-US:Seattle
+</td>
+<td>
+0:1-US:Los Angeles
+</td>
+</tr>
+<tr>
+<td>
+France
+</td>
+<td>
+1:0-France:Paris
+</td>
+<td>
+1:1-France:Lille
+</td>
+</tr>
+<tr>
+<td>
+Germany
+</td>
+<td>
+2:0-Germany:Munich
+</td>
+<td>
+2:1-Germany:Berlin
+</td>
+</tr>
+</table>
+<hr>
+0, 1, 2, 3, 4, 5,
+5, 4, 3, 2, 1, 0,
+</body>
+</html>
+</code>

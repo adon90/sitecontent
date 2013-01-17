@@ -1,0 +1,59 @@
+======JavaOnTracks: Request counter / manager======
+
+This is a basic "cache" that stores how many request came from a particular host over a period of time (in memory).
+
+Oftentimes on a popular site it becomes necessary to "throttle" request, because of some heavy use / attcaks, such as:
+  * Overly aggressive search engine spider, punding your site
+  * "Stupid" spider looping forever over some dynamic links
+  * Users trying to mirror your site
+  * Deliberate Denial of service attacks
+
+So using this counter, you can set threshold and take action after a while, foe example "throttling" a user with over 100 requests in 10 minutes, throttling could be for example delaying each new request by 20 seconds.
+
+JavaDoc: http://java-on-tracks.sourceforge.net/javadoc/javaontracks/latest/javadoc/net/jot/web/JOTRequestCounter.htm 
+
+=====How of use=====
+====Example: protecting a login form from overuse====
+So that a "robot" cannot try random login/password very fast.
+<code>
+public class LoginFormController
+{
+    // cache data for 10 minutes. after that it goes away
+    public static JOTRequestCounter counter = new JOTRequestCounter(10);
+    // we want to allow only 10 requess in 10 mn
+    public static int maxRequestPerIPPer10Mn = 10;
+    // if more than that then we will block this IP for 1 hour
+    public static int blockIPForMn = 60;
+    Vector blockedIps = new Vector();
+    long blockedTime = new Date().getTime();
+
+    public void processRequest(HttpServletRequest request)
+   {
+// that would not work behind a proxy obviously
+        String ip = request.getRemoteAddr();
+        int value = counter.countRequest(request);
+        if (blockedTime > new Date().getTime() + blockIPForMn * 60000)
+        {
+            blockedIps.clear();
+        }
+        if (value > maxRequestPerIPPer10Mn)
+        {
+            blockedIps.add(ip);
+            JOTLogger.log(JOTLogger.WARNING_LEVEL, this, "Blocking Login request for: " + ip);
+        }
+        if (blockedIps.contains(ip))
+        {
+           // do nothing or send user to error page or something
+           return;
+        }
+        // process  login attempt
+   }
+
+}
+</code>
+
+====Using in a filter====
+If you want to protect your "whole"  application, you should probably use within a filter because:
+  * It can easily "intercept" all the requests and have them counted
+  * It is a common point of entry for requests where we can do the throttling.
+

@@ -1,0 +1,215 @@
+======LogHelper - ISA actions &_RFC calls tracing======
+It's quite difficult to follow the struts/layout flow and/or RFC calls from the huge config.xml.\\
+It's easier to track it at run time in the log file to see what happens when you take an action on the website.
+
+However it is difficult to read the SAP log files because the output is huge.
+
+So i wrote this little very useful utility here, which will tail the sap log file and only print out the relevant Struts action or RFC logs (one or the other or both, see the booleans), it's quick and dirty but very useful.
+
+Make sure to asjust SID[] with your own instance
+set  showRFC to true if you want to trace RFC's too.
+
+====Prerequities====
+In the most recent versions of ISA (5.0+), the tracing is disabled by default and need as easy to enable (tracing.isa.runtime is missing from log config.)
+
+Anyway SAP note: 975115 explains how to enable it.
+WARNING: unless you do this nothing will be logged by LogHelper !
+
+**Here is what to do to enable tracing (once):**
+  * Start and logon to J2EE Visual Administrator
+  * Access Server0 -> Services -> Log Configuration
+  * Click on Locations tab   on middle right
+  * Click on To Advanced Mode tab in upper right
+  * Click on New Button, lower right
+  * Enter new controller name tracing.isa.runtime in popup and click OK
+  * Do not need to enter anything else. **set Severity to DEBUG to enable tracing**
+  * Make sure the destination area has "applications_log" (if it's empty, add it).
+  * Click on Apply (save) icon
+  * Select Apply to current node or Apply to all server nodes, whichever is appropriate for your installation.
+
+When done with tracing revert severity to warning/error for better performance.
+Logs will go in /usr/sap/[SID]/JCxx/j2ee/cluster/server0/log (*.log and *.trc)
+
+====LogHelper.java====
+<code java>
+
+package com.pcf;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.RandomAccessFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.pcf.isa.core.util.SystemUtils;
+
+/*
+  It's quite difficult to 
+ follow the struts/layout flow and/or RFC calls from
+  the huge config.xml.
+  It's easier to track it at run time in the log file to see what happens
+  when you take an action on the website.
+
+	However it is difficult to read the SAP log files because the output is huge.
+
+	So i wrote this little utility here, which will tail the sap log file 
+	and only print out the relevant Struts actions or RFC logs 
+	(one or the other or both, see the booleans)
+	It's quick and dirty but very useful. 
+ */
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * For this to work with 5.0+ you need to apply SAP note: 975115
+ * or see: 
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+ */
+public class LogHelper implements FilenameFilter
+{	
+        // sometimes logs endup in this (weird) location (some early 5.0 versions)
+        public static final boolean LOGS_ARE_IN_IPC_FOLDER=false;
+	// change those as needed
+	// possible instance names.
+	static String[] SIDS={"ZTB/JC00","ZDA/JC01","ZMS/JC01"};
+	static String SID=SIDS[0];
+	
+	static boolean showRFC=false;
+	static boolean showStruts=true;
+	// and maybe that one too if on linux, or different instance number etc ...
+	static String logFolder=null;
+	static String sapRoot=null;
+
+	static Pattern patternStruts=Pattern.compile("\\[actionclass\\]=.*");
+	static Pattern patternRFC=Pattern.compile("\\[funcname\\]=.*");
+
+	static
+	{
+		int sidid=0;
+		String root="";
+		
+		if(SystemUtils.isLinux())
+		{
+			sapRoot="/usr/sap/";
+		}
+		else
+		{
+			sapRoot="C:/usr/sap/";
+		}
+		
+		while( logFolder==null || ! new File(logFolder).exists())
+		{
+			SID=SIDS[sidid];
+                        if(!LOGS_ARE_IN_IPC_FOLDER)
+                            logFolder=sapRoot+SID+"/j2ee/cluster/server0/log/";			
+                        else
+                            // what a stupid folder to put the logs in !!!!
+                            logFolder=sapRoot+SID+"/j2ee/cluster/server0/apps/sap.com/crm~ipcpricing/servlet_jsp/ipcpricing/root/WEB-INF/logs/";			
+                            
+			// if none found it will crap out (out of bound), which is fine.
+			sidid++;
+		}
+		System.out.println("Found Log Folder: "+logFolder);
+	}
+	
+	public void tail() throws Exception
+	{
+		String lastRecent="";
+		String mostRecent="";
+		long lastModified=0;
+		long length=0;
+		
+		while (true)
+		{
+			// finding most recently modified file
+			String[] files=new File(logFolder).list(this);
+			for(int i=0;i!=files.length;i++)
+			{
+				long modifDate=new File(logFolder,files[i]).lastModified();
+				if(modifDate > lastModified)
+				{
+					lastModified=modifDate;
+					mostRecent=files[i];
+				}
+			}
+			if(!mostRecent.equals(lastRecent))
+			{
+				System.out.println("\n**Switching to : "+mostRecent+" **\n");	
+				lastRecent=mostRecent;
+				length=new File(logFolder,mostRecent).length();
+			}
+			
+			File file=new File(logFolder,mostRecent);
+			
+			String s="";
+
+			// reading the file.
+			RandomAccessFile f=new RandomAccessFile(file,"r");
+			if(f.length()>length)
+			{
+			f.seek(length);
+			while((s=f.readLine())!=null)
+			{
+				//matches struts actions
+				Matcher matcher=patternStruts.matcher(s);
+				if(showStruts && matcher.find())
+				{
+					s=matcher.group();
+					System.out.println(s);
+				}
+				// matches RFC calls
+				matcher=patternRFC.matcher(s);
+				if(showRFC && matcher.find())
+				{
+					s=matcher.group();
+					System.out.println(s);
+				}
+			}
+			length=f.length();
+			}
+			
+			f.close();
+
+			Thread.sleep(1000);
+		}
+		//System.out.println("done");
+	}
+	
+	public boolean accept(File dir, String fileName)
+	{
+            if(!LOGS_ARE_IN_IPC_FOLDER)
+		return fileName.startsWith("defaultTrace");
+            else
+                return fileName.startsWith("isaruntime");
+                
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args)
+	{
+		System.out.println("starting");
+		LogHelper helper=new LogHelper();
+		try
+		{
+			helper.tail();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		System.out.println("stopping");
+	}
+
+}
+</code>
+
+====Here is an example output====
+<code>
+**************Start Live input*****************
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket' [forward]='/b2c/basketcheckout.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout' [forward]='UIStoreLayout;UIStoreForward:basketorder;UIAction:/b2c/secureLogin.do' [exectime]='1516'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin' [forward]='UILayout:loginLayout[workarea=login]' [exectime]='16'#
+</code>

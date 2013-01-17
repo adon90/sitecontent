@@ -1,0 +1,94 @@
+======Creating a QEMU image and installing Debian in it======
+
+The goal of this is to create a small clean Debian image i can use later for testing software installation etc...
+I will among other things use this to test installation of [[http://www.jotwiki.net/ | jotwiki]] on different distros.
+
+I also created images of other popular distros for the same purposes.
+
+=====Creating a debian image=====
+Download the debian installation CD (the smallest one i can find):
+
+<code>
+cd ~/qemu/
+wget http://debian.osuosl.org/debian-cdimage/current/i386/iso-cd/debian-40r3-i386-businesscard.iso
+</code>
+
+Create a disk image(ex: fake hard drive), in the case of debian, i make it ~750M, this should be enough for my needs.
+<code>
+qemu-img create debian.img 750M
+#or use qcow format for smaller image
+qemu-img create -f qcow debian.qcow 750M
+</code>
+
+Then start the Debian installation CD with QEMU and our new image as the HD.
+<code>
+qemu -cdrom debian-40r3-i386-businesscard.iso -hda debian.img -boot d
+</code>
+
+and follow through the Debian install:
+  * Choose a language, country and keyboard mapping
+  * Set the host and domain names and choose a server to download other components from
+  * Then i choose 'manual partitioning' and create just one / partition using the whole disk (simpler for this purpose). Type: ext3. then save the partition to disk.
+  * I don't bother setting a swap in this case, my machine as lots of memory anyway.
+  * Select your timezone
+  * create the root and a user accounts
+  * after that it will start installing the system, retrieving packages from the ISO and network. (takes a while)
+  * software to install: standard system only
+At the end it will reboot.
+**Reboot will fail, juts stop qemu (CTRL-C)**
+
+Now you can boot the new clean debian install '' qemu -hda debian.img''
+
+After that i have a fully functional 'vanilla' debian system, so i make a copy of that, so i can always go back to that after i play with it:
+
+<code>
+cp debian.img debian_vanilla.img
+</code>
+
+
+====Resizing the QEMU image====
+I originally created my image with a size of 500MB, but Debian base install used like 95% of that, so i decided to resize it to 750MB to have ~300MB to play with. 
+<code | resizing qemu image>
+# create a copy of the image in raw format
+qemu-img convert debian.img -O raw debian.raw
+# Expand the raw image to 750MB by padding with zeroes
+# obs=block_size. seek=nb block size of expanded image. So here 750*1MB = 750 MB
+dd if=/dev/zero of=debian.raw seek=750 obs=1MB count=0
+# recompress the raw image into in qemu format(qcow), uses only space needed.
+qemu-img convert debian.raw -O qcow debian_new.img
+#test new image
+qemu -hda debian_new.img
+# cleanup
+rm debian.raw
+mv debian_raw.img debian.img
+</code>
+
+Note that at this point the hard drive image is larger, but our Debian partition is still the old size(small) and the expanded part of the disk is currently unused.
+
+Here since i have only one partition i can just resize it with fdisk.
+WARNING: **if you have more parttions, or are not comfortable with fdisk you might will better of using something like qparted etc... or a partition resizing disk.**
+
+<code>
+# WARNING: this is dangerous, only safe with one partition which was increased in size.
+sudo fdisk /dev/hda
+# press 'd' to delete the only partition(partition 1)
+# then press 'n' for new, 'p' for primary, and 'enter' twice (to use the whole disk)
+# press 'a' then '1' to make the partition active/bootable
+# press 'w' to write the partition and quit fdisk
+# then reboot so it will remount the partiton
+</code>
+
+Now the parttion is the right size, but it's still formatted the wrong size, so we need to "reformat" it to the right size (without loosing the data)
+**If you used a disk resize tool like parted, you don't have to do this manually**
+<code>
+resize2fs /dev/hda1 710M
+</code>
+
+=====Others distros=====
+
+TODO:
+
+pclinuxos
+ubuntu
+opensuse
+fedora

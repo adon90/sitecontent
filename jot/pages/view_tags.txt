@@ -1,0 +1,187 @@
+====== JOT View Tags ======
+Tags can be within each others, ie: loop in loop, loop in block etc ... 
+
+===== Variable tag =====
+This is the tag to use, to add a dynamic variable to your view.
+
+<code html>
+<jot:var value="myVar" default=""/>
+</code>
+
+**value**= is the string,number or variable to be evaluated.
+**default**= is optional, it is used to set a default value if value is null or can't be resolved.
+
+value will be replaced by the actual variable value defined in \\
+view.addVariable(varname,value);
+
+NOTE: **myVar** can be a variable or an expression, for example:
+  * userName
+  * user.name   (same as user.getName())
+  * user.getName()
+  * user.getPermissions().isadmin
+  * user.ID     (Whereas ID is a public field)
+  * function or getFunction() -> Call a custom function defined by you in the view.
+.
+
+
+See an example: [[JOT variable tag]]
+
+===== Loop tag =====
+<code html>
+<jot:loop over="loopObject" as="item" counter="cpt2">
+This is line # <jot:var value="cpt2"/>
+</jot:loop/>
+</code>
+
+**over**= LoopObject is a loopabale object(Object[],Collection or Hashtable) that was added to the view using:\\
+view.addVariable(loopName,value);
+
+**as**= is the name of the loop iteration variables. ex: loop over="users" as "user"
+
+**counter**= is optional, it is used to set a custom counter variable name (default:cpt).
+
+An alternative is to use a fixed looping range (say from 1 to 6), here is the syntax for that:
+<code html>
+<jot:loop from="0" to="someVar">
+This is line # <jot:var value="cpt"/><br>
+</jot:loop/>
+</code>
+
+**To**= and **From**= can be variables (must be of type Integer)
+
+**counter**= is optional, it is used to set a custom counter variable name (default:cpt).
+
+
+Note: this will run the loop from 0 to 5 included (the loop will run 6 times: 0,1,2,3,4,5)
+
+
+Note: If from is superior to to, then it will count backward (example: from="3", to="1" : 3,2,1)
+
+
+See an example: [[JOT loop tag]]
+
+===== Remove Tag =====
+
+This is used when you have html code you want to display in the template (ie: fake data when editing in say Dreamweaver), but you want it removed from the processed template.
+
+You can also use it to "comment out" a piece of the template.
+
+Note: the code in between tags is removed all-together and never even parsed or evaluated.
+
+
+<code html>
+<jot:remove> ... html content ... </jot:remove>
+</code>
+
+
+===== Standard Tags Overriding=====
+
+One of the most powerful thing is to customize standard html tag.
+
+Any tag can be customized by adding a jotid property to the tag
+
+WARNING: JOTID **MUST** BE THE FIRST PROPERTY OF THE TAG !
+
+
+You use view.addTag(tag) to set a tag.
+
+The tag can be customized in the following ways:
+  * tag.setVisible(false)   if a tag is set to not visible it will be removed all-together from the generated HTML (and all it's content).
+  * tag.setContent("newContent"), everything within the tag will be replaced by "newContent"
+  * tag.setTagProperty("class","myCss") replace a tag property by a new value (or add the property if it does not exist yet.) 
+
+<code html>
+<div jotid="div1"> ... some html content ... </div>
+<!-- or it can also be just one line-->
+<img jotid="div1"/>
+</code>
+
+See an example: [[JOT standard tag]]
+
+===== Block Tag =====
+
+A block tag is the same thing as the previous tag, except it id standalone (does not need an HTML tag)
+
+You use view.addBlock(block) to set a tag.
+
+The block can be customized in the following ways:
+  * block.setVisible(false)   if a tag is set to not visible it will be removed all-together from the generated HTML (and all it's content).
+  * block.setContent("newContent"), The block (including the tag) will be replace by "content"
+
+<code html>
+<jot:block id="block1"> ...html... </jot:block>
+<!-- or it can also be just one line-->
+<jot:block id="block1"/>
+</code>
+
+See an example: [[JOT block tag]]
+
+=====If Tag=====
+The If Tag let you do something conditionally
+You can prepand the variable by ! to do a negation
+The eval will return:
+  * If the variable is a Boolean, it's value
+  * Otherwise true if the variable exists or is not null, false if it is null and exists.
+
+<code>
+<jot:if eval=" admin">
+  Welcome admin
+</jot:if>
+
+<jot:if eval="! admin">
+  Welcome guest
+</jot:if>
+</code>
+
+See an example: [[JOT If Tag]]
+
+=====Include Tag=====
+The include Tag simply let's you import another piece of template within this one.
+The included file will be parsed.
+
+<code>
+<jot:include file="header.inc.html"/>
+</code>
+
+See an example: [[JOT Include Tag]]
+
+=====Url Tag=====
+The URL tag lets you build a relative URL to the current path.
+
+<code>
+<jot:url path="somefile.pdf"/>
+</code>
+
+See an example: [[JOT Url Tag]]
+
+=====Form Tag=====
+The form "Tag" lets you easily manipulate an HTML form from the java side.
+
+<code>
+  <form jotclas s="com.comp.MyForm" action="submitlogin.do" method="post">
+  Login:<input name="login">
+  Password:<input name="password" type="password">
+  <input type="submit">
+  </form>
+</code>
+
+**jotClass**= is the Form class to be called/used to process the form.
+
+The Form element **name=** is being used has the key to manipulate it.
+**EXCEPT** for the radio button<input type="radio">, <option> and <optgroup> for which "name" means something else, in this case use **dataId=**
+Example:
+<code>
+  <form  jotclas s="com.comp.MyForm" action="submitlogin.do" method="post">
+    <input type="radio" dataId="radio1" name="rr">
+    <select name="select1">
+    <optgroup dataId="grp1">
+    <option dataId="opt1" value=">blah
+    </optgroup>
+    <select>
+  </form>
+</code>
+
+WARNING: **name= (or dataId=) MUST** be the first property of the tag.
+
+
+See an example: [[JOT Form Tag]]

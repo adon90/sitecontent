@@ -1,0 +1,558 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== Installation of NWDI 2004s ======
+
+WARNING: ** While this should still be helpful, we decided to stop using the NWDI as we had too many issues with it. see [[b2c no nwdi | here]] for more infos on that.**
+
+On Linux Suse 9.x (x86_64)
+
+=====Docs:=====
+nw2004s_oracle_linux_install.pdf\\
+\\10dp380194\sapdocs\2004s\  
+
+help.sap.com doc:\\
+[[http://help.sap.com/saphelp_nw04s/helpdata/en/01/9c4940d1ba6913e10000000a1550b0/frameset.htm | link]]
+
+Notes: 851251: (2004s linux install)\\
+[[https://websmp101.sap-ag.de/~form/sapnet?_FRAME=CONTAINER&_OBJECT=012006153200000237112005 | link ]]
+
+171356: (general linux install)\\ [[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=171356&_NLANG=E  | link ]]
+
+300900: DEll note\\ 
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=300900&_NLANG=E  | link ]]
+
+797084: Suse9 note \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=797084&_NLANG=E  | link ]]
+
+851169: Oracle / linux note \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=851169&_NLANG=E  | link ]]
+
+861215: linux x64 IBM jvm recommanded settings\\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=861215&_NLANG=E  | link ]]
+
+925796: JDI java components import issues\\ [[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=925796&_NLANG=E | link ]]
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+
+=====suse upgrade notes=====
+After installing suse from DVD's, upgrade/patch it.
+
+Note: we have a suse backup image from this point: made on feb 16 or so.
+
+To upgrade suse: go in Yast2, then "online update"\\
+use the "ireland" server as it's faster\\
+
+**YOU MUST CLICK "RELOAD ALL PATCHES FROM SERVER"** to get the new patches and also check 
+"manualy choose patches"
+
+Update only the kernel first (to >=2.6.5.7-139)\\
+Then reboot and come back in yast2 to upgrade everything else (except nvidia and auto4fs and patch '9974' : skip those)\\
+Copy the sap_cds on the hard drive (ie: from b2btst /root/suse_cds and set them up in yast as the sources of install, that way we can install missing software without having to insert the cd's.
+
+=====installing the SAP stuffs=====
+
+Might have to install samba-client with yast2 first to get smbmount.
+# mount the sapcd folder for easy access to needed software
+<code>
+mkdir /mnt/sapcd
+smbmount //10dp380194/sapcd /mnt/sapcd/ (no password)
+</code>
+
+**DO NOT Installed Java from suse** ! (if installed, remove it with YAST)
+
+Install the special IBM SAP jvm from [[https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=javasap | here ]]
+
+Avail also on thor is/sap-downloads/IBM-jvm and /mnt/sapcd/java/ibm-jvms once mounted
+
+<code bash>
+rpm -Uvh /mnt/sapcd/IBM-jvm/IBMJava2-AMD64-142-SDK-1.4.2-2.0.x86_64.rpm
+#copy the ibm conf file (made by thib)
+cp /mnt/sapcd/IBM-jvm/IBMJava2.conf /etc/java
+</code>
+
+And then run ''SetDefaultJava'' to get java linked
+Then run ''source setJava Java2'' to get java setup and added to your env right away. (note: if open shells are opened, reatsrt them too to refresh the env.)
+
+Verify java is installed 'java -version' shoudl work
+
+=====start the sap installer=====
+
+''cd /mnt/sapcd/51031407_crm50_nw2004s_master/IM_LINUX_X86_64''
+Ran sapinst (''./sapinst'')\\
+Run the prerequities checks <sap system>-Lifecycle-preparation-prerequities/check
+(central service instance - java)
+
+Several issues: (All covered in the suse note(s))
+
+====Issue 1: install sapinit====
+
+see note #171356 + #797084
+
+Note: it was already installed, however sapinst thought it was'nt (maybe it was a too old or unsupported version)
+
+So deinstall (invalid)sapinit package in yast2 then reinstall using the following rpm:
+delete sapinit package in yast2 then reinstall using the downloaded rpm:
+
+from http://ftp.suse.com/pub/projects/sap/SLES9/x86-64/packages/ (also in /mnt/sapcd/suse)
+
+''rpm -ivh suse-xxxxx'' (it came with Suse SP3, yet the cd sapinst would complain it's not there anyhow)
+
+Note: it requires "compat" and "sysstat", install with yast2 if they are missing.
+Once installed, run ''/etc/init.d/sapr3'' start (as root)
+
+====Issue 2: Sap locales (same note #171356)====
+
+From the note download the attachment \\
+https://websmp201.sap-ag.de/~sapidb/012006153200000442092005E/
+
+saplocales_sles9_x86_64_version-7.zip
+(note: saved on /mnt/sapcd/suse)
+
+unzip it
+
+install the extracted rpm:
+''rpm -ivh saplocales-xxx.rpm''
+
+Note: this need to be reinstall everytime the kernel or glibc are modified (upgrade) !!!
+
+====Soft hard resources limits (Note #797084)====
+
+Number of "file descriptors"\\
+Edit: /etc/security/limits.conf\\
+and add the following lines to it:\\
+<code>
+* hard nofile 4096
+* soft nofile 4096
+</code>
+
+These changes take effect after you log off and log back on again (thib: just source /etc/profile)
+
+Edit /usr/lib/java/jre/lib/security/java.security and replace /dev/random by /dev/urandom if present (not prsent in IBM jdk it seems)
+
+After changing all this, it's recommanded to reboot (to force reload of the shm etc.. settings)
+
+=====Install=====
+
+Connect to the machine with an X session (Window manager recommanded or it doesn't refresh right)
+Go back in /mnt/sapcd/51031407_crm50_nw2004s_master/IM_LINUX_X86_64
+
+Run ''sapinst'' and install netweaver2004s/systems with usage types/oracle/central system/central system install.
+
+Type of install "AS-Java" and "DI"
+When it asks for the java dvd, browse to: \\
+/mnt/sapcd/51031372_nw2004s_javacomponents
+
+For java path use: /usr/lib/java
+
+When it asks for the java crypto files, browse to: \\
+https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=jcesdk\\
+/mnt/sapcd/java/Java Cryptolib ssl/ibmjce1.4.2.zip
+
+System ID: ie: PDI\\
+DB ID: ie: PDI
+
+Enter password/login for sapmaster(xxx) and oracle (xxx)\\
+Keep the default memory setting if it seem ok (i used 2000MB, because java will need a bunch)\\
+java schema password: xxx
+
+When it asks for the oracle dvd, browse to: /mnt/sapcd/51031244_oracle10.1_linux64
+
+Secure store settings / keyphrase: xxx \\
+SCS instance: 00 (default) \\ 
+CI instance: 01 (default) \\
+For UME: use java database \\
+Admin/SDM password: xxx
+
+Then it will ask for the kernel 7 dvd: \\
+/mnt/sapcd/51031391_2004s_kernel7_lin_win
+
+And also the Oracle client CD: \\
+/mnt/sapcd/51031518_oracle_client10.2
+
+**If this is going to be the SLD server (jdiprod) as well**\\
+Choose "Configure local SLD"\\
+server: jdiprod\\
+user: SLDUSER\\
+password: same as master pass\\
+**Else (not SLD server) :**
+Register into the SLD: jdiprod.pcf.com 50000 / administrator / xxxx \\
+ADS admin password .. same as admin password \\
+NWI passwords: same passwords for all 3 users (same as master password) \\
+** end if ** \\
+
+Installation will start .....\\
+After step 8 if will ask to do the oracle setup
+
+Note: There are permissions problems, so first we need to run as root (as explained in the pdf):\\
+''chown orapdi /oracle; chgrp dba /oracle; chmod 775 /oracle''\\
+
+
+log as orapdi (su - orapdi)\\
+export the display (not bash) to your X: ''setenv DISPLAY 10.10.1.194:0''\\
+run 'umask' and verify value is 22 (if not it need to be set to 22, see doc)\\
+''cd /oracle/stage/101_64/db/Disk1/SAP/'' (**NOT /mnt/sapcd ...** BUT The one is THE SAP folder !)\\
+''./RUNINSTALLER''
+
+Then it will ask to run /oracle/orainventory/oraInstRoot?.sh, do so in another shell as root ... then press continue
+
+File locations default should be good\\
+Component selection should be left alone
+
+Oracle install will run then it will ask to run another script as root:\\
+''/oracle/PDI/101_64/root.sh'' .. do it on the root shell\\
+It will install binaries etc ... in /usr/bin and start the DB\\
+Go back to the oracle installer GUI and click OK\\
+Cancel the network configuration assistant, then exit the oracle installer.
+
+**DO NOT COMTINUE THE SAP INSTALLATION YET !** We need to install the oracle patches first
+
+Now we need to install the latest Oracle pacthes (10.1.0.4)\\
+Downloaded form 'sap market place' and copied into\\ 
+/mnt/sapcd/Oracle_patches/10.1.0.4_linux64
+
+Reattach the patch pieces together (note: 509314)\\
+<code>
+cat PSET_10104_LINUX-X86-64AA.BIN Pset_10104_Linux-x86-64ab.bin Pset_10104_Linux-x86-64ac.bin >> PSET_10104_LINUX-X86-64.zip
+unzip this new zip
+unzip PSETxxxxxx.zip
+</code>
+
+Install the patchset\\
+do this as orapdi:\\
+''su - orapdi''
+''cd /mnt/sapcd/patches/Oracle_patches/10.1.0.4_linux64/PSET_10104_LINUX-X86-64/Disk1''
+
+As root: stop cssd ''/etc/init.d/init.cssd stop'' to stop the oracle processes and also kill the tsnlstnr process if running(''kill -9'')
+
+Back as orapdi\\
+''./runinstaller''
+
+File locations should be ok by default\\
+Patch then should get installed, at the end it will ask to run as root:\\
+''/oracle/PDI/101_64/root.sh'' => (use /usr/bin and not /usr/local/bin to be consistent with installer!)\\
+do it then press "ok" and complete the oracle patch installer.
+
+Possibly install extra patches to the patchset if necessary (didn't do)
+<code>
+#su - orapdi
+#cd $ORACLE_HOME
+#mkdir .patch_storage
+#cd OPatch
+#check current patches: ./opatch lsinventory
+#./opatch apply -verbose /mnt/sapcd/Oracle_patches/10.1.0.4_linux64/.....
+</code>
+
+Back in the SAP installer click "ok" to continue the install\\
+Rest of install should complete succesfully.\\
+Note: The SLD step (if you are setting a SLD system) will take 1-2h\\
+
+Note: it seem to fail at step 24 "start java engine" seems to be out of memory issue (it does it when the machine as 4GB, but not when it has 8GB)\\
+
+My solution is while it is running (retry), login as pdiadm and do stopsap, then startsap ... \\ that seem to work .... probably clens up some memory.
+
+At this stage it's good to reboot to free some memory before installing the patches.
+
+=====post intsall=====
+
+====Get a license====
+
+start the admintool and go to the license adaptor and get the hardware key\\
+then go to service.sap.com/licensekey to get the key and install it in visual admin.
+
+====Installing the service pack (sp6, sp7)====
+
+Get the doc here:\\
+https://websmp202.sap-ag.de/maintenanceNW2004s \\
+See [[\\10dp380194/sapdocs/2004s/nw2004s_SP_stack_guide_sp06.pdf]]
+
+See note 879289 (support package guide note) \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=879289&_NLANG=E | here ]]
+
+and Note 891983 (JSPM: Central SAP Note SAP NetWeaver? 2004s) \\
+[[https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=891983&_NLANG=E | here ]]
+
+#Got the stack here: https://service.sap.com/sp-stacks (need to allow popups)
+#got the nw2004s stack and add the files to the basket and use the download manager to save them 
+
+and use download manager to get them
+#they are in /mnt/sapcd/patches\nw2004s_patches\spxx\jspm
+
+Use JSPM as explained here (or see section 2.2 of the PDF).
+Do all JSPM stuffs as pdiadm.
+
+copy all the patch files (SAR,JAR etc ...)
+
+Note: I had to create those folders manually as root and then chown them to pdiadm
+
+<code>
+mkdirhier /usr/sap/trans/EPS/in
+cp /mnt/sapcd/patches\nw2004s_patches\spxx\jspm\*  /usr/sap/trans/EPS/in
+
+#also we need to copy the linux specific stuffs (kernel)
+cp /mnt/sapcd/patches\nw2004s_patches\spxx\jspm\KU_LINUX_X86_64\*  /usr/sap/trans/EPS/in
+
+chown -R pdiadm /usr/sap/trans/
+</code>
+also recommanded to copy the lastest sapcar executable in there
+
+WARNING: If your version is SP4 or lower (SP4) we need to update/fix the JSPM first
+
+(as pdiadm)
+<code>
+cd <SDM_HOME> (/usr/sap/PDI/JC01/SDM/program)
+./StopServer?.sh
+./sdm.sh jstartup mode=standalone
+./sdm.sh systemcomponentstate mode=activate
+./sdm.sh jstartup mode=integrated
+./StartServer?.sh (this fixes the SDM once and for all)
+</code>
+
+Update the JSPM sar using the JSPM (yes indeed !)\\
+start (as pdiadm) "go" in /usr/sap/PDI/JC00/j2ee/JSPM/ (takes a while for the gui to comeup)
+
+Enter the password to login the SDM\\
+do "single package" and choose the JSPM patch, select it & click next\\
+once status says "deployed" press exit to stop the JSPM (might have to kill 'go' if it does't die)
+
+Now we can restart the JSPM to update the other components\\
+start (as pdiadm) "go" in /usr/sap/PDI/JC00/j2ee/JSPM/
+
+Enter the password to login the SDM\\
+for nwdi package control choose "not under nwdi".
+
+Do "support stack" and select the linux stack XML file.
+
+**DO NOT CHECK** the "restore settings" box, it is broken as of now (4/20/06)
+
+Update should complete after a while (1-2h).
+
+====POST CONFIG: SLD====
+
+**ONLY** if this is going to be the central SLD server\\
+See nw2004s_SLD_postinstallguide.pdf
+
+Note: didn't do anyhting special about users since the installer already created the SLDUSER user (for data supplier)
+
+and the administrator user got the sdl_administrator role automatically assigned and this is probably enough for us.
+
+Need to update the SLD content first or problems with CMS build dependencies later(see note 669669) \\
+https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=669669&_NLANG=E
+
+go in SLD (http://localhost:50100/sld/) as administrator
+go into administration/import and import\\
+e:\sapcd\sld_content_data\cimsapxx.zip (will take a mn)
+
+then import e:\sapcd\sld_content_data\crdeltaxx.zip (will take ... a while ... 20mn+)\\
+(Note cimsap and crdelta can be found in marketplace)
+
+====POST CONFIG: DI====
+
+doc: isa50devandextguide.pdf\\
+doc: http://help.sap.com/saphelp_nw2004s/helpdata/en/d8/217b426af4b767e10000000a155106/frameset.htm
+
+Install the DI template .....\\
+<code>
+cd /usr/sap/PDI/SYS/global/TemplateConfig?/
+chmod +x cfgtemplategui.sh
+./cfgtemplategui.sh
+</code>
+choose "apply"\\
+Template: JDI-DTR_and-CBS\\
+InstanceDir?: /usr/sap (not /sapmnt)\\
+change global sap dir to: /usr/sap\\
+next,next,next,finish :-) \\
+
+====Recommanded memory settings:====
+
+Setup the JVM settings for each server node(using configtool) according to this note: 861215\\
+https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=861215&_NLANG=E
+
+note: server1 does need 2048M or more, whereas server0,2 probably can do with less (768M)
+
+Be careful, if you make a typo in those args, the j2ee won't start !
+Server: 
+<code>
+-Xgcpolicy:gencon -Xms2048m -Xmx2048m -Xmn400m -verbose:gc -Xtrace -Xsoftrefthreshold3 (-Xsoftrefthreshold1 if sp<5)
+</code>
+Dispatcher:
+<code>
+-Xgcpolicy:gencon -Xms200m -Xmx200m -Xmn70m -verbose:gc
+</code>
+
+Note: it seems the JDI template or something else overwrite this, then it would not boot up ...
+So that is why we do it last (after JDI template).
+
+The reason it would not start is that it added some "-XX" jvm args, that where **not recognized by the IBM vm**, so remove those
+
+====Start scripts to match solaris setup====
+
+created /usr/local/adm folder\\
+in there created SAP-startup.sh with content ''su - pdiadm -c startsap'' \\
+and created SAP-shutdown.sh with content ''su - pdiadm -c stoptsap''\\
+and add ''su - orapdi -c /oracle/PDI/101_64/bin/tnslsnr &'' to /etc/init.d/boot.local\\
+''Chmod +x'' all three
+
+====Other fixes:====
+
+To get Other thinsg to work right: ie CBS fodler creation later, had to do this:\\
+''chown -R pdiadm:sapsys /usr/sap/''
+
+Once, on first reboot would not start, had to: ''chmod 775 /usr/sap/tmp/dev_coll.tmp'', this is probably a one tme thing because i started it as root by accident once, anyway can't hurt...
+
+SLD would fail starting after reboot, error messages did clue how to fix:\\
+in the SLD web interface (http://localhost:50100/sld/ ) under admin/profile\\
+change objectmanager/bufferinstances to false\\
+
+====Reboot====
+
+At this point reboot so we can see if it all works
+
+====Starting the serverAfter boot, as root:====
+
+''/usr/local/adm/SAP-startup''
+
+Check that all seem to run fine using those tools:\\
+http://localhost:50113/ (run the MMC console and see if all server nodes are running/green)\\
+http://localhost:50100/nwa (see it's running, see logs)
+
+Can also use the admin tool to check the log files.\\
+http://localhost:50100/sld to check SLD is running properly\\
+http://localhost:50100/devinf to check the JDI (CBS,CMS,DTR etc ...)
+
+====CBS issue====
+
+The CBS was not finding java, because it did not get set automatically.
+
+In visual admin / server1 / services / component build service, set build_tool_jdk_home to /usr/lib/java then press update
+
+set jdk1.3.1_home to /usr/lib/java (replace the '?') then press update
+
+restart the j2ee engine
+
+**Basic config completed**
+
+==== Exclude from deployement issue ====
+
+WARNING: The "exlude from deployement" column does not show up in the CMS track creation screen and **that will cause SIGNIFICANT problems later if ignored**(the vanilla b2c will be replaced on the server).
+
+See SAP note: 937171.\\
+Basically we need to Patch 1 of the DICMS component (wether using SP5 sp6 or sp7)\\
+For SP7 it's available here (hard to find):\\
+https://smpdl.sap-ag.de/~swdc/012002523100000255562006D/DICMS05P_1-10003499.SCA?_ACTION=DL_DIRECT 
+
+Install it with the JSPM (individual package).
+
+====Backup====
+
+If all this worked fine, run a full backup before continuing and inserting things in the DTR/CBS.
+
+Note: we have a backup image from this point: made on may 18.
+
+
+This backup contains SP7 (with SP7_p1 for DICMS), also domain is defined and SLD content as of april 06.
+
+It contains no tracks or any other data.
+
+=====Setting up DI / creating the domain / track=====
+
+<del>There seem to be permissions issues, I end up, going in the user management and give ALL available roles to "administrator" and simply use this to create the track etc ...  not sure that is a good idae though.</del> Actually seem to work in the end but only works right in IE and not on MY IE for some reason .. odd.
+
+
+The users where created by the installer for us already\\
+Go to http://jdiprod:50100/devinf\\
+Log as NWDI_ADM
+
+WARNING: This only seem to work right in I.Explorer, also the site (ie: http://jdiprod.pcf.com needs to be added to the local list of trustes sites, and popups need to be enabled)
+
+
+
+====creating the domain====
+
+Click on the CMS link and log as NWDI_ADM administrator if necessary this should go to "domain" in the landscape configurator\\
+cmsurl: http://jdiprod.pcf.com:50100\\
+cmsuser: NWDI_CMSADM\\
+cms password: <password for cmsadm>\\
+sld url: http://jdiprod.pcf.com:50100\\
+Then save, it will take a bit to save (10mn)....
+
+Press "update CMS" to make sure we have the latest.
+This will take a few minutes.
+
+====creating the CRM extension track====
+
+In the track data tab (where you should already be after creating the domain) create the track\\
+type: DTR\\
+track id: CRM\\
+description: track for crm extension\\
+DTR url: http://jdiprod.pcf.com:50100/dtr \\
+cbs url: http://jdiprod.pcf.com:50100 \\
+config path: leave blank 
+
+In software components (on the same screen) add the following components: (use the name filter to find those and add them)\\
+And ONLY those:\\
+custcrmprj **This one is suppose to be in the latest SLD content, however it was missing ... need 3sp1+ !** \\
+sap-shrweb (this and others: 5.0)\\
+sap-shrapp (**source only / exclude from deployment**)\\
+sap-crmweb (if modif crm web)\\
+sap-crmapp (if modif crm code  **source only / exclude from deployment**)\\
+sap-crmdic (if modif database tables)\\
+
+do **NOT** import those, or all will fail.
+
+sap-crmjav (sap java code)
+sap-shrjav (sap java code)
+
+Go into the "runtime systems" tab and add the available dev, test, prod etc ... machines (b2c, t2c, p2c etc ...)\\
+ie: host: b2cdev, sdm port: 50118, j2ee url: http://b2cdev.pcf.com:50100/ j2ee engine user/password : (administrator/****)\\
+
+Then Save the track by pressing "save"
+
+====import the SCA's into the track====
+
+Get the sca's from http://service.sap.com/patches (see e:\sapcd\jdi70_components)
+
+NOTE: i found some packages missing/not working after reporting to sap they created this note: 925796
+
+https://websmp205.sap-ag.de/~form/handler?_APP=01100107900000000342&_EVENT=REDIR&_NNUM=925796&_NLANG=E
+
+Browse to: Support Packages and Patches/SAP Application Components/SAP CRM/SAP CRM 5.0/Entry by Component/CRM Java
+
+** Note that need to be SP3 Patch 1 at least (see note 925796)! ** \\
+The CRMWEB,CRMAPP,CRMJAV, SHRWEB,SHRAPP, SHRJAV should be at least SP03 patch1 to fix the problem of missing crm/ext folder. (Note: this also means it probably needs "Basis and Basis ABA Patch 6","BW 7.0 patch 6" and "AP Component Patch 3 (IPC related) installed on the CRM box."
+
+SAP realeased it to fix the problems mentionned before and others.
+
+Found them all and added to download basket and download them all in /mnt/sapcd/jdi700_components
+
+Note infos\\
+<del>tealeaf.sca and struts.csa should be retrieved from CRM5-JAVADVD \J2EE_OSINDEP\UT_CRM (DVD: 51031405)\\
+Other SCA's shoudl be retrieved from marketplace (tealeaf and struts will be added to marketplace as well according to SAP support)</del> They are now available on marketplace as well\\
+
+Here is the current list: \\
+{{scas.jpg}}
+
+copy them in the inbox\\
+as pdiadm:\\
+''cp /mnt/sapcd/jdi700_components/* /usr/sap/JTrans/CMS/inbox/''\\
+Go in transport studio / chek-in\\
+Select all the components and press "check-in"\\
+Once this is done, go to the "developement" tab\\
+Select all the components "select all" and click "import"
+
+This should run for a while ...
+
+Do the same for consolidation (we don't have a consolidation server ..... ran it anyhow )
+
+----
+This should be all, after that see [[Using SAP developer worplace]] to import the code (b2b/b2c) into dev studio and create/extend a project.
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+

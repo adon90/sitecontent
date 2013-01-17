@@ -1,0 +1,7 @@
+======JOTWiki: News======
+===02/28/08: First public release of Jotwiki: 0.1.2===
+Jotwiki is now available for download [[https://sourceforge.net/project/showfiles.php?group_id=198228 | on sourceforge.]]
+
+===02/25/08: First release of JOTWiki (Alpha) to be released soon===
+Jotwiki 0.1.2 will be release within 2 weeks.
+This will be the first publicly released of JOTWiki !

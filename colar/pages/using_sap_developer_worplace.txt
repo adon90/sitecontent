@@ -1,0 +1,60 @@
+======Using SAP Developer Worplace======
+
+WARNING ** While this should still be helpful, we decided to stop using the NWDI as we had too many issues with it. see [[b2c no nwdi | here]] for more infos on that.**
+
+For the doc on installing Workplace see: [[Workspace 2004s]]\\
+For the doc on installing the JDI see: [[JDI 2004s]]
+
+===== Using the JDI / NWDI=====
+see crm50 extension guide\\
+see doc here : \\
+http://help.sap.com/saphelp_nw2004s/helpdata/en/61/1c57428a070e53e10000000a155106/frameset.htm
+
+also see CD258 from saptech 2005 (putting it all together - app. dev. in sap netweaver exercise/demo)
+
+also class 207 of CD3 of saptech 2005 dvds
+
+==== Creating the B2C project ====
+
+Start dev studio\\
+open the "dev configurations perspective" (windows/perspectives/others)\\
+go in windows/preferences/ jdi dev config pool\\
+Enter the SLD URL: http://jdiprod.pcf.com:50100 and click ok\\
+right click on "local development" in "local DC" and choose "import configuration"\\
+choose type "remote"\\
+
+login as NWDI_DEV with password  (Note: had to do it as administrator as NWDI permissions where not working right)\\
+select "CRM_dev" and click "next" and then "finish"\\
+
+Go in **Inactive Dc's**, and right click on CRM/B2C an choose create project\\
+Keep all the dependencies and press OK\\
+Build the module (build) to create the web modeule (.war)
+
+
+==== Creating the custom code extension ====
+To extend the java code, right click on crm/home/shr/ext (in inactive dc's) and do "create project"\\
+keep all dependencies and press ok.\\
+
+Create a folder "src/packages" under this project.
+
+In that folder you can add your custom code.
+
+==== Defining the dependencies ====
+
+==== Checking in ====
+
+==== B2C custom code====
+see [[B2C Customization]]
+
+==== Creating an EAR for local deployment====
+
+FIXME  under construction
+
+Go in Inactive Dc's, and right click on CRM/B2C an choose create project, craete a project of type EAR (b2c_ear)\\
+Right click on it in J2EE explorer and do "Add module"\\
+and add the crm.isa.web.b2c war module\\
+Edit the application.xml and set the context to something decent (ie: "b2ctest")\\
+Right click on the EAR project and select "build"\\
+Once built we can see the EAR and deploy it locally for testing "deploy to j2ee engine".
+
+Then go to http://127.0.0.1:50100/b2ctest/admin/xcm/init.do and log as administrator

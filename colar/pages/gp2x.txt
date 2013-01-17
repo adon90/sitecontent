@@ -1,0 +1,14 @@
+======GP2X Software======
+On June 14 2008, i ordered a [[http://www.gp2x.com|GP2X-F200]] which is a really nice Linux based portable video console.
+Think of it as a hacker PSP.
+
+Anyway it's great i can play games like Doom etc.. on the go,
+
+One of the lame things is that it has a touchscreen built-in yet, almost no support for it exist at this time, so i got coding almost right away.
+
+=====Stylus2X=====
+I created a project called [[Stylus2x]]
+
+The aim of this project is to provide some applications with built-in keyboard support (virtual onscreen keyboard).
+
+See this page for more infos: [[Stylus2X]]

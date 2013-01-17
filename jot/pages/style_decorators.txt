@@ -1,0 +1,61 @@
+======Style / Decorators (Spec)======
+
+=====Example=====
+<code | web/jotconf/style.conf>
+#Example 1
+Style Default /default
+ Exclude login.do
+ Map *.do main.html
+
+#Example 2:
+Style Spiders inherit Default /spider
+
+#Example 3:
+Style Mobile inherit Default /mobile
+ Map edit.do edit_mobile.html
+
+#Example 4:
+Style Different /different
+ Map index.do index.html
+ Exclude *.do
+</code>
+
+<code | Example file structure (web folder)>
+/jotconf/style.conf
+
+/templates/default/home.html
+/templates/default/edit.html
+/templates/default/images/logo.gif
+/templates/different/index.html
+/templates/different/images/logo.gif
+
+/decorators/main.html
+/decorators/mobile/edit_mobile.html
+/decorators/spider/main.html
+/decorators/different/index.html
+</code>
+
+==== Example comments====
+  * Example 1:
+This is the default (named 'Default') decorator, if defined it will be used by default if no specific style has been requested.
+In this example it says to decorator all .do requests using the decorator main.html, except login.do , which will not be decorated.
+Files, such as html, images css etc.. will be looked for in the /templates/default/ folder, while decorators will be looked for in /decorators/default/
+
+  * Example 2:
+This is an example style that would be use by spiders/search engine robots(Dummy example).
+It simply inherits "Default", which means it will behave the same (same mappings etc..), but files(images, html, css etc...) will be looked for first in /templates/spider/ and IF they are not found there, then they will be looked for in /templates/default/. This allow you to easily have a style('spider') that is basically the same as another('default') except for a few files, which you will put in /templates/spider/.
+It works the same for the decorators, which will be looked for first in /decorators/spider/ and if not found there, will be looked for in the "parent" style('Default'): /decorators/default.
+
+  * Example 3:
+Another example style for mobile phones(Dummy Example), which inherits 'Default' as well.
+It is basically the same thing as Example 2, except it has an additional custom mapping, which says to use a special decorator 'edit_mobile.html' for edit.do.
+
+  * Example 4:
+Example 4 does NOT inherit any other Style.
+So it's just a plain Style with it's own set of files in /templates/different and decorators in /decorators/different/.
+It will, not look for files/decorator anywhere else.
+The example mapping here says to decorate index.do and nothing else.
+
+====Conclusion====
+Example 2 is probably the most common to use when you have a requirement such as: "we want a different look for this two pages for condition X (say for a particular user group)", basically it's all the same except those two pages. So you simply inherit your default style and put the custom versions of those two pages in the custom style folders.
+

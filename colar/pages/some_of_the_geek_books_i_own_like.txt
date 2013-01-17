@@ -1,0 +1,102 @@
+======Some of my favorites Programming / Developer Books======
+I've been reading quite a few software dev. books over the years, some at work and some for other languages/methodologies I was interested in, here are some of my favorites.
+
+Those are more or less ordered by order of preference.
+
+  - **[[http://www.amazon.com/Practices-Agile-Developer-Pragmatic-Programmers/dp/097451408X/ref=sr_1_1?ie=UTF8&s=books&qid=1241036790&sr=8-1|Practices of an Agile Developer]] - Venkat Subramanian, Andy Hunt** (The pragmatic Programmmers)
+This is a short book but it's clear and to the point. 
+I'm a strong believer in agile methodologies and had been pushing for them before the term was even coined.
+This books explains very clearly the principles and benefits without pushing/forcing you into any specific implementation.
+It's clear and to the point and very quotable to a decision maker which is a huge plus for me :)
+
+  - **[[http://www.amazon.com/Practical-Algorithms-Programmers-Andrew-Binstock/dp/020163208X/ref=sr_1_1?ie=UTF8&s=books&qid=1241036832&sr=8-1|Practical Algorithm for programmers]] Andrew Binstock, John Rex** (Addison Wesley)
+All right, honestly this book is very old and algorithm like search trees are pretty boring to me (school stuff). 
+
+However all the big companies have interviewed with (Amazon, Disney, Cap Gemini ...) seem to always focus on algorithmic questions for recruiting interviews (even for senior position which I find odd but that's another story).
+
+So anyway, if you have been out of school for many years, chances are you forgot most of that stuff ... and here is a nice book to refresh your memory, as the name says it's targeted to programmers, and to me the code samples are worth a thousand words, even if written in C as is the case in this aging book.
+
+  - **[[http://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Technology/dp/0201485672/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241036881&sr=8-1|Refactoring: Improving the Design of Existing Code]]  Martin Fowler, Kent Beck** (Addison Wesley)
+Refactoring is obviously super important to keep clean and maintainable code, but often companies are scared of it, "why change working code and take a risk without adding functionalities", this book clearly explains the Why's and also, how to do it right.  
+
+While it's the only book I own from this Martin Fowler, I've read many of his on-line papers and recommend just about anything he has written, I agree with most of what he preaches and he is an excellent technical witter, not too much or not enough technical, not boring, not pompous .. just good.   
+
+  - **[[http://www.amazon.com/Design-Patterns-Explained-Perspective-Object-Oriented/dp/0321247140/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241036988&sr=8-1|Design Patterns Explained]]. Alan Shalloway, James R Trott** (Addison Wesley)
+OK, to be honest it took me a while to get through the whole book.
+I had a somewhat negative image of design patterns because I've worked with people who think the more pattern they use the better it is. 
+
+Personally I feel I "discovered" patterns before I read about them, and I think that's best.
+
+When I read about patterns I felt I already used most of those anyway, from experience.
+
+Anyway for me patterns are about using the SIMPLEST proven solution possible, not about using as many patterns as possible ... over over-architect software is often bad software in my view: It's rarely good to over-think software because requirements change and whatever you based your architecture on is gonna change as well, so simpler is better.
+
+So anyway, this book does a good job of explaining the most common patterns and how they work, and it teach me the proper technical wording that I did not know before, this is valuable when talking design with other technical ppl as it is clear and defined.
+
+  - **[[http://www.amazon.com/Thinking-Java-4th-Bruce-Eckel/dp/0131872486/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037026&sr=8-1|Thinking in Java]]  Bruce Eckel** (Prentice Hall)
+Another Author I like a lot.
+
+This was one of my very first Java book (version 1.0), I printed it myself and killed about 8 trees in the process.
+Thanks to the author for releasing this book for free, not only it's free but in my view it's one of the very best Java book available regardless of price.
+
+It's very detailed and covers all of the Java standard API.
+
+  - **[[http://www.artima.com/shop/programming_in_scala|Programming In Scala]] Martin Odersky, Lex Spoon, Bill Venners**
+The Scala language is making a lot of noise lately, as developers are considering Java alternatives / complements.
+This is a very well written book(700 pages) and while I'm not completely sold on Scala, this book is excellent.
+
+The book is carefully written and you can tell they made some serious effort to explain things clearly and also use a nice, clean layout, in particular source code examples are very nicely laid-out and referenced. 
+
+Scala as just about every feature anybody could want, including the kitchen sink and the power tools to fix it, so this book besides being about Scala is also great at explaining many other things.
+It's a good intro - or sales pitch :) - to Functional programming and also does a good job explaining things like closures, functions, concurrency/actors etc...
+
+So whether you fall in love with Scala or not, it's an excellent book for any programmer because it covers and explains very well many programming concepts and advanced features.
+
+  - **[[http://www.amazon.com/Java-J2EE-Job-Interview-Companion/dp/1411668243/ref=sr_1_1?ie=UTF8&s=books&qid=1241037056&sr=8-1|Java / J2EE Job Interview Companion]] K. Arulkuraman, A. Sivayini** (LuLu)
+I bought this book to prepare for interview, thinking it was just a list of questions/answers.
+While this is the format of the book, it turned out to be more valuable than expected.
+
+What is nice is that it covers just about everything J2EE related, from the core API to Spring, Hibernate etc.., so it turns out to be a very nice overview of all the (ever-growing) J2EE technologies, it's nice to have on hand as a quick reference guide (in a way sort of like a J2EE dictionary).
+
+  - **[[http://www.amazon.com/Programming-Python-Complete-Introduction-Developers/dp/0137129297/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037099&sr=8-1|Programming in Python 3]] Mark Summerfield** (Developer's Library)
+I've gained interest into Python lately and started using it in a lot of my own projects, as dynamic languages go, Python as the philosophy I prefer (Ex: One and only one way to write something).
+I picked up this book, even though right now I still use Python 2.x.
+
+I like the fact that the book is not just about what's new about Python, but does a good job of introducing Python from scratch and also highlighting the differences between Python 2 and Python 3.
+
+  - **[[http://www.amazon.com/wxPython-Action-Noel-Rappin/dp/1932394621/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037126&sr=8-1|WxPython in action]] Noel Rappin, Robin Dunn** (Manning)
+Whenever I write an application, I really want it to be multi-platform.
+Python is a good multi-platform language, and WxPython is a very nice cross-platform UI framework for Python.
+
+Writing WxPython can be refreshingly easy and quick compared to Swing, On the other hand WxPython is a little quirky (i would say it feels a bit "hacky" at times), so this books comes in very handy at pointing out the things to watch out, as well as enumerating all the available UI objects and how they work.
+It also comes with good code/examples that helps to get going fast.
+
+  - **[[http://www.amazon.com/Beginning-Groovy-Grails-Novice-Professional/dp/1430210451/ref=sr_1_2?ie=UTF8&s=books&qid=1241037159&sr=8-2|Groovy & Grails]] Christopher M Judd, Joseph Faisal Nusairat, James Shingler** (Apress)
+I'm pretty excited about Groovy & Grails, to me it makes a lot more sense than Ruby and I trust the Java VM much more than the Ruby interpreter at this point, also the fact you have direct built-in access to the Java world of libraries is a gigantic plus.
+
+The fact is I still haven't had time to use Groovy all that much, but I'd like to.
+
+This book focuses mostly on Grails, the Groovy introduction is OK but not very detailed.
+On the other hand the Grails part of the book is excellent, it's very detailed and i really like the approach which is to create a real-life, believable project/site and implementing it with Grails. I like code by example and this is a great one. It also goes through a  lot of the enhancement one my want, like authentication, templating and such.
+
+  - **[[http://www.amazon.com/Effective-Java-2nd-Joshua-Bloch/dp/0321356683/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037194&sr=8-1|Effective Java]] Joshua Bloch** (Addison Wesley)
+This will not teach you Java, what it does is go through all the big Gotcha's and Do's and Don't.
+It's written by Joshua Bloch, the leader behind Java 1.5+ new features and main author of the Collection Framework.
+
+I have to say I've mixed feelings about the new features of Java 1.5, some are great, but I feel one of the 
+things that made Java so reliable and maintainable was it's simplicity. Java 1.5 and later add quite a bit of complexity which I'm still debating the value of ... feel like the extra complexity in concurrency / threading and such might mean less stable and more buggy Java programs (easier for a novice programmer to overlook something.).
+
+  - **[[http://www.amazon.com/Agile-Web-Development-Rails-Third/dp/1934356166/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037228&sr=8-1|Agile web development with Rails]] Dave Thomas, David Heinemeier Hanson** (The pragmatic programmers)
+The book does a good job at introducing Ruby(fairly quickly) and then onto showing a real life example of using rails to build a site.
+The book is fine, but while I love most of the concept behind rails (in particular Convention over configuration), I never really fell in love with Ruby, even though I tried several times. I don't really like the "freedom to write whichever way you please" because it means the IDE can't be as smart and help me, the interpreter either, and it's gonna be more difficult to read/merge/maintain code in the long run (see Perl).
+
+I'm not saying it's a bad language, it's quite good and did start a little revolution in dynamic languages but it's just not for me, I would rather use Python or Groovy. Also i don't want to say anything to bad about Ruby, because the fans are pretty dedicated and feisty :)
+
+  - **[[http://www.amazon.com/Expert-One-One-Development-without/dp/0764558315/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1241037264&sr=8-1|J2EE development without EJB]] Rod Johnson** (wrox)
+This is a great book about the Swing Framework, which is a great framework.
+I have to say however I was a bit disappointed, because I felt measled a bit, I didn't realize it was going to be a book about Spring - should have known who Rod Johnson was - Duh !
+It should have been called "How to use Spring, the great alternative to EJB" or something to that effect :)
+If you want to learn how to use Spring however it's a very good book from the framework author himself.
+
+
+

@@ -1,0 +1,158 @@
+My Blogs:
+|[[Geek Blog]]|[[SAP tips|SAP Blog]]|[[Ice Hockey Blog]]|[[Martial arts blog]]|[[General blog]]|
+
+======Geek Blog======
+===10/16/12: [[Beautiful fonts in Java]]===
+===10/16/12: [[Awesome window manager]]===
+===9/16/12: [[Generic init script for Fantom based server processes]]===
+===8/10/12: [[Getting started with Node.js, NodeJitsu, Faltiron and Co]]===
+===6/26/12: [[Ubuntu 12.04 on Samsung series 7 Chronos laptop]]===
+===12/28/11:[[Migrate Git project folder to own repository]]===
+===4/27/11:[[Git Notes]]===
+===4/27/11:[[Easy Imap + Smtp + Spam killer server - Linux]]===
+===2/15/11: [[fantompres| The presentation I made about Fantom to Seajug]]===
+===11/01/10: [[Favorite Linux software]]===
+===10/27/10: [[Ubuntu Lucid Lynx on HP Z200 - Intel HD graphics]]===
+===09/24/10: [[Installing Limux Mint 9 (Isadora) on HP EliteBook 8440P laptop]]===
+===09/07/10: [[Ruby script to upload / convert a Maildir Inbox to an IMAP server]]===
+===06/25/10: [[IBM Lotus Symphony better than OpenOffice]]===
+===06/22/10: [[Flower Pot BBQ Smoker]]===
+===05/15/10: [[SAP Catalog tool]]===
+===04/26/10: [[Fetching source code from GitHub from behind a firewall]]===
+===04/23/10: [[Selectively converting Subversion repository to Mercurial]]===
+===02/26/10: [[Upgrading Blackberry Firmware with VirtualBox]]===
+===11/05/09: [[Researching a Memory Leak in Java on SAP ISA]]===
+===09/11/09: [[Zoneminder notes]]===
+===07/16/09: [[Fan Getting Started]]===
+===07/15/09: [[Fan Cheat Sheet]]===
+===07/05/09: [[How to choose a Programming Language]]===
+===06/30/09: [[Netbeans plugin for the Fan Language]]===
+===04/28/09: [[Some of the Geek books I Own / Like]]===
+===04/28/09: [[SVN merge does nothing / broken]]===
+===04/28/09: [[Capctha gone wrong]]===
+===04/01/09: [[Netbeans silly warning when doing a svn switch to copy]]===
+===04/01/09: [[http://www.yourzingers.com/sap.html|SAP announces new version of CRM]]===
+===03/28/09: [[Run USB traces on Linux of Windows Software with VirtualBox]]===
+===12/16/08: [[Software releases - Scrum and Subversion branches]]===
+===12/15/08: [[http://www.javaontracks.net/doclet | Prettier Javadoc output with the JavaOnTracks Doclet]]===
+This allow you to output nice "javadoc" documentation.
+The output is a bit more modern and colorful than the standard JavaDoc output.
+It also uses Javascript, templates and CSS extensively, so that:
+    * It can provide nice features (show/hide methods, filter package, class name etc...)
+    * It is easy to customize (CSS & easy to read templates)
+    * It can create nice, colorized and linked source files in HTML format. [[http://www.colar.net/jotdoc/jdk1.6/index.html?page=java/lang/Runtime-source.html | Source Example]]
+    * Compatible output with the standard javadoc tool, so your existing links / search engine references won?t break.
+
+Here are some examples of the output for some API's (jdk1.6, struts, ant etc...)
+Examples: [[http://www.colar.net/jotdoc/ | Doclet Examples]]
+
+===10/20/08: [[Listen to XMonline without the browser script]]===
+===08/19/2008: [[Ubuntu 64 bit notes]]===
+===03/03/08: [[Using KQEMU in Ubuntu]]===
+===02/20/08: [[Creating a QEMU image and installing debian in it]]===
+Creating a simple installation image of debian in qemu, for testing installation of software etc...
+===10/30/07: [[Finding the perfect Linux distro]]===
+My long analysis of Linux after 10 years of use, and what i think about most distros and why, along with my new pick for a Linux Desktop.
+===10/29/07: [[Netbeans 6 better than Eclipse]] ===
+===10/28/07: [[Cleanup your Imac (G5 PPC)]] ===
+===09/22/07: [[FVWM-crystal on Debian/Ubuntu]] ===
+===08/24/07: [[Tethering With Blackberry Pearl On Linux]]===
+===07/17/07: [[Netgear KWGR614 Piece of junk, D-Link DIR-665 much better]]=== 
+===07/03/07: [[Daily stats with AWStats]]===
+===06/20/07: [[Bookmarking options and custom home page]]===
+Finding a good bookmarking site and creating a usefull browser home page.
+===06/15/07: [[Imac G3 Indigo with Xubuntu]]===
+The computer i setup for my toddler.
+===06/15/07: [[Simple linux firewall with Lokkit]]===
+A basic way to secure a linux based server without the hassle.
+===01/12/07: [[Getting started with JSP's]]===
+JSP's - Getting started
+===12/20/06: [[Ubuntu Daper D610]]===
+Ubuntu Draper 6.0.6 on Evo610c
+===09/03/06: [[DataBinder]]===
+Installing DataBinder, a Wicket + Hibernate Solution jor java5.
+===06/04/06: [[Ubuntu Draper]]===
+Ubuntu Draper 6.0.6 on Evo610c
+===03/08/06: [[Moving from gentoo to Debian on UML]]===
+Moving from gentoo to Debian on UML
+===03/04/06: [[Wicket & DataBinder Code]]===
+Code samples etc.. for wicket
+===02/13/06: [[Payflow pro]]===
+Verisign payflow pro installation on Solaris
+===12/24/05: [[Trail Install]]===\\
+Installation of Trails the "rails for java".
+===10/12/05: [[Using JAMon]]===\\
+Using JAMon to monitor java response time etc ...
+===06/08/05: [[DokuWiki]]===
+Infos about DokuWiki Installation.
+===08/07/03: [[VPN Tips]]===\\
+Various notes about setting a VPN between Cisco and linux.
+===08/12/02: [[Samba Tips]]===\\
+Tips about setting up Samba
+===08/15/02: [[Jabber Tips]]===\\
+Infos about connecting to Qarbon's jabber server.
+===09/04/03: [[KyoceraTips]]===\\
+Just a doc about using a kyocera printer from windows.
+===11/12/01: [[Old Code From College]]===\\
+Scary, old, ugly :-) code from college.
+===03/26/06 [[Frameworks opinions]]===
+=== 03/22/03 [[Databinder / wicket]] ===
+=== 3/7/06: [[Java Frameworks]]===
+===3/7/06: [[Static vs Dynamic languages]]===
+===3/7/06: [[XML Overdose]]===
+===3/7/06: [[Programming languages]] ===
+=== 05/23/07: [[302 redirects]] ===
+=== 12/3/06: Http Traces with wget ===
+This will print all the HTTP headers (including redirect / cookies etc ...):
+<code>
+wget -S http://www.somesite.com/
+</code>
+=== 09/21/06: [[Dumping and restoring Postgresql]] ===
+=== 09/20/06: [[Adding custom bug status in mantis]] ===
+=== 03/15/06 [[Enabling java 1.5 on mac]] ===
+=== 03/01/06 Creating a ssh connection to linux in Exceed ===
+In Exceed connections / xstart 
+Create  a new connection
+Method: Secure shell
+enter host etc ...
+Go in settings / security
+Click on the properties button (for ssh)
+Press "config" next to authentication methods
+and select only "keybaord interactive"
+Save.
+=== 10/02/05 [[Resizing a vmware image]] ===
+===05/02/05 [[installing sun java on debian or ubuntu]]===
+===03/02/05	convert avi to divx===
+<code bash>
+mencoder MVI_0081.AVI -o output.avi -ovc lavc -oac copy -lavcopts vcodec=mpeg4:vbitrate=200:vhq:vpass=1
+</code>
+===11/10/04 [[Change qmail user password (ldap)]]===
+===09/28/04 PHP with support for postgresql on gentoo===
+put postgres,pgsql in USE flags, remove mysql from USE flags (otherwise it would install mysql onl y apparently), then emerge mod_php
+===08/30/04 SQL rowcount and max number of rows returned===
+<code sql>
+select count(1) from ad_referers where date='2004_7';
+</code>
+Also to limit the number of rows returned with postgres, use "limit"
+<code sql>
+select * from ad_referers order by value desc limit 10;
+</code>
+===08/27/04 Fixing an unix shell that displays trash (broken font)===
+That happens usually when doing a cat of a binary file for example, then whatever you type appears in a 'symbol' font, that is very messed up.
+to fix that run on the broken shell:
+<code bash>
+echo -ne '\033)K' 
+</code>
+
+===08/27/04 Fixing an unix shell that doesn't echo keystrokes anymore===
+That happens for example if doing a ^C while entering a ssh passord, to fix run:
+<code bash>
+stty echo
+</code>
+===08/26/04 [[Processing a binary newsgroup file]] (divx, etc...)===
+===08/25/04 [[Duplicating any CD on linux]] (including VCD, etc)===
+
+=====[[Pre-2002 Blog Entries]]=====
+
+
+[[Mercurial branch problem]]

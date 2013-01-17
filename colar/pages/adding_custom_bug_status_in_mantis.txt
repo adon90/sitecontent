@@ -1,0 +1,30 @@
+======Custom Bug Status in Mantis======
+We wanted to add the statuses **testedDev** and **testedTest** (meaning, it was tested on dev, or tested on test) with 'closed' menaing it was tested on production and thus closed.
+
+Go into the mantis dir:
+<code>
+cd /usr/share/mantis/gui/
+</code>
+Edit  config_inc.php, and add to it (in the php block):
+<code php>
+$g_status_enum_string = '10:new,20:feedback,30:acknowledged,50:assigned,80:resolved,81:testedDev,82:testedTest,90:closed';
+$g_status_colors['testedDev'] = '#ACE7AE';
+$g_status_colors['testedTest'] = '#CEF9CF';
+</code>
+
+<code php>
+create the file custom_constant_inc.php (/usr/share/mantis/gui/)
+<?php
+define ( 'testedDev', 82 ); 
+define ( 'testedTest', 81 ); 
+?>
+</code>
+
+create the file custom_strings_inc.php (/usr/share/mantis/gui/)
+<code php>
+<?php
+$s_status_enum_string = '10:new,20:feedback,30:acknowledged,50:assigned,80:resolved,81:testedDev,82:testedTest,90:closed';
+?>
+</code>
+
+That's it, the new statuses will be abailable in Mantis.

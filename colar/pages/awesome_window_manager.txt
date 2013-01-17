@@ -1,0 +1,78 @@
+======Awesome Window Manager======
+
+I've used various versions of Linux since 1999 with all kind of windows manager such as windowmaker, fluxbox, gnome, KDE(not much), enlightenment and so on
+
+Lately the trend has been the dumbing down of the window managers, they are much less configurable than ever before, very inefficient and for the most part counter productive as well as pretty buggy in particular Unity and gnome 3.
+
+The "tabletization" of the interfaces is really not all that great for the coders/geeks of the world. We don't need eye candy, we need productivity. In that respect I feel all the latest window managers are a big fail.
+
+While XFCE and LXDE are decent lightweight alternatives, they don't really bring anything special to the plate either 
+
+Now [[http://awesome.naquadah.org/|Awesome]], to me, does bring productivity to the plate ... it's not all that pretty and it's not very newby friendly either BUT it's fully configurable and extremely productive (think VI / Emacs compared to Ecipse)
+
+TODO: explain some more .... (tiling, keyboard control and so on)
+
+It's perfect for programming in my opinion besides you sort of have to be a programmer to configure it :-)
+
+==== Why productive ? ====
+What makes you it very productive if the good use of workspaces, the possibility to have different kind of window layouts on different workspaces and the ability to do just about everything via window shorcuts.
+
+So for example in my case I have a "main" workspace where all apps run maximized, then I have another workspace where i run shell/terminals, it's a tiling workspace so when you add more they automatically layout such as the sum of them fills the screen(no wsated space). Then i have a workspace for my IDE that is fullscreen. and yet another workspace where I use a more traditional "floating" window layout for applications such as gimp.
+
+You can navigate/toggle all this very quickly using keyboard shortcuts mouse too of course but slower)
+
+==== Awesome cheat sheet ====
+
+Most useful keyboard shortcuts (there are more):
+By default the "Mod" key is the windows/apple button (between Ctrl and Alt) 
+
+**Windows** (a.k.a clients):
+''Mod + j'' : Next window
+''Mod + k'' : Previous window
+''Mod + Shift + 1-9'' : Move window to workspace 1..9
+''Mod + m'' : Maximize the window
+''Mod + f'' : Full screen
+''Mod + Shift + c'' : Close / Kill 
+
+''Mod + MouseLeft'' : Move window (for floating windows)
+''Mod + MouseRight'' : Resize window (for floating windows)
+
+''Mod + o'' : Move window to next screen
+
+**Workspaces**: (a.k.a tags but more powerful)
+''Mod + Left'' : Next workspace
+''Mod + Right'' : Previous workspace
+''Mod + 1-9'' : Switch to workspace 1..9 
+''Mod + Ctrl + 1-9'' : Toggle workspace 1..9 (allows to "see" multiple workspaces at the same time) 
+
+**Layouts:**
+''Mod + Space'' : Next layout (you can change on the fly)
+''Mod + h'' : Make tile 5% larger
+''Mod + l'' : Make tile 5% smaller
+
+**Other useful things:**
+''Mod + RETURN'': Start a terminal
+
+Note: There are many more layout shortcuts as well as the concept of "marked" windows you can quickly switch between as well as also keyboard support for when using multiple separate screens
+
+
+==== Installation ====
+<code>
+sudo apt-get install awesome awesome-extra xfonts-terminus xserver-xephyr
+cp /etc/xdg/awesome/rc.lua ~/.config/awesome/
+</code>
+
+If you have an existing login manager like gdm juts pick awesome as your window manager, otherwise you can always start it manually (.xinit for example)
+
+You can customize your ~/.config/awesome/rc.lua file and have awesome relaod it
+
+Note: If it seem it doesn't pick your custom rc.lua, it probably means it probably has errors, check ~/.xsession-errors for info
+
+Note: Java problem (grey windows). Install suckless-tools and use wmname in your rc.lua
+
+==== Config ====
+See my own config here:
+[[https://bitbucket.org/tcolar/configs/src/tip/awesome/rc.lua?at=default]]
+
+I added "-- Custom" comments wherever I made chnages
+

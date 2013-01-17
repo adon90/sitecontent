@@ -1,0 +1,24 @@
+======JOT Include Tag======
+=====Java view=====
+<code | Java>
+addVariable("name", "john");
+</code>
+
+=====Include File=====
+<code | Include File>
+Hello <jot:var value="name/> !
+</code>
+
+=====View (Html Template)=====
+<code | Template>
+text1
+<jot:include path="include.html"/>
+text2
+</code>
+
+=====Generated Html=====
+<code | Html>
+text1
+Hello john !
+text2
+</code>

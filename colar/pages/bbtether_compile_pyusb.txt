@@ -1,0 +1,30 @@
+======BBTether: Compiling pyusb from sources on OSX======
+====Developer tools====
+You will need this to compile anything.
+
+If you run''gcc'' in a terminal and get "command not found", you need to install the compiler (OSX developer tools)):
+
+You can either find them **on the Tiger/Leopard DVD's, or**:
+  * for leopard, xcode 3:
+[[http:developer.apple.com/technology/xcode.html]]
+  * for tiger, xcode 2.5: (that was a pain to find !)
+[[http://adcdownload.apple.com/Developer_Tools/xcode_2.5_developer_tools/xcode25_8m2558_developerdvd.dmg]]
+
+You will need to register/login (free) to Apple dev. connection to download those.
+
+Download and install xcode
+=====PyUSB=====
+Install pyusb from sources:
+
+Download pyusb ([[http://sourceforge.net/project/showfiles.php?group_id=145185&package_id=159677]])
+and extract it.
+
+Then run those commands in a terminal (setup.py will run the compilation)
+<code | In terminal>
+cd pyusb
+sudo python setup.py install
+</code>
+
+=====Sharing your binary=====
+**It would be great if you could send me your compile usb.so** (in pyusb/build folder), so i could add it to the universal binary.
+This way nobody would have to compile it manually again.

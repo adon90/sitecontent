@@ -1,0 +1,16 @@
+======Special SFR Config======
+TIP: Config provided by Alexandre Mely
+
+  - Networking Mode changed to 2G on the BB (doest not work with 3G, could not get local address...)
+  - **Firefox User-Agent changed to "Vodafone/1.0/HTC_Mercury/1.23.163.5/Mozilla/4.0 <http://1.23.163.5/Mozilla/4.0>" (provider only accepts http requests from phone browsers)**
+
+Configuration, just modified few lines in tmobile config file as follow:
+<code | tmobile>
+   user ""
+</code>
+
+<code | tmobile-chat>
+  OK 'AT+CGDCONT=1,"IP","wapsfr"'
+</code>
+
+

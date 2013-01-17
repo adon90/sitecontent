@@ -1,0 +1,290 @@
+======Finding the perfect Linux distro======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+{{arch.png}} {{debian.png}} {{foresight.png}} {{gentoo.png}} {{pclinuxos.png}} {{sabayon.png}} {{suse.png}} {{ubuntu.png}}  {{freespire_logo.gif}} {{mint.png}} 
+=====Why this article=====
+I have been using Linux for a very long time, since around 1996, over the years i have used many distributions, all of the major onces for sure, for fun/learning, at work on production machines and has my desktop.
+I started back then playing with slackware, followed by some very early version of Mandriva(before it was called even Mandrake, "Les logiciels du soleil").
+After that i used a lot of early RedHat versions, and some later Mandrake versions.
+At work i first started with Redhat which was the distribution of choice on servers at the time, but could never stand the bad rpm issues (badly design package management leading to dependency hell.)
+I later moved on using Gentoo for 2+ years, it was a much better experience than redhat, but after a while compiling from sources gets old, especially when you ahve to reinstall a broken app in a rush on a production machine !
+We also use Suse on servers at my current work, because it is the supported distribution for running SAP software, however it is based on RPM and thus suffer the same package management issues as Redhat.
+My distribution of choice now for a server is Debian, it's reliable and has a great package management (apt), Unfortunately the Debian team is not about making life easy for the users, but rather about over-the-top politics and flaming users looking for help, that doesn't bother me since i can figure things out but i think it's just plain stupid. Linux is about helping each other, Debian people rather pick on people and laugh at how stupid they are ... whatever.
+
+Anyway, for my main desktop machine i have been using Ubuntu for about 3 years and have been pretty happy with it, but lately a few things have annoy me, the upgrades tend to break and being debian based it suffers from the debian politics (ie: they don't like non-oss apps etc..).
+
+The last Debian stupidity that just threw me over the edge is recently my Firefox icons disappeared from Ubuntu, after much research turns out that what happens (simplified) is that Mozilla had to register the name Firefox so that the name would be safe, thus the Firefox icon became "registered", the debian people decided that it means it's "non-free" (the way they define "free"), and decided to not only remove the icons but ALSO create a brand new distribution of the mozilla suite with it's own name and icons, with a dumb name (ice-weasel or something). Debian people needs to get laid right now !
+
+In my opinion this is completely childish bullshit politics, and i'm just sick and tired of Debian for this kind of crap.
+Debian is one of best distro in terms of technology and stability, and APT is great, but they are just shooting themselves in the foot with politics. I'm a linux guy myself yet it pisses me off, what does a regular user think of this? they just want something that works !
+
+So i decided to find a new Desktop distro that was not Debian based or less of an issue.
+
+=====What matters in a distro=====
+
+If you think of it, even though there are 300+ Linux distros, most of them are very similar, the main differences being package-management, out-of-the-box experience / installed apps, window manager, community and politics. 
+
+====Package management====
+If you want a distro that works reliably and upgrade smoothly, package management is the key.
+In my experience package management system that use a repository are much better.
+
+Here are the main type of package management and what i think of them:
+  * All-in-one package (RPM and derivative: Redhat, Mandriva, Suse, PCLinuxOs etc...)
+RPM is known to lead to dependencies hell, if you look at the way it's designed it's no surprise. Each person making a package is responsible to define dependencies, and making a package is not very straight forward, that leads to many "bad packages", and since the dependencies are not handled by a repository they can't be fixed by the distro people.
+Personally i decided to stay away from any RPM based distros because it's just not maintainable in the long run.
+Note that there is  now apt-get for RPM(PCLinuxOs) and that might work better though i still have doubts about that.
+
+  * Source based (Gentoo, portage)
+This is great package management since it's "rolling updates" and you can update anytime and have the latest stuff.
+Since it's from source and with portage you have no dependencies issues, and it works well.
+The pain though is compiling everything from source takes ages, on a desktop huge apps like openoffice and kde are huge, and on a server having to recompile things is potentially risky and slow.
+
+  * APT based (Debian, Ubuntu and other derivatives)
+The debian based system (APT) is one of the best package management, they have a huge repository and the dependencies almost NEVER EVER cause problems. So while Debian annoys me with politics they are big winners in terms of package management.
+
+  * Conary (Foresight Linux, rPath)
+Conary is a pretty new system that is similar to APT but potentially even more powerful (think of it has APT meets CVS), and allows multiple version supports and great dependencies management.
+The only downside is that it's very new, so less proven, but in my experience it's been very good.
+
+  * ClickToRun, while not really a package management (it just calls apt-get, rpm etc ..), this is an heaven for new users, it makes installing software way easy. Even if not using it, one of the difficult things on Linux for a new user is to find software, for example how would you guess  instant messenging software are called kopete, gaim or pigdin ?
+**So i highly recommend using this site to find software:** 
+[[http://www.cnr.com/]]
+
+====Your time is worth money====
+Installing/dealing with linux takes time, though of course that beats trying to do so in the unlogical, bang your head on the door world of windows.
+
+But seriously installing Gentoo for example is very time consuming, but it's not wasted time (well at least the first few time) because you learn a lot.
+
+On the other hand wasting hours trying to fix dependencies issues is a full waste of time.
+
+**Having to jump through hoops to install a "non-free" software because the distro people don't like non-free stuff (politics) is a waste of time as well.**
+
+**Those people insist Linux is about freedom, yet they decide you should only install this or that software for their own reason .... Freedom of choice should be for the user, not the distro manager !**
+
+====Politics====
+I wish politics weren't a factor, but using Debian it has become one.
+
+I use Linux because i want to be able to do what i want and install whichever sofware i choose, i don't want somebody else to decide for me that commercial software has no place on my computer, that is MY choice.
+
+====Community====
+When you need support/help you will probably turn to the community for help (for a non-free distro say Redhta or Suse you can have support from the vendor though), so the community is important.
+
+In general the most popular the distro, the bigger the community and the better the support (more likely somebody already had/solved your issue).
+
+The small distro usually have very helpful people too, it's just less likely your issue is already fixed.
+
+I think Ubuntu and Gentoo have some of the best communities.
+
+Debian (i know i'm a little pissed at them right now :-) ) has a large community but they tend to not be very helpful/friendly. Debian people are like your system admin guy, i believe they are the same people that spend their day on slashdot flaming people, sure there are great helpful people, but as a lot it seem they rather flam you than help, that way they feel SPECIAL !
+
+====Window manager====
+It's less important because really you could install any window manager on any distro but the fact is when a distro is MADE for a specific window manager, it just works better to use that one (all the apps are there right of the bat and it's all integrated).
+
+There are many choices, i've tried most and really it's your choice.
+
+Personally i always preferred Gnome over KDE, i don't like windows and i don't care for something that tries to look like it (KDE) and sometimes seem to act like it (crash). I also like lightweight alternatives like XFCE and lately fvwm-crystal (beautiful).
+
+If you are familiar/like windows you will probably prefer KDE, otherwise gnome just seem smoother/faster.
+
+=====Finding the best distro=====
+So after all this, i now decided to find a new distro for my workstation and my laptop.
+Over the last 2 weeks i have installed many distros on my laptop to try them out until i foudn one that satisfied my needs.
+
+To help i went to [[http://www.distrowatch.org]] to find the most popular distros. Most popular doesn't mean best of course, but you don't want some tiny unsupported distro either.
+
+I did not try RedHat/Mandriva because i established i want to stay away from RPM.
+I did not try Debian based distros because of their political issues mentioned eralier, and also because i'm familiar with them, using them on my servers, and using currently Ubuntu as my desktop.
+ 
+So here is what i tried and my opinion:
+
+====[[http://www.opensuse.org/ | OpenSuse (Gnome edition)]]====
+{{suse.png}}
+Well, strange i tried that since it's RPM based but i had heard good things so decided to give it a shot.
+
+Pros: 
+  * Easy Installation
+  * Great hardware support
+  * Easy to configure (Yast is great at that)
+  * Works well out of the box
+
+Cons:
+  * Only took two days to have RPM issues
+  * To many package management, none works well: RPM,Yast,Yum,Yast2,apt-get-rpm etc ...
+  * RPM Base
+  * Gnome support is good, but they seem to prefer KDE
+
+Overall quite a professional distro, but package management is a big issue.
+
+====[[http://www.pclinux.org | PCLinuxOs]]====
+{{pclinuxos.png}}
+PCLinuxOs is currently #1 on distrowatch, and i can see why.
+
+Pros:
+  * Great LiveCD
+  * Smooth installation 
+  * Pretty
+  * Almost everything works out of the box
+  * Very simple(best) Configuration panel
+  * Very easy for windows users.
+
+Cons:
+  * KDE only, sorry i just do not like KDE
+  * Uses apt-get but fetches RPM's, not sure how good that is? I had no dependencies problems in 2 days.
+  * looks too much like windows :-)
+
+Overall, if you need a LiveCD it's a great one, especially if you have lots of ram, you can load the cd to ram for way fast execution.
+If you like KDE and are comfortable with windows, i highly recommend this distro.
+I'm not sure how good is apt-get(RPM), is it as good as apt-get or as bad as RPM, probably in between, in any case seems better than pure RPM.
+
+====[[http://www.sabayonlinux.org/ | Sabayon]]====
+{{sabayon.png}}
+Sabayon is a Gentoo base distro that makes Gentoo easy and looks amazing.
+I like the portage packaging system so decided to try this, compiling from source is still slow and annoying but sabayon comes with most of what you need already installed from the CD.
+
+Pros:
+  * Based on portage (Gentoo)
+  * Makes portage easy, with the 'portato' GUI.
+  * Installation is a snap.
+  * Absolutely beautiful.
+  * User driven (users vote on features).
+
+Cons:
+  * Have to compile other packages from source
+  * 'Portato' died/broke on me after two days and broke even 'emerge' .... show stopper !
+
+If you like the idea of compiling from source (performance), but want an up to date beautiful desktop and easy installation, this is a good choice.
+Maybe i just got unlucky with 'Portato' but that kind of bugs just can't happen.
+
+====[[http://www.archlinux.org/ | Arch Linux]]====
+{{arch.png}}
+Arch linux is a neat linux distro, far from a full fledge desktop however, it's a lot more like a base debian or slackware install.
+It's flexible and lightweight but if you want a desktop you have to work for it.
+
+Pros:
+  * Lightweight
+  * Very clean system
+  * Clean system yet much simpler than say slackware.
+  * Configuration is very clean/simple (BSD style)
+
+Cons:
+  * old style installer
+  * lots of works to install full desktop
+
+Well it's probably not the best choice for a desktop unless you like to work for it.
+On the other end it's a good alternative to debian for a base server install, in some ways the configuration is simpler and more standard than debian (debian likes to do their own stuff).
+
+====[[http://www.foresightlinux.org/ | Foresight Linux]]====
+{{foresight.png}}
+Well after looking at all those other distros i still could not find one matching ALL my requirement (Not RPM, not Debian based, Preferably gnome base), then i came across foresight Linux.
+
+Foresight uses another Package Manager called 'Conary', 
+
+Pros:
+  * Conary is a very powerful package management system
+  * Installation is smooth (though a little slow)
+  * Very latest Gnome with all the goodies including compiz, barryl etc ... (Gnome reference distro.)
+  * Everything worked out of the Box! (java, playing any movie, 3D effects, Flash, PDF ... everything !)
+  * Free but Non-opensource apps are available/installed ... no crazy politics .
+
+Cons:
+  * GUI frontend installer to conary does not work yet (next version), though command line installation works great (ex: sudo conary update gaim).
+  * Conary is fairly new, though rPath has been using it in appliances for a while.
+  * Fairly small/not-popular-yet distro so community is smaller, but great and fast help through IRC/Forums.
+
+Foresight blew me out of the water, it's the perfect distro for me, gnome looks great and is fully integrated with all the goodies.
+This is the first time ever i have a distro where all those things worked out of the box: java, playing any movie, 3D effects, Flash, PDF.
+They really need to work on an installer GUI though,a s the average Joe might not want to use the command line, it's suppose to be coming in the very next release (2.x).
+
+Anyway I have found my distro and have no need to look any further.
+
+**Update 05/2008:**
+After upgrading to Foresight 2.0 it hasn't been as rosy, it's a good distro but at this time conary does not have enough packages made for it, so it became a pain to install any slightly uncommon applications, for now it's quite annoying, as the community grow that should improve though.
+
+====[[http://www.freespire.org/ | FreeSpire]]====
+{{freespire_logo.gif}}
+
+Why did i even try that ? My sister in law has a new laptop with vista on it and it runs like sh$$ ! man vista is a pig.
+Anyway i wanted to give her a linux option and has she is not a Linux geek it had to be simple.
+I first tried PCLinuxOS, but it did not detect all her hardware properly, so i tried a few others until i happened to find FreeSpire.
+LinSpire has a bad rep in the days, it use to log you as root i think back then which is a no-no for unix people.
+But guess what Freespire is a free version with some solid features (and uses sudo)!
+
+Pros:
+  * Very simple and fast install (~10 mn)
+  * Pretty and snappy desktop
+  * everything works !! even her laptop built-in webcam .. woohoo ! even the winmodem !
+  * Installing software with ClickAndRun is super easy.
+  * Apt-get under the hood of ClickAndRun so easy but still powerful .
+  * **Best Distro i've seen to date for a complete linux beginner.**
+
+Cons:
+  * if you want to dual boot windows you need to partition separately(difficult for newbie).
+  * Is clickAndRun safe ? a little worried about that. 
+
+If you haven't tried Freespire yet, have a look, you will be surprised !
+
+
+====[[http://www.linuxmint.com/ | Mint Linux]]====
+{{mint.png}}
+
+Mint Linux is built on top of ubuntu but is more open to "proprietary" code and "non-free" apps.
+Also it's a very pretty (eye candy) Distro, it is very much like foresight but uses a more reliable package management (apt-get / and/or clickAndRun)
+
+I Now use this on my laptop instead of Foresight because it has more apps readily available and all the same functionalities.
+
+Pro:
+  * very beautiful (compiz etc..)
+  * Let you install what you want
+  * Most drivers out of the box
+  * Ubuntu based
+  * Can use ClickAndRun
+
+Cons:
+  * Haven't found any yet !
+
+=====Conclusion=====
+I've split this in two section: 
+  * Desktop
+Because on a desktop you usually want the latest stuff and can afford a (very) little instability. You also want things to work out of the box, viewing documents, browsing the web, browser plugins, playing media etc...
+You will want to upgrade often so package management should be simple and up to date
+
+  * Server
+On a server you just want reliability, performance and security, nothing else. 
+
+====Best Desktop distros====
+===Gnome===
+  * {{mint.png}} [[http://www.linuxmint.com/|Linux Mint]]
+Let you install waht YOU want, most drivers out of the box.
+
+  * {{ubuntu.png}} [[http://www.ubuntulinux.org|Ubuntu]]
+Ubuntu is still a very solid distro, it suffers a bit from it's Debian roots(politics).
+
+  * Foresight, if you are more of an expert, because it's very much cutting-edge.
+
+===KDE===
+  * {{freespire_logo.gif}} [[http://www.freespire.org/|Freespire]]
+Easiest to use, let you install what YOU want, most drivers/devices work out of the box.
+
+  * {{pclinuxos.png}} [[http://www.pclinuxos.org|PCLinuxOs]]
+PCLinuxOs is quite impressive, one of the simplest distro yet, and very familiar for windows users.
+
+  * Kubuntu, If you accept to deal with RPM issues: Mandriva, OpenSuse
+
+====Best Server distros====
+  * {{debian.png}} [[http://www.debian.org | Debian]]
+Politics matter a lot less on a server, actually they are even a good thing here. When it comes to stability and reliability, Debian is still a great choice. It's also lightweight and apt-get is very good.
+
+  * {{arch.png}} [[http://www.archlinux.org|Arch linux]]
+ArchLinux is a good alternative to debian for a server, it's lightweight and very "vanilla linux" with simple "BSD like" configuration, all this without as much politics/attitude than Debian.
+

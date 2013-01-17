@@ -1,0 +1,85 @@
+======Smart log analizer======
+
+NOTE: Well Google beat me to it :-)
+
+
+=====Concept=====
+Out of Apache common/combined log files, read:
+<code | Log data>
+IP(country/host)
+Login
+Date
+Request(Type,protocol,path)
+Response Code
+Data Size
+Referer (WEB CRAWLER?, SEARCH ENGINES?)
+Browser String(Browser type, version, lang, plugins; OS type, version, WEB CRAWLER?, SEARCH ENGINES?)
+</code>
+
+Let user create queries from filters
+Filters based on
+<code | Filters>
+All filters might also have an "Exclude" version of them
+
+Period: hour, day, week, month, year, all
+host: ip, host, ip block, all, country?, search engine/crawler?
+login: "toto", guest, loggedin, all
+request_path: "/toto", "/toto/*", all 
+request_type: GET HEAD POST ALL
+request_protocol: http1.0, wap? ..., all
+Response Code: 200 40x 50x 301 302 !200 all etc...
+Size: ">25000" "<25000" all etc ...
+Referer: "xyz" "!xyz"
+Crawler: google, !google, all etc ...  (same as host ??)
+Browser_type: firefox, ie,all etc ... 
+Browser_version: ffox1 ffox2 ie4 ie5 ie6 ie7 all etc ... (combine with browser_type?)
+Browser plugins: googlebar etc ...
+Browser lang: en, fr etc...
+OS type: windows, linux
+OS Version: win95, win98 etc ... (combine with os_type ??)
+
+Sort By?: browser_type, hour, login whatever ...
+</code>
+
+  * Create a report about how long the reports took.
+  * Provide predefined queries/jobs of course (configurable) for standard things regular log analyzer provides.
+
+  * User can build a query using the filter.
+  * Then can run query "now" on specific data set (existing or date range)
+  * User can save query as a job -> run how often/what time(everyday at 1am) .. on which data(yesterday,this month, other report results ex:buyers, etc...)
+  * maybe create a "view" from a  set of report results.
+  * View, would use a report "dataset" (ex: trimmed log), and use a bunch of components "hourly hits", "monthly hits", "browser_type_pie" .. etc ..
+  * CSV dowload of data/dataset.
+
+<code | Structure>
+Report
+  Query Result
+    Query
+    Dataset
+      Log files
+  View
+    View Components
+      Hourly request graph
+      Browser typr pie
+      ......
+</code>
+
+
+Log formats:
+<code>
+%h:host; %v:virtualhost; %l:login; %u:logName ;%t:tstamp; %r:request; %>s:status; %b:size
+%{Referer}i:referer; %{User-agent}i:userAgent; %T:%D:time spent(s/ms) (%D only in 2.0)
+%{UNIQUE_ID}e: unique ID from mod_unique_id
+
+Common
+    "%h %l %u %t \"%r\" %>s %b"
+Common with vhost
+    "%v %h %l %u %t \"%r\" %>s %b"
+combined
+    "%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
+Enhanced
+    "%v %h %l %u %t \"%r\" %>s %b %T \"%{Referer}i\" \"%{User-agent}i\""
+Unique
+    "%{UNIQUE_ID}e %v %h %l %u %t \"%r\" %>s %b %T \"%{Referer}i\" \"%{User-agent}i\""
+
+</code>

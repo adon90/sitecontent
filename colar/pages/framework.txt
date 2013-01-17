@@ -1,0 +1,97 @@
+<code>
+Setup
+	- manual: choose settings in db or (file - TBD);   set a password for administration ; define db ?
+  - settings (auto generate missing DB objects in DB; )
+  - log levels, destination.
+
+Tools (web based)
+  - create persistance objects from existing tables
+  - create java defined db objects into DB (or maybe create on the fly if missing ?)
+  - "struts" graphical setup.
+  - save/(load) settings
+
+DB persistance + pooling (DBManager)
+	- persistence : annotations ? doclets ? xml ? properties ?
+	- direct object persistance
+Logging (LogManager)
+	- levels
+Debugging
+	- session debugger
+	- object dumper
+Page
+	- webpage, list, input 
+	- wicket like   no logic    like velocity
+Layout system
+	- templates ?
+Struts sytem
+	- store "request" path to know where we came from and where we are going
+	-   action -- code -- code -- page -- html template.
+Page creation tool 
+	- all css
+Ajax ?
+	- meh.
+Logon/authentication 
+	- roles
+	- users
+	- text base (text/xml) or DB based.
+Nice URL's ?
+
+Testing ? (code test)
+	- public Static void test() throws Exception()       -> exception
+		{
+		  TestObj=new TestObj();
+		  
+			Tester.checkIf("Checking price is 12$",testObj.getPrice()==12);    -> throws TestException
+			//checkNotNull("dasad", obj);
+			//checkThrowsException("sadas",getPrice());
+			checkThrowsException("asddas",getprice(),"java.lang.RuntimeException");  -> no exception specified = any
+		}
+	- Tester.runAlltests();
+	
+multithread tests ??
+Run test at night (cron)
+Email test results
+
+- B(inary)ML :-)
+- Save & Load object from XML just as done for DB
+
+- Map object to DB -> if class.functionname.toLowercase() exits in DB with same name, then map otherwise ignore
+ Option to ovveride field names by implementing a mapping method ?
+ 
+ 	public class Toto implements DBsaver     DBSaver extends Saver)
+ 	{
+ 		String tata;
+ 		ObjectRef tutu;
+ 		
+ 		public void saveInDb()
+ 		{
+ 			save(tata);
+ 			save(tutu);
+ 		}
+ 	
+ 	OR:
+ 	
+ 	public clas Toto extends DBModel(or FileModel) implements ModelFilter
+ 	{
+ 		// default=all saved;
+ 		public void modelModify()
+ 		{
+ 			// if save all -> put nohting here
+ 			createMissingTable(false); -> turn on/off automatic table creation
+ 			useTable("the_tata"); -> if table name is not class name (lowercase)
+ 			doNotSave(tata); -> if field is not to be saved in DB
+ 			map(tutu,"the_tutu"); -> if filed name in db is different that java name (lowercase minus special chars)
+ 		}
+ 		
+ 		
+ 		save();
+ 		load();
+ 	}
+ 	
+ 	}
+
+Eclipse plugins
+
+Ant tasks
+
+</code>

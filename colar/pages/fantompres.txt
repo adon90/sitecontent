@@ -1,0 +1,21 @@
+======Fantom Presentation======
+
+I presented the [[http://www.fantom.org|Fantom]]  programming language to SEAJUG during February 2011.
+
+Here are the slides:
+[[http://www.colar.net/fantompres/s5-blank/fantom.html| Presentation Slides]]
+
+Note: You "hover" over the "question mark" icons it will open tooltips with more infos.
+Also, if you go the bottom right corner of the slides, you can click the "slashed zero" button, this will give you all the slides text and tooltips in an easy to read/print format.
+
+
+Here are some code examples: 
+[[http://www.colar.net/fantompres/html/hello/fan/examples/|Presentation Code Examples]]
+
+[[http://www.fantom.org/doc/examples]]
+
+[[http://rosettacode.org/wiki/Category:Fantom]]
+
+Fantom playground to try fantom code directly in your browser:
+[[http://www.fanzy.net/]]
+

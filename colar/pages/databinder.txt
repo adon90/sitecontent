@@ -1,0 +1,157 @@
+====== DataBinder Installation ======
+
+http://databinder.net/ \\
+http://wicket.sourceforge.net/wicket-quickstart/index.html \\
+http://www.javalobby.org/java/forums/t60786.html\\
+http://javageek.org/2006/03/14/migrating_wicket_example_to_wicket_1_2_beta_1.html
+
+===== Installation =====
+(On Debian)\\
+See guide here:\\
+http://databinder.net/setup-guide.html
+
+First you need Java 1.5 installed with JAVA_HOME in the classpath and JAVA_HOME/bin in your PATH\\
+
+The "easy" :-P way to install databinder is with Maven2, which is a project/build tool (like ant or make but fancier :-) ), that will fetch for you all the databinder dependencies (jars) automatically.
+
+I did not have that on Debian, and it's not available in the default apt repositories, so i had to install Maven2 first (from source)
+
+==== Maven2 Installation ====
+get the latest maven2xx.tgz from here:\\
+http://maven.apache.org/download.html \\
+and save it on disk.
+
+WARNING for databinder < 0.6 the project creation will fail if using maven 2.0.4, so get 2.0.2 preferably
+
+extract the archive to /usr/local
+<code>
+cd /usr/local
+sudo tar -xzvf /home/downloads/maven2xx.tgz
+</code>
+
+Add maven2/bin to your path\\
+On my debian i added in ~/.bashrc along with JAVA_HOME
+<code>
+export PATH=/usr/local/maven-2xx/bin:$PATH
+</code>
+
+Then we can evrify that maven is found and running
+<code>
+source /etc/environment
+mvn --version
+#should return "Maven Version 2.xx"
+</code>
+
+==== Fetching the dependencies ====
+
+The JTA jar from Sun can't be retrieved by Maven (licensing issue), so we need to get it manually first:
+
+Go to: \\
+http://java.sun.com/products/jta/ \\
+to get the JTA interfaces from the Download link next to “**Class Files 1.0.1B**”. \\
+Save jta-1_0_1B-classes.zip in your download directory
+
+Then get maven to use those jars and retrive all the other dependencies automatically.
+
+<code>
+cd /home/downloads
+mvn install:install-file -DgroupId=javax.transaction -DartifactId=jta -Dversion=1.0.1B -Dpackaging=jar -Dfile=jta-1_0_1B-classes.zip
+</code>
+
+NOTE: maven seem to fail sometimes, just run it again.
+
+Maven should then fetch and install the needed dependencies.
+
+We still need to install separately the Hibernate Annotations support:\\
+Get it from here:\\
+http://prdownloads.sourceforge.net/hibernate/hibernate-annotations-3.1beta8.tar.gz?download \\
+and save it to disk, then run:
+<code>
+cd /home/download
+tar xzvf hibernate-annotations-3.1beta8.tar.gz
+cd hibernate-annotations-3.1beta8
+cd lib
+mvn install:install-file -DgroupId=javax.persistence -DartifactId=ejb -Dversion=3.0-public-draft-20060118 -Dpackaging=jar -Dfile=ejb3-persistence.jar
+# should return "build successful"
+</code>
+
+==== Creating a DataBinder project ====
+Go in the directory where you want to have your project (**! in eclipse workspace**)\\
+Run the foolowing command, make sure you replace: \\
+- example by your company  (ie:com.oracle) \\
+- myExample by the project name (ie: testProject) \\
+<code>
+cd /home/me/
+mvn archetype:create -DarchetypeGroupId=net.databinder -DarchetypeArtifactId=data-app -DarchetypeVersion=0.3 -DgroupId=example -DartifactId=myExample
+</code>
+
+**Note** As of 03/21/06 it seem taht when creating a project, it creates a dependency to DataBinder 0.2 (old), fix that by editing the pom.xml and changing 0.2 into 0.3. The project owner as been noticed, so it probably will be fixed soon.
+
+==== Define the Hibernate DB ====
+
+Define your database here (if you use mysql, you probably only need to edit the user/password) or even nothing if you don't authenticate local DB connections:
+<code>
+vi testProject/src/main/resources/hibernate.properties
+</code>
+
+==== Check that it runs ====
+<code>
+cd /home/me/testProject
+mvn compile jetty6:run
+</code>
+The first time it will take a while since it will have to download the Jetty J2EE container, etc... and dependencies)
+
+Then browse to:\\
+http://127.0.0.1:8080/testProject/app
+
+You should see "my Project" displayed orange.
+
+Now we can try modifying the page and see that it recompiles:\\
+Leave Maven/Jetty running and go edit the java file, and recompile
+<code>
+# Ran this in a new shell
+cd /home/me/testProject
+vi src/main/java/mycompany/MyDataPage.java
+# change the getName() method to return something new. (ie: "i changed this!")
+mvn compile
+</code>
+
+Since we let the other maven/jetty run, it's still up.\\
+It should automatically pickup the chnages\\
+reload: http://127.0.0.1:8080/testProject/app
+
+It should now display our new text (ie: "i chnaged this!")
+
+===== Eclipse Integration =====
+
+Let's get the eclipse project created using maven:
+<code>
+cd /home/me/testProject
+# adjust the path to your env.
+mvn -Declipse.workspace=/home/me/workspace eclipse:add-maven-repo
+# and this line to setup/fetch the required libraries
+mvn -Declipse.downloadSources=true eclipse:eclipse
+</code>
+
+Ok, now we are ready to use this in Eclipse ! 
+
+Start Eclipse\\
+You might want to install the jetty plugin:\\
+Follow: http://jettylauncher.sourceforge.net/docs/ if you want to. \\
+
+Import the project into Eclipse:\\
+Click "file"/"import"/"existing project into workspace"\\
+browse to /home/me/testProject and press "finish"
+
+You should now have the project avail. in your workspace in Eclipse.
+
+Now we can go see some Examples:\\
+http://databinder.net/examples.html
+
+and start coding :-P
+
+=====Upgrade to 0.4=====
+There is now a new version 0.4, see the guide here to upgrade to 0.4\\
+[[databinder 0.4 | guide]]
+
+~~DISCUSSION~~

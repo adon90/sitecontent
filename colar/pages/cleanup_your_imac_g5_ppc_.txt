@@ -1,0 +1,37 @@
+======Cleanup your Imac (G5 PPC)======
+
+Yesterday i was using the mac for development and noticed it was just very sluggish, after a while i figured out i had set the performance setting to "lowest" (under system settings / Energy saving).
+
+My Imac is the older one (thick flat screen all in one), not the lamp or the old CRT style. (they need nicknames for all those different machines called Imac.
+
+I could not remember why i set it taht way, until i set it back to highest and the fan started whirling like a turbine, very very liudly.
+What it sounded like is when a jetplane is reving it's engines before takeoff. 
+Even with very little load on the system (top reports ~3% cpu use).
+
+Apparently that is a common issue on those macs, though as usual Apple denies it, they start to annoy me when it comes to that (i had a defective ibook as well).
+
+Anyway, i decided to open it and have a look at the fan, turn out it was full of dust.
+
+After i vacuumed the inside of the mac and cleaned the fans (took it out and clean the fan paddles with water) the average CPU temp dropped over 10F, the fan noise did not drop much when overloading the computer BUT the fan had to run a lot less fast most of the time since the CPU/Case temp dropped big time, and THAT resulted in much less Fan noise.
+
+So if you have never cleaned your Imac in 2+ years i highly recomand it.
+
+It is VERY easy to do, the mac inside design is very clean and it's easy to open.
+
+===Opening the Imac===
+There are great Documents/pictures on doing that here:
+[[http://www.apple.com/support/manuals/imac_diy/]]
+(See ther fan replacement PDF's)
+
+===Temperature tracking===
+I used this temperature monitor tool to see how my CPU was doing:
+[[http://www.bresink.de/osx/0TemperatureMonitor/issues.html]]
+
+Before cleaning, my CPu was 65-75F with no load and >75 with load resulting in the fan going full speed, sounding like a jet engine.
+
+After cleaning the fans, it was 60-70F with no load, about 70-75 with load, slower fans, less load.
+
+After vacuuming the inside of the case (including the cpu heat dissipator), it was 55-62 with no load, 65-70 wiht load, hence much quiter.
+
+===Conclusion===
+Clean your mac !

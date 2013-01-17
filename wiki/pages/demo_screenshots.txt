@@ -1,0 +1,37 @@
+======Demo & Screenshots======
+=====Screenshots=====
+====Viewer Features====
+===Home page Example===
+{{ home.png }}
+===Print preview=== 
+{{ print.png }} 
+===AddThis.com feature===
+{{ addthis.png }} 
+===Posting comments===
+{{ comment.png }} 
+===Search feature===
+{{ search.png }}  
+
+====Author Features====
+===Login screen===
+{{ login.png }} 
+===Edit a page===
+{{ edit.png }} 
+===Upload files/images===
+{{ Upload.png }} 
+===Changing a page options===
+{{ page_options.png }} 
+
+====Admin Features====
+===Main Setup screen===
+{{ setup.png }} 
+===Namespaces / Sites===
+{{ ns.png }} 
+===Profiles / Permssions===
+{{ profile.png }} 
+===User management===
+{{ user.png }} 
+
+=====Demo=====
+FIXME: Provide a demo jotwiki (jailed/separated, reset every day ...)
+

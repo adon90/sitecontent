@@ -1,0 +1,35 @@
+====Home====
+===[[My Software]]===
+[[My Software|Here]] you will find information and links to some software I wrote.
+  * [[Status302:home| Status302]] : My own company, provides software development and consulting.
+  * [[status302:camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
+  * [[MameChose|mameChose MAME frontend]] A multiplatform MAME frontend written in Fantom.
+  * [[fanide:home|FantomIDE]] IDE for the Fantom language based on Netbeans. 
+  * [[berry:home|Berry4all / BBTethter]] An easy to use Python program for tethering a Blackberry (UNIXes).
+  * [[wiki:home|JOTWiki]] which is a WIKI software i wrote based on JavaOnTracks.
+  * [[jot:home|JavaOnTracks]] which is my own SIMPLE Java framework
+
+===[[My Projects]]===
+[[My Projects|Here]] you will find information about other projects i built/installed/played with, such as:
+  * [[Ikea standing Desk]] A large standing desk made from Ikea parts.
+  * [[Camping Trailer]] A lightweight camping trailer I built.
+  * [[Ice Rink]], the homemade ice rink i build in Spokane (in the winter)
+  * [[R C planes|R/C Planes]], the remote controlled planes i play with.
+  * [[Car MP3 Player]], the custom made MP3 player for my back (way back in 2000 when nobody had one :-)
+
+===[[My Blog & Tips]]===
+[[My Blog|Here]] you will find my thought/docs/tips on stuffs:
+  * [[Geek Blog]], my thought and tips about software related subjects, mostly Java and Linux etc...
+  * [[SAP Tips]], many tips and documentation about SAP/Java (CRM5.0 ISA B2C B2B TREX etc...)
+  * [[Ice Hockey Blog]], opinions and predictions about the NHL and Hockey in General.
+  * [[Martial Arts Blog]], Here you will find info about my progression at TaeKwonDo and Brazilian Jiu-jitsu.
+  * [[General Blog]], general thoughts about the world and news that made me react.
+
+===[[About Me]]===
+[[About Me|Here]] you will find among other things, my personal and family news, such as:
+  * [[http://www.colar.net/photos/|Our family photos]]
+  * [[My Resume]] (more or less up to date)
+  * [[Hockey Teams]] i play in.
+  * [[My Bookmarks]], some of my favorite sites / applications.
+  * [[Guestbook|Guestbook / Contact Me]] Drop me a line. 
+  * [[http://marie.colar.net | Marie Colar]]

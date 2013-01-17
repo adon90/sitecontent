@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.6//EN" "http://www.netbeans.org/dtds/autoupdate-catalog-2_6.dtd">
+<module_updates timestamp="11/07/21/28/05/2010">
+
+
+<module_group name="Fantom">
+
+<module codenamebase="net.colar.netbeans.fan" distribution="net-colar-netbeans-fan.nbm" downloadsize="914802" homepage="http://wiki.colar.net/" license="991EFF62" moduleauthor="Thibaut Colar" needsrestart="true" releasedate="2010/05/28" targetcluster="fantomide">
+    <manifest AutoUpdate-Show-In-Client="true" OpenIDE-Module="net.colar.netbeans.fan/1" OpenIDE-Module-Display-Category="Fantom" OpenIDE-Module-Implementation-Version="100528" OpenIDE-Module-Java-Dependencies="Java &gt; 1.5" OpenIDE-Module-Long-Description="This is the Fantom Netbeans Plugin (Thibaut Colar)&#10;More infos: http://fantomide.colar.net/&#10;&#10;Fantom language:&#10;http://www.fantom.org/&#10;&#10;This is released under the Artistic License 2.0 (see also licenses of bundled libraries bellow)&#10;&#10;---Bundled Java Libraries---&#10;* parboiled.jar: Parboiled parser support: Apache License 2.0&#10;        http://wiki.github.com/sirthias/parboiled/&#10;* fantom (sys.jar): Academic Free Licence&#10;        http://www.fantom.org/&#10;* javaOnTracks.jar: Artistic Licence 2.0&#10;        http://www.javaontracks.net/&#10;* H2.jar: Database (Mozilla Licence &amp; Eclipse Licence) &#10;        http://www.h2database.com/  &#10;----------------------------" OpenIDE-Module-Module-Dependencies="org.jdesktop.layout/1 &gt; 1.7.1.103, org.netbeans.api.debugger/1 &gt; 1.17.1, org.netbeans.api.debugger.jpda/2 &gt; 2.19.1, org.netbeans.api.java.classpath/1 &gt; 1.19.1, org.netbeans.core.output2/1 &gt; 1.11.1.1, org.netbeans.modules.csl.api/2 &gt; 2.4.1.2.1.1.4, org.netbeans.modules.debugger.jpda/2 &gt; 1.23.2, org.netbeans.modules.debugger.jpda.ant &gt; 1.11.1, org.netbeans.modules.debugger.jpda.projects &gt; 1.5.2, org.netbeans.modules.editor.indent/2 &gt; 1.12.1.9, org.netbeans.modules.editor.lib/2 &gt; 2.8.1.10.2, org.netbeans.modules.extexecution/2 &gt; 1.14.1, org.netbeans.modules.java.debug &gt; 1.5.2.1.8.7, org.netbeans.modules.java.platform/1 &gt; 1.12.1, org.netbeans.modules.java.project/1 &gt; 1.25.1, org.netbeans.modules.java.source &gt; 0.52.1.8.8.2, org.netbeans.modules.javascript.kit/1 &gt; 0.105.2, org.netbeans.modules.lexer/2 &gt; 1.30.1.1, org.netbeans.modules.options.api/1 &gt; 1.12.1, org.netbeans.modules.parsing.api/1 &gt; 1.26.1.2, org.netbeans.modules.projectapi/1 &gt; 1.24.1, org.netbeans.modules.projectuiapi/1 &gt; 1.35.1.6, org.netbeans.spi.debugger.ui/1 &gt; 2.16.1, org.netbeans.spi.viewmodel/2 &gt; 1.17.1, org.openide.actions &gt; 6.9.1.1, org.openide.awt &gt; 7.8.1.1, org.openide.dialogs &gt; 7.10.1, org.openide.filesystems &gt; 7.21.1.1.1, org.openide.loaders &gt; 7.5.1, org.openide.modules &gt; 7.10.1, org.openide.nodes &gt; 7.9.1.1, org.openide.text &gt; 6.22.1, org.openide.util &gt; 7.22.1.1, org.openide.util.lookup &gt; 8.2.1, org.openide.windows &gt; 6.26.1" OpenIDE-Module-Name="Fantom" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Support for the Fantom programming language" OpenIDE-Module-Specification-Version="1.6.2"/>
+    
+</module>
+
+</module_group>
+
+<license name="991EFF62" url="License.txt"/>
+</module_updates>
+

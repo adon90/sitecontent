@@ -1,0 +1,95 @@
+===== Setting up the NWDI =====
+
+==== Creating the common code track ====
+First we created a "common java code" track
+<code>
+track id: PCFSHRD
+name & description: PCF Shared code
+DTR url: http://jdiprod.pcf.com:50100/dtr
+CBS url: http://jdiprod.pcf.com:50100
+</code>
+
+add SHRWEB and SHRAPP(exclude from deployment) to the software dependencies.
+
+go into runtime systems, and add a dev system:
+<code>
+b2cdev, http://b2cdev.pcf.com:50100
+sdm port:50118 user:administrator   password
+</code>
+
+then press "save" to save this track
+
+==== Creating a B2C site track ====
+
+<code>
+Name:B2CSEALY
+Description: PCF B2c Sealy
+DTR url: http://jdiprod.pcf.com:50100/dtr
+CBS url: http://jdiprod.pcf.com:50100
+</code>
+
+Add software components: shrweb (5), shrapp(source, exclude from deployment), custcrmprj \\
+Define a dev runtime system
+
+save the track
+
+==== Adding the trcak connection ====
+
+then go to track connection. \\
+<code>
+source: PCF shared
+target: B@CSealy
+type: transport
+Select "transport developed components".
+</code>
+save
+
+==== Importing data in the tracks ====
+
+go to transport studio:
+
+**For EACH track** \\
+	select all, check-in and then select all / import into dev and consolidation.
+
+==== Dev studio ====
+
+in dev studio. \\
+in DC view, right click "local development" and click "import configuration"\\
+import both PCFSHARED_D and B2CSEaly_dev
+
+in the "inactive DC's" view, right click on PCFSHARESD/shrweb/crm/home/shr/ext and choose create project.\\
+right click on B2CSealy/shrweb/crm/isa/web/b2c and choose create project.
+
+right click on B2CSealy/CUSTCRMPRJ and choose "create new DC"\\
+change the vendor to your company (ie: pcf.com)\\
+choose a name (b2c/sealy)\\
+select the type j2ee / enterprise application, create a new activity if requested  and complete the component creation.
+
+right click on B2CSealy/shrapp/crm/b2c and choose create project.
+
+copy application-j2ee-engine.xml,data-source-aliases.xml,log-configuration.xml,monitor-configuration.xml and monitor-configuration.dtd\\
+from  crm/b2c/META-INF into our own project  b2c/sealy/META-INF
+
+Then in the "J2ee DC explorer" view, right click our project (b2c/sealy) and choose "add module" and select crm~isa~web~b2c from the B2CSealy track
+
+Then open the application.xml of our project (b2c/sealy) and change contect_root to something simple (ie: b2c_sealy)
+
+in the j2ee DC explorer, open our project (b2c/sealy) and right click on METADATA/DC definition/USED DC's and select "add used DC"\\
+and choose SHRWEB/crm/home/shr/ext/DC metadata/public part/assembly as the used DC (build time only)
+
+in the "package explorer", create the folders src/packages inside the project PCFSHARESD/shrweb/crm/home/shr/ext (new/folder)\\
+
+then in this folder add some code, ie: com.pcf.Test.java and put a bit of test code in there. (new/java/class)\\
+It will ask to add the file to the DTR, say yes.
+
+create the java file
+
+then right click on PCFSHARESD/shrweb/crm/home/shr/ext and click development component / build
+
+==== Deploy using the DTR ====
+
+in the DTR. checkin and activate
+
+==== What does not work ====
+
+I could not add a dependency from the "b2c track" b2c project to the "shared code" track shr~ext

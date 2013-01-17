@@ -1,0 +1,12 @@
+======Creating a SAP solution manager key======
+  * Start sapgui and log into the solution manager box.
+  * Call transaction SMSY (System Landscape Maintenance)
+Create your SAP ECC System in the system landschape:
+
+  * Select the landscape component Systems, and choose Create New System, in the context menu.
+  * Enter the system ID
+  * Choose the product SAP CRM or whichever is relevant & Save
+  * Select the newly created System
+  * Click the "Other objects" icon in the menu bar (6th icon from left)
+  * In the popup that opens click the "Key" icon (generate a key)
+  * enter the system number(Ex: 01) and message server (host name of machine) and click "generate key"

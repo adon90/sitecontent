@@ -1,0 +1,466 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======Generic SAP tips======
+=====Visual admin won't connect to the local machine (just login error)=====
+VisualAdmin is super picky about DNS lookups, I think it won't work unless it's setup exactly the way it needs it.
+On my machine i need:
+<code | vi /etc/resolv.conf>
+127.0.0.1 localhost
+10.10.1.195 frenchie frenchie.mycomp.com
+</code>
+Anything else and it fails !
+
+=====Visual admin connects but you can't browse to any "node"=====
+This is caused by using java 1.5 with visual admin.
+You will see this error:
+<code | Java1.5 visual admin error>
+java.rmi.RemoteException: Error while getting cluster node subtree of :name=ClusterNodeRepresentative,j2eeType=com.sap.engine.services.adminadapter.impl.ClusterNodeRepresentative,SAP_J2EEClusterNode=3984950,SAP_J2EECluster=""; nested exception is: 
+	javax.management.ReflectionException: Cannot invoke getter or setter (getClusterNodeMBeanSubTree) as operation unless jmx.invoke.getters property is set
+.......
+</code>
+
+TIP: either use java 1.4, or **add "-Djmx.invoke.getters=true" to the visual admin go script** java command
+More importantly, "-Djmx.invoke.getters=true" needs to be added using the configtool, to **cluster/instance and cluster/instance/dispatcher and cluster/instance/server, note sure it needs to be in all those places, but that seem to help.**
+**Using java 1.4 works best**
+
+
+You might also want to add it to the visual admin start script itself (not usre if necessary or not):
+<code | My updated /usr/sap/ZZZ/JC00/j2ee/admin/go file>
+#!/bin/sh
+if [ -z "${JAVA_HOME}" ]
+then
+echo "ERROR Environment variable JAVA_HOME not set"
+exit 1
+fi
+${JAVA_HOME}/bin/java -showversion -Djmx.invoke.getters=true -Duser.language=en -DP4ClassLoad=P4Connection -Dp4Cache=clean -jar ${0}.jar $@
+</code>
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+=====Errors with shmmax or to many files open=====
+SAP won't start if shmmax is to low, can be overwritten during a system upgrade
+make sure sysctl.conf is set correctly
+<code | sysctl.conf>
+// ..........
+kernel.shmmax = 1879048192
+kernel.msgmni = 128
+fs.file-max = 38192
+</code>
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+=====Connectivity issues / Visual admin can't connect etc...=====
+Sometimes the file etc/services can get overwritten by the OS too then you get all kind of connection issues, such as visual admin not able to connect to the j2ee.
+Make sure /etc/services as the SAP entries.
+<code | /etc/services>
+//........
+sapdp00	3200/tcp	# SAP System Dispatcher Port
+sapdp01	3201/tcp	# SAP System Dispatcher Port
+sapdp02	3202/tcp	# SAP System Dispatcher Port
+sapdp03	3203/tcp	# SAP System Dispatcher Port
+sapdp04	3204/tcp	# SAP System Dispatcher Port
+sapdp05	3205/tcp	# SAP System Dispatcher Port
+sapdp06	3206/tcp	# SAP System Dispatcher Port
+sapdp07	3207/tcp	# SAP System Dispatcher Port
+sapdp08	3208/tcp	# SAP System Dispatcher Port
+sapdp09	3209/tcp	# SAP System Dispatcher Port
+sapdp10	3210/tcp	# SAP System Dispatcher Port
+sapdp11	3211/tcp	# SAP System Dispatcher Port
+sapdp12	3212/tcp	# SAP System Dispatcher Port
+sapdp13	3213/tcp	# SAP System Dispatcher Port
+sapdp14	3214/tcp	# SAP System Dispatcher Port
+sapdp15	3215/tcp	# SAP System Dispatcher Port
+sapdp16	3216/tcp	# SAP System Dispatcher Port
+sapdp17	3217/tcp	# SAP System Dispatcher Port
+sapdp18	3218/tcp	# SAP System Dispatcher Port
+sapdp19	3219/tcp	# SAP System Dispatcher Port
+sapdp20	3220/tcp	# SAP System Dispatcher Port
+sapdp21	3221/tcp	# SAP System Dispatcher Port
+sapdp22	3222/tcp	# SAP System Dispatcher Port
+sapdp23	3223/tcp	# SAP System Dispatcher Port
+sapdp24	3224/tcp	# SAP System Dispatcher Port
+sapdp25	3225/tcp	# SAP System Dispatcher Port
+sapdp26	3226/tcp	# SAP System Dispatcher Port
+sapdp27	3227/tcp	# SAP System Dispatcher Port
+sapdp28	3228/tcp	# SAP System Dispatcher Port
+sapdp29	3229/tcp	# SAP System Dispatcher Port
+sapdp30	3230/tcp	# SAP System Dispatcher Port
+sapdp31	3231/tcp	# SAP System Dispatcher Port
+sapdp32	3232/tcp	# SAP System Dispatcher Port
+sapdp33	3233/tcp	# SAP System Dispatcher Port
+sapdp34	3234/tcp	# SAP System Dispatcher Port
+sapdp35	3235/tcp	# SAP System Dispatcher Port
+sapdp36	3236/tcp	# SAP System Dispatcher Port
+sapdp37	3237/tcp	# SAP System Dispatcher Port
+sapdp38	3238/tcp	# SAP System Dispatcher Port
+sapdp39	3239/tcp	# SAP System Dispatcher Port
+sapdp40	3240/tcp	# SAP System Dispatcher Port
+sapdp41	3241/tcp	# SAP System Dispatcher Port
+sapdp42	3242/tcp	# SAP System Dispatcher Port
+sapdp43	3243/tcp	# SAP System Dispatcher Port
+sapdp44	3244/tcp	# SAP System Dispatcher Port
+sapdp45	3245/tcp	# SAP System Dispatcher Port
+sapdp46	3246/tcp	# SAP System Dispatcher Port
+sapdp47	3247/tcp	# SAP System Dispatcher Port
+sapdp48	3248/tcp	# SAP System Dispatcher Port
+sapdp49	3249/tcp	# SAP System Dispatcher Port
+sapdp50	3250/tcp	# SAP System Dispatcher Port
+sapdp51	3251/tcp	# SAP System Dispatcher Port
+sapdp52	3252/tcp	# SAP System Dispatcher Port
+sapdp53	3253/tcp	# SAP System Dispatcher Port
+sapdp54	3254/tcp	# SAP System Dispatcher Port
+sapdp55	3255/tcp	# SAP System Dispatcher Port
+sapdp56	3256/tcp	# SAP System Dispatcher Port
+sapdp57	3257/tcp	# SAP System Dispatcher Port
+sapdp58	3258/tcp	# SAP System Dispatcher Port
+sapdp59	3259/tcp	# SAP System Dispatcher Port
+sapdp60	3260/tcp	# SAP System Dispatcher Port
+sapdp61	3261/tcp	# SAP System Dispatcher Port
+sapdp62	3262/tcp	# SAP System Dispatcher Port
+sapdp63	3263/tcp	# SAP System Dispatcher Port
+sapdp64	3264/tcp	# SAP System Dispatcher Port
+sapdp65	3265/tcp	# SAP System Dispatcher Port
+sapdp66	3266/tcp	# SAP System Dispatcher Port
+sapdp67	3267/tcp	# SAP System Dispatcher Port
+sapdp68	3268/tcp	# SAP System Dispatcher Port
+sapdp69	3269/tcp	# SAP System Dispatcher Port
+sapdp70	3270/tcp	# SAP System Dispatcher Port
+sapdp71	3271/tcp	# SAP System Dispatcher Port
+sapdp72	3272/tcp	# SAP System Dispatcher Port
+sapdp73	3273/tcp	# SAP System Dispatcher Port
+sapdp74	3274/tcp	# SAP System Dispatcher Port
+sapdp75	3275/tcp	# SAP System Dispatcher Port
+sapdp76	3276/tcp	# SAP System Dispatcher Port
+sapdp77	3277/tcp	# SAP System Dispatcher Port
+sapdp78	3278/tcp	# SAP System Dispatcher Port
+sapdp79	3279/tcp	# SAP System Dispatcher Port
+sapdp80	3280/tcp	# SAP System Dispatcher Port
+sapdp81	3281/tcp	# SAP System Dispatcher Port
+sapdp82	3282/tcp	# SAP System Dispatcher Port
+sapdp83	3283/tcp	# SAP System Dispatcher Port
+sapdp84	3284/tcp	# SAP System Dispatcher Port
+sapdp85	3285/tcp	# SAP System Dispatcher Port
+sapdp86	3286/tcp	# SAP System Dispatcher Port
+sapdp87	3287/tcp	# SAP System Dispatcher Port
+sapdp88	3288/tcp	# SAP System Dispatcher Port
+sapdp89	3289/tcp	# SAP System Dispatcher Port
+sapdp90	3290/tcp	# SAP System Dispatcher Port
+sapdp91	3291/tcp	# SAP System Dispatcher Port
+sapdp92	3292/tcp	# SAP System Dispatcher Port
+sapdp93	3293/tcp	# SAP System Dispatcher Port
+sapdp94	3294/tcp	# SAP System Dispatcher Port
+sapdp95	3295/tcp	# SAP System Dispatcher Port
+sapdp96	3296/tcp	# SAP System Dispatcher Port
+sapdp97	3297/tcp	# SAP System Dispatcher Port
+sapdp98	3298/tcp	# SAP System Dispatcher Port
+sapdp99	3299/tcp	# SAP System Dispatcher Port
+sapgw00	3300/tcp	# SAP System Gateway Port
+sapgw01	3301/tcp	# SAP System Gateway Port
+sapgw02	3302/tcp	# SAP System Gateway Port
+sapgw03	3303/tcp	# SAP System Gateway Port
+sapgw04	3304/tcp	# SAP System Gateway Port
+sapgw05	3305/tcp	# SAP System Gateway Port
+sapgw06	3306/tcp	# SAP System Gateway Port
+sapgw07	3307/tcp	# SAP System Gateway Port
+sapgw08	3308/tcp	# SAP System Gateway Port
+sapgw09	3309/tcp	# SAP System Gateway Port
+sapgw10	3310/tcp	# SAP System Gateway Port
+sapgw11	3311/tcp	# SAP System Gateway Port
+sapgw12	3312/tcp	# SAP System Gateway Port
+sapgw13	3313/tcp	# SAP System Gateway Port
+sapgw14	3314/tcp	# SAP System Gateway Port
+sapgw15	3315/tcp	# SAP System Gateway Port
+sapgw16	3316/tcp	# SAP System Gateway Port
+sapgw17	3317/tcp	# SAP System Gateway Port
+sapgw18	3318/tcp	# SAP System Gateway Port
+sapgw19	3319/tcp	# SAP System Gateway Port
+sapgw20	3320/tcp	# SAP System Gateway Port
+sapgw21	3321/tcp	# SAP System Gateway Port
+sapgw22	3322/tcp	# SAP System Gateway Port
+sapgw23	3323/tcp	# SAP System Gateway Port
+sapgw24	3324/tcp	# SAP System Gateway Port
+sapgw25	3325/tcp	# SAP System Gateway Port
+sapgw26	3326/tcp	# SAP System Gateway Port
+sapgw27	3327/tcp	# SAP System Gateway Port
+sapgw28	3328/tcp	# SAP System Gateway Port
+sapgw29	3329/tcp	# SAP System Gateway Port
+sapgw30	3330/tcp	# SAP System Gateway Port
+sapgw31	3331/tcp	# SAP System Gateway Port
+sapgw32	3332/tcp	# SAP System Gateway Port
+sapgw33	3333/tcp	# SAP System Gateway Port
+sapgw34	3334/tcp	# SAP System Gateway Port
+sapgw35	3335/tcp	# SAP System Gateway Port
+sapgw36	3336/tcp	# SAP System Gateway Port
+sapgw37	3337/tcp	# SAP System Gateway Port
+sapgw38	3338/tcp	# SAP System Gateway Port
+sapgw39	3339/tcp	# SAP System Gateway Port
+sapgw40	3340/tcp	# SAP System Gateway Port
+sapgw41	3341/tcp	# SAP System Gateway Port
+sapgw42	3342/tcp	# SAP System Gateway Port
+sapgw43	3343/tcp	# SAP System Gateway Port
+sapgw44	3344/tcp	# SAP System Gateway Port
+sapgw45	3345/tcp	# SAP System Gateway Port
+sapgw46	3346/tcp	# SAP System Gateway Port
+sapgw47	3347/tcp	# SAP System Gateway Port
+sapgw48	3348/tcp	# SAP System Gateway Port
+sapgw49	3349/tcp	# SAP System Gateway Port
+sapgw50	3350/tcp	# SAP System Gateway Port
+sapgw51	3351/tcp	# SAP System Gateway Port
+sapgw52	3352/tcp	# SAP System Gateway Port
+sapgw53	3353/tcp	# SAP System Gateway Port
+sapgw54	3354/tcp	# SAP System Gateway Port
+sapgw55	3355/tcp	# SAP System Gateway Port
+sapgw56	3356/tcp	# SAP System Gateway Port
+sapgw57	3357/tcp	# SAP System Gateway Port
+sapgw58	3358/tcp	# SAP System Gateway Port
+sapgw59	3359/tcp	# SAP System Gateway Port
+sapgw60	3360/tcp	# SAP System Gateway Port
+sapgw61	3361/tcp	# SAP System Gateway Port
+sapgw62	3362/tcp	# SAP System Gateway Port
+sapgw63	3363/tcp	# SAP System Gateway Port
+sapgw64	3364/tcp	# SAP System Gateway Port
+sapgw65	3365/tcp	# SAP System Gateway Port
+sapgw66	3366/tcp	# SAP System Gateway Port
+sapgw67	3367/tcp	# SAP System Gateway Port
+sapgw68	3368/tcp	# SAP System Gateway Port
+sapgw69	3369/tcp	# SAP System Gateway Port
+sapgw70	3370/tcp	# SAP System Gateway Port
+sapgw71	3371/tcp	# SAP System Gateway Port
+sapgw72	3372/tcp	# SAP System Gateway Port
+sapgw73	3373/tcp	# SAP System Gateway Port
+sapgw74	3374/tcp	# SAP System Gateway Port
+sapgw75	3375/tcp	# SAP System Gateway Port
+sapgw76	3376/tcp	# SAP System Gateway Port
+sapgw77	3377/tcp	# SAP System Gateway Port
+sapgw78	3378/tcp	# SAP System Gateway Port
+sapgw79	3379/tcp	# SAP System Gateway Port
+sapgw80	3380/tcp	# SAP System Gateway Port
+sapgw81	3381/tcp	# SAP System Gateway Port
+sapgw82	3382/tcp	# SAP System Gateway Port
+sapgw83	3383/tcp	# SAP System Gateway Port
+sapgw84	3384/tcp	# SAP System Gateway Port
+sapgw85	3385/tcp	# SAP System Gateway Port
+sapgw86	3386/tcp	# SAP System Gateway Port
+sapgw87	3387/tcp	# SAP System Gateway Port
+sapgw88	3388/tcp	# SAP System Gateway Port
+sapgw89	3389/tcp	# SAP System Gateway Port
+sapgw90	3390/tcp	# SAP System Gateway Port
+sapgw91	3391/tcp	# SAP System Gateway Port
+sapgw92	3392/tcp	# SAP System Gateway Port
+sapgw93	3393/tcp	# SAP System Gateway Port
+sapgw94	3394/tcp	# SAP System Gateway Port
+sapgw95	3395/tcp	# SAP System Gateway Port
+sapgw96	3396/tcp	# SAP System Gateway Port
+sapgw97	3397/tcp	# SAP System Gateway Port
+sapgw98	3398/tcp	# SAP System Gateway Port
+sapgw99	3399/tcp	# SAP System Gateway Port
+sapdp00s	4700/tcp	# SAP System Dispatcher Security Port
+sapdp01s	4701/tcp	# SAP System Dispatcher Security Port
+sapdp02s	4702/tcp	# SAP System Dispatcher Security Port
+sapdp03s	4703/tcp	# SAP System Dispatcher Security Port
+sapdp04s	4704/tcp	# SAP System Dispatcher Security Port
+sapdp05s	4705/tcp	# SAP System Dispatcher Security Port
+sapdp06s	4706/tcp	# SAP System Dispatcher Security Port
+sapdp07s	4707/tcp	# SAP System Dispatcher Security Port
+sapdp08s	4708/tcp	# SAP System Dispatcher Security Port
+sapdp09s	4709/tcp	# SAP System Dispatcher Security Port
+sapdp10s	4710/tcp	# SAP System Dispatcher Security Port
+sapdp11s	4711/tcp	# SAP System Dispatcher Security Port
+sapdp12s	4712/tcp	# SAP System Dispatcher Security Port
+sapdp13s	4713/tcp	# SAP System Dispatcher Security Port
+sapdp14s	4714/tcp	# SAP System Dispatcher Security Port
+sapdp15s	4715/tcp	# SAP System Dispatcher Security Port
+sapdp16s	4716/tcp	# SAP System Dispatcher Security Port
+sapdp17s	4717/tcp	# SAP System Dispatcher Security Port
+sapdp18s	4718/tcp	# SAP System Dispatcher Security Port
+sapdp19s	4719/tcp	# SAP System Dispatcher Security Port
+sapdp20s	4720/tcp	# SAP System Dispatcher Security Port
+sapdp21s	4721/tcp	# SAP System Dispatcher Security Port
+sapdp22s	4722/tcp	# SAP System Dispatcher Security Port
+sapdp23s	4723/tcp	# SAP System Dispatcher Security Port
+sapdp24s	4724/tcp	# SAP System Dispatcher Security Port
+sapdp25s	4725/tcp	# SAP System Dispatcher Security Port
+sapdp26s	4726/tcp	# SAP System Dispatcher Security Port
+sapdp27s	4727/tcp	# SAP System Dispatcher Security Port
+sapdp28s	4728/tcp	# SAP System Dispatcher Security Port
+sapdp29s	4729/tcp	# SAP System Dispatcher Security Port
+sapdp30s	4730/tcp	# SAP System Dispatcher Security Port
+sapdp31s	4731/tcp	# SAP System Dispatcher Security Port
+sapdp32s	4732/tcp	# SAP System Dispatcher Security Port
+sapdp33s	4733/tcp	# SAP System Dispatcher Security Port
+sapdp34s	4734/tcp	# SAP System Dispatcher Security Port
+sapdp35s	4735/tcp	# SAP System Dispatcher Security Port
+sapdp36s	4736/tcp	# SAP System Dispatcher Security Port
+sapdp37s	4737/tcp	# SAP System Dispatcher Security Port
+sapdp38s	4738/tcp	# SAP System Dispatcher Security Port
+sapdp39s	4739/tcp	# SAP System Dispatcher Security Port
+sapdp40s	4740/tcp	# SAP System Dispatcher Security Port
+sapdp41s	4741/tcp	# SAP System Dispatcher Security Port
+sapdp42s	4742/tcp	# SAP System Dispatcher Security Port
+sapdp43s	4743/tcp	# SAP System Dispatcher Security Port
+sapdp44s	4744/tcp	# SAP System Dispatcher Security Port
+sapdp45s	4745/tcp	# SAP System Dispatcher Security Port
+sapdp46s	4746/tcp	# SAP System Dispatcher Security Port
+sapdp47s	4747/tcp	# SAP System Dispatcher Security Port
+sapdp48s	4748/tcp	# SAP System Dispatcher Security Port
+sapdp49s	4749/tcp	# SAP System Dispatcher Security Port
+sapdp50s	4750/tcp	# SAP System Dispatcher Security Port
+sapdp51s	4751/tcp	# SAP System Dispatcher Security Port
+sapdp52s	4752/tcp	# SAP System Dispatcher Security Port
+sapdp53s	4753/tcp	# SAP System Dispatcher Security Port
+sapdp54s	4754/tcp	# SAP System Dispatcher Security Port
+sapdp55s	4755/tcp	# SAP System Dispatcher Security Port
+sapdp56s	4756/tcp	# SAP System Dispatcher Security Port
+sapdp57s	4757/tcp	# SAP System Dispatcher Security Port
+sapdp58s	4758/tcp	# SAP System Dispatcher Security Port
+sapdp59s	4759/tcp	# SAP System Dispatcher Security Port
+sapdp60s	4760/tcp	# SAP System Dispatcher Security Port
+sapdp61s	4761/tcp	# SAP System Dispatcher Security Port
+sapdp62s	4762/tcp	# SAP System Dispatcher Security Port
+sapdp63s	4763/tcp	# SAP System Dispatcher Security Port
+sapdp64s	4764/tcp	# SAP System Dispatcher Security Port
+sapdp65s	4765/tcp	# SAP System Dispatcher Security Port
+sapdp66s	4766/tcp	# SAP System Dispatcher Security Port
+sapdp67s	4767/tcp	# SAP System Dispatcher Security Port
+sapdp68s	4768/tcp	# SAP System Dispatcher Security Port
+sapdp69s	4769/tcp	# SAP System Dispatcher Security Port
+sapdp70s	4770/tcp	# SAP System Dispatcher Security Port
+sapdp71s	4771/tcp	# SAP System Dispatcher Security Port
+sapdp72s	4772/tcp	# SAP System Dispatcher Security Port
+sapdp73s	4773/tcp	# SAP System Dispatcher Security Port
+sapdp74s	4774/tcp	# SAP System Dispatcher Security Port
+sapdp75s	4775/tcp	# SAP System Dispatcher Security Port
+sapdp76s	4776/tcp	# SAP System Dispatcher Security Port
+sapdp77s	4777/tcp	# SAP System Dispatcher Security Port
+sapdp78s	4778/tcp	# SAP System Dispatcher Security Port
+sapdp79s	4779/tcp	# SAP System Dispatcher Security Port
+sapdp80s	4780/tcp	# SAP System Dispatcher Security Port
+sapdp81s	4781/tcp	# SAP System Dispatcher Security Port
+sapdp82s	4782/tcp	# SAP System Dispatcher Security Port
+sapdp83s	4783/tcp	# SAP System Dispatcher Security Port
+sapdp84s	4784/tcp	# SAP System Dispatcher Security Port
+sapdp85s	4785/tcp	# SAP System Dispatcher Security Port
+sapdp86s	4786/tcp	# SAP System Dispatcher Security Port
+sapdp87s	4787/tcp	# SAP System Dispatcher Security Port
+sapdp88s	4788/tcp	# SAP System Dispatcher Security Port
+sapdp89s	4789/tcp	# SAP System Dispatcher Security Port
+sapdp90s	4790/tcp	# SAP System Dispatcher Security Port
+sapdp91s	4791/tcp	# SAP System Dispatcher Security Port
+sapdp92s	4792/tcp	# SAP System Dispatcher Security Port
+sapdp93s	4793/tcp	# SAP System Dispatcher Security Port
+sapdp94s	4794/tcp	# SAP System Dispatcher Security Port
+sapdp95s	4795/tcp	# SAP System Dispatcher Security Port
+sapdp96s	4796/tcp	# SAP System Dispatcher Security Port
+sapdp97s	4797/tcp	# SAP System Dispatcher Security Port
+sapdp98s	4798/tcp	# SAP System Dispatcher Security Port
+sapdp99s	4799/tcp	# SAP System Dispatcher Security Port
+sapgw00s	4800/tcp	# SAP System Gateway Security Port
+sapgw01s	4801/tcp	# SAP System Gateway Security Port
+sapgw02s	4802/tcp	# SAP System Gateway Security Port
+sapgw03s	4803/tcp	# SAP System Gateway Security Port
+sapgw04s	4804/tcp	# SAP System Gateway Security Port
+sapgw05s	4805/tcp	# SAP System Gateway Security Port
+sapgw06s	4806/tcp	# SAP System Gateway Security Port
+sapgw07s	4807/tcp	# SAP System Gateway Security Port
+sapgw08s	4808/tcp	# SAP System Gateway Security Port
+sapgw09s	4809/tcp	# SAP System Gateway Security Port
+sapgw10s	4810/tcp	# SAP System Gateway Security Port
+sapgw11s	4811/tcp	# SAP System Gateway Security Port
+sapgw12s	4812/tcp	# SAP System Gateway Security Port
+sapgw13s	4813/tcp	# SAP System Gateway Security Port
+sapgw14s	4814/tcp	# SAP System Gateway Security Port
+sapgw15s	4815/tcp	# SAP System Gateway Security Port
+sapgw16s	4816/tcp	# SAP System Gateway Security Port
+sapgw17s	4817/tcp	# SAP System Gateway Security Port
+sapgw18s	4818/tcp	# SAP System Gateway Security Port
+sapgw19s	4819/tcp	# SAP System Gateway Security Port
+sapgw20s	4820/tcp	# SAP System Gateway Security Port
+sapgw21s	4821/tcp	# SAP System Gateway Security Port
+sapgw22s	4822/tcp	# SAP System Gateway Security Port
+sapgw23s	4823/tcp	# SAP System Gateway Security Port
+sapgw24s	4824/tcp	# SAP System Gateway Security Port
+sapgw25s	4825/tcp	# SAP System Gateway Security Port
+sapgw26s	4826/tcp	# SAP System Gateway Security Port
+sapgw27s	4827/tcp	# SAP System Gateway Security Port
+sapgw28s	4828/tcp	# SAP System Gateway Security Port
+sapgw29s	4829/tcp	# SAP System Gateway Security Port
+sapgw30s	4830/tcp	# SAP System Gateway Security Port
+sapgw31s	4831/tcp	# SAP System Gateway Security Port
+sapgw32s	4832/tcp	# SAP System Gateway Security Port
+sapgw33s	4833/tcp	# SAP System Gateway Security Port
+sapgw34s	4834/tcp	# SAP System Gateway Security Port
+sapgw35s	4835/tcp	# SAP System Gateway Security Port
+sapgw36s	4836/tcp	# SAP System Gateway Security Port
+sapgw37s	4837/tcp	# SAP System Gateway Security Port
+sapgw38s	4838/tcp	# SAP System Gateway Security Port
+sapgw39s	4839/tcp	# SAP System Gateway Security Port
+sapgw40s	4840/tcp	# SAP System Gateway Security Port
+sapgw41s	4841/tcp	# SAP System Gateway Security Port
+sapgw42s	4842/tcp	# SAP System Gateway Security Port
+sapgw43s	4843/tcp	# SAP System Gateway Security Port
+sapgw44s	4844/tcp	# SAP System Gateway Security Port
+sapgw45s	4845/tcp	# SAP System Gateway Security Port
+sapgw46s	4846/tcp	# SAP System Gateway Security Port
+sapgw47s	4847/tcp	# SAP System Gateway Security Port
+sapgw48s	4848/tcp	# SAP System Gateway Security Port
+sapgw49s	4849/tcp	# SAP System Gateway Security Port
+sapgw50s	4850/tcp	# SAP System Gateway Security Port
+sapgw51s	4851/tcp	# SAP System Gateway Security Port
+sapgw52s	4852/tcp	# SAP System Gateway Security Port
+sapgw53s	4853/tcp	# SAP System Gateway Security Port
+sapgw54s	4854/tcp	# SAP System Gateway Security Port
+sapgw55s	4855/tcp	# SAP System Gateway Security Port
+sapgw56s	4856/tcp	# SAP System Gateway Security Port
+sapgw57s	4857/tcp	# SAP System Gateway Security Port
+sapgw58s	4858/tcp	# SAP System Gateway Security Port
+sapgw59s	4859/tcp	# SAP System Gateway Security Port
+sapgw60s	4860/tcp	# SAP System Gateway Security Port
+sapgw61s	4861/tcp	# SAP System Gateway Security Port
+sapgw62s	4862/tcp	# SAP System Gateway Security Port
+sapgw63s	4863/tcp	# SAP System Gateway Security Port
+sapgw64s	4864/tcp	# SAP System Gateway Security Port
+sapgw65s	4865/tcp	# SAP System Gateway Security Port
+sapgw66s	4866/tcp	# SAP System Gateway Security Port
+sapgw67s	4867/tcp	# SAP System Gateway Security Port
+sapgw68s	4868/tcp	# SAP System Gateway Security Port
+sapgw69s	4869/tcp	# SAP System Gateway Security Port
+sapgw70s	4870/tcp	# SAP System Gateway Security Port
+sapgw71s	4871/tcp	# SAP System Gateway Security Port
+sapgw72s	4872/tcp	# SAP System Gateway Security Port
+sapgw73s	4873/tcp	# SAP System Gateway Security Port
+sapgw74s	4874/tcp	# SAP System Gateway Security Port
+sapgw75s	4875/tcp	# SAP System Gateway Security Port
+sapgw76s	4876/tcp	# SAP System Gateway Security Port
+sapgw77s	4877/tcp	# SAP System Gateway Security Port
+sapgw78s	4878/tcp	# SAP System Gateway Security Port
+sapgw79s	4879/tcp	# SAP System Gateway Security Port
+sapgw80s	4880/tcp	# SAP System Gateway Security Port
+sapgw81s	4881/tcp	# SAP System Gateway Security Port
+sapgw82s	4882/tcp	# SAP System Gateway Security Port
+sapgw83s	4883/tcp	# SAP System Gateway Security Port
+sapgw84s	4884/tcp	# SAP System Gateway Security Port
+sapgw85s	4885/tcp	# SAP System Gateway Security Port
+sapgw86s	4886/tcp	# SAP System Gateway Security Port
+sapgw87s	4887/tcp	# SAP System Gateway Security Port
+sapgw88s	4888/tcp	# SAP System Gateway Security Port
+sapgw89s	4889/tcp	# SAP System Gateway Security Port
+sapgw90s	4890/tcp	# SAP System Gateway Security Port
+sapgw91s	4891/tcp	# SAP System Gateway Security Port
+sapgw92s	4892/tcp	# SAP System Gateway Security Port
+sapgw93s	4893/tcp	# SAP System Gateway Security Port
+sapgw94s	4894/tcp	# SAP System Gateway Security Port
+sapgw95s	4895/tcp	# SAP System Gateway Security Port
+sapgw96s	4896/tcp	# SAP System Gateway Security Port
+sapgw97s	4897/tcp	# SAP System Gateway Security Port
+sapgw98s	4898/tcp	# SAP System Gateway Security Port
+sapgw99s	4899/tcp	# SAP System Gateway Security Port
+sql6		7210/tcp
+#sapdbni72		7269/tcp
+sapdbni72		7269/tcp
+</code>

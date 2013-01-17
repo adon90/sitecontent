@@ -1,0 +1,4 @@
+{"author":"Guest (Guest)",
+"title":"Working in different distros",
+"text":"This works great for me using my US Cellular BlackBerry 9630 Tour. I had to modify the \"uscellular.conf\" file because there was no \".conf\" at the end of the last line referring to uscellular-chat.conf. Once I had corrected this oversight, everything went smoothly.\n\nSo far, I have used this with Ubuntu 8.10, 9.04, and 9.10, #!CrunchBang 9.04.01, Mint 7 and Fedora Core 12 (good luck finding all the files required for this one). I have not tried it with any distro running KDE, XFCE, or LXDE, but it did work well in Openbox.",
+"ts":"2010-01-15T12:41:00-08:00 Los_Angeles"}

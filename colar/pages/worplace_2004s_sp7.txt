@@ -1,0 +1,128 @@
+====== SAP developer worplace 2004s SP7 ======
+
+This is a part of this doc: [[workspace 2004s]], **you need to look there first for the patch prerequities.**
+
+See nw2004s_SP_stack_guide_sp07.pdf\\
+See note: 879289 (support package guide note)\\
+and Note: 891983 (JSPM: Central SAP Note SAP NetWeaver 2004s)\\
+WARNING and Note: 933687 (JSPM hanging on windows with SP07)\\
+
+You must have downloaded SP7 from http://service.sap.com/sp-stacks
+
+We have it in\\
+\\frenchie/sapcd/patches/nw2004s_patches/sp07/
+
+**Copy**:\\
+\\frenchie/sapcd/patches/nw2004s_patches/sp07/* \\
+\\frenchie/sapcd/patches/nw2004s_patches/sp07/windows/* \\
+into:\\
+C:\usr\sap\trans\EPS\in
+
+=====Upgrade the Dev Studio=====
+
+Stop all the SAP system\\
+use the sap management console (MMC) to shut down the whole SAP Server (all instances)
+
+cd \\frenchie\sapcd\patches\nw2004s_patches\sp07\studio\J2EE-RUNT-CD\IDE \\
+and run ''IDE70Setup.exe''
+
+Once the Installer runs, choose “Update” and complete the install.
+
+=====Upgrade Web AS / Portal / Trex=====
+
+Restart the instance using the sap MMC.
+
+NOTE Start a command prompt this way:\\
+Go to Start/Program/Accessories, and Right click on “Command Prompt”, in the contextual menu, select “Run As” \\
+A “run as” prompt will popup, select the user ZTBadm.
+
+Now we have a shell where we are logged as ZTBadm (like a unix “su”)
+
+WARNING Do the rest of the patching as ZTBADM using this command prompt
+
+Use JSPM as explained here (or see section 2.2 of the PDF).
+
+WARNING First you might need to fix the SDM (if you are running ⇐SP4): \\
+
+WARNING If you don’t do this patch will fail !\\
+
+See here if you are starting from sp4 or lower on how to do it [[Worplace 2004s sp6]]
+
+If the DB(MaxDB) is not up, start it with SAP MMC \\ 
+We also need the SDM up, so start the J2ee node as well \\
+wait for the SDM to be started.
+
+Start the JSPM
+<code>
+cd c:\usr\sap\ZTB\JC00\j2ee\JSPM\
+go.bat
+#(takes a while for the gui to come up)
+</code>
+
+Enter the password to login in the SDM\\
+for nwdi package control choose “Not under nwdi” (Only deployment servers are ??)
+
+Choose “single package”\\
+and select all the packages and click “next”\\
+
+After JSPM is updated, restart JSPM to continue the update\\
+Choose “Support package stack” / “No NWDI control”\\
+
+WARNING **DO NOT Select** "Restore application settings" (as of now it will mess the j2ee engine, and it won';t start anymore if you do - It makes the irj component not start automatically which causes all kind of issues later)\\
+
+Select to use “2004SP7_windowsxx.xml”
+
+Note: if “support package stacks” does not work (does not find any stack), this probably means you are missing some packages (SAR) or that some are corrupted.
+
+Click “Next”, it will run “Check Queue” for a while (=~15mn)
+
+Then it will show what it’s gonna do, at that point make sure you close the MMC if it’s open, then click “Next”
+
+Update should hopefully complete after a while (~5 hours, depending on machine).
+
+NOTE if the JSPM fails see my [[worplace 2004s SP6 | SP6 doc]] for a workaround using the SDM
+
+NOTE it will several time fail (mainly because the j2ee is too slow to restart), try to just press "resume" sometimes it works.\\
+If it fails, try "new deployement"
+
+==== Problem fix====
+I was getting a hard error, because the component caf/eu/gp/croom/... would fail every time.
+
+Here is the full error message:
+<code>
+Starting Deployment of caf/eu/gp/croom/content
+Aborted: development component
+'caf/eu/gp/croom/content'/'sap.com'/'MAIN_APL70VAL_C'/'886219', grouped
+by software component
+'SAP-EU'/'sap.com'/'MAIN_APL70VAL_C'/'1000.7.00.7.0.20060331151344':
+Caught exception during application deployment from SAP J2EE Engine's
+deploy service:
+java.rmi.RemoteException: Error occurred while deploying ear file
+./temp/deploy/work/deploying/caf_eu_gp_croom_content.ear. Reason: None of
+the available containers recognized the components of application
+sap.com/caf~eu~gp~croom~content; it is not possible to make deploy.
+(message ID:
+com.sap.sdm.serverext.servertype.inqmy.extern.EngineApplOnlineDeployerImpl.performAction(DeploymentActionTypes).REMEXC)
+Deployment of caf/eu/gp/croom/content finished with Error (Duration 3125 ms)
+
+Starting Deployment of SAP-EU
+Aborted: software component
+'SAP-EU'/'sap.com'/'MAIN_APL70VAL_C'/'1000.7.00.7.0.20060331151344':
+No further description found.
+Deployment of SAP-EU finished with Error (Duration 2484 ms)
+</code>
+
+Resolution:\\
+  * Extract (ie: unzip) the SAPEUxxx.sca to a temporary directory (tmp)
+  * Start the SDM and go to the deployment tab
+  * Click the "+" (add) icon and briwse to tmp/deployarchives/
+  * Select ALL the SDA's **EXCEPT** caf.eu.gp.examples.* **AND** caf.eu.gp.croom.*
+  * Deploy all those components
+  * Leave the SDM
+  * **Restart** the J2EE engine
+  * Start the SDM and deploy the rest of sap-eu
+  * If there are any packages left to patch, Start the JSPM, choose "New deployment" and complete the patch.
+  
+
+
+~~DISCUSSION~~

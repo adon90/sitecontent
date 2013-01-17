@@ -1,0 +1,12 @@
+======SAP Catalog tool======
+I've been messing with writing a faster more efficient tool for SAP CRM Catalog maintenance.
+It's written in Fan, using FWT.
+
+Anyway it's very early and mostly useless, but i wanted to highlight two features that should absolutely be standard in SAP's standard GUI:
+  - **Export a table to CSV** (so you can print it or look at it in Excell)
+  - **Translate a Cell to English**, becuase lots of infos are in German! (Using Google translate API)
+
+See Demo:
+<html>
+<embed src=http://media.skoffer.com/api/v1/skoffer_player.swf?config={"playlist":[{"url":"http://media.skoffer.com/40c70bb60d1f165df16701caf3578c36.flv","autoPlay":false,"autoBuffering":true,"scaling":"fit"}]} type="application/x-shockwave-flash" wmode="transparent" width="800" height="660" allowFullScreen="true" allowScriptAccess="always" allowNetworking="all" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+</html>

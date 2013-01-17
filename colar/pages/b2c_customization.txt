@@ -1,0 +1,276 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== CRM ISA Debugging, Tracing & Profiling======
+This is a collection of tips, tools and utilities, very helpful for debugging/tracing/profiling ISA applications, to find problems and help with development, maintainability in general.
+
+===== Usefull URL's =====
+
+NWA, main j2ee page\\
+[[http://host:50100/]]
+
+Main Admin page\\
+[[http://host:50100/b2c/admin/index.jsp]]
+
+XCM Setup:\\
+[[http://host:50100/b2c/admin/xcm/init.do]]
+
+XCM Shop tool Setup:\\
+[[http://host:50100/shopadmin/admin/xcm/init.do]] \\
+
+XCM Catalog tool setup:\\
+[[http://host:50100/webcatadmin/admin/xcm/init.do]]
+
+Catalog administration tool:\\
+[[http://host:50100/webcatadmin/catadm/init.do]]
+
+Shop Administration tool
+[[http://host:50100/shopadmin/shopadmin/init.do]]
+
+===== Call Custom ABAP functions =====
+
+To allow the ISA application to call your custom function module you have to register it in\\
+WEB-INF/xcm/customer/modification/modfication-config.xml
+
+Example:
+<code xml>
+<function-module-replacement>
+    <param name="fm:CRM_ISA_SHOP_GETLIST" value="Z_CRM_ISA_SHOP_GETLIST"/>
+</function-module-replacement> 
+</code>
+
+===== Debugging ABAP code (called from WEBAS java /ISA)  =====
+For a long time i thought it did not work right, this is because the doc does not tell you everything.\\
+The doc explains how you have to craete the user weblogin etc ...\\
+First to setup on the server side:\\
+<code>
+Go to the server XCM configuration page
+go to start->components_customer and select jco
+press "edit"
+enter a name (jcodebug) and press "create"
+select "server_connect" as  base configuration
+enter the server (crm) connection data
+Save.
+Then go to xcm   start-> app config.-> customer and select the config (~shop) you want to use,   change the "jcodata" parameter to the connection we just created (jcodebug)
+Save
+</code>
+Then to setup on the client side (developer):
+<code>
+Start sapgui
+go to transaction SE37
+Go to utilities -> settings,   go to the "debugger" tab
+Enter the id (not an alias) of the user which you set in the jco connection (ie: weblogin).
+Note: THIS USER MUST HAVE DEBUG PERMISSIONS (S_ENTW_SHOW) !
+</code>
+Now to debug:
+<code>
+In SAP GUI, go to se37, 
+go to whatever function you want to debug
+click on a line of code and set an EXTERNEL  breakpoint (stop sign icon)
+Then go to the ISA website and when you get to where the code is called, it should stop on the breakpoint and start a debug session.
+</code>
+
+Now what they don't tell you (not in the doc anyway):\\
+On the site if you login (as a user of the website) debug will not work anymore, that is because instead of sending the debug infos as the default user we defined (weblogin), it now connects as the actual user.\\
+So the way to gte that to work is:\\
+
+Create a user on the website (ie: debug@company.com), then go to SU01 and give it debug permissions, now you have the user ready to go, also find the user id (ie: 5000000200).\\
+
+Then in the sapgui go back to the debug settings screen and use that (5000000200 instead of weblogin as the user.\\
+
+Then and only then will it stop on breakpoints after you are logged on the site.\\
+Of course if you log out of the site you have to swicth back to default user (weblogin).
+
+
+===== Debugging java code =====
+
+See here [[b2c_no_nwdi]]
+
+===== Add a popup to ABAP code =====
+
+As an alternative to debugging.\\
+We can test the code by adding a call to TH_POPUP, this will show a popup in SAPGUI when the code is executed.\\
+
+
+===== IPC Debugging =====
+
+We scratched our heads quite a while about that one.\\
+The B2C java code makes RFC calls to CRM to functions such as SPC_GET_DOCUMENT_INFOS  (or SPC*)\\
+If you look at those functions in CRM you will see they are empty and can't be debugged.\\
+The reason why is they are only "shells" for java calls (here calls to the IPC).\\
+You can run transaction SM53 then go to applications -> activated applications -> SAP IPC -> connections to see the "mapping" between those RFC shells and the actual java class they are calling.\\
+If you want to see those classes code, the jar files can be found in the SAPAPIPCJxx   SAR file.\\
+In any case it's very unpractical to debug those IPC calls, since they involve, two different java virtual machine + CRM (ABAP).
+
+===== Tracing: Struts Flow and RFC Calls =====
+It's quite difficult to follow the struts/layout flow and/or RFC calls from the huge config.xml.\\
+It's easier to track it at run time in the log file to see what happens when you take an action on the website.
+
+However it is difficult to read the SAP log files because the output is huge.
+
+So i wrote this little very useful utility here, which will tail the sap log file and only print out the relevant Struts action or RFC logs (one or the other or both, see the booleans), it's quick and dirty but very useful.
+
+See [[ISA action & RFC tracer]]
+
+Here is an example output
+<code>
+**************Start Live input*****************
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket' [forward]='/b2c/basketcheckout.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout' [forward]='UIStoreLayout;UIStoreForward:basketorder;UIAction:/b2c/secureLogin.do' [exectime]='1516'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin' [forward]='UILayout:loginLayout[workarea=login]' [exectime]='16'#
+</code>
+
+=====Profiling SAP ISA J2EE=====
+See [[Profiling SAP ISA J2EE WEBAS with Netbeans]] (**Requires running sap on java 1.5 or 6.0**)
+
+Or [[Profiling SAP ISA J2EE WEBAS using Eclipse Memory Analyzer(MAT)]] (**Less convenient but works with Java 1.4**)
+
+=====Scanning log files for errors (automated script)=====
+See [[Perl script to scan isaerror.log and report/email unplanned errors]]
+
+===== ISA flow chart =====
+B2B flowchart {{sap_flow.doc}}
+
+Note: to find the path infos,  see this file(s)\\
+
+<code>
+tail -f c:/usr/sap/ZTB/JC01/j2ee/cluster/server0/log/defaultTrace*
+</code>
+** or easier, use the java helper class provided in the previous section**
+
+B2C flow:
+<code>
+going to init.do
+[actionclass]='com.sap.isa.isacore.action.IsaCoreInitAction' [path]='/b2c/coreinit'#
+[actionclass]='com.sap.isa.isacore.action.IsaCoreInitAction' [path]='/b2c/coreinit' [forward]='/b2c/preparelogin.do' [exectime]='0'#
+[actionclass]='com.sap.isa.user.action.PrepareLoginAction' [path]='/b2c/preparelogin'#
+[actionclass]='com.sap.isa.user.action.PrepareLoginAction' [path]='/b2c/preparelogin' [forward]='/b2c/login.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.LoginAction' [path]='/b2c/login'#
+[actionclass]='com.sap.isa.isacore.action.b2c.LoginAction' [path]='/b2c/login' [forward]='/b2c/shoplist.do' [exectime]='94'#
+[actionclass]='com.sap.isa.isacore.action.ShopShowListAction' [path]='/b2c/shoplist'#
+[actionclass]='com.sap.isa.isacore.action.ShopShowListAction' [path]='/b2c/shoplist' [forward]='/b2c/shoplist.jsp' [exectime]='109'#
+clicking on a shop
+[actionclass]='com.sap.isa.isacore.action.ShopReadAction' [path]='/b2c/readshop'#
+[actionclass]='com.sap.isa.isacore.action.ShopReadAction' [path]='/b2c/readshop' [forward]='/b2c/campaignfromMIG.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.campaign.GetCampaignFromMIGAction' [path]='/b2c/campaignfromMIG'#
+[actionclass]='com.sap.isa.isacore.action.campaign.GetCampaignFromMIGAction' [path]='/b2c/campaignfromMIG' [forward]='/catalog/ISAEntry.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.ISAEntryAction' [path]='/catalog/ISAEntry'#
+[actionclass]='com.sap.isa.catalog.actions.ISAEntryAction' [path]='/catalog/ISAEntry' [forward]='/b2c/initB2C.do' [exectime]='1062'#
+[actionclass]='com.sap.isa.isacore.action.b2c.InitB2CAction' [path]='/b2c/initB2C'#
+[actionclass]='com.sap.isa.isacore.action.b2c.InitB2CAction' [path]='/b2c/initB2C' [forward]='/advisor/checkAvailable.do' [exectime]='6672'#
+[actionclass]='com.sap.isa.advisor.action.AdvisorIsAvailableAction' [path]='/advisor/checkAvailable'#
+[actionclass]='com.sap.isa.advisor.action.AdvisorIsAvailableAction' [path]='/advisor/checkAvailable' [forward]='/b2c/checkoci.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.CheckOciReceiveAction' [path]='/b2c/checkoci'#
+[actionclass]='com.sap.isa.isacore.action.CheckOciReceiveAction' [path]='/b2c/checkoci' [forward]='/b2c/start.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.StartApplicationAction' [path]='/b2c/start'#
+[actionclass]='com.sap.isa.isacore.action.StartApplicationAction' [path]='/b2c/start' [forward]='UILayout:homeLayout[workarea=catalogentry]' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket' [forward]='UIInclude:/b2c/pcf/miniBasket.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.marketing.ShowCatalogEntryAction' [path]='/b2c/catalogEntry'#
+[actionclass]='com.sap.isa.isacore.action.marketing.ShowCatalogEntryAction' [path]='/b2c/catalogEntry' [forward]='UIInclude:/b2c/pcf/catalogentry.inc.jsp' [exectime]='0'#
+clicking on category 'pillows'
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieInPathAction' [path]='/catalog/categorieInPath'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieInPathAction' [path]='/catalog/categorieInPath' [forward]='/catalog/updateAreaContext.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateAreaContext'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateAreaContext' [forward]='UILayout:catalogLayout[workarea=productList];UIAction:/b2c/display.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket' [forward]='UIInclude:/b2c/pcf/miniBasket.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories' [forward]='UIInclude:/catalog/pcf/CategoriesB2C.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products' [forward]='/b2c/captureviewcategory.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory' [forward]='/catalog/path.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path' [forward]='/catalog/getAttributes.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes' [forward]='/catalog/itemPage.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage' [forward]='/catalog/prices.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices' [forward]='UIInclude:/catalog/pcf/ProductsB2C.inc.jsp' [exectime]='0'#
+clicking on product 'soft support'
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieInPathAction' [path]='/catalog/categorieInPath'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieInPathAction' [path]='/catalog/categorieInPath' [forward]='/catalog/updateAreaContext.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateAreaContext'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateAreaContext' [forward]='UILayout:catalogLayout[workarea=productList];UIAction:/b2c/display.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket' [forward]='UIInclude:/b2c/pcf/miniBasket.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories' [forward]='UIInclude:/catalog/pcf/CategoriesB2C.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products' [forward]='/b2c/captureviewcategory.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory' [forward]='/catalog/path.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path' [forward]='/catalog/getAttributes.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes' [forward]='/catalog/itemPage.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage' [forward]='/catalog/prices.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices' [forward]='UIInclude:/catalog/pcf/ProductsB2C.inc.jsp' [exectime]='2297'#
+adding one item to cart
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateItems'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/catalog/updateItems' [forward]='/catalog/updateItems1.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemContextAction' [path]='/catalog/updateItems1'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemContextAction' [path]='/catalog/updateItems1' [forward]='/catalog/updateItems2.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateNextContextAction' [path]='/catalog/updateItems2'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateNextContextAction' [path]='/catalog/updateItems2' [forward]='/catalog/updateItems3.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateQueryContextAction' [path]='/catalog/updateItems3'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateQueryContextAction' [path]='/catalog/updateItems3' [forward]='/catalog/updateItems4.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateScenarioContextAction' [path]='/catalog/updateItems4'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateScenarioContextAction' [path]='/catalog/updateItems4' [forward]='/catalog/updateItems5.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemsFromPageAction' [path]='/catalog/updateItems5'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemsFromPageAction' [path]='/catalog/updateItems5' [forward]='/catalog/addToBasket.do?target=basket' [exectime]='2375'#
+[actionclass]='com.sap.isa.catalog.actions.AddToBasketAction' [path]='/catalog/addToBasket'#
+[actionclass]='com.sap.isa.catalog.actions.AddToBasketAction' [path]='/catalog/addToBasket' [forward]='/b2c/addtobasket.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.order.AddToBasketAction' [path]='/b2c/addtobasket'#
+[actionclass]='com.sap.isa.isacore.action.order.AddToBasketAction' [path]='/b2c/addtobasket' [forward]='/b2c/addtobasket-display.do' [exectime]='2406'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/b2c/addtobasket-display'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateAreaContextAction' [path]='/b2c/addtobasket-display' [forward]='/b2c/addtobasket-display1.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemContextAction' [path]='/b2c/addtobasket-display1'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateItemContextAction' [path]='/b2c/addtobasket-display1' [forward]='/b2c/addtobasket-display2.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateQueryContextAction' [path]='/b2c/addtobasket-display2'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateQueryContextAction' [path]='/b2c/addtobasket-display2' [forward]='/b2c/addtobasket-display3.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateNextContextAction' [path]='/b2c/addtobasket-display3'#
+[actionclass]='com.sap.isa.catalog.actions.UpdateNextContextAction' [path]='/b2c/addtobasket-display3' [forward]='UIAction:/b2c/display.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.DisplayMiniBasketB2CAction' [path]='/b2c/miniBasket' [forward]='UIInclude:/b2c/pcf/miniBasket.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategoriesB2CAction' [path]='/catalog/categories' [forward]='UIInclude:/catalog/pcf/CategoriesB2C.inc.jsp' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemsFromCategoryAction' [path]='/catalog/products' [forward]='/b2c/captureviewcategory.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory'#
+[actionclass]='com.sap.isa.isacore.action.CaptureViewCategoryAction' [path]='/b2c/captureviewcategory' [forward]='/catalog/path.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path'#
+[actionclass]='com.sap.isa.catalog.actions.GetPathAction' [path]='/catalog/path' [forward]='/catalog/getAttributes.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes'#
+[actionclass]='com.sap.isa.catalog.actions.GetCategorieAttributesAction' [path]='/catalog/getAttributes' [forward]='/catalog/itemPage.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage'#
+[actionclass]='com.sap.isa.catalog.actions.GetItemPageAction' [path]='/catalog/itemPage' [forward]='/catalog/prices.do' [exectime]='0'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices'#
+[actionclass]='com.sap.isa.catalog.actions.GetPricesAction' [path]='/catalog/prices' [forward]='UIInclude:/catalog/pcf/ProductsB2C.inc.jsp' [exectime]='0'#
+clicking 'view shopping cart'
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket' [forward]='UILayout:basketLayout[workarea=basketDisplay];UIAction:/b2c/display.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDisplayAction' [path]='/b2c/basketdisplay'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDisplayAction' [path]='/b2c/basketdisplay' [forward]='/b2c/cuaforbasket.do' [exectime]='47'#
+[actionclass]='com.sap.isa.isacore.action.marketing.ShowCUAInBasketAction' [path]='/b2c/cuaforbasket'#
+[actionclass]='com.sap.isa.isacore.action.marketing.ShowCUAInBasketAction' [path]='/b2c/cuaforbasket' [forward]='UIInclude:/b2c/order/pcf/basket.inc.jsp' [exectime]='266'#
+clicking 'proceed to checkout
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CDispatcherAction' [path]='/b2c/maintainBasket' [forward]='/b2c/basketcheckout.do' [exectime]='0'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout'#
+[actionclass]='com.sap.isa.isacore.action.b2c.order.MaintainBasketB2CCheckoutAction' [path]='/b2c/basketcheckout' [forward]='UIStoreLayout;UIStoreForward:basketorder;UIAction:/b2c/secureLogin.do' [exectime]='844'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin'#
+[actionclass]='com.sap.isa.core.action.StartSecureAction' [path]='/b2c/secureLogin' [forward]='UILayout:loginLayout[workarea=login]' [exectime]='15'#
+</code>
+
+=====ISA Tags=====
+They are poorly documented, so it's sometimes usefull to look at the sources:\\
+See com.sap.isa.catalog.taglib.*
+

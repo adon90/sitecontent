@@ -1,0 +1,102 @@
+======sp7_to_sp13_subversion_branching_merging======
+
+This just logs the stuff i had to do to support a branch of our code based on sap SP7 while the trunk was moved to SP13, so we could maintain the SP7 code, while we complete the upgrade of our infrastructure to SP13.
+
+It was decided the trunk would get the upgrade since it is the most changes, while the branch would keep the old version(SP7) and whatever fixes we need to do before we complete the upgrade.
+Also the fixes/features we add in SP7 will be merged into SP13 as we go along.
+
+=====creating branch=====
+
+CREATED a new branch dir in svn: http://our.svn.server/svn/branches/sp7/ (using rapidsvn)
+
+Then we copied the current code to the branch.
+Note: because some code already changed in the trunk since i created my "upgrade" projects, i had to go the revision i use for those projects.
+
+<code>
+# those haven't changed, so copy current revision into branch
+svn copy http://our.svn.server/svn/apps_b2b_pcf http://our.svn.server/svn/branches/sp7/apps_b2b_pcf
+svn copy http://our.svn.server/svn/apps_b2c_sealy http://our.svn.server/svn/branches/sp7/apps_b2c_sealy
+
+# those changed, so i need to get the revision i based the upgrade on
+svn copy -r 1440 http://our.svn.server/svn/b2b_pcf http://our.svn.server/svn/branches/sp7/b2b_pcf
+svn copy -r 1411 http://our.svn.server/svn/b2c_sealy http://our.svn.server/svn/branches/sp7/b2c_sealy
+svn copy -r 1425 http://our.svn.server/svn/pcf_java/ http://our.svn.server/svn/branches/sp7/pcf_java
+
+# those should be based on head(unchanged), but i accidentally committed the upgraded version to the trunk before creating the branch, so i need to go back to the right revision.
+svn copy -r 422 http://our.svn.server/svn/b2b_vanilla http://our.svn.server/svn/branches/sp7/b2b_vanilla
+svn copy -r 979 http://our.svn.server/svn/sap_crm_java http://our.svn.server/svn/branches/sp7/sap_crm_java
+svn copy -r 976 http://our.svn.server/svn/sap_crm_libs http://our.svn.server/svn/branches/sp7/sap_crm_libs
+svn copy -r 157 http://our.svn.server/svn/vanilla_b2c http://our.svn.server/svn/branches/sp7/vanilla_b2c
+</code>
+
+===== Merging changed code (during upgrade) back into branch =====
+Since some code has changed in the trunk already after the revisions i based the branch on(was suppose to be code-freeze), i have to do the xtra step to merge the trunk changes to the branch
+
+WARNING: this is an odd case, usually you merge the branch changes to the trunk, not the other way around like here.
+
+Process: checked out the branch in a temp folder and merge diff from trunk into the branch for projects that need it: pcf_java,b2b_pcf
+
+<code>
+mkdir /tmp/svn
+cd /tmp/svn/
+svn checkout http://our.svn.server/svn/apps_b2b_pcfb2b_pcf
+svn checkout http://our.svn.server/svn/b2c_sealy
+#svn checkout http://our.svn.server/svn/pcf_java
+cd b2c_sealy
+# we merge the diff between the revision we branched at and the current version of trunk
+# first do a dry run to just make sure it looks ok
+svn merge --dry-run -r 1411:1458 http://our.svn.server/svn/b2c_sealy
+# then do it
+svn merge -r 1411:1458 http://our.svn.server/svn/b2c_sealy
+# save the patched branch (commit)
+svn commit
+
+#then we do the same for the other project 
+cd ../b2b_pcf
+svn merge --dry-run -r 1440:1456 http://our.svn.server/svn/b2b_pcf
+svn merge ---r 1440:1456 http://our.svn.server/svn/b2b_pcf
+svn commit
+</code>
+
+===== revisions after commit of upgraded code to trunk =====
+Here are the revisions i ended up with after all this:
+
+trunk:
+b2b_pcf: 1470
+b2c_sealy: 1473
+pcf_java: 1474
+
+branch:
+b2b_pcf: 1463
+b2c_sealy: 1462
+pcf_java: 1451
+
+
+At this point the branch and trunk are ready for use (end of code freeze)
+
+===== Build server =====
+We use a build server(hudson) for our release, in the short term we want it to use the branch, so we made that changed on hudson.
+
+===== Post Upgrade =====
+We now have fully completed the upgrade and will stop using the branch and now work mainly on the trunk (upgraded code).
+
+  * First we need to merge all the upgrade/fixes we made on the branch back into the trunk.
+
+On my developer station i switched all projects back to the trunk (after committing whatever was not to the branch.).
+Then i go in my projects root and do the merge 
+Run the commands first with --dry-run to see what will happen
+
+<code | merging branch changes back into trunk>
+Note: 1500 is the revision on which the branch was originally made. 1558 is the current version of the branch.
+svn merge http://our.svn.server/svn/branches/sp7/b2c_sealy@1500 http://our.svn.server/svn/branches/sp7/b2c_sealy@1558 b2c_sealy
+svn merge http://our.svn.server/svn/branches/sp7/b2b_pcf@1499 http://our.svn.server/svn/branches/sp7/b2b_pcf@1555 b2b_pcf
+svn merge http://our.svn.server/svn/branches/sp7/pcf_java@1488 http://our.svn.server/svn/branches/sp7/pcf_java@1559pcf_java
+</code>
+
+Now the merged code needs to be reviewed, and possibly conflict fixes.
+When all good, then commit all the merged projects to complete the merge.
+
+  * switch all developers back to trunk
+
+  * build server: switched back to build from trunk rather than the branch.
+

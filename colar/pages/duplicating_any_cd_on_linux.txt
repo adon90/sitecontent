@@ -1,0 +1,46 @@
+======Duplicating a CD on linux (Including VCD)======
+
+This can be done easily using the "disc at once" tool, that smartly copy the whole disc as once instead of stupidly tryign to get separate files.
+You need the cdrdao tool installed.
+First you need to find your device, use:
+cdrdao scanbus
+If it finds nothing, then you probably have an ATA drive (ie: IDE, not sccsi), in that case you can find it with the cdrecord tool:
+<code bash>
+cdrecord -scanbus dev=ATA
+</code>
+It should return something like:
+
+<code>
+Cdrecord-Clone 2.01a28 (powerpc-unknown-linux-gnu) Copyright (C) 1995-2004 J?g Schilling
+scsidev: 'ATA'
+devname: 'ATA'
+scsibus: -2 target: -2 lun: -2
+Warning: Using badly designed ATAPI via /dev/hd* interface.
+Linux sg driver version: 3.5.27
+Using libscg version 'schily-0.8'.
+scsibus0:
+0,0,0	  0) 
+0,1,0	  1) 'SONY	 ' 'CD-RW  CRX820E  ' '3.3b' Removable CD-ROM
+0,2,0	  2) *
+0,3,0	  3) *
+0,4,0	  4) *
+0,5,0	  5) *
+0,6,0	  6) *
+0,7,0	  7) *
+</code>
+From that you see the (sony) cdrom drive device is "0,1,0"
+
+So now we know that we can make the actual copy, first pop the disk to be copied into the drive, then run: (if you use a scsi drive, remove "ATA:")
+<code bash>
+cdrdao read-cd --device ATA:0,1,0 --driver generic-mmc cd.toc
+</code>
+That will read the CD.
+If you are copying an audio CD, you can also try retrieveing the CDDB data (songs titles), etc by running:
+<code bash>
+cdrdao read-cddb --device ATA:0,1,0 --driver generic-mmc cd.toc
+</code>
+Now, put a blank CD in the drive and run this command to write the CD:
+<code bash>
+cdrdao write --device ATA:0,1,0 --driver generic-mmc cd.toc
+</code>
+

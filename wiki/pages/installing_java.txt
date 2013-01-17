@@ -1,0 +1,65 @@
+======Installing java======
+=====Testing if you already have java=====
+Go to a console/dos prompt and type 'java -version', it it finds java (form SUN) version 1.4 and up, you are good to go.
+
+=====Installing java on Mac=====
+The latest java is always available on the Mac, that's why you got one :-)
+
+=====Installing java on Windows=====
+Download the installer(latest JDK) here:
+[[http://java.sun.com/javase/downloads/index.jsp]]
+and run it.
+
+WARNING: **You should add java to the PATH environment variable, otherwise windows won't know where to find it.**
+  *Click Start > Control Panel > System on Windows XP or Start > Settings > Control Panel > System on Windows 2000.
+  *Click Advanced > Environment Variables.
+  *Add the location of bin folder of JDK installation for PATH in User Variables and System Variables. A typical value for PATH is:
+<code>C:\Program Files\Java\jdk1.xx\bin or c:\j2sdk1.4xx\bin   (browse to find it.)</code>
+  * Edit the **PATH environment variable**, it is a series of directories separated by semi-colons (;) and is not case sensitive. Microsoft Windows looks for programs in the PATH directories in order, from left to right.
+  * **Add the path to java to the end of the PATH variable (after a semi column)**: for example if you already have "c:\windows\system32\", you will now have "c:\windows\system32\;c:\j2sdk1.4.2.15\bin\".
+
+
+Now If you type ''java -version'' in a new dos prompt, it should NOT say "not found" but rather show you your current java version.
+
+You should probably reboot after installation completes.
+
+=====Installing java on Linux=====
+
+On some Linux Distributions you can install Java **>=1.4(from sun)** with a simple command.
+WARNING: **You need the Sun java, the "free alternatives" like kaffe etc... probably won't work**
+
+
+Because Sun java's is(was) not licensed under the GPL, some distributions make it difficult to install :-(
+
+====Apt-Get====
+<code | debian>
+sudo apt-get install sun-java5-jdk
+</code>
+Note: If you have an older Debian or have not allowed 'non-free' packages this package will not be found.
+See here for more infos: [[http://wiki.colar.net/installing_sun_java_on_debian_or_ubuntu]]
+
+====RPM====
+<code | rpm>
+# For RPM, download the RPM packaged JRE from: [[http://java.sun.com/javase/downloads/index.jsp]]
+chmod +x jdk-6-linux-i586-rpm.bin
+./jdk-4-linux-i586-rpm.bin
+#accept the license (press SPACE for a while, then answer 'y'. This will  give you a RPM, install it.
+rpm -i jdk-6-linux-i586-rpm
+</code>
+
+====Others====
+You can find a package for your distributions or simply download a ".bin" version of Java from Sun here:
+[[http://java.sun.com/javase/downloads/index.jsp]]
+and run it.
+
+=====Shared archive error=====
+Once on a fresh Debian install, i had the following error when running java (even just java -version)
+<code>
+An error has occured while processing the shared archive file.
+Unable to reserve shared region.
+Error occurred during initialization of VM
+Unable to use shared archive.
+</code>
+
+It is fixed after running: ''java -Xshare:dump -version''
+

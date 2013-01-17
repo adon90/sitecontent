@@ -1,0 +1,101 @@
+======SAP ISA on tomcat======
+
+WARNING: **Under construction - Incomplete** (This works but instructions are not yet complete)
+
+=====Why=====
+Because:
+  - Tomcat is **very small & lightweight** (will run on almost any hardware)
+  - Tomcat can run on almost **any OS**
+  - It is possible to do **JSP debugging and stepping** ! Since B2B/B2C JSP's are full of logic code this is super useful.
+  - It is possible to do code **hot-swapping during debug** !
+  - **Better error reporting** than NetWeaver
+  - ISA is Java so it should be able to run on any J2EE
+  - Tomcat **IDE integration** is great (regardless of IDE), allowing single click deploy/run/debug/profile.
+
+TIP: The amount of time saved having the JSP debugger and enhanced logging is HUGE, great productivity boost.
+
+
+=====Making ISA run on Tomcat=====
+That's the hard part, I had lots of Help from the Fine folks at [[http://www.sisusoftware.com/|SISU software]].
+
+I had done some of the work already, but they put it all together, in their case using jetty and provided me very detailed infos and help.
+
+Here are the main challenges:
+  -  Figuring out and retrieving the needed library dependencies (compile and runtime)
+  -  Patching a couple of SAP issues and having the classloader use those first
+  -  All this is done WITHOUT modifying the "standard" b2b/b2c projects, we want to make sure those stay "vanilla" (although there are local patches that only get deployed to tomcat)
+  -  Dealing with the XCM (using Files rather than a Database, simpler and easier to manage on multiple machines)
+  -  I also added optional Support for a database to support java basket (H2 database and MySQl implemented)
+
+====JCO====
+You need JCO(SAP java connector) installed and accessible on the system.
+
+Before installing JCO on linux, **you need libstdc++5** (very old) installed
+
+''sudo dpkg -i libstdc++5_3.3.6-18_amd64.deb''
+
+**Install jco 2.x (NOT 3.x !)**
+Download the proper JCO for your OS from [[https://service.sap.com/connectors/]]
+
+Extract it and copy the jco libraries into the system libaries folder:
+''sudo cp *.so /usr/lib''
+
+====Tools Needed====
+  - [[http://www.java.com | Java 6]] installed.
+  - [[http://www.fantom.org | Fantom]] (optional but needed to run some of my helper tools)
+See [[Fantom - Quick Install]] fot instructions.
+  - [[http://java.decompiler.free.fr/?q=jdgui | JD-GUI]] (might be needed to decompile some classes)
+  - [[http://mercurial.selenic.com/|Mercurial(HG) client]] to pull out my helper projects
+  - Retrieve my [[https://bitbucket.org/tcolar/saptomcat|sap_tomcat]] project from bitbucket (helpers)
+  - An unzipping utility. On Linux file-roller works well. 7Zip is another good option.
+
+''hg clone https://tcolar@bitbucket.org/tcolar/saptomcat''
+
+====Customized Tomcat to run SAP B2B/B2C====
+I picked Tomcat because it's lightweight and has the best IDE support yet provides lots of J2EE engine features.
+
+I've made a custom/patched version of tomcat patched and configured to run our b2c/b2b projects
+
+**Here is How I customized/patched Tomcat 6:**
+**See: [[Tomcat customizations to run SAP B2c/B2B apps]]**
+
+====B2B / B2C projects Customization====
+
+**See here:
+ [[SAP B2C / B2B projects customization to run on Tomcat]]**
+
+===Database support (Optional, needed when using Java Basket)===
+
+**See here:
+[[Support SAP B2B/B2C Java basket Database in Tomcat]]**
+
+====IDE Config====
+This is for Netbeans, but you can do similar things in other IDE's
+
+  - **Give enough memory to the IDE**:
+edit in netbeans folder /conf/netbeans.conf
+add ''-j-Xmx1000m'' to the netbeans_default_options line
+
+  - **Netbean config:** (setup the IDE to use our custom tomcat, similar idea for other IDE's)
+Start Netbeans, Go to tools/server
+- Choose "add server": type -> "tomcat 6" 
+- Server location: Give the path to the customized sap_tomcat-6.0.20 folder
+- Username/Password: admin/admin (match whatever was set in tomcat-users.xml)
+- In platform tab set VM options such as''-Xmx912m -XX:MaxPermSize=250m''
+- Click "Finish"
+
+Now we can choose this server as the run/deploy/debug target for our B2B/B2C projects.
+
+====Errors left====
+Some errors will be logged but can be ignored.
+
+  - Naming/JNDI error (no provided impl.)
+  - JMX errors (no provided impl.)
+  - Some connections errors (it fails first-with no password- but then retries with password fine)
+<code>
+Can ignore(it does that no matter what): WARN  com.sap.isa.core.eai.sp.jco.JCoConnectionStateless [] - Error occcurred in EAI layer "Cannot connect to backend system. com.sap.isa.core.eai.BackendException: user missing. parameters: [client]='null' [user]='null' [language]='null' [ashost]='null' [systemnumber]='null' [mshost]='null' [gwhost]='null' [gwserv]='null' [group]='null' [systemid]='null' 
+Properties: {client=100, sysnr=01, ashost=somehost, lang=en, codepage=1100}
+</code>
+
+
+

@@ -1,0 +1,70 @@
+======Berry4all - Blackberry support for the rest of us====== 
+**Berry4All is a free, open-source software for using your Blackberry on alternative OS'es (Linux, OSX...) **
+Formerly known as BBTether.
+Berry4All is released under the Artistic License.
+=====Features=====
+Right now the main feature of Berry4all is tethering (use the blackberry as a modem)
+
+It has been tested on multiple versions of Linux and OS X
+
+More features are planned for later (install apps, sync etc...)
+
+It is fairly easy to install since it's written in Python and does not need to be compiled.
+=====Latest Version=====
+TIP: See [[http://bitbucket.org/tcolar/berry4all/src/tip/ChangeLog.txt|ChangeLog]]
+
+=====Tested OS, Devices, providers=====
+**Tested OS's: **
+  * Linux: Debian, Ubuntu, Mint, Fedora
+  * OS X: Tiger (PPC & x86), Leopard.
+
+**Tested Blackberry Devices**
+^Device ID^Device Name^OS^Works since^Tested by (Thanks!)^Infos^
+|8100 OS 4.2|Pearl (black)|Ubuntu|0.1c|Myself & 2 others||
+|8100 OS 4.5|Pearl (black)|Ubuntu/Mint/OSX|0.2a/0.2c|Myself||
+|8130|Pearl (silver)|Linux|0.1m|Timothy Owings||
+|8120 OS 4.5|Pearl - wifi|Linux|0.2c|Max Taranukha||
+|8220|Pearl Flip|Ubuntu|0.3f|Chris Dundon|Need battery pull(once)|
+|8320|Curve|Ubuntu|0.2h|Kamran Kashef||
+|8320|Curve|Fedora 12|0.3l|Fedora Mangler||
+|8330|Curve|Debian 5|0.3d|Chris Jarvis|
+|8530|Curve|Ubuntu|0.3l|Gufibutt|
+|8820||Ubuntu|0.3f|Yu Jiang|
+|8900|Curve 2|Ubuntu|0.3f|Myself|
+|9000 OS 4.6|Bold|Mac OS X|0.2l|Barry Liu|Bold needs Battery pull(once)|
+|9500 OS 4.7|Storm|Linux|0.2g|Wennael Lemonnier(Strato)||
+|9500|Storm|OSX on Dell mini9|0.3l|aero07||
+|9530 OS 5.0|Storm|Ubuntu 9.10|0.3j|Luis||
+|9550|Storm 2|Ubuntu Lucid 64 bit|0.3l|akom||
+|9630|Tour|Linux|0.3f|jcaino|Verizon|
+|9700|Bold|Ubuntu|0.3l|MaxG|PlusGSM|
+|9800|Torch|Ubuntu Lucid|9700|Alexander Rau|Bell mobility|
+
+
+**Tested Providers (tethering)**
+^Provider^Country^Works since^Tested with^[[http://www.speedtest.net/mini.php|Speed Down/Up(kbps)]]^Tested By^Infos^
+|Bell mobility|CA|0.3f|N/A|N/A|N/A|using rogers conf|
+|Bouygues Telecom|FR|0.2g|9500|N/A|Wennael Lemonnier(Strato)|Works with 4.7.0.106|
+|China Mobile|China|0.3f|8820|N/A|Yu Jiang|Using tmobile conf|
+|Movistar|Venezuela|0.3l|?|N/A|Ricardo Correa||
+|O2 Jolicloud|Germany|0.3l|?|N/A|Phil||
+|Orange|Romania|0.3f|?|N/A|Mihai Radu||
+|PlusGSM|Polland|0.3l|?|N/A|MaxG||
+|Rogers(Edge)|CA|0.2c|8120|162/40|Max Taranukha||
+|Rogers(3G)|CA|0.2l|9000|?|Barry Liu||
+|SaskTel|CA|0.36|8320|556 / 128|Fedora Mangler||
+|SFR|FR|0.3g|9000|2G|Alexandre MELY|See [[SFR config]]|
+|Sprint)|US|0.3l|8530|390/50|Gufibbut||
+|Sprint(speed)|US|0.1m|8130|630/79|Timothy Owings||
+|Sprint(speed)|US|0.3d|8330|800/80|Chris Jarvis||
+|Starhub|Singapor|0.3l|9000|N/A|Osprey23||
+|T-mobile(Edge)|US|0.1c|8100|~ 200/76(at best)|Myself & 2 others||
+|T-Mobile|Hungary|0.3f|9000|N/A|Robert Kuszinger||
+|TIM|Brazil|0.3m|||andradejr||
+|US Cellular|US|0.3j|8330||P.K. Carlisle|[[USCellular config]]|
+|TurkCell|US|0.3l|9700||Erol SANER||	
+|Verizon|US|0.3a|8330/9630||ChrisG||
+|Verizon|US|0.3j|9530|963/148|Luis||
+|Vivo|Brazil|0.3m|||João C. Coutinho||
+|Zain|Tanzania|0.3m|||Donovan Brockmeyer ||
+

@@ -1,0 +1,18 @@
+======My software TODO list======
+===Berry4All===
+Implement alternate connection method not using ppp, but instead have a python "http proxy" on the computer talking through USB(and maybe bluetooth too) to an app(midlet) on the phone - this would use the data plan rather than be considered tethering.
+===MIGLayout===
+Implement MigLayout for Fantom.
+===FantomIDE===
+Try to get my plugin released on Netbeans plugin portal.
+===SAP CRM Cat tool===
+Continue development
+===Other "top-secret" ideas===
+  - Work on the "tracking pixel" idea
+  - Work on the "barcode" idea
+===JavaOnTracks/JOTWiki===
+  * Jotwiki: fix file download.
+  * Jotwiki: <del>allow "optional" areas in template -> content can be set in page option (text or file include)-> with widget ?? (db widget)</del>
+  * jotwiki: 301 redirects
+  * jotwiki: "forum" page type (or widget)
+  * Finish the [[jot:home | javaontracks]] webapp server

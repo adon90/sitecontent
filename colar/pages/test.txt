@@ -1,0 +1,93 @@
+====== Test Case ======
+For testing of the wiki parser.
+
+==== Characters ====
+Quote & curly characters: He said "it's the other guy's fault".
+Weird characters: &<>(c)(tm)(r)????????
+Foreign characters: ????
+50$
+kuggkgkggkjkkj\\hjfhjfjhfj\\
+
+==== Text styles ====
+//Italic Text//
+__Underlined Text__
+<del>Strike-through Text</del>
+**Bold text**
+<sub>subscript</sub>
+
+** Bold // Italic // **
+
+**Bold//Italic__underline<del>del<sub>sub</sub></del>__//**
+
+
+==== Smiley's ====
+'':-)'':-) '':-('':-( '';-)'';-) '':-P'':-P '':-D'':-D
+
+==== Images ====
+{{caro2.jpg}}
+{{ caro2.jpg}}
+{{caro2.jpg }}
+{{ caro2.jpg }}
+
+==== Code ====
+fdsffdsdsf ''inline code'' dsfdsfsdfds
+
+<code | code example>
+long code
+with lot's of stuff
+in it.
+here is a br: <br>
+end
+</code>
+
+==== Links ====
+[[Internal Link]]
+[[mailto:tcolar@colar.net|Email Link]]
+[[http://example.com|External Link]]
+[[file:///c:/temp/]]
+[[www.google.com]]
+[[ftp://ftp.google.com]]
+[[\\thor.pcf.com\public\|local server Link]]
+
+==== Lists ====
+  - Ordered List Item
+  - Ordered List Item
+  * Unordered List Item
+  * Unordered List Item
+
+==== Separator(HR) ====
+-------------
+
+==== Content boxes ====
+FIXME: this needs to be fixed
+
+
+WARNING: this is scary
+
+
+TIP: this is a great idea that takes two lines
+and i have more to say about it !
+
+
+DELETEME: this should be removed
+
+
+NOTE: remember this
+
+==== Tables ====
+
+^Col1^Col2^col3^
+|1.1|1.2|1.3|
+|2.1|2.2|2.3|
+|3.1| 3.2| 3.3 |
+
+|1.1|1.2|1.3|
+|__2.1__|//2.2//|**2.3**|
+|3.1| 3.2| 3.3 |
+
+====== Headlines ======
+===== Level 2 Headline =====
+==== Level 3 Headline ====
+=== Level 4 Headline ===
+== Level 5 Headline ==
+

@@ -1,0 +1,386 @@
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======SAP CRM 5.0 (2004s): Custom B2C without NWDI======
+Why would we not use NWDI and SAP dev studio?\\
+Well there are tons of reasons, that's why ... see my [[SAP rants]] for some of the reasons.
+
+The following probably would not be recommanded by SAP, but many consultants and SAP customers have come up with things like this because the could not/ would not work with NWDI.
+
+NWDI/dev studio instead of being a tool to accelerate / facilitate development seem to always be in the way and painfully slow, buggy and undocummented.
+
+SAP has made it difficult (most likely on purpose) to work without using the NWDI, yet i believe force-feeding us this inferior product is just plain bad practice.
+
+So anyway we decided to go sans NWDI, and whilemit took time to get the initial thing setup, it also greatly improve the active development cycle. ie: changing a JSP an dtesting the rsults takes less than 2mn, instead of 10+mn using the NWDI system.
+
+=====Intalling (my)eclipse=====
+The Eclipse version provided by SAP as many drawbacks:
+  * It's very old (based on eclipse 2.1)
+  * It does not let you install any plugins !
+  * It's bloated by useless things (visual composer etc...) and very slow
+  * It misses many new eclipse features (ie: no JSP error detection)
+
+So you can install Eclipse from here:\\
+http://www.eclipse.org/
+
+Or You can use Myeclipse, which for 30-50$/year gives you tons of great features bundled with eclipse.\\
+For example the JSP editor / compilation /error check is great, also it has struts support (grapth) and many other nice things.\\
+It's available here: http://www.myeclipseide.com/
+
+Personally i used MyEclipse and install it.\\
+On first start it asks for a workspace, choose something with no spaces preferably.\\
+ie: c:\JDT\workspace\
+
+TIP: If you have memory on your computer, myeclipse will be much faster by adjusting the memory.
+Right click on the "MyEclipse" shortcut and edit the properties:
+add " -vmargs -Xmx1024m -Xms512m -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8" to "Arguments"  (use 512and 256 if you have less memory available.)
+Example: 
+Link: C:\Program Files\MyEclipse 5.1.1 GA\eclipse\eclipse.exe
+Arguments: -vm "C:\Program Files\MyEclipse 5.1.1 GA\jre\bin\javaw.exe" -vmargs -Xmx1024m -Xms512m
+Start in: C:\Program Files\MyEclipse 5.1.1 GA\eclipse
+
+
+=====Creating the SAP projects=====
+
+Note: The easy way to get the correct libraries (and to upgrade them) is to deploy the vanilla B2C application to the j2ee engine and copy the required things from there.\\
+To do this, use the SDM or JSPM to deploy the SHRWEB, SHRJAV and SHRAPP SCA's to the j2ee engine.\\
+Once they are here we will be able to copy the sources from the j2ee engine as well as the libraries used.
+
+====Sap libraries project====
+
+This will contain all the sap dependencies (jars) usually provided through dependencies by the NWDI
+
+We create thsi project so we have only one set of those libraries which the B2C projects can share (copy from)
+
+In eclipse we create a new project "sap_crm_libs" of type java and added all the B2C SAPlibraries to it.
+
+To get those (or update them) we deployed the vanilla B2C app to the j2ee engine and then copy\\
+C:\usr\sap\[SID]\JC01\j2ee\cluster\server0\apps\sap.com\crm~b2c\servlet_jsp\b2c\root\WEB-INF\lib\* \\
+into: \\
+C:\JDT\workspace_700\sap_crm_libs
+
+====Custom java code (jar)====
+
+We want to have all our custom java code in one place only to avoid duplicating code, and all B2C implementation uses it (copy)
+
+This is another java project we called "pcf_java", we added a "project build path dependency" from it to "sap_crm_libs" (and add the libraries) so it has access to the needed sap libraries.
+
+We put our custom java code unser the "src" folder. (ie: src/com/pcf/Test.java)
+
+==== B2C Web Archive (war) ====
+
+This is our own customized version of B2C
+
+We create a project of  type "web project" (in  myeclipse) we calle dit "b2c_sealy"\\
+Note: in myeclispe after the project is created you can add "struts capability" to it, this will provided better support for struts.
+
+Now we will "copy" the vanilla b2c sources into our project.
+
+Get C:\usr\sap\[SID]\JC01\j2ee\cluster\server0\apps\sap.com\crm~b2c\servlet_jsp\b2c\sap.com~crm~isa~web~b2c.war and extract it.\\
+extract everything into the webroot folder
+
+Add a "project build path dependency" from it to "sap_crm_libs" and "pcf_java" (and add the libraries) so it has access to the needed sap libraries.
+
+We now have a full copy of the B2C app to work on.
+
+see [[B2C customization]] for some tips on getting started with this.
+
+Note: Go in windows/preferences/my eclipse/validation and remove DTD & XML validation as SAP xml files are broken.\\
+
+Note: Most .inc.jsp will fail JSP validations, they are suppose to be part of another jsp and thus miss imports statements etc ....\\
+just ignore the warnings.
+
+====Enterprise Archive (EAR) ====
+
+This is just an EAR wrapper of the webapp, so it can be deployed to the SAP j2EE engine.\\
+Create a project of type "Enterprise archive" we called it apps_b2c_sealy.\\
+Right clik on the project and select "add module", add the "b2c_sealy" web archive module.\\
+
+Extract(unzip) SAPSHRAPP and browse to SAPSHRAPP04P_2-20001151.SCA\DEPLOYARCHIVES\sap.com_crm~b2c.sda\META-INF\ \\
+Copy all those files into the META-INF folder of your project.
+
+You will want to edit application.xml to adjust the "context root" to something new (ie: b2c_sealy)
+
+At this point you should be able to create the EAR and deploy it (See the ant script section later in this doc)
+
+====SAP sources java project====
+
+Having the source code on hand is helpful for reference (no changes).\\
+Also it's good to have when running a debug session.
+
+Ceate a "java" project and add the sap  sources to it.
+
+It's difficult to get the source, either get it from NWDI, otherwise you can do this:
+
+Extract SAPSHRJAV and browse top SAPSHRJAV04P_2-10002938.SCA\BUILDARCHIVES\ \\
+Here you will see a lot of zip files. for each of them you can extract  it, and then extract the .ppa inside and go in the src folder.\\
+This is a bit odf a pain, though using 7zip helps greatly.
+
+NOTE: this turn out to be annoying to maintain, so i came up with a quick and dirty script.\\
+Basically it takes the SAPSHRJAV file from SAP and extract from it all the sources and libraries for you and then they are ready to use !!   Thanks me :-)
+
+Here is the script: [[SAPSHRJAV extractor]] \\
+Copy the source into your project src folder\\
+and the libraries into the lib folder
+
+
+=====Creating ant files for building the application=====
+
+Here are the three ant files i use (one for the custom java code, one for the WAR, one for the EAR)\\
+Note: those are just examples are not articularely clean (many hardcoded things that should be properties), but in any case it should still help.
+
+Note, i ususally only call directly the "dist" method of the EAR project, which creates the EAR to be deployed to the J2EE engine.
+
+The custom "java code" project ant file:
+<code>
+<project name="B2C" default="jar" basedir=".">
+    <description>build file for B2C</description>
+
+	<target name="compile">
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin">
+		<classpath>
+      	<fileset dir="..\sap_crm_libs\">
+        	<include name="**/*.jar"/>
+      	</fileset>
+      	<fileset dir="..\sap_crm_java\lib">
+        	<include name="**/*.jar"/>
+      	</fileset>
+      	</classpath>
+      	</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="pcf_java.jar">
+		<fileset dir="bin"/>
+		</jar>
+	</target>
+</project>
+</code>
+
+The WAR project ant file:
+<code>
+<project name="B2C" default="dist" basedir=".">
+    <description>build file for B2C</description>
+
+	<target name="dist">
+
+		<!-- building custom java lib -->
+	   	<ant antfile="../pcf_java/build.xml" target="jar" dir="../pcf_java/"></ant>
+
+		<!-- copying custom java lib -->
+		<copy todir="WEB-INF/lib">
+			<fileset dir="../pcf_java" includes="*.jar"/>
+			<fileset dir="../sap_crm_libs" includes="*.jar"/>
+		</copy>
+			
+		<!-- creating web module archive -->
+		<war destfile="b2c_sealy.war" webxml="WEB-INF/web.xml">
+		<fileset dir="webcontent"/>
+		<webinf dir="WEB-INF"/>
+		</war>
+	</target>
+	
+</project>
+</code>
+
+The EAR project ant file
+<code>
+<project name="b2c_sealy" default="deploy" basedir=".">
+<property name="project.name" value="b2c_sealy"/>
+<property name="app.name" value="apps_b2c_sealy"/>
+<property name="ear.name" value="apps_b2c_sealy.ear"/>
+<property name="j2ee.root" location="C:\usr\sap\ZTB\JC01\j2ee\cluster\server0\apps\sap.com\apps_b2c_sealy\servlet_jsp\b2c_sealy"/>
+
+    <description>build file for the PCF ePayment System</description>
+
+	<target name="dist">
+
+		<!-- Building the web module -->
+	   	<ant antfile="../b2c_sealy/build.xml" target="dist" dir="../b2c_sealy/"></ant>
+
+		<echo message="Bulding EAR"/>
+	    <ear earfile="${project.name}.ear" appxml="meta-inf/application.xml">
+	        <fileset dir="..\${project.name}" includes="*.jar,*.war"/>
+	   		<metainf dir="META-INF" includes="*"> 
+	    	<include name="application-j2ee-engine.xml" /> 
+	    	  <include name="buildinfo.xml" /> 
+	    	  <include name="data-source-aliases.xml" /> 
+	    	  <include name="monitor-configuration.dtd" /> 
+	    	  <include name="monitor-configuration.xml" /> 
+	    	  <include name="SAP_MANIFEST.MF" /> 
+	   		</metainf>
+        </ear>
+
+	</target>
+
+</project>
+
+
+</code>
+
+=====Working with Subversion (eclipse)=====
+You will need to have the subversion server installed obviously.\\
+See here for how to install it on linux, i won't cover the server install here:\\
+http://subversion.tigris.org/ \\
+http://www.xhtml.net/articles/subversion-apache2-debian
+
+We need a subversion plugin, subclipse is one.\\
+Subclipse can be found here: http://subclipse.tigris.org/ \\
+
+To install Eclipse:\\
+In eclipse: help/software updates/find and install\\
+click "search for new software to install"\\
+"New remote site"\\
+name: subclipse\\
+url: http://subclipse.tigris.org/update_1.0.x\\
+press "ok" then "finish"\\
+
+In the "select features to install"\\
+select "subclipse", press "next" and accept the license, then press "finish" etc ...\\
+It will ask you to restart, do it as soon as possible (ie: now) save your changes first if necessary.
+
+In the "package explorer", right click on each project you want to share and click "share project"\\
+choose "SVN" for the repository type.\\
+Enter the svn server repository URL. ie: http://svnserver/svn/ \\
+keep "use folder name as project name" ... or not if you want something else (you might want to create a "trunk" folder) \\
+click "next", then "finish" \\
+
+Enter a comment ie: "project import" \\
+Select all the files you want to be versionned (all) \\
+Prsee "Ok" \\
+
+Repeat for other projects you want to share. \\
+
+Note: to commit  your project, right click on the project and go into team/commit   (you will find other SVN function in there as well)
+
+At that point the projects as in SVN, and other developers can load them into their Eclipse using team/checkout.
+
+NOTE: after fetching the sap_crm_java from svn, it's good to disable it from synchronizing from SVN, because it's so large it makes eclipse way slow sometimes, this sources should never change anyway.\\
+Go to team/svn/disconnect.
+
+
+=====Ant files for fast deploy/testing=====
+
+Creating the EAR and then having to deploy it with visual administrator manually each time a change is made is a bit time consuming and a bit too "manual".
+
+So here is a way to make quick deploy/test on the local j2ee engine.
+
+The basic idea is:
+  * stop the Application (not the whole J2ee)
+  * copy the files (jsp's, java etc ..) directly to the j2ee engine (rather than using slow SDM or extracting the big EAR)
+  * start the application (which will reload the java, jsp's etc ...)
+
+This takes about 25seconds on my machine instead of the 5mn it took with visual admin or the 15mn it took with NWDI.
+
+Ok, the way we do the stop/start of the J2ee engine is using the telnet feature of the J2EE engine. we could do that with the ant extra telnet tasks i guess, but SAP SDN provides a jar for you, so i just used that.
+
+You can get the SAP telnet jar here: \\
+https://www.sdn.sap.com/irj/servlet/prt/portal/prtroot/docs/library/uuid/bae862dd-0a01-0010-c499-e72d9e385369 \\
+
+Anyway i use that it created the few needed scripts and added all this as a zip here: {{sap_helpers.zip}}\\
+Note: you will need to extract it and then edit the properties file to set your sap j2ee engine login etc ...
+
+Then i created a new target in my EAR project ant file called deploy.\\
+
+Addon to ant file:
+<code>
+	<target name="deploy" depends="dist">
+		<echo message="Quick deploy (copy) and app restart - bypasses SDM !"/>
+		
+		<!-- stop app -->
+		<ant antfile="sap_helpers.xml" target="sap.telnet.stopapp">
+		</ant>
+	   	
+		<!-- copy content web + web-inf -->
+		<copy todir="${j2ee.root}\root"  overwrite="true">
+	   	<fileset dir="..\b2c_sealy\webcontent"/>
+	   	</copy>
+		<copy todir="${j2ee.root}\root\WEB-INF"  overwrite="true">
+	   	<fileset dir="..\b2c_sealy\WEB-INF"/>
+	   	</copy>
+
+		<!-- starts app -->
+		<ant antfile="sap_helpers.xml" target="sap.telnet.startapp">
+		</ant>
+
+	</target>	
+</code>
+
+Here is the "sap_helpers" ant file whch gives access to the telent functions:
+<code>
+<project name="sap_helpers" basedir=".">
+<property name="sdm.home" location="C:\usr\sap\ZTB\JC01\SDM"/>
+<property name="saptelnet.home" location="C:\JDT\workspace_700\sap_helpers"/>
+<property name="sdm.guiport" location="50118"/>
+
+
+		<!--  Stops an application -->
+		<target name="sap.telnet.stopapp">
+		<echo message="Stopping application: ${app.name}"/>
+		<copy file="${saptelnet.home}/stop_app.txt" tofile="${saptelnet.home}/stop_app.tmp" overwrite="true"/>
+		<replace file="${saptelnet.home}/stop_app.tmp" token="APPNAME" value="${app.name}"/>
+		<java jar="${saptelnet.home}\sapTelnetScript.jar" fork="true" dir="${saptelnet.home}">
+		<arg value="sapTelnet.properties"/>
+		<arg value="stop_app.tmp"/>
+		</java>
+		</target>	
+
+		<!--  starts an application -->
+		<target name="sap.telnet.startapp">
+		<echo message="Starting application: ${app.name}"/>
+		<copy file="${saptelnet.home}/start_app.txt" tofile="${saptelnet.home}/start_app.tmp"  overwrite="true"/>
+		<replace file="${saptelnet.home}/start_app.tmp" token="APPNAME" value="${app.name}"/>
+		<java jar="${saptelnet.home}\sapTelnetScript.jar" fork="true" dir="${saptelnet.home}">
+		<arg value="sapTelnet.properties"/>
+		<arg value="start_app.tmp"/>
+		<jvmarg value="-Xmx256M"/>
+		<jvmarg value="-Xms256M"/>
+		</java>
+		</target>	
+
+</project>
+</code>
+
+Calling this method will create the EAR (you could bypass this for even more speed, but i like to have the EAR craeted each time for constistancy) with the updated/recompiled code. And then it copy it to the J2EE engine and restart the application. It's then ready to test in the browser (as soon as it finish starting).
+
+=====Fast debug directly from eclipse=====
+
+The debugger used in SAP developer studio is **extremely slow** and often the J2EE engine will even fail to start when it's turned on.  I think it is based on the "old" java debugger.
+
+Instead here we will use The new java debugger (JDPA using jdwp: java debug wire protocol), straight from Eclipe, this seem to be much more reliable and much faster.
+
+To set this up:\\
+  * start the SAP configtool
+  * browse to cluster/data/instancexx/serverx
+
+In the java parameter window add the following (you can use other than port 8000):
+<code>
+-Djava.compiler=NONE
+-Xdebug
+-Xnoagent
+-Xrunjdwp:transport=dt_socket,suspend=n,server=y,address=8000
+</code>
+
+  * Save the settings
+  * restart the J2EE engine (ie: with SAP MMC).
+
+To run a debug session.
+  * start Eclipse
+  * go to run/debug
+  * select "remote java application"
+  * select the project you want to debug and enter the server and port (localhost / 8000)
+  * press "Ok"
+
+In eclipse go to the "debug" perspective (it might do it automatically for you)\\
+
+When you run the application, it should stop at the breakpoints you set in your code.
+
+=====Deploying to remote SAP engines=====
+I simply use the SAP J2EE administrator to deploy to remote engines, it seem to be fastest and most reliable way to deploy a web application.\\
+Start visual administrator, login the server and go to server/services/deploy, browse to jsp_servlets and use "deploy and start" or "update" to deploy the new/updated EAR.
+
+===== Upgrading code to SR2(SP13) =====
+see:
+[[isa_no_nwdi_upgrading_code_base_to_sr2]]
+
+

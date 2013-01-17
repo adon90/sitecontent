@@ -1,0 +1,70 @@
+======Upgrading Blackberry Firmware with VirtualBox======
+
+WARNING: **Do this at your own risk!!, this is not supported by RIM nor by me**. 
+It worked for me on Ubuntu with VirtualBox 3.1, a win2K image, a BB 8900 and OS 5.0.0.461 .
+**You could potentially brick your Blackberry.**
+
+
+Total time: ~45mn, assuming you have VirtulBox and a Windows image avail.
+====Installing latest VirtualBox====
+Make sure you use the **latest** version of vmware(I used 3.1)
+[[http://www.virtualbox.org/wiki/Downloads]]
+
+Note: **Ubuntu (at least hardy) seem to have a very outdated VirtualBox package (1.6?)**
+You want to use the download / repo here (See instructions): [[http://www.virtualbox.org/wiki/Linux_Downloads]]
+And then install the latest one: (NOT just 'virtualbox', links to an old version). Ex: ''sudo install virtualbox-3.1''
+
+====Start a VirtualBox windows image====
+Plug your Blackberry.
+Starts VirtualBox
+Make sure the image has USB enabled: Under settings/USB/ check "Enable USB", put a checkmark on "RIM device")
+------
+{{ bbvbox.png }} 
+------
+Boot the Win2K image(XP should be OK, not tested).
+===Download and install the latest firmware for your device===
+Pick the right section for **YOUR device** from the crackberry forums (Example : "BlackBerry Bold 9000"):
+[[http://forums.crackberry.com/f1/]]
+
+Then one of the first link in this forum is usually titled like "Sticky Newest OS: 5.0.0.461 (Multilanguage) for 8900".
+Go there and dowload the firmware installer from one of the links provided.
+and follow the instructions to install it.
+===Installing the firmware updater===
+  - Download the above OS file to the PC then install it to the PC by running (double clicking) the file you downloaded.
+  - Go to c:\program files\common files\research in motion\apploader and **delete the file named "vendor.xml."**
+  - Plug in BB and double click on "Loader.exe." It's located in the same place as the above vendor.xml file.
+
+===Special Notes when doing this in VirtualBox===
+
+**Process stuck**:
+TIP: **This is the one "special" trick, to make the process work , so pay attention:**
+
+At times the process gets stuck (usually when the device resets itself ), for example at steps:
+"connecting to device", or "reconnecting to jvm", you will want to do this:
+
+Right click the vmware usb "icon"(Bottom left, see screenshot), and if the blackberry entry is uncheck, check it back on, then it will continue (If the device is starting up, wait for it to be fully started first).
+
+**White screen for a while**
+When the blackberry restarts it can take quite a while, be patient.
+
+**Error at connecing to boot rom"**
+At step "connecing to boot rom", I got an error message once, I think only because the blackberry took a while to restart, wait for it to be fully restarted, then make sure you enable the checkmark under virtual box USB icon once again.
+Then choose "Continue" in the error dialog, it should continue from where it left of.
+
+**Waiting for device Initialization**
+That step can take a looooong time, be patient (~30mn).
+The blackberry shows a black screen with a progess bar, then eventually boot into the BB OS.
+It will then ask you to set permissions for existing apps and do the initial blackberry setup (language, time etc...), you can click "close" if you don't want to go through all the tutorial again.
+It will then update whatever apps you had preinstalled that needs to be updated for the new OS (Ex: app world).
+
+You will want to enable the VirtualBox usb icon one more time, so the firmware updater can now restore your data and complete the process.
+
+Note: **On my 8900 the new 5.0 OS seem to be running WAY faster than the old 4.6 I had (dog) !**
+
+====Screenshots====
+USB icon of VirtualBox to right click to "re-enable" the blackberry device after it resets/restarts:
+{{ bbvbox1.png }} 
+
+Progress:
+{{ bbvbox2.png }} 
+

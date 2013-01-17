@@ -1,0 +1,89 @@
+====== CRM Image Server Setup ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+Setting this up was quite a pain.
+
+
+===== RFC connections =====
+Use SM59 to check the RFC's SAPFTP,SAPFTPA,SAPHTTP and SAPHTTPA\\
+This transactions are suppose to work out of the box, but we had problems with them.
+
+See notes: 164203, 455197, 544843
+
+The main issue i had was that SAPHTTP was broken out of the box.\\
+By running RSHTTP05 (under SE38), it reported the transaction SAPHTTP was broken. So i had to go to SM59 and delete it.\\
+Then run RSHTTP05 again, it will recreate it correctly and the test should work.
+
+===== Configuring the web/ftp server (FTP + WebDav)=====
+
+We use apache / Pure-Ftpd
+
+Apache config:  add webdav section / restart apache
+<code>
+ServerAdmin webmaster@localhost
+        DocumentRoot /var/www
+        DavLockDB /var/lock/apache2/FTP-DAVLock
+        <Directory /var/www/crmdev>
+                DAV On
+                AuthType Basic
+                AuthName "Image server"
+                AuthUserFile /etc/apache2/davusers
+                <LimitExcept GET HEAD OPTIONS>
+                Require user image
+                </LimitExcept>
+        </Directory>
+</code>
+
+Pure-ftpd:
+<code>
+pure-pw useradd image -f pureftpd.passwd -u 1001 -g 1001 -d /var/www/
+pure-pw mkdb
+</code>
+
+Note: Webdav/apache and Pure-Ftpd HAVE to point to the same directory.
+
+To help finding issues:
+<code>
+tail /var/log/pure-ftpd/transfer.log /var/log/apache2/*.log /var/log/messages -f
+</code>
+
+===== Configuring the RFC =====
+Go to transaction SPRO, and see "Define search server relation".
+
+{{ trex_img.jpg }} 
+
+Also check the RFC was created correctly:
+
+{{ sm59.jpg }} 
+
+===== Define the publishing target =====
+Go to transaction SPRO  and run **"Set Targets for publishing catalog contents"** \\
+
+WARNING: Also new in 2007(not on the screenshot) : go to **"Maintain IMS server for Catalog Indexing"** (same folder) and enter the RFC in there (ex: "**TREX_RFC_TRX**")
+
+
+
+{{imageserver_pubcat.jpg}}
+
+{{imageserver_target.jpg}}
+
+===== Setting up the catalog in XCM =====
+go to the XCM and set the image server \\
+{{imageserver_xcm.jpg}}
+
+
+===== Running the replication=====
+Go to the product catalog maintenance and run the replication \\
+
+{{imageserver_replication.jpg}}

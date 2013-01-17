@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+<url>
+  <loc>http://fantomide.colar.net/</loc>
+  <lastmod>2012-12-13T19:38:29Z</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.9</priority>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/home</loc>
+  <lastmod>2012-12-13T19:38:29Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/menu</loc>
+  <lastmod>2010-02-01T16:30:29Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/install</loc>
+  <lastmod>2012-10-24T01:05:09Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/changelog</loc>
+  <lastmod>2012-10-24T01:21:16Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/demo</loc>
+  <lastmod>2009-12-11T16:07:07Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/help</loc>
+  <lastmod>2010-12-07T18:40:57Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/topleft</loc>
+  <lastmod>2010-08-25T12:52:49Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>http://fantomide.colar.net/fantom_ide_completion_screencast</loc>
+  <lastmod>2009-12-11T16:10:35Z</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+</urlset>

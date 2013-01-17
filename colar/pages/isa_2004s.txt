@@ -1,0 +1,368 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======ISA 2004S on Suse Linux======
+===== Docs=====
+
+Doc nw2004s_oracle_linux_install.pdf
+[[\\frenchie/sapdocs/2004s/]] \\
+Notes 851251 (2004s linux install) \\
+
+171356 (general linux install)\\
+300900 DEll note \\
+797084 Suse9 note\\
+851169 Oracle / linux note\\
+861215 linux x64 IBM jvm recommanded settings
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+
+===== Suse Upgrade Notes =====
+
+After installing suse from DVD's, upgrade/patch it.\\
+
+To upgrade suse: go in Yast2, then "online update"\\
+use the "ireland" server as it's faster\\
+
+WARNING: YOU MUST CLICK "RELOAD ALL PATCHES FROM SERVER" to get the new patches and also check "manually choose patches"
+
+
+WARNING: Update only the kernel first (to over 2.6.5.7-139)
+
+
+Then reboot and come back in yast2 to upgrade everything else (except nvidia and auto4fs and mksdkprod.sh : skip those since they fail anyhow and they are only optional)\\
+
+NOTE Copy the Suse cds(usually only CD1 and CD2 needed) on the hard drive (ie: from b2btst /root/suse_cds and set them up in yast as the sources of install, that way we can install missing software without having to insert the cd's.
+
+=====Installing the SAP stuffs=====
+
+NOTE Might have to install sambaclient with yast2 first.\\
+mount the sapcd folder for easy access to needed software \\
+
+<code>
+mkdir /mnt/sapcd
+smbmount //frenchie/sapcd /mnt/sapcd/ (no password)
+</code>
+
+Note, you might need to install samba-client wth yast2 to get smbmount.\\
+
+WARNING **DO NOT Installed Java from suse** (if installed, remove it with YAST)\\
+
+Install the special IBM SAP jvm from \\
+[[https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=javasap]] \\
+(need to login with my home email and usual pass, get the one for AMD64)
+(avail also on thor is/sap-downloads/IBM-jvm and /mnt/sapcd/ibm-jvms once mounted) \\
+
+<code>
+rpm -Uvh  rpm -Uvh /mnt/sapcd/java_installers/IBM-jvm/IBMJava2-AMD64-142-SDK-1.4.2-7.0.x86_64.rpm
+copy the ibm conf file (made by thib)
+cp /mnt/sapcd/java_installers/IBM-jvm/IBMJava2.conf /etc/java
+</code>
+
+and then run ''SetDefaultJava'' to get java linked\\
+
+Then run 
+<code>source setJava Java2</code>
+to get java setup and added to your env right away. (NOTE do this in ALL open shells)\\
+
+(verify java is installed ''java -version'' shoudl work)\\
+
+=====Pre-Install=====
+
+Start the SAP Installer
+
+''cd /mnt/sapcd/51031407_crm50_nw2004s_master/IM_LINUX_X86_64''\\
+Ran sapinst (''./sapinst'')\\
+
+Run the prerequities checks <sap system>-Lifecycle-preparation-prerequities/check\\
+(central service instance - java)\\
+Several issues: (All covered in the suse note(s))\\
+
+====Issue 1====
+install sapinit see note #171356 and #797084
+
+Note: it was already installed, however sapinst thought it was'nt (maybe it was a too old or unsupported version)
+
+So deinstall (invalid)sapinit package in yast2 then reinstall using the following rpm \\
+
+delete sapinit package in yast2 then reinstall using the downloaded rpm \\
+from http://ftp.suse.com/pub/projects/sap/SLES9/x86-64/packages/ (also in /mnt/sapcd/sap_suse_addons)
+
+rpm -ivh suse-xxxxx
+it came with Suse SP3, yet the cd sapinst would complain it's not there anyhow\\
+
+Note: it requires compat and sysstat, install with yast2 if they are missing.\\
+
+Once installed, run ''/etc/init.d/sapr3 start'' (as root)\\
+
+====Issue 2====
+
+Sap locales (same note #171356): 
+
+From the note download the attachment\\
+
+https://websmp201.sap-ag.de/~sapidb/012006153200000442092005E/saplocales_sles9_x86_64_version-7.zip 
+
+It is saved on /mnt/sapcd/sap_suse_addons
+
+unzip it\\
+
+install the extracted rpm:
+
+''rpm -ivh saplocales-xxx.rpm''
+
+WARNING this need to be reinstalled every time the kernel or glibc are modified (upgrade) !!!
+
+====Soft hard resources limits (Note #797084)====
+
+Number of "file descriptors"\\
+Edit: /etc/security/limits.conf\\
+and add the following lines to it:
+<code>
+* hard nofile 4096
+* soft nofile 4096
+</code>
+
+These changes take effect after you log off and log back on again (thib: just source /etc/profile)
+
+#edit /usr/lib/java/jre/lib/security/java.security and replace /dev/random by /dev/urandom if present
+
+After changing all this, it's recommanded to reboot (to force reload of the shm etc.. settings)
+
+=====Install=====
+
+Connect to the machine with an X session (Window manager recommanded or it doesn't refresh right)\\
+Go back in /mnt/sapcd/51031407_crm50_nw2004s_master/IM_LINUX_X86_64\\
+
+Run sapinst and install netweaver2004s/systems with usage types/oracle/central system/central system install.\\
+
+  * Type of install "AS-Java"\\
+
+When it asks for the java dvd, browse to: /mnt/sapcd/51031372_nw2004s_javacomponents\\
+When it asks for the java crypto files, browse to:\\
+
+(https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?source=jcesdk)\\
+
+/mnt/sapcd/Java Cryptolib ssl/ibmjce1.4.2.zip\\
+
+  * System ID: ie: T2C\\
+  * DB ID: ie: T2C\\
+
+Enter password/login for sapmaster(*) and oracle (*)\\
+Keep the default memory setting if it seem ok (in this case was 2GB out of 4GB)\\
+
+  * java schema password: *\\
+When it asks for the oracle dvd, browse to: /mnt/sapcd/51031244_oracle10.1_linux64\\
+
+  * Secure store settings / keyphrase: *\\
+
+  * SCS instance: 00 (default)\\
+
+  * CI instance: 01 (default)\\
+
+  * For UME: use java database\\
+  * Admin/SDM password: *\\
+
+Then it will ask for the kernel 7 dvd: /mnt/sapcd/51031391_2004s_kernel7_lin_win\\
+And also the Oracle client CD: /mnt/sapcd/51031518_oracle_client10.2\\
+
+  * Register into the SLD: jdiprod.pcf.com 50000 / administrator / 123...\\
+
+ADS admin password .. same as admin password\\
+
+Installation will start .....\\
+After step 8 if will ask to do the oracle setup\\
+
+
+====Oracle setup====
+
+Note: There are permissions problems, so first we need to run as root (as explained in the pdf):\\
+
+<code>
+chown orat2c /oracle
+chgrp dba /oracle
+chmod 775 /oracle
+</code>
+
+log as orat2c and export the display (not bash but csh) to your X\\
+verify than umask  value is 22 (if not it need to be set to 22, see doc)\\
+<code>
+su - orat2c
+setenv DISPLAY 10.10.1.194:0
+umask
+cd /oracle/stage/101_64/db/Disk1/SAP/ # (NOT /mnt/sapcd ... BUT The one is THE SAP folder ! )\\
+./RUNINSTALLER
+</code>
+
+Then it will ask to run ''/oracle/orainventory/oraInstRoot.sh'', do so in another shell as root ... then press continue\\
+
+File locations default should be good\\
+Component selection should be left alone\\
+
+WARNING: I would get this error: Error in invoking target ntcontab.o of makefile ...
+GCC was missing, had to install it with yast.
+
+
+Oracle install will run then it will ask to run another script as root:\\ ''/oracle/T2C/101_64/root.sh'' .. do it on the root shell\\
+
+It will install binaries etc ... in /usr/bin and start the DB\\
+Go back to the oracle installer GUI and click OK\\
+Cancel the network configuration assistant, then exit the oracle installer.\\
+
+WARNING: **DO NOT CONTINUE THE SAP INSTALLATION YET ! We need t install oracle patches first**
+
+Now we need to install the latest Oracle patches (10.1.0.4)\\
+
+Downloaded form 'sap market place' and copied into /mnt/sapcd/Oracle_patches/10.1.0.4_linux64\\
+
+<code>
+#Reattach the patch pieces together (note: 509314)\\
+#cat PSET_10104_LINUX-X86-64AA.BIN Pset_10104_Linux-x86-64ab.bin Pset_10104_Linux-x86-64ac.bin >> PSET_10104_LINUX-X86-64.zip
+#unzip this new zip
+#unzip PSETxxxxxx.zip
+</code>
+
+Install the patchset\\
+#do this as orat2c:\\
+<code>
+su - orat2c
+cd /mnt/sapcd/Oracle_patches/10.1.0.4_linux64/PSET_10104_LINUX-X86-64/Disk1
+</code>
+
+As root: stop cssd: ''/etc/init.d/init.cssd stop'' to stop the oracle processes and also kill the tsnlstnr process if running(kill -9)\\
+
+Back as orat2c\\
+<code>./runinstaller</code>
+
+File locations should be ok by default\\
+Patch then should get installed, at the end it will ask to run as root:\\
+<code>
+/oracle/T2C/101_64/root.sh
+</code>
+(**choose to install to /usr/bin and not /usr/local/bin to be consistent with installer**)\\
+
+do it then press "ok" and complete the oracle patch installer.\\
+
+Possibly install extra patches to the patchset if necessary (didn't do)
+<code>
+#su - orat2c
+#cd $ORACLE_HOME
+#mkdir .patch_storage
+#cd OPatch
+#check current patches: ./opatch lsinventory
+#./opatch apply -verbose /mnt/sapcd/Oracle_patches/10.1.0.4_linux64/.....
+</code>
+
+
+====Continue install====
+
+Back in the SAP installer click "ok" to continue the install\\
+Rest of install should complete succesfully.\\
+
+Note: it seem to fail at step 24 "start java engine" seems to be out of memory issue
+My solution is while it is running, login as t2cadm and do stopsap, then startsap ... that seem to work ....
+
+At this stage it's good to reboot to free some memory before installing the patches.
+
+=====post intsall=====
+
+====Get a license====
+
+start the admintool and go to the license adaptor and get the hardware key\\
+then go to service.sap.com/licensekey to get the key and install it in visual admin.\\
+
+====Installing the service pack====
+
+For SP6 See: [[ISA 2004s SP06]]
+
+For SP7 see: [[ISA 2004s SP07]]
+
+07/19/2007: SR2/SP13, see: [[isa_2004s_server_-_upgrading_to_sr2_sp13_]]
+
+====Recommanded settings====
+
+Setup the JVM settings (using configtool) according to this note: 861215\\
+Server: 
+<code>
+-Xgcpolicy:gencon -Xms2048m -Xmx2048m -Xmn400m -verbose:gc -Xtrace -Xsoftrefthreshold3 
+ (-Xsoftrefthreshold1 if sp<5)
+</code>
+Dispatcher:
+<code>
+-Xgcpolicy:gencon -Xms200m -Xmx200m -Xmn70m -verbose:gc
+</code>
+
+
+====Start scripts to match solaris setup:====
+created **/usr/local/adm** folder\\
+in there created **SAP-startup.sh** with content 
+<code>su - t2cadm -c startsap</code>
+and created **SAP-shutdown.sh** with content
+<code>su - t2cadm -c stoptsap</code>
+and added to /etc/init.d/boot.local
+<code>su - orat2c -c "/oracle/T2C/101_64/bin/lsnrctl start"</code>
+Then ''Chmod +x'' all three files
+
+
+
+====Starting the server====
+After boot, as root:\\
+<code>
+/usr/local/adm/SAP-startup
+</code>
+
+NOTE Once, on first reboot would not start, had to: ''chmod 775 /usr/sap/tmp/dev_coll.tmp''
+
+NOTE To get Other things to work right: ie JDI, had to do this:
+<code>
+''chown -R pdiadm:sapsys /usr/sap/''
+</code>
+
+===== SSL certificates =====
+ISA comes with expired SSL certificates which causes lots of issues later, renew/ the certificates using this doc:
+
+[[http://wiki.colar.net/sap_j2ee_ssl_keys]]
+
+==== Visual Administrator stuck at 99% ====
+If you can connect to remote machines form your Visual Administrator, but you can't connect to your local J2ee, it is probably due to name resolution issues.
+Visual Administrator is VERY picky about this ! (i guess it probably does dns lokup & reverse DNS)
+
+Anyway make sure your /etc/hosts and /etc/hostname are coorect, something like this:
+<code | /etc/hosts>
+127.0.0.1       localhost localhost.localdomain
+10.10.1.195     sapmachine sapmachine.mycompany.com
+
+# The following lines are desirable for IPv6 capable hosts
+# you might have ipv6 stuff here
+</code>
+
+<code | /etc/hostname>
+sapmachine
+</code>
+
+===== Deploying the java components for CRM B2C/B2B =====
+
+You can deploy those components also using the JSPM.
+The components are: SAP-CRMJAV, SAP-CRMWEB, SAP-IPCMSA, SAP-SHRJAV, SAP-SHRWEB, SAP-CRMAPP, SAP-CRMDIC and SAP-SHRAPP (also has needed DICMS STRUTS TEALEAF)
+
+''cp /mnt/sapcd/2004s_java_components/May\ 2006/* /usr/sap/trans/EPS/in/''
+
+and run JSPM again to deploy those. (select "new components" and skip all except the components listed i just listed).
+
+==== Performance enhancements====
+See: [[sap_crm5_0_isa_trex_performance_settings]]
+
+==== Setup B2c ====
+
+See here on how to setup the ISA server/B2B/B2C sites
+
+Follow this link:
+[[Saving/Loading iSA B2B/B2C XCM config]]
+
+<html><center>
+<a href="http://www.jdoqocy.com/click-3402476-10524481?url=http%3A%2F%2Fwww.ecampus.com%2Fbk_detail.asp%3Fisbn%3D9780972598804%26referrer%3DCJ&cjsku=9780972598804N" target="_blank"><img src="http://images.ecampus.com/images/d/8/804/9780972598804.jpg" border="0" alt="The Sap Consultant Handbook: Your Sourcebook to Lasting Success in an Sap Consulting Career"/></a>
+<img src="http://www.ftjcfx.com/image-3402476-10524481" width="1" height="1" border="0"/>
+</center></html>
+

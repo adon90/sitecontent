@@ -1,0 +1,6 @@
+====== Kyocera Howto ======
+
+This explains how to setup windows to use the Kyocera printer at Qarbon.
+
+See this viewlet:\\
+http://www.colar.net/qarbon/kyocera.viewlet/

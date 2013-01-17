@@ -1,0 +1,24 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== Sap Remote Access ======
+
+Open a connection for SAP service
+
+For connection to the remote access machine (windows terminal server) on Cedar.
+
+Login into http://service.sap.com/ \\ 
+Click on "Remote connections" \\
+Click on "Maintain Connections" \\
+Click on TPT \\
+Click "Maintain Connections" \\
+And open a "R/3 support" and a "Windows Terminal" connections for 5 days. \\
+
+Then SAP can do this: \\
+
+From the SAP connection platform, connect To \\
+Pacific Coast Feather / BW / TPT \\
+Then use the "Cedar" connection to connect to the machine (Windows terminal server).
+
+
+~~DISCUSSION~~

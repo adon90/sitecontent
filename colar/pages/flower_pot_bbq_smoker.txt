@@ -1,0 +1,88 @@
+======Flower Pot BBQ Smoker======
+I only have a lame little BBQ at the time and have been thinking of making myself a BBQ brick station in the backyard (brick & cinder block)
+
+Basic idea would be to have a 'counter' (tiles) with a regular 'grill section' builtin ... but I was thinking a slow-cooker type unit would be cool too. Here is a quick sketch: {{smoker.pdf}} 
+
+Anyway I kinda researched a bit slow cookers, and found tbe best are the ceramic types, like the Green Big Egg ... but that's quite spendy (700$ plus) and i couldn't build this into my 'station'
+
+After a bit more research I came across The neat flower pot smoker has demonstrated by Alton Brown in [[http://www.youtube.com/watch?v=_Ka2kpzTAL8| this video]]
+Here is a good page with explanations on making one and many comments:
+[[http://www.naffziger.net/blog/2008/07/05/the-alton-brown-flower-pot-smoker/]]
+
+However I don't like the idea of the electric element, it might be easier than wood/charcoal but it's quite inefficient (1000 watt for 10+ hours) and consensus is the heating element doesn't last long.
+
+Here is what mine looks like by itself, read more for the details.
+{{bbq_smoker.jpg}} {{ bbq_salmon_small.jpg}}
+
+====Items list:====
+  - <del>Flower pot. 18' Terra cotta from lowes (not heavy rimmed)</del>
+Returned because of failure to find large enough top/cover and matching grill grid (The charbroil ~18' fits just under the rim, but barely.)
+  - **Flower planter - Terra Cotta**. [[http://www.homedepot.com/Outdoors-Garden-Center-Planters-Clay/h_d1/N-5yc1vZ1xg1Zapt4/R-100576411/h_d2/ProductDisplay?langId=-1&storeId=10051&catalogId=10053|Item 10035 18.5' Heavy rim terra cotta planter]] - Fred Meyers or Home depot ~ 30$
+A little smaller but like it because the heavy rim makes it stronger & retains more heat near where the grate/food will be. 
+Also the standard, easy to find, 14.5' Weber replacement grate sits a perfect 2/3 of the way up in the pot.
+They do have those in 16', 20', 18.5' and 22'.
+  - **Terra cotta saucer** - Fred Meyer's ~ 15$
+I gave up(for now, will get back to it) on finding a "bowl" type cover (hanging basket) of that size and just went for a saucer.
+It's the same diameter as the pot rim - wider would be OK too, you should buy the saucer and planter at the same time.
+  - **[[http://www.acehardwaresuperstore.com/weber-charcoal-grate-145-p-87897.html?ref=42|14.5' Weber replacement grate #7431]]** ~ 10$
+Ace harware & Fred Meyers have it, HD and Lowes didn't seem to have that size.
+Wanted to note that I have an el-cheepo tiny foldable BBQ kettle (for camping) which I bought for <10$ and both grate in there (squarish with rounded corner) also would work well in the pot, the 'cooking' grate fits about 2/3 of the way up, the 'charcoal' grate 1/3 of the way up.
+  - Charbroil (short probe) **BBQ Thermometer** #9678 from Lowes (0F to 700F) ~4$
+  - **Old heavy duty small pan** (To hold the charcoal), make sure it's smaller than the pot bottom to allow air flow.
+  - A few bricks ~5 of them.
+  - A few nuts and bolts
+  - A Couple fit of plumber "straps" (metal) to make lid handles
+  - [[http://www.lowes.com/pd_197879-505-7416_0_?newSearch=true&catalogId=10051&productId=1057001&Ntt=bbq+chimney&N=0&langId=-1&y=0&x=0&Ns=&storeId=10151&Ntk=i_products&ddkey=http:SearchCatalogDisplay| A BBQ Chimney]](~10$) - A must have to lit coals easily, so simpe and efficient. Can be found anywhere.
+  - [[http://www.homedepot.com/h_d1/N-5yc1vZ1xh8/R-202183529/h_d2/ProductDisplay?langId=-1&storeId=10051&catalogId=10053 | A piece of expanded metal 24'x24' ]] Haven't use that one yet, but planning to make a charcoal basket out of it, for the coal to burn better than in the pan. ~18$
+Kinda hard to find at home dpot, not with the chicken wire, but in the "harware" section with the sheet metal, also it's warpped in cardboard, easy to miss if not  paying attention.
+Make sure it's not chromed or Galvanized -> toxic !
+
+====Putting it together====
+The flower pot is use as-is and no modification are necessary, the air will come through the bottom hole, of course the pot need to be raised of the ground (on bricks) to allow air flow.
+
+Now the saucer I had did not have a drain hole, so I made one using a hole cutter and a drill.
+Note on drilling: Use plenty of water on the drill hole to prevent cracking the saucer and overheating the drill bit, go slow. Also it seem to ruin drill bits pretty quickly :)
+{{ smoker_drill.jpg }}
+
+While I was at it I also made a hole for the thermometer probe and a couple 'handles' to lift the lid (made from bolt/nuts and plumbing straps). I used high heat silicon for filling the holes & 'gluing" the thermometer.
+{{ smoker_drilled.jpg }} 
+
+After that you want a receptacle for the charcoal, something heavy duty, fireproof and food safe, I used an old sturdy saucepan, which I cut the handle of:
+
+That's all.
+Putting it together: First I stand the pot on a couple of brick without blocking the air flow through the drain hole, then I added a few pieces of brick at the bottom of the pot to raise the charcoal pan off the air hole, then you would put hot coals, then then grate and then close the lid.
+{{smoker_1.jpg}} {{smoker_2.jpg}} {{smoker_3.jpg}} {{smoker-4.jpg}} 
+
+=====Priming the smoker / Test run=====
+I decided to do a test run to test the smoker and dry/prime it to see how it goes.
+
+First I lit a few wood lumps(not much at all) into the chimney until they where nice and toasty, then I transfered them into the pan  with BBQ tongs( careful).
+
+Then I closed the lid, see the coals glowing through the top hole, and the temperature went up to 150F
+
+After a while it went ~200F, it took a while because the saucer was soaked from the drilling water and that's slow to dry up.
+Even after the coal died out the pot stays hot for 1+ hours which is a good thing.
+{{smoker_chimney.jpg}} {{smoker_coals.jpg}} {{smoker_coals2.jpg}} {{smoker_150.jpg}} 
+
+
+=====06/24/2010 : Smoked plank salmon=====
+The next day I decided to try smoking the salmon my wife got from Costco here in Seattle. She brined/rubbed it according a recipe i got from the 'Planet BBQ' book.
+ 
+This time I prepared More coals, I mixed a few Kingsford charcoals and some natural lumps and lit them in the chimney.
+
+Once Hot I put them in and added some soaked apple wood chips on top (for smoke), place the grate and then the salmon on a soaked cedar plank.
+
+The smoker temp went up to ~220F-230F and stayed there - the perfect temp !
+I open onced after ~40 mn and fanned the coals a bit and added a few more soaked chips (more smoke), after 1:15mn it was ready.
+
+My wife said it's one of the top 2 best salmon she ever had, i agree, only minus was that it was a bit salty, but the flavor was fantastic.
+
+Couple Notes:
+  - I don't think I could get the temp much hotter than 250F because it seem the air flow is too limited, I will try to make a charcoal basket to help that, also I think my coal pan is too wide and limiting the airflow a bit too much ... on the other hand 200 to 250F is the recommended temp for smoking, so maybe I should leave it alone.
+  - After I was done cooking, the smoker temp staid over 200F for 3+ hours, not bad considering I only used 1/3 chimney of coal/chips - it's not even fully consumed either.
+
+{{smoker_slamon3.jpg}} {{smoker_salmon2.jpg}} {{smoker_slamon_large.jpg}} 
+
+=====To Be Continued=====
+FIXME: **To Be Continued**
+

@@ -1,0 +1,32 @@
+======My Software======
+  * [[What's cooking| TODO list]]
+What i'm working on  
+
+  * ButBucket Repository
+[[http://bitbucket.org/tcolar/]]
+
+  * [[fanide:home|FanIDE]] 
+IDE for the Fan language based on Netbeans. 
+
+  * [[berry:home|Berry4All / BBTether]]
+An easy to use program for tethering(use as a modem) a blackberry under linux, written in python.
+
+  * [[fan|Netbeans Plugin For The Fan Language]]
+A Netbeans plugin for the Fan language.
+
+  * [[jot:Home|JavaOnTracks]]
+A java Framework/Toolbox with tons of functionalities.
+
+  * [[wiki:Home|JotWiki]]
+A Wiki based on the JavaOntracks framework.
+This site is running on jotwiki.
+
+  * [[GP2X]]
+Some software i wrote for the GP2X device: virtual touchscreen keyboard (python)
+
+  * [[WMFrog Dockapp]]
+About a small lame :-) dockapp i wrote(long ago), which displays the weather.
+
+  * HockeyPond.com
+About the hockey website i made.
+

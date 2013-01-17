@@ -1,0 +1,48 @@
+======Software releases - Scrum and Subversion branches======
+**Issue**: It is difficult to handle fast changing requirements in a large software projects while maintaining stability.
+
+The main issues are:
+  * You need to release often, so new features can be deployed quickly in response to customer needs.
+  * Yet you need to be able to work on  "long-term" features without affecting software stability.
+  * You also need to be able to quickly make a production release as needed. 
+
+Some way to establish that is to establish a project management methodology that works well with software.
+I believe "Scrum"(a form of "Agile" development) is a very good match for software development and is gaining popularity among software companies of all sizes. The most innovative software companies often use scrum/agile development, from small startups to giants (ex: Google & Amazon)
+
+As far as the technology to manage all the software releases, careful use of subversion: branches and merging, can help.
+
+=====SCRUM=====
+See full description here: [[http://en.wikipedia.org/wiki/Scrum_(development)]]
+
+The way it works, is all the requested features/fixes are in a"Product backlog", then a subset of those features are assigned to the "sprint backlog"(next release).
+
+Basic concepts of SCRUM:
+  * Scrum recognize that requirements always change and we should embrace it rather than fight it (that's just the way it is in the software industry.)
+  * Scheduled, short interval, releases: every 2-4 weeks. (called the sprint)
+  * 15mn "developers" stand-up morning meeting every other day. (what have you done ? What are you planning to do today? any difficulties / schedule issue)
+  * After each sprint(~release), meeting to discuss how it went and how to improve next time, and plan next sprint backlog (have marketing/sales have a say in priority)
+
+Notes
+  * Even if we do releases every 2 weeks, we don't necessarily have to deploy them to production, though we usually would.
+  * We should try to split features such as they can fit in a sprint (ie: take less than 2/4 weeks)
+  * If we have releases often (say 2 weeks), we should be able to have marketing/sales willing to wait fr the next releases for most features (ie: won't take 6 month)
+
+=====Subversion - Branching / Merging=====
+There are lots of opinions on this, but here are some infos:
+[[http://svnbook.red-bean.com/en/1.5/svn.branchmerge.commonpatterns.html | Common branching patterns]]
+we currently mostly do the "release branch pattern", but the "feature branch pattern" would be best.
+
+Here is more infos on some other Branching patterns:
+[[http://www.codeplex.com/TFSGuide/Wiki/View.aspx?title=Chapter%205%20-%20Defining%20Your%20Branching%20and%20Merging%20Strategy&referringTitle=Home | Branching & Merging strategies]]
+
+So anyway I recommend we mostly follow the "feature pattern".
+Basically we want the trunk to be pretty stable, and in a "releasable" state every 2-4 weeks.
+We create a branch for long term features/upgrade.
+
+  * Simple features (<2 weeks) are scheduled in a scrum sprint and committed to trunk only once completed
+  * "Long-term" features/upgrade go in a branch. The trunk is merged into the branch weekly (to detect merging/integration conflict early and in the branch - keep the trunk stable). when feature complete, it's merged  into the trunk for release. (and we can later remove the branch)
+  * We should try to do every "urgent" request in a sprint, however in case of a critical bug in production, or urgent feature, we could do a "maintenance branch" on demand and deploy it. (and merge it right away into the trunk so it goes in the next release as well)
+
+{{ chart.png }} 
+
+

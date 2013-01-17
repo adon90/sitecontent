@@ -1,0 +1,17 @@
+<code>
+Table:          TSTCT
+Displayed Fields:   3 of   3  Fixed Columns:                2  List Width 0250
+---------------------------------------------------------------------
+| |SPRSL|TCODE                 |TTEXT                               |
+---------------------------------------------------------------------
+| |D    |/1BEA/BBEA_BD_01      |Fakturabelege bearbeiten            |
+| |E    |/1BEA/BBEA_BD_01      |Maintain Billing Documents          |
+| |E    |/1BEA/BBEA_BD_02      |Transfer Billing Docs to Accounting |
+| |D    |/1BEA/BBEA_BD_02      |Fakturabelege an das RW ?erleiten  |
+| |D    |XSLT_TOOL             |XSLT Tool starten                   |
+| |D    |XXTH                  |test                                |
+---------------------------------------------------------------------
+
+</code>
+
+

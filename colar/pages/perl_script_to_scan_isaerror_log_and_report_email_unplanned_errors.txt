@@ -1,0 +1,215 @@
+======Perl script to scan isaerror logs and report/email unplanned errors======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+Sometimes the ISA server goes very wrong and some unplanned exception are thrown, this script here is a quick and dirty script that scans those logs and find errors, then outputs a list of errors (and stacktrace) out.
+
+It also sends the "new" (since last run) errors by email.
+
+Notice LOG_FOLDER, why do isa log files end-up in that folder (ipcpricing), i have no idea ... weird !
+We have a bunch of "exclusions" for errors we know are harmless and we ust want to ignore
+
+<code | ISA alerts scanscript 'scan.pl'>
+#!/usr/bin/perl
+#Thibaut Colar
+#
+# Scans SAP isa logs and create report file & send email alert
+
+# Uses Mail:sendmail to send directly through socket on smtp server
+use Mail::Sendmail;
+
+### Constants ####
+$LOG_FOLDER="/usr/sap/XYZ/JC01/j2ee/cluster/server0/apps/sap.com/crm~ipcpricing/servlet_jsp/ipcpricing/root/WEB-INF/logs/";
+$MAX_TRACE_LENGTH=5;
+$SMTP_SERVER="10.10.10.10";
+$EMAIL_RCPTS='me@me.net,me@me.com';
+$EMAIL_FROM='isa-alerts@me.com';
+$START_NO_EMAIL=75; #1:15AM
+$END_NO_EMAIL=195; #3:15AM
+##################
+
+
+##### Main ###############
+$lastErr=`cat lasterr.txt`;
+chomp($lastErr);
+chomp($lastdate);
+print "Prev Run:".$lastErr."\n";
+$now=`date +%s`;
+chomp($now);
+
+open(LS,"ls -1t --color=never ${LOG_FOLDER}isaerror* | ");
+@lslines=<LS>;
+chomp(@lslines);
+# files are rotated, so we use last two, so not to miss anything
+$data_file=@lslines[0];
+$data_file2=@lslines[1];
+`cat '$data_file2' > scan.tmp`;
+`cat '$data_file' >> scan.tmp`;
+print "Ran At:".$now."\n";
+print `date`;
+print "Using files ".$data_file2." & ".$data_file."\n\n";
+close LS;
+
+open(LOG, "scan.tmp") || die("Could not open file!");
+
+@lines=<LOG>;
+$i=0;
+$newCpt=0;
+$newLastErr=0;
+$nbError=0;
+while($i < $#lines)
+{
+	$line=@lines[$i];
+	# find errors
+	if($line =~ m/ Error /i)
+	{
+		# exclusions
+		if( ! (
+   $line =~ m/com.sap.isa.isacore.BusinessEventTealeafCapturer/ 
+|| $lines[$i] =~ m/Logon is invalid/
+|| $lines[$i] =~ m/Payment card\s+\S+\s+has expired/
+|| $lines[$i] =~ m/An error occurred during card authorization/
+|| $lines[$i] =~ m/Use another card or another payment type/
+|| $lines[$i] =~ m/for card type \S+ incorrect/
+		))
+		{
+			$traceCpt=0;
+			$ignore=0;
+			$title=$line;
+			$trace="";
+			# Do we have a stack trace ?
+			if($lines[$i+1] =~ m/[Exception]/)
+			{
+				$trace=$trace.$lines[$i+1];
+				$i=$i+2;
+				# traces start with a non space char(tab)
+				while(! ($lines[$i] =~ m/^\S+\s+\d+/) && $i< $#lines)
+				{
+					#traces to be ignored
+					if(
+   $lines[$i] =~ m/Error at user change: internet user is unknown/
+|| $lines[$i] =~ m/com.tealeaf.sdk.UserConfiguration.getCookie/
+# We should fix those in code
+|| $lines[$i] =~ m/com.sap.engine.services.servlets_jsp.server.exceptions.WebIOException: The connection is closed./
+|| $lines[$i] =~ m/CM_NO_DATA_RECEIVED/
+|| $lines[$i] =~ m/java.lang.NumberFormatException: For input string/
+|| $lines[$i] =~ m/error for text CRM_ORDERI/
+)
+					{
+						$ignore=1;
+					}
+					if($traceCpt<$MAX_TRACE_LENGTH || $lines[$i] =~ m/^Caused by/)
+					{
+						$trace=$trace.$lines[$i];
+						$traceCpt++;
+					}
+					$i=$i+1;
+				}
+				$i=$i-1;
+			}
+
+
+
+			# print the error / send email
+			if($ignore==0)
+			{
+				$nbError++;
+				if($line =~ m/^(\S+ \d+, \d+ \d+:\d+:\d+ \w+)/)
+				{
+					$time=`date -d "$1" +%s`;
+					chomp($time);
+					if($time > $lastErr)
+					{
+						$email=$email.$title;
+						$email=$email.$trace;
+						print "---NEW ERROR---\n";
+						$newLastErr=$time;
+						$newCpt++;
+					}		
+				}	
+				print $title;
+				print $trace;
+			}
+		}
+		
+	}
+	$i=$i+1;
+}
+close LOG;
+print "----- Errors found: ".$nbError." ------\n";
+
+if($newLastErr>$lastErr)
+{
+	`echo "$newLastErr" > lasterr.txt`; 
+}
+$mn=`date +%M`;
+$h=`date +%H`;
+chomp($mn);
+chomp($h);
+$total=60*$h+$mn;
+if($email)
+{
+	if($total>$START_NO_EMAIL && $total<$END_NO_EMAIL)
+	{
+		print "NOT Sending alerts by email. ($START_NO_EMAIL>$total<$END_NO_EMAIL)\n";
+	}
+	else
+	{
+		print "Sending new alerts by email.\n";
+		%mail = ( To      => "$EMAIL_RCPTS",
+                From    => "$EMAIL_FROM",
+                Message => "$email",
+                Subject => "New($newCpt) SA Alerts(Maple)!",
+		smtp => "$SMTP_SERVER"
+               );
+		sendmail(%mail) or die $Mail::Sendmail::error;
+	}
+}
+</code>
+
+<code | Example report after running 'perl scan.pl'>
+Prev Run:1205776848
+Ran At:1205776872
+Mon Mar 17 11:01:12 PDT 2008
+Using files /usr/sap/XYZ/JC01/j2ee/cluster/server0/apps/sap.com/crm~ipcpricing/servlet_jsp/ipcpricing/root/WEB-INF/logs/isaerror.9.log & /usr/sap/XYZ/JC01/j2ee/cluster/server0/apps/sap.com/crm~ipcpricing/servlet_jsp/ipcpricing/root/WEB-INF/logs/isaerror.0.log
+
+Mar 14, 2008 11:30:49 AM,973 SAPEngine_Application_Thread[impl:3]_17   Error com.sap.isa.core.eai.sp.jco.JCoConnectionStateless Error occcurred in EAI layer "com.sap.mw.jco.JCO$Exception: (102) RFC_ERROR_COMMUNICATION:      I/O error for text CRM_ORDERI 47DAD56FCDF81BCDE1000000C7F9D70B Z001 ". 
+[EXCEPTION]
+ com.sap.mw.jco.JCO$Exception: (102) RFC_ERROR_COMMUNICATION:      I/O error for text CRM_ORDERI 47DAD56FCDF81BCDE1000000C7F9D70B Z001 
+	at com.sap.mw.jco.MiddlewareJRfc.generateJCoException(MiddlewareJRfc.java:457)
+	at com.sap.mw.jco.MiddlewareJRfc$Client.execute(MiddlewareJRfc.java:1395)
+	at com.sap.mw.jco.JCO$Client.execute(JCO.java:3896)
+	at com.sap.mw.jco.JCO$Client.execute(JCO.java:3332)
+	at com.sap.isa.core.eai.sp.jco.JCoManagedConnectionFactory.executeJCoFunction(JCoManagedConnectionFactory.java:1136)
+	at com.sap.isa.core.eai.sp.jco.JCoConnectionStateless.execute(JCoConnectionStateless.java:398)
+	at com.pcf.b2c.rfc.AddOrderText.executeRFC(AddOrderText.java:40)
+	at com.pcf.b2c.rfc.RFCAction.executeRFC(RFCAction.java:43)
+	at jsp_acknowledgement_2e_inc1201230851220._jspService(jsp_acknowledgement_2e_inc1201230851220.java:51)
+Mar 14, 2008 12:44:07 PM,479 SAPEngine_Application_Thread[impl:3]_38   Error com.sap.isa.businessobject.order.ExternalReference Backend Error: When payment form is payment card, please enter card data 
+----- Errors found: 3 ------
+</code>
+
+Script to run the scan and store the result under the 'admin' section of the site, so it can be easily checked at http://myisasite/myisaapp/admin/scan.txt  In the 'admin' section so it requires authentication, since we don't want anyone to see this file (may contain sensitive data)
+<code | 'scan.sh'>
+#!/bin/sh
+cd /home/me
+./scan.pl > /usr/sap/XYZ/JC01/j2ee/cluster/server0/apps/sap.com/apps_b2c_custom/servlet_jsp/b2c_custom/root/admin/scan.txt
+</code>
+
+Cron entry to run this every 3 mn
+<code | cron entry>
+*/3 * * * * /home/me/scan.sh >/dev/null &
+</code>
+
+
+

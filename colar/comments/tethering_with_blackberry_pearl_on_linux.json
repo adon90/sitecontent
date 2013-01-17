@@ -1,0 +1,120 @@
+{"author":"Lost1 (Guest)",
+"title":"Basic question about service",
+"text":"I use Tmobile in the US with a Blackberry Pearl 8120. But I have no idea what service to pay for to allow this tethering to work?  Is it the Tmobile \"web2go\" or \"Tmobile Total Internet\" or \"Tmobile Hotspot\" or \"Blackberry Unlimited\" or what?  Tmobile I think makes it hard on purpose to sort through these plans to allow a creative linux user to make things work.\n",
+"ts":"2009-03-29T15:45:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Praise for a great page and a request for some help",
+"text":"This is one the best if not the best how to's I have relied upon in recent memory! Congrats!\n\nNow for the help request:  I know it ran through the first time, as I saw the output, but it did not successfuly connect.\n\nOK, now when I run <sudo ppd call blackberry> this is the ouput:\n\ntkilgore@toshiba:/usr/local/bin$ sudo pppd call blackberry &\n[2] 8779\ntkilgore@toshiba:/usr/local/bin$ Initializing\nATE\nDialing\nSerial connection established.\nusing channel 2\nUsing interface ppp0\nConnect: ppp0 <--> /dev/pts/1\nWarning - secret file /etc/ppp/pap-secrets has world and/or group access\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x78db71a6> <pcomp> <accomp>]\nLCP: timeout sending Config-Requests\nConnection terminated.\nReceive serial link is not 8-bit clean:\nProblem: all had bit 7 set to 0\nModem hangup\n\nThis is completely out of my area; any help would be appreciated.  I am using an 8700.\n\nThanks in advance!\n",
+"ts":"2008-12-01T23:41:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"If you have notebook/laptop that has bluetooth and a BB which also has bluetooth, you can tether wirelessly. Mine works with 8800.\n",
+"ts":"2008-11-13T10:20:00-08:00 Los_Angeles"}
+{"author":"Tina (Guest)",
+"title":"My 2 cents.",
+"text":"Has anyone gotten this to work with OS 4.5? It stopped working for me once I upgraded, and now even removing and reinstalling doesn't work!\n",
+"ts":"2008-09-29T14:28:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Cool page, dude. Your ppp scripts w/slight changes work for my 7100t bb and tmobile.I'm running opensuse 10.2. Xlt would not build 'til I copied libXm.* to /usr/lib. XmBlackBerry wouldn't run until I copied libXlt.* there also (easiest solution for me). Hope this comment helps someone, I'm up and running!\n",
+"ts":"2008-08-11T05:39:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Tethering a BlackBerry to Ubuntu 8.04 with Alltel.",
+"text":"I followed this tutorial, but I struggled for a while with the pppd scripts due to alltel not allowing APN.\n\nSo here's how to get your tether working on Ubuntu if you have Alltel. I have an 8830 WE but this probably works with others as well.\n\n1. Follow the above articles instructions until it gets to the section on PPP scripts. \n\n2. Edit /etc/wvdial.conf to:\n\n[Modem0]\nModem = /dev/pts/x(this number tends to change)\nBaud = 115200\nSetVolume = 0\nDial Command = ATDT\nInit1 = ATZ\nFlowControl = Hardware (CRTSCTS)\n[Dialer blackberry]\nUsername = 10digitphone#@bb.alltel.net\nPassword = alltel\nPhone = #777\nStupid Mode = 1\nInherits = Modem0\n\n3. Connect your BB and run \"sudo bcharge\" in a terminal. If you get an error saying possible Kernel conflict thats ok. \n\n4. Run \"sudo XmBlackBerry\" then when it finishes it should say \"ip_modem.c:NewIpModem [...] '/dev/pts/3'\" That last digit may change each time you connect your BB so you'll have to edit the /etc/wvdial.conf file accordingly before you run wvdial.\n\n5. Open a seperate terminal and run \"sudo wvdial blackberry\" If it displays an IP address then you're in business!\n\nAny questions email me chainy1 at gmail",
+"ts":"2008-07-25T00:48:00-07:00 Los_Angeles"}
+{"author":"slackcub (Guest) (Guest)",
+"title":"GPRS modem device not available",
+"text":"ok, I figured out my last problem.  It was because I had a smart card in the blackberry and bcharge wasn't grabbing it.  but now I get this on the console when I'm running XmBlackBerry:\n\nGPRS modem device Not available",
+"ts":"2008-07-19T19:03:00-07:00 Los_Angeles"}
+{"author":"slackcub (Guest) (Guest)",
+"title":"can't find device",
+"text":"when I run bcharge, I get this:\n\nScanning for Blackberry devices...\nFound device #12...adjusting charge setting...adjusting Pearl mode to dualDetecting possible kernel driver conflict, trying to resolve...\n\nusb_reset failed: could not reset: No such device\n...done\n\nI am running Slackware 11.0, with a Blackberry Pearl 8130, Sprint service.  any help you could give me would be greatly appreciated!",
+"ts":"2008-07-19T18:53:00-07:00 Los_Angeles"}
+{"author":"admin",
+"title":"From The author",
+"text":"- To bzz: I fixed my weeky, so it does not use \n\"fancy\" curley's / quotes in the code block (that caused problems), it was  not suppose to do that but there was a bug in my wiki.\n\n- For: M4 not found, exiting\nYou need to install the m4 package for your distro, usually it's part of build-essentials, or just run 'apt-get install m4' on debain\n\n- For: firefox goes in offline mode:\nYou probably still have another connection active and ffox is trying to use it . you will want to turn off or disable other connections, this can be done in  network manager or something like 'ifconfig eth0 down'",
+"ts":"2008-05-30T12:01:00-07:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"Great Idea!",
+"text":"I'm very much trying to get this working, it's a wonderful idea!  And the install process seems to work just fine so far but I just hit 'Installing libXlt\" and I get the message \"M4 not found, exiting.'  I'm afraid the script itself isn't too clear on which .m4 it's looking for.  Do you have any suggestions?  Thanks!\n",
+"ts":"2008-05-15T20:48:00-07:00 Los_Angeles"}
+{"author":"Danny (Guest)",
+"title":"Problem Using Internet Connection Once ppp0 Adaptor Established",
+"text":"Excellent tutorial. I have everything working including getting a ppp connection w/ remote and local ips.\nI used an addendum to this tutorial for verizon phones:\nhttp://www.blackberryforums.com/linux-users-corner/101715-how-verizon-8703e-usb-tethered-linux-ubuntu-7-10-a.html#post925339\n\nUnfortunately when I try to use it Firefox goes into offline browsing mode.\n\nAny hints on what I am missing?",
+"ts":"2008-05-11T15:02:00-07:00 Los_Angeles"}
+{"author":"bzz (Guest)",
+"title":"I forgot to add...",
+"text":"I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU! I LOVE YOU!\n\n:)",
+"ts":"2008-04-16T23:06:00-07:00 Los_Angeles"}
+{"author":"bzz (Guest)",
+"title":"You ROCK!",
+"text":"I have the exact same setup as you, I ran into a few issues though..\n\n1. Had an issue installing barry using the script, but I downloaded the package from SF.net, installed it and moved on.\n\n2. It's 'sudo XmBlackBerry' just a small oversight :P\n\n3. Last but not least: While copying the scripts, just remember to change the fancy double quotes to the generic \" and the same goes with the single quotes '. :) If you get errors with the scripts, check this first!!!",
+"ts":"2008-04-16T23:03:00-07:00 Los_Angeles"}
+{"author":"coteyr (Guest)",
+"title":"compile motif problem",
+"text":"if you get missing bitmap errors when compiling openmotif try 'sudo apt-get install xbitmaps'\n",
+"ts":"2008-03-27T20:59:00-07:00 Los_Angeles"}
+{"author":"Craig T. (Guest)",
+"title":"8830",
+"text":"I have an 8830 and Sprint, and I am unable to get it working.  I am able to get XmBlackBerry to see it, and it is showing on /dev/pts/1, but when I try to connect using pppd or wvdial, I don't have any luck.  Any help would be greatly appreciated.\n",
+"ts":"2008-03-23T19:24:00-07:00 Los_Angeles"}
+{"author":"Bigmack83 (Guest)",
+"title":"My 2 cents.",
+"text":"I have also been able to get my blackberry 7130e (sprint) connected. i pretty much used this forum as a backbone so i dont take any credit. I got it mostly from this page but i made a post for other forums and to put my insight in it also.\n\nhttp://ubuntuforums.org/showthread.php?p=4550979#post4550979",
+"ts":"2008-03-20T07:25:00-07:00 Los_Angeles"}
+{"author":"David Morlitz (Guest)",
+"title":"Compiling Xlt on Ubuntu 7.10",
+"text":"On my clean Ubuntu 7.10 system, I was getting error messages while making Xlt.  The error messages basically said that during linking the -lXm switch was unknown.\n\nThis problem was solved by install libmotif-dev:\n\nsudo apt-get install libmotif-dev",
+"ts":"2008-03-07T10:31:00-08:00 Los_Angeles"}
+{"author":"dukenada (Guest)",
+"title":"FYI for anyone using Verizon 8830",
+"text":"First and foremost thank you greatly for this article!  top-notch my friend.  \n\nI'm currently using this setup on a EeePC 4GB with the default Xandros install.  \n\nIn order to get this working in its entirety, I did have to add a line to the /etc/chatscripts/blackberry file as well as get the username/password combo from Verizon and update the APN and usr/pass in the /etc/ppp/peers/blackberry file.  \n\nmy /etc/chatscripts/blackberry file looks like this:\n\nABORT BUSY ABORT 'NO CARRIER' ABORT VOICE ABORT 'NO DIALTONE' ABORT 'NO DIAL TONE' ABORT 'NO ANSWER' ABORT DELAYED ABORT ERROR\nSAY \"Initializing\\n\"\n''ATZ\nSAY \"ATE\\n\"\nOK 'AT+CGDCONT=1,\"IP\",\"12.168.70.74\"'\nOK 'AT'\nOK 'ATDT*99***1#'\nSAY \"Dialing\\n\"\nCONNECT \"\\d\\c\"\n\n-----------------------------------------\nThis is what my /etc/ppp/peers/blackberry:\n\ndebug debug debug\nnodetach\n/dev/pts/2\n115200\nconnect \"/usr/sbin/chat -f /etc/chatscripts/blackberry\"\nnomultilink\ndefaultroute\nnoipdefault\nipcp-restart 7 \nipcp-accept-local\nipcp-accept-remote\n#need lcp-echo turned off, at least for tmobile, otherwise c0onnectin\n# disconnects after few mn of inactivity.\n# thanks to ?loon? for this info\nlcp-echo-interval 0\nlcp-echo-failure 999\nmodem\nnoauth\nnocrtscts\nnoipdefault\nnovj # refused anyway, no point in trying every time\nusepeerdns\nuser 5555555555@vzw3g.com\npassword vzw\n\nHope this helps somebody.",
+"ts":"2008-03-05T21:41:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"Hi,\n\nI havent tried this but thanks!\nRememebr that you may need to change this line:\n\n>OK ?AT+CGDCONT=1,?IP\",\"wap.voicestream.com??\n\nto \n\n>OK ?AT+CGDCONT=1,?IP\",\"your carrier APN??\nie: in Australia you might need:\nOK ?AT+CGDCONT=1,?IP\",\"telstra.internet??\nor\nOK ?AT+CGDCONT=1,?IP\",\"blackberry.net??\n\nFor those with a bit of savy the BB website has some details on this:\nhttp://www.blackberry.com/btsc/search.do?cmd=displayKC&docType=kc&externalId=KB05196&sliceId=SAL_Public&dialogID=48269804&stateId=1%200%20105588766\n\nHope this helps someone!\n\n\n",
+"ts":"2008-03-05T02:17:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"OMG Thank you!!!!!!!! It didn't all work but at least it charges and I can get to Pics, Ringtones, etc... \n\"Sur'n yer a saint!\"\n",
+"ts":"2008-02-26T11:32:00-08:00 Los_Angeles"}
+{"author":"kerb (Guest@127.0.0.1)",
+"title":"building Barry",
+"text":"Am I the only one having problems with Barry? I used the downloadable package and from CVS, both goives me the error when calling \"./configure\"\n\n....\nchecking whether stripping libraries is possible... yes\nchecking dynamic linker characteristics... GNU/Linux ld.so\nappending configuration tag \"F77\" to libtool\n./configure: line 20484: syntax error near unexpected token `LIBUSB,'\n./configure: line 20484: `PKG_CHECK_MODULES(LIBUSB, libusb,'\n[root@localhost barry]#                                 \n\nany ideas? im on pclinuxos 2007. im planning to use blackberry 7130c (would this be detected?)",
+"ts":"2008-02-18T21:54:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"Connection Problem",
+"text":"Hi, I followed all your info and had 3 issues :\n\nOn the first barry cvs line the console asks for a password. by hitting enter I managed to continue but am not 100% sure I have all the files installed.\n\nWhen I run XmBlackBerry I cannot type anything into the console. If I \"connect to desktop\" the Pearl 8100 shows a desktop connection and I can then run \"sudo pppd call blackberry\"\n\nRunning the command above gives me an error saying /dev/pts/1 is unrecognised but this is the port XmBlackBerry reports mine on !\n\nAny guidance would be appreciated.\n\nBrian",
+"ts":"2008-02-11T09:47:00-08:00 Los_Angeles"}
+{"author":"yigalw (Guest@127.0.0.1)",
+"title":"It works!!",
+"text":"Hi I'm sending this via my BB modem, 8100, thanks!  You are right tmobile does not have a very fast data plan, but it does work and that is hard to be beat.\n",
+"ts":"2008-02-09T20:29:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"eee pc repositories",
+"text":"For anyone trying to do this on the EEE PC w/ the default Xandros linux distribution...can you please explain how you even got past step 1?  I  can't even get past:\nsudo apt-get install libc6-dev g++ gcc make build-essential\n\n\nPlease help :)  Thanks.",
+"ts":"2008-02-09T17:44:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"Got it working!!",
+"text":"Thank you so much for this article.  \n\nI have a bb 8830 and Sprint is the carrier.\n\nI got it working by installing barry, opensync, and deps from source first, then followed your guide.  I fought with ppp, then switched to wvdial and voila!  Here's my wvdial.conf:\n\n[Modem0]\nModem = /dev/pts/5\nBaud = 115200\nSetVolume = 0\nDial Command = ATDT\nInit1 = ATZ\nFlowControl = Hardware (CRTSCTS)\n[Dialer blackberry]\nUsername = <cell_phone_number>\nPassword = <cell_phone_number>\nPhone = #777\nStupid Mode = 1\nInherits = Modem0\n\nI noticed that sometimes the /dev/pts/5 changes and had to reflect the change in the conf.\n\nThis is so sweet!\n\nHippiePete",
+"ts":"2008-02-09T16:56:00-08:00 Los_Angeles"}
+{"author":"admin",
+"title":"From the Author",
+"text":"Glad it worked for you guys !\n",
+"ts":"2008-02-08T11:58:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"My 2 cents.",
+"text":"Thank you very much, this is wonderful\n",
+"ts":"2008-02-08T00:20:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"",
+"text":"I missed user and password from /etc/ppp/peers/blackberry\nNow everything works well.\n\nThank you.",
+"ts":"2008-02-07T03:46:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"Authentication issue",
+"text":"Thank you for your guide, very easy and clear.\nI compiled everything on my Eee pc and adapted the  PPP scripts to my operator (vodafone italy) but when I try to connect I get the following errors on and on:\n\nSerial connection established.\nusing channel 1\nUsing interface ppp0\nConnect: ppp0 <--> /dev/pts/2\nsent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x7aaeaf13> <pcomp> <accomp>]\nrcvd [LCP ConfReq id=0x0 <auth pap> <asyncmap 0x0>]\nNo auth is possible\nsent [LCP ConfRej id=0x0 <auth pap>]\nrcvd [LCP ConfRej id=0x1 <magic 0x7aaeaf13> <pcomp> <accomp>]\nsent [LCP ConfReq id=0x2 <asyncmap 0x0>]\nrcvd [LCP ConfAck id=0x2 <asyncmap 0x0>]\nrcvd [LCP ConfReq id=0x1 <auth pap> <asyncmap 0x0>]\nNo auth is possible\n.......\n\nAny suggest ?",
+"ts":"2008-02-07T03:00:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest@127.0.0.1)",
+"title":"works great!!!",
+"text":"Excellent guide!  This works perfectly on my Asus EEE pc with the default Xandros linux installation.  The only thing unfortunate is the slow speeds of the T-Mobile Edge network.\n\nThanks for writing such a detailed guide.",
+"ts":"2008-02-03T13:36:00-08:00 Los_Angeles"}

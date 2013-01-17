@@ -1,0 +1,48 @@
+======List of my favorites Linux software for different purposes======
+
+**Last update: 11/01/2010**
+
+TIP: I list the **most** favorite software first(in bold)
+
+
+Linux Distro: **Mint**, Ubuntu, Debian, Gentoo
+
+====General====
+Editor: **Gedit**, Geany, Vim, Nano
+Graphics: **Gimp**, Dia
+Office: **Abiword**, **gnumeric**, Symphony, OpenOffice
+====Internet====
+Email: **Evolution**, Claws, Thunderbird(good but buggy)
+Browser: **Chrome**, Firefox
+IM: **Pigdin**
+Twitter: (nothing great) Gwibber, Yoono, DestroyTwitter, Tweetdeck
+====Multimedia====
+DVD backup: **K9copy**, dvd::rip
+Photo management: **Fspot**
+Music: **Banshee**, Amarok, Rythmbox
+Video playback: **VLC**, Mplayer, Xine
+Modelling/CAD: **ArtOfIllusion**
+==== Development ====
+Full IDE: **Netbeans**, Eclipse
+Lightweight IDE: **Geany**
+
+Load testing: **Jmeter**, TheGrinder
+Functional web testing: **Canoo webtest**, selenic, watij
+
+Java server: **Jetty**, Tomcat, Jboss
+Profiling: VisualVM
+
+Virtualization: **VirtualBox**, Vmware, Qemu
+File compare/merge: **Meld**
+====Tools====
+Disk cleanup: **Baobab**
+Archiving: File-roller, **7Zip**
+Disk burning: **Brasero**, GnomeBaker
+
+Coffe maker: **Keurig** :)
+
+
+
+
+
+ 

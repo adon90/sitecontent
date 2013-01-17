@@ -1,0 +1,93 @@
+======JavaOnTracks: Basic Testing API======
+
+This testing API, is intended to be very lightweight and non intrusive.
+You don't need to configure anything or have to change your code(implement something) to use it.
+
+All you have to do is add a method called jotTest() to whichever class you want to run a test in, and test something in it.
+
+The JOTTester class is there to run the tests, you can run it from a cron to test periodically, or call it from Ant.
+It has options such as: create reports (text or HTML) and to send them by email (always or only on failure) etc...
+
+=====Test Example=====
+<code | Test Example>
+public class YourClass
+{
+  public String yourMethod(String arg)
+  {
+     //.... return "i worked";
+  }
+  
+  	public static void jotTest() throws Throwable
+	{
+            YouClass clazz=new YourClass();
+            // tag() is just to log some test progress infos in your logs
+	    JOTTester.tag("Starting My super cool test");
+
+            // typical test: test that a function returns the expected value (if not a JOTTestException will be thrown)
+            JOTTester.checkIf("Testing the proper return value: ",clazz.yourMethod("").equals("i worked"));
+
+            // checking for an exception (here we want yourTest(null) throws a NullPointerException)
+            String[] args={null};
+            JOTTester.checkThrowsException(java.lang.NullPointerException.class,"yourMethod",args);
+
+	    JOTTester.tag("Super cool test is done");
+        }
+}
+</code>
+
+=====Running the test=====
+To run the tests, all you have to do is invoke the "JOTTester" class.
+It has quite a few options, you can run "java JOTTester" to list them (or see bellow to see the list).
+
+
+====Run the test from ant====
+<code | Ant task to run tests>
+    <target name="test" depends="compile">
+        <java classname="net.jot.testing.JOTTester">
+            <!-- Example classpath, adjust to your needs, or use classpath variable -->
+            <classpath path="classes:/usr/share/java/postgresql-jdbc3-8.1.jar"/>
+            <!-- First arg(required) is to your classes (to be tested) folder
+            <arg value="classes"/>
+            <!-- you can pass arguments to tell JOTTester what to do, see ""JOTTEster Arguments bellow for other args -->
+            <!--<arg value="-debug"/>-->
+            <!--<arg value="-outputTo=/tmp/jottest.html"/>-->
+        </java>
+    </target>
+</code>
+
+=====JOTTester arguments=====
+**Syntax:** ''java "net.jot.testing.JOTTester classpath  <options>''
+
+Where **classpath** is column or semiColumn. separated list of class folders (where the classes to be tested are)
+
+  *      Option: **-includePackages=""**
+                 Column or semiC. List of packages that should be tested (all others will NOT)
+
+  *      Option: **-excludePackages=""**
+                 Column or semiC. separated List of packages that should NOT be tested (all others WILL)
+
+  *      Option: **-debug**
+                 debug or not
+
+  *      Option: **-stopOnFailure=**
+                 Stop testing after a failure: true or false
+
+  *      Option: **-help**
+                 Display this help message
+
+  *      Option: **-outputTo=""**
+                 Path to a file where you want to output the results (.txt or .html) default: console
+
+  *      Option: **-emailAlways=""**
+                 email address to which you want to send the result
+
+  *      Option: **-emailOnFailure=""**
+                 email address to which you want to send the result (only on failure)
+
+  *      Option: **-selfTest**
+                 Also test the Testing API itself.
+
+**Example:** ''java "net.jot.testing.JOTTEster "classes;c:\my_classes" -includePackages="com.mypkg.*;com.otherpkg.*" -debug=true ''
+
+=====JavaDoc=====
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/testing/package-summary.html]]

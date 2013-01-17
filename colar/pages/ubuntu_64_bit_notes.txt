@@ -1,0 +1,168 @@
+======Ubuntu 64 bits notes======
+I had to install an SAP 2007 ISA central instance on my workstation and that requires a 64 bit OS
+
+So it was time to install Ubuntu hardy heron 64 bits, 64 bits is good but there are a few quirks, i list here all the quirks and tips i had to find to make it behave.
+====Smooth fonts====
+See: [[http://www.howtogeek.com/howto/ubuntu/enable-smooth-fonts-on-ubuntu-linux/]]
+<code | gedit ~/.fonts.conf>
+<?xml version="1.0??? ?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+<match target="font">
+<edit name="autohint" mode="assign">
+<bool>true</bool>
+</edit>
+</match>
+</fontconfig>
+</code>
+
+====Flash 9 in firefox====
+See: [[http://ubuntuforums.org/showthread.php?t=772490]]
+<code>
+sudo apt-get install nspluginwrapper flashplugin-nonfree lib32nss-mdns
+sudo ln -sf /usr/lib/nspluginwrapper/plugins/npwrapper.libflashplayer.so /usr/lib/firefox-addons/plugins/
+sudo ln -sf /usr/lib/nspluginwrapper/plugins/npwrapper.libflashplayer.so /usr/lib/firefox*/plugins/
+#Chrome
+sudo ln -sf /usr/lib/nspluginwrapper/plugins/npwrapper.libflashplayer.so /usr/lib/chromium-browser/plugins/libflashplayer.so
+</code>
+
+====Flash 10 64 bits in Chrome/Firefox====
+**Updated 9/2010 : Adobe finally released a 64 bits linux version**
+
+Download the correct installer here:
+<Del>http://labs.adobe.com/downloads/flashplayer10.html</del>
+[[http://labs.adobe.com/downloads/flashplayer10_square.html]]
+
+Then extract it somewhere (say home directory)
+''cd ~ && tar xzvf flashplayer_square_p1_64bit_linux_091510.tar.gz''
+
+and make the plugin executable: ''chmod +x libflashplayer.so''
+
+Copy the plugin to the browser's plugin folder:
+
+Firefox: ''sudo cp libflashplayer.so /usr/lib/firefox-addons/plugins/libflashplayer.so''
+
+Chrome: '' sudo cp libflashplayer.so /opt/google/chrome/plugins/''
+
+Restart the browser and enjoy !
+
+====Java webstart and plugin in firefox====
+See: [[http://dmartin.org/content/running-java-web-start-apps-ubuntu-linux-amd-64]]
+<code>
+sudo apt-get install ia32-sun-java5-bin
+#use that to run .jnlp files
+</code>
+NOTE: this does not seem to work with all .jnlp files (or maybe it's SAP specific).
+
+====Java in Chromium====
+<code>
+locate libnpjp2
+sudo ln -sf /usr/lib/jvm/java-6-sun-1.6.0.16/jre/lib/amd64/libnpjp2.so /usr/lib/chromium-browser/plugins/
+sudo rm /usr/lib/chromium-browser/plugins/libjavaplugin_oji.so
+</code>
+Restart chromium.
+Test: [[http://www.java.com/en/download/help/testvm.xml]]
+
+====NVidia video drivers====
+See: [[https://help.ubuntu.com/community/BinaryDriverHowto/Nvidia]]
+See: [[https://help.ubuntu.com/community/FixVideoResolutionHowto]]
+
+Close all opened apps cause otherwise it might go wrong
+<code>
+sudo apt-get install envyng-gtk
+</code>
+**start Envyng** (Applications menu)
+Then **choose nvidia -> automatic install**
+reboot or at least restart Xwindows.
+
+Run **nvidia-settings** (menu or ''sudo nvidia-settings'')
+
+Go to **x server display config** and choose whatever you want (**resolution & refresh rate**) ex: 1280*1024 @ 75Hz
+and then press "**save to x config. file**"
+and restart X again (Ex: XTRL-ALT-BACKSPACE)
+
+Note: Ubuntu screen resolution chooser will still say 50Hz, you can ignore that, it's not.
+
+
+====Blank java applications windows====
+Compiz is a cool eye candy window manager add-on for gnome, unfortunately there is a bug and when it's enabled, java applications just show a bank empty useless window.
+
+I need Netbeans and other java apps to work, so i need to disable compiz:
+Go to **system-preference**-**appearance**-**visual effects**: and **Select 'None'**
+
+After doing this however you won't have any transparency at all, and won't be able to use cool things like avant-window-manager (Apple like dock for Linux), so we enable a lightweight transparency manager which does not have the java issue:
+
+<code>
+sudo apt-get install xcompmgr
+</code>
+Start it manually for now: ''xcompmgr &''
+
+We need it to start automatically when X starts
+Go to **preferences** -> **sessions** -> **startup programs**
+**Add**: name:compmgr       command:/usr/bin/xcompmgr
+
+====Advance window manager (awn) (OSX like dock for Linux)====
+I like a nice dock like thing, here is how i installed it:
+
+Note: you need a composition manager for this to work, see above topic for installing xcompmgr
+
+
+See: [[http://news.softpedia.com/news/Install-AWN-on-Hardy-Heron-82611.shtml]]
+**Add apt sources:**
+<code | gedit /etc/apt/sources.list>
+deb http://ppa.launchpad.net/awn-testing/ubuntu hardy main
+deb-src http://ppa.launchpad.net/awn-testing/ubuntu hardy main
+</code>
+
+**Install it:**
+<code>
+sudo apt-get update
+sudo apt-get install awn-manager-trunk awn-extras-applets-trunk
+</code>
+
+**Start it:**
+Applications -> Accessories -> Avant Window Navigator  or just '' avant-window-navigator &''
+
+Run the awn manager: ''awn-manager'' and in the general tab select: "Automatically start AWN on login"
+
+**Removing gnome panel:**
+Right now you will have both gnome menu bars and the dock which is lame, after you had the useful stuff to your dock, you will want to disable gnome-panel:
+You will want to kill it ''killall gnome-panel'' , and probably also preventing it from running next time:
+See: **Preferences** -> **sessions** ...
+
+
+====SAP Gui====
+Sapgui (platin) only works right using java 32 bits since it needs to call 32 bits libraries (JNI), so created a wrapper like this:
+<code | sapgui.sh>
+export PLATIN_JAVA=/usr/lib/jvm/ia32-java-1.5.0-sun/bin/java
+../SAPClients/SAPGUI/bin/guilogon
+</code>
+
+
+====Getlibs to make 32 bits programs start====
+
+Lots of programs do not want to work on linux 64 bits(32 bits only) .... however most of those could actually run by using 32 bits libraries, that is where getlibs come in handy, it finds what a given program needs and install 32 bit compat libraries so it can run.
+
+Examples: [[http://www.yoono.com/|Yoono]] (Nice social media client), Skype.
+
+**Download getlibs**:
+[[http://frozenfox.freehostia.com/cappy/getlibs-all.deb]]
+
+**and install it** (with gdeb or manully: ''sudo dpkg -i getlibs-all.deb'')
+
+Install your program, in the case of Yoono, you just have to unzip the folder, but if say it's a 32 bits package (rpm, deb) you might have to 'force' install like this:
+
+''sudo dpkg -i --force-all some_app.deb''
+
+Now, use getlibs to install the 32 bits dependencies of the program
+
+**Call getlib with the program as the parameter**:
+
+Example1: ''sudo getlibs ./yoono-desktop''
+
+Example2: ''sudo getlibs /usr/bin/skype''
+
+This will install the libraries.
+
+**You can now run the program**!!
+

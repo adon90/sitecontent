@@ -1,0 +1,52 @@
+======ZooZooBee camping trailer - Conception / Drafting======
+Note: **This is just a part of my [[ZooZooBee, My home built Camping Trailer|Complete camping trailer build log]]**
+
+====Requirements====
+First you need to figure what it is that you need /want.
+
+For example in my case, I wanted:
+  - hard shell camper - because it's cold and humid here in the Pacific NW.
+  - simple shape - I'm not a very skilled wood worker)
+  - lightweight - need to tow with a subaru outback, my goal is < 1000 pounds.
+  - one large bed for the adults, at least queen size (80*60)
+  - Two smaller beds for the kids (at least 5' by 2')
+  - Space for a Porta potty
+  - A sink for washing hands.
+  - A seating area
+  - A shower
+  - A size that would not introduce to much drag / bad millage on the car (ie: front of the trailer not much bigger than 6 wide by 6' tall.
+
+Trying to feet all that stuff in a compact floor plan (ex: 4*8 or 5*10) is the fun, but tricky part !
+
+You might want to reconsider stuff that waste floorspace (example: shower) or find creative ideas to save space, such as bunk beds, recessed floors and so on.
+
+====K.I.S.S====
+I had started going wild with ideas such as making the railer out of plastic (lexan) and having "pull out" extensions on the side and so on.
+
+After a while I realized I forgot one of my favorite principals keep it simple stupid (K.I.S.S)and decided to go with a much simpler / standard design, especially for my first build.
+
+====Materials====
+The materials you will use will also impact your design and trailer weight.
+
+There are many different constructions techniques with various strength / weight.
+
+You should also decide what kind of a frame / chassis you will use and consider/source some of your components, such as windows and doors as they will impact your floor plan/ design.
+
+====Drafting====
+While it's not fully required, stuffing that much stuff in a small space needs a lot of planning and you really should draft it on paper and make sure it all works out before you start building.
+
+While paper works fine, it';s much easier to represent all the layers involved, such as structure, furnitures, electrical wiring and so on using computer software(CAD), if you can figure it out.
+
+See here for lists of CAD software that works well for sketching a trailer:
+[[http://www.mikenchell.com/forums/viewforum.php?f=36]]
+
+Note: I highly recommend Google sketchup as it's very easy to use, if you are on linux like me, much less good choices - best I found where "Art Of Illusion" and "QCad.
+
+All That said I worked and reworked some designs,  a CAD software lets you do that easily, here are some examples of what I came up with (**but did not use in the end**):
+
+{{ tt2.jpg }} 
+
+{{ tt3d.png }} 
+
+==== _ ====
+

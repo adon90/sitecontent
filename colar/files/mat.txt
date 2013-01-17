@@ -1,0 +1,84 @@
+
+
+http://dev.eclipse.org/blogs/memoryanalyzer/2008/10/23/troubleshooting-memory-problems-from-ibm-systems-with-memory-analyzer/
+http://www.ibm.com/developerworks/java/jdk/tools/mat.html
+
+https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?lang=en_US&source=swg-ibmjavaisv
+download IBMJava2-SDK-AMD64-1.4.2-13.0.x86_64.tgz
+cd /usr/lib/jvm
+sudo tar xzvf /media/sap/sapcd/Others/java_installers/IBM-jvm/IBMJava2-SDK-AMD64-1.4.2-13.0.x86_64.tgz
+
+su - ztbadm
+/usr/sap/ZTB/JC00/j2ee/configtool
+./configtool
+set all javahome to /usr/lib/jvm/IBMJava2-amd64-142/
+
+stopsap    startsap
+
+Download mat:
+http://www.ibm.com/developerworks/java/jdk/tools/mat.html
+and extract /home/thibautc/apps/
+
+cd /home/thibautc/apps/mat/
+
+Start mat with lots of memory:
+./MemoryAnalyzer  -vmargs -Xmx2G (java must point to java1.5+)
+
+Download ftp://ftp.software.ibm.com/software/java/support/tools/mat/matdtfj.zip and save it (don't extract it)
+- in MAT menu select Help/ Software Updates / Find and Install
+- select "Search for new features to install" and click Next.
+- Select "New Archived Site" and provide matdtfj.zip then click "Finish".
+- Select "matdtfj" and click "Next"
+- Accept the license & click "Next"
+- click "Finish" and click "Install All" to install it 
+- When asked to restart, say "Yes".
+
+stop mat
+
+
+
+Getting heap dump:
+https://wiki.sdn.sap.com/wiki/pages/viewpage.action?pageId=33456
+sap note 1263258 (for x86_64)
+
+su - ztbadm
+/usr/sap/ZTB/JC00/j2ee/configtool
+./configtool
+under cluster/instance/server/general add:
+-Xdump:system:events=user,request=exclusive+prepwalk+compact
+  SCREENSHOT !!
+press Svae, and confirm, then quit configtool
+
+stopsap    startsap
+
+
+-----run load test etc.... ------------
+jmeter
+
+get the dump:
+su - ztbadm  
+	(top shift-m), find the one using lots of memory (jlaunch) and notepid (ie: 23568)
+	or ps axf | grep jlaunch | grep std_server
+
+**Make sure you have disk space avail(4GB+ - at least 1.5x memory given to jlaunch) in /usr/sap/ZTB/JC00/j2ee/cluster/server0/**
+
+kill -3 23568      replace 23568 by actual jlaunch pid .
+Files will be written in /usr/sap/ZTB/JC00/j2ee/cluster/server0/*.dmp
+When done, run jextract on it:
+/usr/lib/jvm/IBMJava2-amd64-142/jre/bin/jextract core.20090728.111307.16444.0003.dmp 
+
+we can remove the original dump 
+rm /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp
+
+Now in jmat go File/extract dump  and select the zip file: ex: /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp.zip
+It's going to open it (takes about 10mn)
+
+Note: file need to be in writeable dir ?  copy if needed
+
+when done, cleanup:
+rm /usr/sap/ZTB/JC00/j2ee/cluster/server0/core.20090728.111307.16444.0003.dmp.zip
+
+
+
+
+

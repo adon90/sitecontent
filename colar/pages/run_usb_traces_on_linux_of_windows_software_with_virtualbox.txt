@@ -1,0 +1,56 @@
+======Run USB traces on Linux of Windows Software with VirtualBox======
+Tip: usbmon only grabs a part of the data (first 30? packets), if you need to grab all, then you can use SnoopyPro within windows:
+[[http://www.berry4all.com/creating_an_usb_trace_under_windows]]
+
+
+There is nothing more annoying than companies making a windows only driver (or Mac only or whatever), and providing no docs to help the community create one for other platforms.
+
+Research In Motion, is a prime example of that (thumb down), it's sad cause the Blackberry devices are great.
+
+Anyhow when trying to write a driver for such a device, often the only recourse is to run traces on a windows box and decrypt / figure out the protocol.
+
+It's possible to use a software on windows for example USBSnoop to run the traces.
+
+The linux stack as it's own builtin tool (usbmon) and it's possible to trace USB running in VirtualBox(emulator) which makes it more convenient.
+
+USBMon Doc: [[http://www.mjmwired.net/kernel/Documentation/usb/usbmon.txt]]
+=====Setup=====
+  * Enable debugfs on the linux box:
+<code>
+sudo mount -t debugfs none_debugs /sys/kernel/debug
+sudo modprobe usbmon
+</code>
+
+If you want to scan a specific device, find it's device number (''sudo lsusb''), then save the sniffed data to a file, ex:
+<code>
+sudo cat /sys/kernel/debug/usbmon/4u > /tmp/usb.log
+</code>
+
+run some usb transactions of some kind :-)
+
+when done kill the 'cat' command (^c)
+
+=====VirtualBox / VMWare=====
+VirtualBox/VMWare can run windows or other OS'es with USB support, but it passes through the linux USB stack so usbmon can grab it (cool), so the procedure is the same, just run whatever usb software within virtualbox and usbmon will capture it !
+
+
+=====Nicer output=====
+It can be kinda hard on the eye to read usbmon output.
+So i made a small python script to convert usbmon logs to HTML in an easier to read format.
+
+What it adds to a usbmon log:
+  - colors so it's easier to scan through
+  - timestamps shown as time offsets - easier to see where we are at
+  - data packets shown in ascii as well as hex (ascii helps seing commands)
+
+You can download it here and save it to your machine:
+[[http://bitbucket.org/tcolar/berry4all/src/tip/src/usmon_helper.py]]
+
+Then run it to convert an usbmon log file.
+
+<code | Example>
+python usmon_helper.py /tmp/usb.log > /tmp/usb.html
+</code>
+
+Open /tmp/usb.html in browser and enjoy !
+

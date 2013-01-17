@@ -1,0 +1,18 @@
+======Fantom - Quick Install======
+  - Download fantom from [[http://www.fantom.org/]]
+
+  - Extract the fantom archive
+<code | example>
+unzip fantom-1.0.57.zip
+</code>
+  - Fix permissions (unixes)
+<code>
+chmod +x fantom-1.0.57/adm/unixsetup
+./fantom-1.0.57/adm/unixsetup
+</code>
+  - Add Fantom binaries to your path
+<code>
+export PATH=$PATH:/home/me/fantom-1.0.57/bin
+</code>
+  - Test Fantom
+run ''fan'' should say "Fantom launcher" ....

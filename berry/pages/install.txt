@@ -1,0 +1,54 @@
+======Installing Berry4All======
+Berry4Allis written in python which is readily available on most platforms
+It also uses libusb and pyusb, and the GUI requires wxpython.
+
+Follow the corresponding instructions for your OS: [[#Linux]],   [[#Mac OS X]],   [[#Windows]]
+
+=====Linux=====
+**Dependencies:**
+This script requires python, pppd, libusb and the python usb(pyusb) module installed:
+<code | apt-get>
+sudo apt-get install python libusb-dev ppp python-usb
+</code>
+or if you have an rpm system:
+<code | yum (untested)>
+yum install python libusb-dev ppp pyusb
+</code>
+
+If you want to use the GUI, you will also need [[http://www.wxpython.org/|wxpython]]
+<code>
+sudo apt-get install python-wxgtk2.8
+</code>
+
+**Berry4All:**
+Download Berry4All: [[http://bitbucket.org/tcolar/berry4all/downloads]]
+and extract it wherever you want Ex: your home dir).
+
+=====Mac OS X (Fixed 3/25/11)=====
+**Python 2.5+**
+  * If you are in **Snow Leopard or Leopard**, you already have Python 2.5 or better (you can run ''python -V'' to check)
+  * If you are on **Tiger** or previous, you have a very old version of python (2.3 or less), install 2.5:
+[[http://www.python.org/ftp/python/2.5.2/python-2.5.2-macosx.dmg]]
+
+**LibUSB:**
+Thanks to [[http://www.ellert.se/twain-sane/ | Mattias Ellert]] for creating libusb OSX universal binaries. 
+Download and install libusb for [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/libusb-snow-leopard.pkg.zip|Snow Leopard]] **OR** [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/libusb-leopard.pkg.zip|Leopard]] **OR** [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/libusb-tiger.pkg.zip|Tiger]]
+
+**PyUSB:**
+Download & Install pyusb for [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/pyusb-0.41-snow-leopard.pkg.zip|Snow Leopard]] **OR** [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/pyusb-0.41-leopard.pkg.zip|Leopard]] **OR** [[http://bitbucket.org/tcolar/berry4all/raw/tip/osx/pyusb-0.41-tiger.pkg.zip|Tiger]]. 
+
+If that does not work(usb not found) you can always [[bbtether compile pyusb|compile it from source]].
+
+**WXPython:**
+If you want to use the GUI (not required), you will need [[http://www.wxpython.org/|wxpython]].
+Download and install the latest Unicode binary from: [[http://www.wxpython.org/download.php]] for your version of python. ''python -V'' to check.
+For Example for Python 2.5 install: [[http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.9.2-universal-py2.5.dmg|WxPython 2.5 Unicode (dmg)]]
+
+**Berry4All:**
+**Now you can download Berry4All zip here**:
+[[http://bitbucket.org/tcolar/berry4all/downloads]]
+and extract it wherever you want (say your home dir).
+
+=====Windows=====
+FIXME: TBD
+

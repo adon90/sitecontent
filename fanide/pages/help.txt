@@ -1,0 +1,37 @@
+======Fantom IDE Help /FAQ ======
+====FAQ's====
+  -**It won't accept my fan_home folder**
+Make sure fantom/bin/fan is executable (even for windows until I fix it)
+On Unix make sure you ran:
+<code>
+# wherever you installed fantom
+cd /home/me/fantom/ 
+sh ./adm/unixsetup
+</code>
+  - **The Debugger appears buggy**
+Sometime when setting a breakpoint it will say something like:
+<code>
+WARNING: Unable to submit line breakpoint to fan.Debug.Main$doStuff$0 at line 29, 
+reason: No executable location available at line 25 in class fan.Debug.Main$doStuff$0.
+</code>
+But the breakpoint will work anyway.
+This is a [[http://www.netbeans.org/issues/show_bug.cgi?id=115033|known bug in NB6.7]] (should be fixed in 6.8)
+  - **Can I open existing fantom sources.**
+A fantom project is recognized as a folder with a build.fan in it (simplistic).
+So as long as you have a directory with a build.fan in it, it will be recognized as a fantom project and can be opened.
+  -**I'm not used to Netbeans shortcuts / keybindings**
+In Netbeans you can go under Tools / Options / Keymap and choose Netbeans, IntelliJ, Emacs or Eclipse keybindings.
+You can also customize them to your own likings.
+====Asking for help====
+
+**For bug report / Feature request please use:**
+[[http://bitbucket.org/tcolar/fantomide/issues]]
+
+For other questions you can contact me at:
+[[mailto:tcolar@colar.net]]
+
+Please send a detailed description and the log file:
+
+Linux.OSX: [user home]/.fantomide/dev/fantom/log/jot.log
+Windows: C:\Documents and Settings\[youruser]\Application Data\.fantomide\dev\fantom\log\jot.log
+

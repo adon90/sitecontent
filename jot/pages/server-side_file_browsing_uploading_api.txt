@@ -1,0 +1,96 @@
+======JavaOnTracks: Java Server side file browsing / uploading API======
+
+This API allows you to provide access to the server file system such as:
+  * browsing / viewing / downloading files 
+  * creating / deleting files/folder
+  * uploading / updating files
+  * configurable : you can allow only some of the operations.
+  * secure : well there are no warranties but i tried hard to keep it has safe as possible buy checking directories and checking for directory traversal and that kind of things.
+  * Easy to use.
+
+See the main javadoc here:
+[[http://www.colar.net/jotdoc/net/jot/web/filebrowser/package-summary.html]]
+
+If you use JavaOnTracks as your framework it is made even simpler, by using/extending the generic controller & the generic browser View:
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/web/filebrowser/JOTFileBrowserController.html]]
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/web/views/JOTGenericFileBrowserView.html]]
+
+In the case where you ask the user to pick files/folders, you can the results like this:
+''File [] files=JOTFileBrowserHelper.getChosenFiles(request);''
+
+The action types is passed to the JOTFileBrowserHelper constructor
+
+<code | possible actions (list in JOTFileBrowserHelper)>
+        // no return expected.
+        public static final int TYPE_BROWSE=1;
+	// we want  (force)1 file to be chosen (returned)
+	public static final int TYPE_CHOOSE_1_FILE=2;
+	// we want  (force)1 or more file(s) to be chosen (returned)
+	public static final int TYPE_CHOOSE_1PLUS_FILE=3;
+	// we want (force) 1 folder to be chosen (returned), you might want to set allowPickRootFolder accordingly
+	public static final int TYPE_CHOOSE_1_FOLDER=4;
+	// we want (force) 1(and only one) file to be uploaded and returned, note this defaults nbUploadFields=1 and listFiles=false
+	public static final int TYPE_UPLOAD_1_FILE=5;
+</code>
+
+=====How to use As-IS with JavaOnTracks framework=====
+
+=====flow.conf=====
+Example of using the standard file manager as-is:
+<code | flow.conf extract>
+Controller myFileManager jot.web.filebrowser.JOTFileBrowserController
+Request /filemanager
+	Call myFileManager
+        # if you want to do something with the selected files
+	IfResult completed ContinueTo filesSelected
+	RenderPage net.jot.web.views.JOTGenericFileBrowserView /fileManager.html
+
+# this would be your custom action that do something with choosen files (optional) 
+# (ex: File [] files=JOTFileBrowserHelper.getChosenFiles(request);)
+Request /filesSelected
+	RenderPage net.jotwiki.view.FilesSelected /filesSelected.html
+</code>
+
+=====Customizing the Controller=====
+You might want to make a custom JOTFileBrowserController to set your own fileBrowsing options (for enabling / disabling features), or define a custom action type (ie: upload a file, free browsing etc...)
+
+<code | example custom Browser Controller with almost all permissions>
+public class MyFileManager extends JOTFileBrowserController
+{
+
+	public JOTFileBrowserSession createFbSession()
+	{
+		String rootFolder="/tmp/";
+		String startFolder=rootFolder;
+
+// THE Session Type determines 	what kind of action the user is expected to do	
+		JOTFileBrowserSession fbSession=new JOTFileBrowserSession(new File(rootFolder), new File(startFolder),JOTFileBrowserHelper.TYPE_BROWSE);
+
+		fbSession.setTitle("My File Manager");
+
+        // ALLOWS almost everyhting :  DANGEROUS IF EVERYBODY CAN ACCESS
+
+		fbSession.setNbOfUploadFields(1);
+		fbSession.setAllowCreateFolders(true);
+		fbSession.setAllowUploadFile(true);
+		fbSession.setAllowDelete(true);
+		fbSession.setAllowDeleteFilledFolders(true);
+		fbSession.setAllowListHiddenFiles(true);
+		fbSession.setAllowPickRootFolder(true);
+		fbSession.setAllowRenaming(true);
+		fbSession.setAllowUpdateFile(true);
+		fbSession.setAllowDownloadFile(true);
+		fbSession.setAllowBrowsing(true);
+		fbSession.setAllowListFiles(true);
+		return fbSession;
+	}
+
+	public boolean validatePermissions()
+	{
+          return WikiPermission.hasPermission(request, WikiPermission.MANAGE_FILES);
+	}
+
+}
+</code>
+
+You could also customize the view, by extending JOTGenericFileBrowserView.

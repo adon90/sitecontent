@@ -1,0 +1,11 @@
+====== Samba 2 from windows ======
+
+Samba expects plain password by default, however windows sends it encrypted.
+
+Apply One of those files to have windows send the password "plain".\\
+Note: For win XP, use the windows 2000 reg file.
+
+http://www.colar.net/qarbon/samba/
+
+
+~~DISCUSSION~~

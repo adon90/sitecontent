@@ -1,0 +1,25 @@
+<html>
+<a href="http://www.blogcatalog.com/directory/computers/software" title="Software Blogs - Blog Catalog Blog Directory"><img src="http://www.blogcatalog.com/images/buttons/blogcatalog5.gif" alt="Software Blogs - Blog Catalog Blog Directory" style="border: 0;" /></a>
+</html>
+
+My Blogs:
+|[[Geek Blog]]|[[SAP tips|SAP Blog]]|[[Ice Hockey Blog]]|[[Martial arts blog]]|[[General blog]]|
+
+======My Blogs======
+I decided to split my blogs in several parts, since they have such different subjects.
+
+  * [[Geek Blog]]
+Here you will find a lot of software informations, such as tips, installation walkthrough and other discussion/opinion on various IT subjects.
+This is mostly about Linux and Java related subjects (but also other things).
+
+  * [[SAP tips]]
+I work with SAP sofware at work, so here you will find a lot of informations about my experience with that: CRM 5.0, B2B, B2B, ISA, TREX etc...
+
+  * [[Ice Hockey Blog]]
+You will find informations and opinions about hockey, mostly the NHL in general and my favorite team, the San Jose Sharks.
+
+  * [[Martial Arts Blog]]
+I just (june 2007) decided to get back into martial arts (Tae Kwon Do) and you can read about my experience doing that here.
+
+  * [[General Blog]]
+My thought on any other subject, like things i saw in the news, and made me react vigorously.

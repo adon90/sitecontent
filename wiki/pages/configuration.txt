@@ -1,0 +1,42 @@
+====== JOTWiki Initial Configuration / Setup ======
+
+After completing the [[Installation]], you will have run the initial setup.
+
+**Go to [[http://yourserver:8080/jotwiki/]] this should present you with the setup page.**
+
+TIP: **Depending of which application server you are using and configuration, the port might be other than 8080.
+However 8080 is the "standard" java server port (8180 for debian tomcat)**
+
+=====Configuration Steps=====
+  * You will get the [[http://www.jotwiki.net/demo_screenshots#main_setup_screen | setup page]], **fill all the fields appropriately** (click the help icons if you need more infos) **and click "Save"**.
+The most important things would be: the admin password, your mail server(optional).
+  * Then you should **edit the "default" [[http://www.jotwiki.net/demo_screenshots#namespaces_sites | namespace page]]**, in particular the title, web URL etc... and Save
+  * **Click "exit setup"**.
+
+WARNING: **It is highly recommended to restart jotwiki (restart the app server) now** so it will pick up all the new settings.
+
+
+After the restart is complete, you should be able to go back to [[http://yourserver:8080/jotwiki/]] and be presented with your brand new (blank) home page.
+**Jotwiki is now up and running and ready to be used !**
+
+===== Using a proxy / Apache in front of the application server =====
+Optionally you can use a proxy in front of the application server, for security/performance reason.
+This explains how to accomplish this:
+
+The simplest way is to install/enable [[http://httpd.apache.org/docs/2.0/mod/mod_proxy.html| mod_proxy]] and set apache to use it.
+
+Here is an example virtual host file on Debian: (it's the similar on other distros/OS's).
+<code | vi /etc/apache2/conf.d/mygreatsite>
+<VirtualHost *>
+  DocumentRoot /var/www/mygreatsite
+  ServerName www.mygreatsite.net
+
+// this passes www.mygreatsite.net requets to jotwiki.
+  ProxyPass / http://localhost:8080/jotwiki/
+// or to go stratight map to a specific namespace:
+//  ProxyPass / http://localhost:8080/jotwiki/mynamespace/
+// don't forget this reverse-proxy line
+  ProxyPassReverse / http://localhost:8080/
+
+</VirtualHost>
+</code>

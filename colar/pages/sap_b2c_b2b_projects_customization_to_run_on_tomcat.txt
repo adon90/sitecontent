@@ -1,0 +1,58 @@
+WARNING: **Under Construction - Incomplete**
+
+
+WARNING: **This is ONLY A PART of the [[SAP ISA on Tomcat]] doc.**
+
+
+======SAP B2C / B2B projects customization to run on Tomcat======
+====Create the new B2C/B2B projects====
+  - In your IDE of choice, **create a new "java web(J2EE)" project** 
+
+For example in Netbeans: File/new project/java web/Web Application
+Name: For example "b2c_mine"
+
+Context: "/b2c_mine"
+Web pages folder: "webcontent" 
+Web-INF folder : "webcontent/WEB-INF/"
+Source Format: **"Java 1.4"**
+Run options - java "-Xmx800m"
+You can select "Deploy on Save"
+Target server: **Choose the custom tomcat previously built**
+Target J2EE version: **"J2EE 1.4"**
+
+  - **Create a folder called "local_web_patches"** in the web project root (ex: /home/me/NetBeansProjects/b2c_mine/local_web_patches), this will contain all the customized items for local deployment only (not to be deployed on a SAP engne).
+
+===Copy the vanilla sources===
+Locate the SAPSHRAPP*.sca file. 
+This is typically found on the "Java componnents" DVD.
+
+Open the file witha zip utility, ex: ''file-roller SAPSHRAPP02_0-10005559.SCA''
+
+Browse to DEPLOYARCHIVES/
+
+Browse to(unzip) crm~b2c.sda (B2C) OR crm~b2b.sda (B2B)
+Extract the content of src.zip somewhere of your choice: Those are the java sources for B2B/B2C and might be useful later for reference/debugging.
+
+Unzip all the content of the war file (ex: sap.com~crm~isa~web~b2c.war) into your new project webcontent folder (b2c_mine/webcontent/)
+
+FIXME: extract META_INF (and how to modify it)
+Unzip the content of the META-INF folder (in crm~b2c.sda) into your new project webcontent/META-INF/ folder (b2c_mine/webcontent/META-INF/)
+
+
+
+
+customize build file
+
+
+
+
+<code>
+The value for the useBean class attribute com.sap.isa.businessobject.marketing.MktQuestionary is invalid.org.apache.jasper.JasperException: /b2c/pcf/newregister.jsp(244,4) The value for the useBean class attribute com.sap.isa.businessobject.marketing.MktQuestionary is invalid
+-> http://www.manning-sandbox.com/thread.jspa?forumID=35&threadID=10121&messageID=29899#29899
+-> http://www.mularien.com/blog/2008/02/19/tutorial-how-to-set-up-tomcat-6-to-work-with-jstl-12/
+for use-bean tahs replace "class=" by "type=" in all jsp's (works on sap engine as well)
+</code>
+
+<code>
+web.xml -> env-entry for sys.global.dir
+</code>

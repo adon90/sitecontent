@@ -1,0 +1,40 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== SAP J2EE SSL Keys ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+The SAP webas engine comes with expired SSL keys.
+
+To have the proxy working right, those keys need to be replaced.
+
+  - first thing to do is in the visual administrator, go to the server instance key store and create a new ssl key/cert
+
+{{j2eessl1.jpg}}
+
+  - Then go to the dispatcher instance and tell it to use the newly created ssl key/cert
+
+{{j2eessl2.jpg}}
+
+  - Then stop and then (re)start the ssl provider
+
+{{j2eessl3.jpg}}
+
+{{j2eessl4.jpg}}
+
+
+Go to https://host:50101/   (or whichever port SSL is set to use) and check the certificate in the browser to see if it picked up the new one.
+
+NOTE:  sometimes it seem the whole j2ee engine needs to be restarted to pick up the new certificate.
+

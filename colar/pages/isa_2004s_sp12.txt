@@ -1,0 +1,74 @@
+====== SAP ISA2004s SP13 ======
+
+(Used as part of this doc [[ISA 2004s]])
+
+=====Documentation=====
+Get the SAP doc here: 
+https://websmp202.sap-ag.de/maintenanceNW2004s \\
+
+See [[\\frenchie/sapdocs/2004s/nw2004s_SP_stack_guide_sp12.pdf]] \\
+See note: 879289 (support package guide note) \\
+and Note: 891983 (JSPM: Central SAP Note SAP NetWeaver 2004s)\\
+
+#Got the stack here: https://service.sap.com/sp-stacks (need to allow popups)\\
+#got the nw2004s stack and add the files to the basket and use the download manager to save 
+
+Also got the Java components here:
+[[http://service.sap.com/sp-stacks/]]
+Support Packages and Patches -> SAP Application Components -> SAP CRM -> SAP CRM 5.0 -> Entry by Component -> CRM Java
+
+them and use download manager to get them\\
+\\frenchie\sapcd\patches\nw2004s_patches\sp12\jspm
+# they are in /mnt/sapcd/patches\nw2004s_patches\sp12\jspm\ \\
+
+Use JSPM as explained here (or see section 2.2 of the PDF). \\
+
+=====Patching=====
+
+FIXME not tried yet - TBD
+
+Do all JSPM stuffs as t2cadm. \\
+
+copy all the patch files (SAR,JAR etc ...)\\
+
+Note: I had to create those folders manually as root and then chown them to t2cadm
+<code>
+mkdirhier /usr/sap/trans/EPS/in
+cp /mnt/sapcd/patches\nw2004s_patches\sp06\jspm/*  /usr/sap/trans/EPS/in
+
+#also we need to copy the linux specific stuffs (kernel)
+cp /mnt/sapcd/patches\nw2004s_patches\sp06\jspm/KU_LINUX_X86_64/*  /usr/sap/trans/EPS/in
+
+chown -R t2cadm /usr/sap/trans/
+</code>
+
+also recommanded to copy the lastest sapcar executable in there\\
+Since our current version is SP4 or lower (SP4) we need to update/fix the JSPM first\\
+
+(as t2cadm)\\
+<code>
+cd <SDM_HOME> (/usr/sap/T2C/JC01/SDM/program)
+./StopServer?.sh
+./sdm.sh jstartup mode=standalone
+./sdm.sh systemcomponentstate mode=activate
+./sdm.sh jstartup mode=integrated
+./StartServer?.sh (this fixes the SDM once and for all)
+</code>
+
+Update the JSPM sar using the JSPM (yes indeed !)\\
+start (as t2cadm) "go" in /usr/sap/T2C/JC00/j2ee/JSPM/ (takes a while for the gui to comeup)\\
+
+Enter the password to login the SDM\\
+do "single pacakage" and choose the JSPM patch, select it & click next\\
+
+once status says "deployed" press exit to stop the JSPM (might have to kill 'go' if it does't die)\\
+
+Now we can restart the JSPM to update the other components\\
+start (as t2cadm) "go" in /usr/sap/T2C/JC00/j2ee/JSPM/ \\
+
+Enter the password to login the SDM\\
+for nwdi package control choose the apropriate role.\\
+
+Do "single packages" and for each "cuurently installed" package select the new (latest) version in the list and click next.\\
+
+Update should complete after a while (1h).

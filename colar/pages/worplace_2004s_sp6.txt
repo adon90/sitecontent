@@ -1,0 +1,97 @@
+====== SAP workplace 2004s SP6 ======
+
+This doc is part of [[workspace 2004s]]
+, **you need to look there first for the patch prerequities.**
+
+====Upgrade the Dev Studio====
+Stop all the SAP system\\
+use the sap management console (MMC) to shut down the whole SAP Server (all instances)
+
+Extract the Visual studio patch (in a temp folder)
+<code>
+#sapcar -xvf JIDE06_0-10003480.SAR
+#Go in the created folder and run 
+cd e:\sapcd\patches\nw2004s_patches\sp06\studio\J2EE-RUNT-CD\IDE
+IDE70Setup.exe
+</code>
+Once the Installer runs, choose "Update" and complete the install.
+
+====Upgrade Web AS / Portal / Trex====
+
+Restart the instance using the sap MMC.
+
+<del>Log As ZTBADM **on windows we have to log off ant then log as in as user "ztbadm"** </del>\\
+I found a better way to do this:\\
+Start a command prompt this way:\\
+Go to Start/Program/Accessories, and **Right click** on "Command Prompt", in the contextual menu, select "Run As"\\
+A "run as" prompt will popup, select the user ZTBadm.\\
+
+Now we have a shell where we are logged as ZTBadm (like a unix "su")
+
+WARNING: **Do the rest of the patching as ZTBADM using this command prompt**
+
+Use JSPM as explained here (or see section 2.2 of the PDF).\\
+
+WARNING: **First we need to fix the SDM** (since we are running <=SP4):\\
+If you don't do this **patch will fail ! **
+
+<code>
+cd <SDM_HOME> (c:\usr\sap\ZTB\JC01\SDM\program)
+StopServer.bat
+# Note the QUOTES, they have to be there for this to work (differs from linux.)
+sdm.bat jstartup "mode=standalone"
+sdm.bat systemcomponentstate "mode=activate"
+sdm.bat jstartup "mode=integrated"
+StartServer.bat
+</code>
+
+If the DB(MaxDB) is not up, **start** it with SAP MMC\\
+We also need the SDM up, so **start** the J2ee node as well\\
+wait for the SDM to be started.
+
+Start the JSPM
+<code>
+cd c:\usr\sap\ZTB\JC00\j2ee\JSPM\
+go.bat
+#(takes a while for the gui to come up)
+</code>
+
+Enter the password to login in the SDM\\
+for nwdi package control choose "Not under nwdi" (Only deployment servers are ??)
+
+Choose "single package"\\
+and select all the packages and click "next"\\
+After JSPM is updated, restart JSPM to continue the update\\
+Choose "Support package stack" / "No NWDI control"\\
+Select to use "2004SP6_workplace.xml"
+
+Note: if "support package stacks" does not work (does not find any stack), this probably means you are missing some packages (SAR) or that some are corrupted.
+
+Click "Next", it will  run "Check Queue" for a while (=~15mn)
+
+Then it will show what it's gonna do, **at that point make sure you close the MMC if it's open**, then click "Next"
+
+Update should hopefully complete after a while (half a day, depending on machine).
+
+NOTE: The JSPM did not work properly and failed many times.\\
+The way i got it all patched, is each time it would fail, i would note the name of the package(s) that failed.\\
+Then i would start the SDM program  (..\..\SDM\program\RemoteGui.bat) and deploy those packages manually from there. (We had to do sapjeecor, sapjee, sapjtechf, sapjtechs) \\
+Once those package are deployed, start the jspm again and do "new deployment", "support stack" etc ... and it should continue the patching process.\\
+
+Go back to the JSPM to complete the patching. (if it fails(out of memory), try "retry", if it still fails, go back to the SDM ...)
+
+WARNING: At this stage it seem JSPM is really buggy, so had to use SDM as the backup (BTW it is weird this works, because in theory JSPM is just a frontend for SDM).
+
+==== Upgrading IGS ====
+
+NOTE: I was getting this error: "format error in header"  when trying to unzip (sapcar -xvf) the igs.sar file.\\
+The reason was that i was using a too old sapcar, so make sure you always use the latest verion of sapcar.
+
+Because of a bug in SP5,SP6 the patch has to be done manually \\
+see this SAP note:\\
+https://websmp102.sap-ag.de/~form/sapnet?_FRAME=CONTAINER&_OBJECT=012003146900000542232005
+
+  * Stop the instance with MMC
+  * copy all from E:\sapcd\patches\nw2004s_patches\sp06\IGS to C:\usr\sap\ZTB\JC01\exe (overwrite)
+  * restart the instance
+

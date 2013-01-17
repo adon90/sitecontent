@@ -1,0 +1,129 @@
+======Listen to XMonline without the browser script======
+
+I did not make that script but found it on internet and adapeted it to my needs.
+
+It does:
+  * Listen to a XM radio station online (need an account)
+  * All on the command line so you dn't need tons of libraries like KDE, gnome etc...
+  * Run the stream in your prefeered app (mplayer, totem, xine etc...)
+
+NOTE: to use edit the script to add your isername and password in there, then run as follow ''./xmol.sh 204'' where 204 is the radio station you want to liten to.
+
+
+<code>
+#!/bin/bash
+# Thanks to B. Galliart
+# Modified by Elisamuel Resto <user00265@gmail.com>
+# Re-modified by Thibaut Colar
+# xamp.sh --> kxm.sh by William Austin (Script unchanged, dialog added)
+# Please set the following variables
+# The script will only work with a valid XM Online USER and PASS
+
+USER="" #add you login/password fro xmonline
+PASS=""
+CHAN="204"
+RATE="high" # setting for the bit RATE are "low" or "high"
+PLAYER="totem" # either mplayer, xine, xmms or totem
+NOSONGINFO=1 # Set to 1 to skip getting updates on the song playing
+UPDATEDELAY=5
+
+### You should not need to modify anything beyond this point ###
+
+
+if [ "x$USER" == "xUSER" ] ; then
+	echo "You must modify the USER variable in the script" >&2
+	exit 1
+fi
+
+if [ "x$PASS" == "xPASS" ] ; then
+	echo "You must modify the PASS variable in the script" >&2
+	exit 1
+fi
+
+if [ "x$CHAN" == "x" ] ; then
+	echo "Must provide a channel number on the command line" >&2
+	echo "Such as \"$0 22\" to play channel 22" >&2
+	exit 1
+fi
+
+if [ ! -d $HOME/.xmonline ] ; then
+	mkdir $HOME/.xmonline
+fi
+
+cd $HOME/.xmonline
+rm -f xmonline.cookies xmonlinelogin.out xmonlinestream.out xmonlinesong.out xmonlinesong.old
+curl -s -c xmonline.cookies -d "user_id=$USER" -d "pword=$PASS" http://xmro.xmradio.com/xstream/login_servlet.jsp > xmonlinelogin.out
+EXITCODE=$?
+
+if [ $EXITCODE -ne 0 ] ; then
+	echo "curl error exit value ${EXITCODE}" >&2
+	exit $EXITCODE
+fi
+
+egrep "Invalid email and/or password" xmonlinelogin.out > /dev/null
+if [ $? -eq 0 ] ; then
+	echo "Invalid email and/or password" >&2
+	exit 1
+fi
+
+egrep "[(]Not .*? " xmonlinelogin.out > /dev/null
+if [ $? -eq 0 ] ; then
+	echo -n "Logged in as: " >&2
+	egrep "[(]Not .*? " xmonlinelogin.out | sed 's/.*[(]Not //;s/? .*//' >&2
+fi
+rm -f xmonlinelogin.out
+
+curl -s -b xmonline.cookies -d "" "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=$CHAN&speed=$RATE" > xmonlinestream.out
+egrep "xmmediaplayer[.]URL = '" xmonlinestream.out > /dev/null
+if [ $? -eq 0 ] ; then
+	STREAM=`egrep "xmmediaplayer[.]URL = '" xmonlinestream.out | sed "s/.*xmmediaplayer[.]URL = '//;s/';.*//"`
+else
+	egrep "<PARAM NAME=\"FileName\" VALUE=\"" xmonlinestream.out > /dev/null
+	if [ $? -eq 0 ] ; then
+		STREAM=`egrep "<PARAM NAME=\"FileName\" VALUE=\"" xmonlinestream.out | sed "s/.*<PARAM NAME=\"FileName\" VALUE=\"//;s/\">.*//"`
+	else
+		echo "Error parsing HTML to find stream URL" >&2
+		exit 1
+	fi
+fi
+
+rm -f xmonlinestream.out
+STREAM=`curl -A "Windows-Media-Player/10.00.00.3646" "${STREAM}" | grep 'mms://' | sed -e 's/.*\<Ref href=\"//' | sed -e 's/\"\/>//'`
+echo "Stream URL: ${STREAM}" >&2
+
+$PLAYER $STREAM &
+PLAYERPID=$!
+
+if [ $NOSONGINFO -eq 1 ] ; then
+	exit 0
+fi
+
+while [ true ] ; do
+	curl -s -b xmonline.cookies -d "" -H "Pragma: no-cache" "http://player.xmradio.com/padData/pad_data_servlet.jsp?channel=$CHAN&rnd=$RANDOM" > xmonlinesong.out
+	egrep "<artist>|<album>|<songtitle>|<channelnumber>|<channelname>" xmonlinesong.out > /dev/null
+	if [ $? -ne 0 ] ; then
+		echo "Error parsing html to find song info" >&2
+		exit 1
+	fi
+
+	if [ -f xmonlinesong.old ] ; then
+		DIFF=`comm -3 xmonlinesong.out xmonlinesong.old | wc -l`
+	else
+		DIFF=1
+	fi
+
+	if [ $DIFF -gt 0 ] ; then
+		egrep "<artist>|<album>|<songtitle>|<channelnumber>|<channelname>" xmonlinesong.out | sed 's/<\/[a-z]*>//' | sed 's/^..<artist>/ Artist: /' | sed 's/^..<album>/ Album: /' | sed 's/^..<songtitle>/ Song Title: /' | sed 's/^..<channelnumber>/ Channel #: /' | sed 's/^..<channelname>/ Channel Name: /' >&2
+		echo
+	fi
+
+	sleep $UPDATEDELAY
+	mv xmonlinesong.out xmonlinesong.old
+	( kill -0 $PLAYERPID 2>&1 ) > /dev/null
+	if [ $? -eq 1 ] ; then
+		echo "Player \"${PLAYER}\" ended" >&2
+		rm -f xmonlinesong.old
+		exit 0
+	fi
+done
+</code>

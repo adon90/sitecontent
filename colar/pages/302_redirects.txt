@@ -1,0 +1,13 @@
+======302 Redirects======
+Google doesn't like 302  redirect (temporary redirect)
+301 redirects don't get penalized by google as much (301 is permanent redirect)
+
+==== Java 301 redirect ====
+res.setHeader("Location", "http://somewhereElse.com/blah");
+res.setStatus(301);
+
+==== Apache mod_rewrite 301 redirect====
+RewriteEngine on
+RewriteRule ^(.*)$ http://www.example.com/$1 [R=301]
+
+.

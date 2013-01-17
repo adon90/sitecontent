@@ -1,0 +1,63 @@
+======Patching MaxDB======
+This is a MINOR patch (Here from from 7.6.00.18 to 7.6.00.35)
+
+WARNING: this is for a minor patch only, for going up a major revision it is different
+
+MaxDB upgrade/paching Doc here: [[https://websmp202.sap-ag.de/~form/sapnet?_SHORTKEY=00200797470000065740]]
+See GUIDE_MAX_UPGRADE-UX.pdf
+
+We Downloaded newer maxdb DVD from sap marketplace (7.6.00.35) DVD:51032296_4 (MaxDB RDBMS 7.6.00 Build 35 - Linux on IA32 32bit) to our machine.
+
+cd /media/sap/sapcd/Others/maxdb/maxdb7.6.00.35/51032296_4_RDBMS_MAXDB_7.6.00_Build_35_Linux32/MAXDB_LINUX_I386/
+sudo sh DBUPDATE.SH 
+
+do you want to continue -> yes
+Provide the DB name (ex: control)
+Provide the DB user name (Ex: control)
+
+Then upgrade will proceed.
+
+
+=====MaxDB / SAPDB control/DBM users passwords where lost/changed, Resetting it=====
+At first i could not complete this, because the "control" user password was not "control" anymore and no matter what i tried (admin password, old password, install password) it would not take them.
+So i had to reset the control password, here is how i did that.
+
+I had some prompt and useful help from SDN (Thanks to  Markus D?r)
+[[https://www.sdn.sap.com/irj/sdn/thread?threadID=257587&tstart=0&messageID=2895955]]
+
+The magic thing was to use "c_J2EE"
+
+  * Log as <SIDadm>
+<code>
+# replace <SID> with your system SID of course
+sudo su - <SID>adm
+cd /sapdb/programs/bin/
+</code>
+
+  * Using c_J2EE to reset "control" password:
+<code>
+./dbmcli -U c_J2EE
+dbmcli on frenchie : ZTB>user_put control password=control
+#OK
+dbmcli on frenchie : ZTB>quit
+#OK
+</code>
+
+  * We need to update the .XUSER62 file with the update password, using the xuser tool
+./xuser set -U <SID>adm ?d ZTB ?u control,control
+
+  * Checking we can login now:
+<code>
+./dbmcli -d ZTB -u control,control
+dbmcli on ZTB>
+# Yeah, we are in !
+/code>
+
+Otherwise you would have got:
+<code>
+./dbmcli -d ZTB -u control,dsffsdfdsf
+Error! Connection failed to node (local) for database ZTB:
+-24950,ERR_USRFAIL: User authorization failed
+</code>
+
+  * Restart SAP after that (stopsap, startsap)

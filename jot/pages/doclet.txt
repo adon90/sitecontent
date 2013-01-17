@@ -1,0 +1,75 @@
+======JOT(JavaOnTracks) JavaDoc Doclet======
+This allow you to output nice "javadoc" documentation.
+The output is a bit more modern and colorful than the standard JavaDoc output.
+It also uses Javascript, templates and CSS extensively, so that:
+  * It can provide nice features (**show/hide methods, filter package, class name** etc...)
+  * It is **easy to customize** (CSS & easy to read templates)
+  * It can create nice, **colorized and linked source files** in HTML format. [[http://www.colar.net/jotdoc/jdk1.6/index.html?page=java/lang/Runtime-source.html | Source Example]]
+  * **Compatible** output with the standard javadoc tool, so your existing links / search engine references won't break.
+
+Here are **some examples** of the output for some API's (jdk1.6, struts, ant etc...)
+
+**Examples:** [[Doclet Examples]]
+
+=====How to use to generate your own javadoc=====
+The JOT doclet is a standard "Javadoc Doclet", so all you have to do is to specify it when calling javadoc.
+First [[download | copy JavaOnTracks.jar]] on your machine so we can access it.
+
+====Calling javadoc through Ant====
+Example: (Generating the JavaDoc for the Ant api)
+
+<code>
+<!-- you need tools.jar in your classpath for a doclet to work -->
+    <path id="jotdoc.path">
+        <filelist dir="/usr/lib/jvm/java-6-sun/lib">
+            <file name="tools.jar"/>
+        </filelist>
+    </path>
+
+<target name="jotdoc-ant" depends="jar">
+        <javadoc sourcepath="/home/thibautc/NetBeansProjects/apache-ant-1.7.1/src/main/" destdir="/tmp/jotdoc/ant" packagenames="*" doctitle="Apache Ant 1.7.1" windowtitle="Apache Ant 1.7.1" link="../jdk1.6/" splitindex="true">
+            <doclet name="net.jot.doclet.JOTDoclet" path="dist/javaOnTracks.jar"/>
+            <arg value="-linksource"/>
+            <classpath>
+                <pathelement path="$ {jotdoc.path}"/>
+            </classpath>
+        </javadoc>
+</target>
+</code>
+
+
+NOTE: The Important part here is ''<doclet name="net.jot.doclet.JOTDoclet" path="dist/javaOnTracks.jar"/>'' this tells javadoc to use our custom doclet.
+''link="../jdk1.6'' creates back link to previously generated jdk1.6 javadoc (Optional)
+''<arg value="-linksource"/>'' tells javadoc to create nice source files HTML.
+See [[http://ant.apache.org/manual/CoreTasks/javadoc.html | Here]] for more infos about the Javadoc task options.
+
+
+====Calling javadoc manually====
+FIXME: TBD, basically the same thing.
+
+====Customizing the templates====
+You have to add the arguments ''-template /your/template/folder/''
+Example:
+<code>
+   <target name="jotdoc-ant" depends="jar">
+        <javadoc sourcepath="../apache-ant-1.7.1/src/main/" destdir="/tmp/jotdoc/ant" packagenames="*" doctitle="Apache Ant 1.7.1" windowtitle="Apache Ant 1.7.1" link="../jdk1.6/" splitindex="true">
+            <doclet name="net.jot.doclet.JOTDoclet" path="dist/javaOnTracks.jar"/>
+            <arg value="-linksource"/>
+            <arg value="-template"/>
+            <arg value="/tmp/mytpl/"/>
+            <classpath>
+                <pathelement path="$ {jotdoc.path}"/>
+            </classpath>
+        </javadoc>
+    </target>
+</code>
+
+NOTE: The first time you run it, if the folder you specify is empty, it will copy the standard template into it.
+You can then customize it.
+
+
+Try to simply change the stylesheet (doclet.css), and the footer and header (in tpl/ folder)
+If you need more customization, you can edit the templates (in the tpl/) folder and images (in img/)
+
+You can browse the standard templates here:
+[[http://bitbucket.org/tcolar/javaontracks/src/tip/resources/doclet/tpl/]]

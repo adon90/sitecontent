@@ -1,0 +1,97 @@
+====== JOT block tag Example ======
+
+===== Java View =====
+<code | Java>
+	public void prepareViewData() throws Exception
+	{
+		//tags
+		JOTViewTag tag0=new JOTViewTag();
+		tag0.setVisible(false);
+		JOTViewTag tag1=new JOTViewTag();
+		tag1.setContent("Updated tag1");
+		JOTViewTag tag4=new JOTViewTag();
+		tag4.setTagProperty("style", "color:#00ff00");
+		JOTViewTag tag5=new JOTViewTag();
+		tag5.setTagProperty("style", "color:#00ff00");
+		JOTViewTag tag6=new JOTViewTag();
+		tag6.setTagProperty("src", "test.jpg");
+		addTag("tag0", tag0);
+		addTag("tag1", tag1);
+		addTag("tag4", tag4);
+		addTag("tag5", tag5);
+		addTag("tag6", tag6);
+        }
+</code>
+
+
+
+===== HTML view (template) =====
+<code | Template>
+<html>
+<body>
+Tag 0(should be removed  completely):<br>
+<div >
+This text is tag0 Dummy (in a div tag)
+</div>
+<hr>
+Tag 1(should show "Updated tag1"):<br>
+<div >
+This text is tag1 Dummy (in a div tag)
+</div>
+<hr>
+Tag 2 (One liner, shoudl stay as is): <br>
+<span  class="default"/>
+<hr>
+Tag 3(nothing changed):<br>
+<div >
+This text is tag3 Dummy (in a div tag)
+</div>
+<hr>
+Tag 4(should have a new style color(green)):<br>
+<div >
+This text is tag4 Dummy (in a div tag)
+</div>
+<hr>
+Tag 5(should have an updated style color(green)):<br>
+<div  style="color:#ff0000">
+This text is tag5 Dummy (in a div tag)
+</div>
+<hr>
+Tag 6 (should show test.jpg image): <br>
+<img  src="nonexistant.jpg"/>
+</body>
+</html>
+</code>
+
+===== Generated HTML =====
+<code | Html>
+<html>
+<body>
+Tag 0(should be removed  completely):<br>
+<hr>
+Tag 1(should show "Updated tag1"):<br>
+<div >Updated tag1</div>
+<hr>
+Tag 2 (One liner, shoudl stay as is): <br>
+<span  class="default"/>
+<hr>
+Tag 3(nothing changed):<br>
+<div >
+This text is tag3 Dummy (in a div tag)
+</div>
+<hr>
+Tag 4(should have a new style color(green)):<br>
+<div  style="color:#00ff00">
+This text is tag4 Dummy (in a div tag)
+</div></div>
+<hr>
+Tag 5(should have an updated style color(green)):<br>
+<div  style="color:#00ff00">
+This text is tag5 Dummy (in a div tag)
+</div></div>
+<hr>
+Tag 6 (should show test.jpg image): <br>
+<img  src="test.jpg"/>
+</body>
+</html>
+</code>

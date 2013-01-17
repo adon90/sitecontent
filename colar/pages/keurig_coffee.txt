@@ -1,0 +1,17 @@
+======Keurig Coffee K-Cups reviews======
+
+^Brand^Kind^Review^score^
+|Coffee People|Donut shop coffee|Meh. Weak/sweet. American coffee|2|
+|Glorian Dean|Cappuccino|Nice smelling cappuccino with powder milk|4|
+|Green Mountain|Caramel vanilla cream|Smells good, nice morning coffee|4|
+|Green Mountain|Expresso blend|Very strong and Tasty|4.5|
+|Green Mountain|Hot Cocoa|Decent hot chocolate|3.5|
+|Green Mountain|Kenyan AA extraBold|Good, strong not too sweet|4|
+|Green Mountain|Kona Blend-Extra bold|Strong and tatsty, one of my favorites|5|
+|Green Mountain|Southern Pecan|Nice flavor, but not very strong|4|
+|Green Mountain|Wild mountain blueberry|Smells great, taste OK|3.5|
+|Timothy's|Columbian Extra Bold|Very strong and flavorful|4.5|
+|Timothy's|Kona Blend|Good coffee, somewhat sweet|4|
+|Timothy's|Nuit parisienne|Strong, simple good coffee|4|
+
+

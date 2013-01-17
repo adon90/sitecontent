@@ -1,0 +1,17 @@
+======Processing a binary newsgroup file (Divx, etc...)====== 
+
+Once all the part of a movie are downloaded with BNR (*.rar and some *.par2), first run the check too see they are not broken: (use the command par2verify with any of the par2 file)
+par2verify myvovie.par2
+If it all goes well, good, otherwise you will have to use the command "par2repair"
+Now let's recreate the full movie: (unrar any of the .rar file, it will unrar them all)
+unrar mymovie-part1.rar
+Now you got your movie, if it fits one one CD (<800MB) go burn it with cdrecord or K3B or whatever burning tool, if not then let's split it in 2 pieces first.
+Let's do piece number one with the first hour of the movie:
+<code bash>
+mencoder -endpos 1:00:00 -oac copy -ovc copy -o mymovie-1.avi mymovie.avi
+</code>
+Lets' do the second piece with the rest of the movie:
+<code bash>
+mencoder -ss 00:59:30 -oac copy -ovc copy -o mymovie-2.avi mymovie.avi
+</code>
+

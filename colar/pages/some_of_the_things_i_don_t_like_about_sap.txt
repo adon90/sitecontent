@@ -1,0 +1,162 @@
+======Some of the things I don't like about SAP======
+
+Fixme: **Under construction**
+
+
+I have been throwing a lot of negative comments on twitter, but I figure I should argument those points better.
+
+=====Disclaimers=====
+  - This is **my own opinion** and not necessarely that of my company.
+
+  - While this might seem overly negative, the goal here is to report what is NOT so great - Assume all else is totally fantastic :) .
+
+Remember that if you use a piece of software long enough and hard enough you will find thing you don't like. 
+
+My blog is easy to find online (due to sad lack of other sap documentation on Google) ... and it appears SAP atually fixed some of the stuff I complained about in the past, so taht's also worth a shot.
+
+=====My Background=====
+This might explain some of my comments
+
+Before joining a SAP shop I was working at a startup([[http://www.qarbon.com|Qarbon.com]]) using cutting edge Java (since 1998), with a LOT of transactions on just a few servers.
+
+The idea there was lean software and quick implementation, what is now called "agile".
+
+What I work with now (SAP shop) is:
+E-Commerce on a SAP platform, at the moment we are using a CRM 2007 backend with the B2C and B2B scenarios of SAP internet sales.
+
+We are currently on a Netweaver 7.0 base, and yes I do know sa few of my concerns have been resolved in the newer versions, but most customers are not using that yet either, more on that later.
+
+Java(ISA):
+Over-engeenered (ISA) Multi-layer
+lagging behind(1.4 etc..) ... yes I know the new version are finally on 1.5 but it tookover 6 years to get there, talk about lag !
+
+I was always shocked to hear people say ABAP is better than Java (ABAP looks a lot like Cocol to me) .... but I think the essage there is that SAP code made in ABAP(backend mostly) is better than SAP code in Java ... and that I agree too, but that's not Java's fault.
+
+It is possible that ABAP being more "procedural" "forced" simpler implementations that what was done with Java. 
+Simpler = cleaner, faster and easier to maintain.
+
+XCM database = unneeded complexity
+
+SAP JVM ??
+
+J2EE engine:
+Slow startup, no debugging / code hot swap (maybe in 7.2)
+crashes after multiple deploys
+Poor error reporting : fragmented logs, and root cause often hidden
+Not very "standard" (JSP compiler, some code does not compile with jasper)
+Administration being now web based only (no more visual admin)is a drawback - slow UI response / confusing/less powerful
+No IE integration aside from Netweaver CE
+
+NWDI:
+WAY top heavy, not well documented, not encouraging agile/lean (slow and "in the way")
+Not very "open" often preventing/making difficult using a lot of OSS tools (plugins/libraries/debuggers/unit test you name it)
+
+Infrastructure - the real problem
+Not lean at all
+You should not even need "Basis" people, installation should just be a simple task.
+Installing a new system is very time consuming
+Need to read 150 pages PDF plus countless notes(which are sometimes listed in the PDF,sometimes not) - lots of issues pop up
+Most often installation is not successful the first time and trying again often requires restarting from scratch(OS reinstall)
+Needs very fast computers even for developer workstations(no laptops)
+Setting up a new dev env is NOT fast
+Often to take advantage of new features you have to update, which is not always an option, especially if you are trying to be "agile" / rapid deployments
+
+----
+freakyfays 12:28am via TweetDeck
+Trying to figure out when we can apply our Enhancement Package next year, but not that easy with the aggressive planning of Go Lives and PRJ
+----
+
+ISA:
+Almost no javadoc
+No unit testing/ testing mockups
+Some of it is good, some is ugly, might be caused by SAP Java people coming from ABAP and/or outsourrced ?
+Java SHOULD run anywhere
+
+Ugly JSP's, not easily customizable -> not easily upgraded/maintained -> not lean/agile
+Why not "standard" java project -> tomcat etc....
+
+{{ b2c_van.png }} 
+
+This should be made as "vanilla" as possible with emphathys on easy customization (no JSP's!) ~ shoudl try to be a clean API rather than a poor implementation.
+
+IPC:
+The IPC is very difficult to deal with because
+- it's spawns VM n demand making debugging very tricky
+- it's running on a separate instance/box and it uses mixed ABAP/CRM which is far from ideal performancewise.
+- it's a bit of an undocumented black box
+
+Upgrades:
+New features always require upgrading, but that's is a very slow and painful process(sloooow) because of the large infrasruture
+Lack of documentation on whis java components are compatible with others (ie: can I upgrade pathc just  1 particular component?)
+
+WEBUI:
+United interface is nice, but catalog management through the webui is terribly slow, web interfaces just aren't all that great for managing files anyhow
+
+Case for Tomcat + Virtualized NW 7.1 server
+Open SCM stack: ant, SVN, hudson (IDE independant)
+Tomcat startup time is a few seconds at most
+Tomcat is integrated in just about any IDE
+It supports full debugging, including JSP stepping and stepping, as well as hot swapping (Huge time saving VS "error in JSP" with NW)
+It' easy to use, very well documented and can be integrated with many other toos, such as build servers, testing tools.
+It's very easy and quick to setup - afew minutes VS many hours (if no issues) witrh NW
+You can run it on almost ay hardware(laptop), no need for 12GB of memory and 50 GB of swap !
+-> very quick to setup a new employee/consultant, no "sepcial" setup/skill required.
+
+* "Support" 
+SAP + Novell + IBM VS OSS Comunnity 
+Support is not all that great and it can take a loog time to get a knowledgeable person about a particular issue
+SDN often faster/better than service.sap.com
+
+* "Best practices"
+Meaningless, not 2 companies use SAP the same way, everbody's business is different.
+Not everybody should have the same site ... how does that make your company better ??
+
+* "Standard"
+My boss always press to stay "standrad" .... but fact is, at least as far as e-commerce goes, standard is nt lame, it's not game chnager and it's definitely not what marketing wants <- thi is directly linked to the fear of upgrading.
+Also linked to "support"
+
+* "World class" website
+My Boss alos say often we want to have a "World class" website", that's a semi-joke, but seriosuly we do want a site that looks modern and that customer love .... well guess what that's defintely NOT compatible with SAP "standrad".
+Who in their right might would use a SAP B2B/B2C e-commerce site "As-is" .... Blue screen - hugh !
+
+Saptech message "upgrade upgrade upgrade"
+Most customer would LOVE to ...BUT ... it's way too painful .... very heavy/scary intertwined process required "down" time from daily operation while it's fiured out.
+Fact is we are SCARED of upgrading and it's way too time consuming.
+
+Be more open and provide more clean "API's" rather than ugly implementations.
+
+Make instllation much easier and straight forward ... it suld be as much "zero-config" as possible - convention over configuration (where it makes sense)
+Have "lean" server/base(NW) install with individual packages to deploy on top (per "feature"), install only what is needed.
+De-couple system from one another (upgrade one at a time)
+
+Documentation -> service.sap.com search is orible, SDN, docupedia
+IT's often said SAP lacks documentation but that is not really true
+They actually do have a lot of documentation but is very fragmented and hard to find.
+- Code documentation ... almost inexistant, the only javadoc you will find are ''//**TODO: Document Me!**/''
+- Official site: [[http://service.sap.com/]] .  This one is pretty bad, it's not index on Google and the builtin search engine(probably TREX) is terrible. Many times I had no results for a keyword, yet later found a Note with that exact keyword in it.
+- PDF documentation: Lot of the coumentation is in PDF form, the problem with that is that it's difficult to search.
+- SDN site [[http://sdn.sap.com]]. They make a good effort at trying to provide search accross all sort of SAP doc ... it's pretty good but it's also mixed with forum questions and other stuff so it's a bit hard to find what you are really looking for.
+- SAP Docupedia. I juts found about this, and this is quite promising. Basically a SAP Documentation Wiki (Seems Indexed in Google) - Way to go.
+
+Keep It Simple Stupid:
+I'm a big proponent of that. You don't solve complex processes by using complex software, that is BS.
+The way you solve complex processes is by divding them in small simple pieces. So that means simple many small simple solutions. small solutions are easy to maintain, easy to test on their own and importantly, almost always scale better (simple = light weight)
+
+A good example is Amazon.com. Their approach is to use the best tool for the job and to keep those tool as simple as possible so they will scale.
+They are probably the most used E-commerce site, yet they didn't seem to have scalabilty problems (no "fail-whale").
+
+Very good article on Amazon achitecture and how it scales
+[[http://highscalability.com/amazon-architecture]]
+
+Talking about best tool for the job, this is how I use to work at a startup ... in a SAP company ... you can often only use the best tool for the job ... as long as it comes from SAP.
+It feels like instead of picking the best tool in the shop, I am handed a big rusty SAP swiss army knife. It can do all kind of things, but not very practical and bulky to use.
+To make the best work you should be allowed to use the best tools.
+
+Conclusion:
+- Need much much simpler installation/upgrade process and leaner landscape - Easier upgrades = customer WIN and SAP WIN
+- Documentation needs to be indexed and all searcheable at once.
+- Need to provide much simpler/cleaner API's that customer can plug in
+- Software more open / integreable with open techs.
+- KISS: Make components lean, simple and independant - Nobody needs all 20K features (bloat). Lightwegiht frameworks.
+
+ 

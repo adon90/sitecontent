@@ -1,0 +1,92 @@
+<code>
+SetDefaultErrorPage ErrorPage
+
+Request /admin
+	SetMarker "returnFromLogin"
+	#SetSessionFlag "asDoneThis"
+	#SetequestFlag "asDoneThis"
+	#ClearSessionFlag "keepforever"
+	Call init
+	Call CheckLogin
+	RenderPage /admin.html
+
+Request /users/login.do
+	KeepMarker "returnFromLogin"
+	Run init
+	RenderPage /login.html
+	
+Action CheckLogin
+	class=com.myclass.CheckLogin
+	ifResult "notLogged" RedirectTo /users/login.do   =>   hard redirect / exit
+	ifResult "tooManyTries" RedirectTo /error.do   =>   hard redirect / exit
+	# return to that marker if it exists
+	ReturnToMarker "returnFromLogin"
+	RedirectTo /home.html
+
+ActionBundle init
+	Action initScheduler
+	Action initserver
+
+Page RenderUserList
+	class=com.myclass.RenderUserList
+	Template=/users/list.html
+
+Page ErrorPage
+	class=com.myclass.RenderError
+	defaultTemplate=/error.html
+</code>
+
+<code>
+Request /users/list.do
+	Run init
+	Save "login_from"="userlist"
+	Run CheckLogin => might force a hard redirect
+	Run GetUserList
+	ifResult "nousers" UseTemplate /users/emptylist.html
+	# or : ??
+	ifResult "nousers" setTag "nousers"
+	Render RenderUserList
+
+Request /users/login.do
+	Run init
+	RenderPage /login.html
+	
+Action CheckLogin
+	class=com.myclass.CheckLogin
+	ifResult "notLogged" RedirectTo /users/login.do   =>   hard redirect / exit
+	# if came from userlist go back there ?
+	ifSaved "login_from"=="userlist" redirectTo /users/list.do
+	
+Action GetUserList
+	class=com.myclass.GetUserList
+
+Page RenderUserList
+	class=com.myclass.RenderUserList
+	defaultTemplate=/users/list.html
+
+	
+ActionBundle init
+	Action initScheduler
+	Action initserver
+	
+Action initScheduler
+	class=com.myclass.initScheduler
+	ifnotresult "success" setTag "schedulerInitError"
+	ifnotresult "success" RedirectTo /users/error.do
+
+Action initScheduler
+	class=com.myclass.initServer
+	ifnotresult "success" setTag "serverInitError"
+	ifnotresult "success" RedirectTo /users/error.do
+	
+Request /users/error.do
+	RenderPage ErrorPage
+
+Page ErrorPage
+	#this class might use the tags like "serverInitError" to do a thing or another 
+	class=com.myclass.RenderError
+	defaultTemplate=/error.html
+
+Page DefaultErrorPage
+	defaulttemplate=/unexpectederror.html
+</code>

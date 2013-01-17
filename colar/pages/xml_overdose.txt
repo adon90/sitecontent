@@ -1,0 +1,28 @@
+======XML Overdose======
+
+OK, it's been brewing since 1999, and even though most people disagree (or at least use to), i have to Say it:
+
+XML is the most Over Hyped, Bloated, Annoying, Marketed freaking file format ever.
+
+Yes that's right, it's just a file format anyway, what's so exciting about that? How did that a major selling point ?? (Well for EOM or integration sure, but for a plain application ? Come on, it makes no difference whatsoever to the end user !).
+
+OK, sure it is very useful to describe complicated objects and sharing them, but:
+
+  * It's been hyped so much that I'm sick of it !
+  * When you use Java libraries, you are gonna get sick of XML(config) very quick, see how everybody jump on ROR (no XML config) !
+  * It's way overused, for simple things like key/value
+  * It's Huge, wasting disk space and bandwidth
+  * It's difficult to parse, resulting in 6MB parser using 20MB of memory in some case !
+
+One of the main thing which sucks about it is that, since it's suppose to be "Human Readable", people expect you to edit those in a text editor instead of writing a nice "editor" app for it.\\
+Once you go see an XML properties file, you realized it's really not that human readable and is a pain to edit and maintain. (ever configured say jboss or struts ?)\\
+
+Anyway, I'll still be using XML of course, but gee! could people actually use XML only when it's needed and not expect "humans" to have to edit it by hand !
+How many 200Kb Java apps, require a 5MB XML parser to read 1 configuration key/value ? This makes no sense whatsoever.
+
+Anyhow, I've been called an idiot for saying this aloud before, but apparently there where many other people thinking the same thing and now people want simple things like "Stripes" or "ROR", and even Sun started to cut the XML crap in the latest Java version (IE: Using Annotation)
+
+Anyway i guess XML lost some of it's hype now, geek evangelist are now excited over ROR instead (no saying that it's bad, just over-hyped too).
+
+Haaaa! this felt **SO** good :-)
+

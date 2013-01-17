@@ -1,0 +1,6 @@
+======CAPTCHA gone wrong - very wrong======
+Was trying to sign-up for subversion forums, got this CAPTCHA ... no seriously ?? wtf !
+
+Took me 8 tries before i got one i manage to figure out.
+
+{{ captcha.png }} 

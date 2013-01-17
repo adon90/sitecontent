@@ -1,0 +1,57 @@
+/*
+This only contains addons/ovverides to the default jotwiki.css
+*/
+
+/* jotwiki ovverides */
+body,html{font-family: "Verdana, Arial, Helvetica, sans-serif;",Arial,sans-serif; font-size: 14px; color:#111111; background-image:url('images/wood4.png');}
+.content{clear:both;width: 80%;float:left;color: #111111;background-color: transparent;margin-bottom:20px}
+.nb_coil{background-image:url('images/nb_coil.png');background-repeat:repeat-y;}
+.page{margin-left:50px; padding-right: 30px;padding-top: 20px;padding-bottom: 20px;background-color: #f0f1e5;min-height:600px}
+.page_text{}
+
+#menuButton {clear:both;padding-left:70px;font-size:16px}
+#menuButton>a {background-color:#fff999; text-decoration:none;margin-right:12px;padding-left:20px;padding-right:20px;min-height:10px;font-weight:bold;border-style:groove;border-left:1px;border-right:1px;border-top:1px;border-bottom:0px;border-color:#000000}
+#menuButton>a:visited{background-color:#fff999}
+#menuButton>a:hover{background-color:yellow}
+
+h1, h2, h3, h4, h5 {color:#772222;font-weight: bold;border-bottom:1px solid #b8b49c;margin-bottom:0px}
+h1 {font-size: 160%; margin-left: 0px;}
+h2 {font-size: 150%; margin-left: 10px;}
+h3 {font-size: 140%; margin-left: 20px;}
+h4 {font-size: 120%; margin-left: 30px;}
+h5 {font-size: 100%; margin-left: 40px; border-bottom:1px solid #b8b49c}
+a{color: #0000ff;border-bottom-color: #0000ff;}
+a:hover{color: #0000DD;border-bottom-color: #0000DD;}
+
+.ruler{float:left;width:80%;height:60px;background-image:url('images/ruler_part.png');margin-bottom:20px}
+.pagename{color: #666666;font-weight:normal;padding-top:18px;font-size:18px}
+#header_title{padding-top:12px;font-size:26px}
+
+.title {font-style: normal;color: #666666;}
+.title:hover {font-style: normal;color: #666666;}
+.title:visited {font-style: normal;color: #666666;}
+
+.box{border: 0px;background-color: transparent; }
+.fixme{background-color:transparent;border:2px solid orange ;}
+.deleteme{background-color:transparent;border:2px solid orange ;}
+.warning{background-color:transparent;border:2px solid red ;}
+.note{background-color:transparent;border:2px solid green ;}
+.tip{background-color:transparent;border:2px solid teal ;}
+
+.table{background-color:#999999;}
+.th{background-color:#d0d1c5;}
+.td{background-color:#f0f1e5;}
+
+.comments{background-color: #f0f1c5;margin-top:30px}
+.comment{background-color: transparent; border: 1px solid olive;}
+
+.toc{border: 1px solid black; background-color: #fff999; padding:3px; margin-left:-15px; margin-top:15px}
+.toc_title{font-weight:bold;color:#660000; text-align:center}
+.toc_content{background-color: transparent;}
+
+.buttonHelpSpan{font-size:90%;color:#000000;}
+
+.top_left{float:right;width:20%}
+
+.pager{background-image:url('images/pager.png');width:180px;height:120px;margin-left:15px}
+.searchBox{font-weight:bold;background-color:#149656;text-align:right;padding:2px;width:125px;margin-top:24px;margin-left:22px;border:0px;padding:0px}

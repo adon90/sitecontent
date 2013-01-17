@@ -1,0 +1,487 @@
+
+TIP: **See the [[Fan|index of all my fantom pages]]**
+
+======Fantom Cheat Sheet======
+**See also [[Fan Getting started]] and [[fanide:home|fantomIDE]]**
+=====Intro=====
+**Fantom(Fan) is an exciting new language that targets the Java VM and the CLR**.
+It borrows it's Syntax from Java but also adds many features and syntactic sugar created or borrowed from .NET, Groovy, Python, Erlang etc...
+
+It's immediately familiar to a Java / .Net programmer but is much less painful to use (**no boilerplate**).
+
+Fantom has very good documentation on the [[http://www.fantom.org/doc/index.html | Wiki]], but I created this page here as a "Cheat sheet", with all the basics in one page (for quick find / reference), still it's back linked to the full documentation when more infos are needed.
+
+====Source file structure====
+A Fantom source file is an UTF8 file with the extension **.fan.**
+
+Comments are supported as ''// comment'' and ''/* comments */''
+FanDocs (like javadoc) are as follow ''** blah'' (each line starts with ''**'')
+
+A .fan source contains (besides comments / doc):
+  - Zero or more ''using'' statements (pod import) a.k.a packages.
+  - 1 or more "type" definition ([[#class|Class]], [[#mixin|Mixin]], [[#enum|Enum]])
+
+<code | example.fan>
+using inet                  // example: import all of in inet pod
+using xml::XNode            // example: import XNode from xml pod
+using sys::Time as T        // import Time of sys pod, as "T"  
+
+class Hello
+{
+  static Void main()
+  {
+     echo("Time is $T.now") 
+  }
+}
+</code>
+====Types====
+More infos: [[http://www.fantom.org/doc/docLang/TypeSystem.html]]
+
+fantom is **statically typed and purely OO** (**everything is an object**, no primitives), but:
+  - You can do a **dynamic invocation**: ''obj->dothing'' instead of ''obj.dothing''
+  - The compiler can do lots of **implicit casting** for you.
+  - **Type inference** is supported for local variables, lists, and maps, so you can write ''i=3'' rather than ''Int i=3''.
+
+fantom does not support generics per say(which I find ugly anyway), however List, Map and Functions do support it:
+  - List Examples: ''Int[]'' ''Int?[]'' ''Str[][]''
+  - Map Examples: ''Str:User'' ''[Uri:File]?''  ''[Str:File][]''
+  - Function Examples: ''|Int a, Int b->Str|'' ''|->Bool|''
+
+**Nullabale types support**: ''Str s''(s **can NOT** be null) ''Str? s''(s **can** be null)
+===Class===
+More infos:[[http://www.fantom.org/doc/docLang/Classes.html]]
+
+Example: ''abstract class MyNewClass { }''
+Class Modifiers:
+  - ''public'', Public is the default. The class can be use from anywhere.
+  - ''internal'' The class can only be used within the same pod (~ java 'protected')
+  - ''abstract'' Required if the class contains abstract methods.
+  - ''final'' Can not be sub-classed.
+  - ''const'' Mark a class as **immutable** (checked by compiler).
+
+A class can inherit from 1(max) parent class: ''class Rectangle : Shape {}'' 
+
+A class can also inherit (implement) 0 or more mixins. ''class Rectangle : Shape, Drawable, Serializable {}''
+Note: Class inheritance has to be first, then mixins.
+
+===Mixin===
+More infos:[[http://www.fantom.org/doc/docLang/Mixins.html]]
+
+A Mixin is like a Java interface but **can declare method implementations** (Cool)
+Modifiers: A mixin is automatically abstract.
+It can only have the following modifiers: ''public'' ''internal'' ''const''
+<code | Mixin Example>
+mixin class Audio
+{
+  abstract Int volume
+  Void incrementVolume() { volume += 1 }
+  Void decrementVolume() { volume -= 1 }
+}
+
+class Television : Audio
+{
+  // volume is abstract so has to be implemented
+  override Int volume := 0
+}
+</code>
+===Enum===
+More infos: [[http://www.fantom.org/doc/docLang/Enums.html]]
+
+Just like a Java enumeration (range of values)
+Example ''enum Color { red, blue, green }''
+
+Enum can also have a **private** constructor:
+<code | Enum>
+enum class Suits
+{
+  clubs("black"),
+  diamonds("red"),
+
+  private new make(Str color) { this.color = color; }
+  const Str color;
+}
+</code>
+Enum modifiers: can only be ''public'' or ''internal''
+====Slots====
+Slots are the items within a Type(class, mixin, enum) such as fields, methods, constructors.
+===Fields===
+More Infos: [[http://www.fantom.org/doc/docLang/Fields.html]]
+
+Field type is not required if it can be inferred.
+
+Fields have **automatic getter and setter** - nice
+
+Example: ''class User{name := "toto"}'' you can now do ''name=user.name'' (uses the implicit getter)
+Example 2: ''Str? name := "toto"'' same but address is **nullable**  (default is not)
+  - **Direct access**
+In case you want to bypass the getter or setter you can do this ''*name''. ('*' means direct access) 
+  - **Custom getter and setter**
+You can specify a setter and getter (in the rare case you need it)
+<code | Custom getter/setter>
+Int id := 0  
+{ 
+  get { echo("get id"); return *id }; 
+  set { echo("set id"); *id = val } 
+}
+</code>
+  - **Field modifiers**
+
+''const'' Means the field is immutable, though it can be set in the constructor.
+''static'' Static field.
+''public''(default) ''protected'' ''internal'' ''private''
+''readonly'' Makes the automatic setter private. nice !
+''virtual'' Makes the setter and getter overloadable.
+''abstract'' Getter/Setter have to be overridden by subclass
+''native'' Mark the field as native(.NET, Java).
+
+Note: Mixins can only have ''const'' or ''abstract'' fields.
+
+
+===Methods===
+More infos: [[http://www.fantom.org/doc/docLang/Methods.html]]
+A method is a slot which defines a function within a class or mixin:
+
+**Defining methods:**
+<code | Method examples>
+class MyObject
+{
+// Static method(doesn't need an instance) that return the sum of arguments a and b
+	static Int add(Int a, Int b) { return a + b }
+// Instance method that increments the field called count
+	Void sayHello() { echo("Hello world") }
+// Instance method that sets this instance 'name' field to the value 'name'
+	Int setName(Str name) { this.name=name }
+</code>
+
+If the method returns something but has only 1 expression you can drop ''return''
+For example: ''static Int add(Int a, Int b) { a + b }'' 
+
+**Calling methods:**
+We can call a method using the ''.'' (static call), or ''->'' (dynamic call)
+A **static ''.'' call** is statically compiled and checked by the compiler.
+A **dynamic ''->'' call** is not checked by the compiler but evaluated at runtime
+
+If there are no parameters to the method, the convention is to drop the parenthesis
+<code | Method calls>
+// static method call (we don't need an instance of MyObject)
+  MyObject.add(2,3)
+// creating a MyObject instance to make methods call on
+  myObj := MyObject()
+// call setName method
+  myObj.setName("JDoe")
+// call sayHello - we drop parenthesis as there are no params
+  myObj.sayHello
+// Same but with a dynamic (runtime) call
+  myObj->sayHello
+</code>
+
+The special ''this'' keyword can be used in a method, it means "this instance"
+
+**Default parameters:**
+Parameters in a method can have default values, this is quite handy.
+Instead of writing as you would do in Java:
+<code | in Java>
+	void parseString(String text, boolean removeLinebreaks) {/*code*/}
+// then a shortcut method:
+	void parseString(String text) {parseString(text, false)}
+</code>
+You would just have:
+<code | fantom with default params>
+	Void parseString(Str text, bool removeLinebreaks := false) {/*code*/}
+</code>
+
+**Method modifiers:**
+''public''(default) ''protected'' ''internal'' ''private''
+''static'' Static method (not running on an instance)
+''Abstract'' A method that is unimplemented(no body) and must be implemeted(override)in a subclass.
+''Virtual'' A method that is designed to be "override"(reimplemented) in the subclass, but has a default implementation.
+''override'' Indicates that the method re-implements a method defined in the parent or implemented mixins
+''Once'' A once method uses lazy-caching: it cahes it's results, so if called again it does not have to recompute the result.
+''native'' A method marked as implemented natively (FFI)
+==Constructors==
+Only classes can have constructors, not mixin.
+A constructor is a special method which returns an instance of the class it's declared in
+
+**Defining a constructor:**
+By convention the default constructor is called ''make()'', other constructors ''makeSomeUniqueName()''
+The constructor return type is always ''new'', meaning it returns a new instance of the class.
+
+You can call another constructor or a parent constructor using the constructor chaining syntax, see the example bellow
+In the constructor chain you can use ''this'' to call another constructor in the instance, or ''super'' to call a constructor in the instance parent object.
+<code | Constructors example>
+class MissingPerson
+{
+  Str name
+  Bool wantedByFBI := false
+//Default constructor, create MissingPerson withe given name
+  new make(Str name) { this.name = name }
+//Other constructor with chaining, calls the default constructor first then sets wantedByFBI
+  new makeWanted(Str name) : this.make(name) { wantedByFBI = true }
+}	
+</code>
+
+**Static constructor:**
+A so called static constructor or "init block" is a static block that will be called when the class is initialized(once).
+<code | static block>
+class MyClass
+{
+	static{echo "MyClass initialization"}
+}
+</code>
+
+**Calling a constructor:**
+It's just like calling a method, except the parenthesis are NOT optional.
+<code>
+MissingPerson person := MissingPerson.make("John Doe")
+// shorthand
+person := MissingPerson("John Doe")
+</code>
+====Literals====
+Detailed infos: [[http://fantom.org/doc/docLang/Literals.html]]
+===Booleans===
+<code | Booleans>
+bool1:=true;    bool2:=false; // Bool
+</code>
+===Numbers===
+<code | Int>
+int1:=45;    int2:=-89_039;    int3:=0xcafebabe;    int4:=0xCAFE_BABE
+int5:='?';   int6:='\n';       int7:='\u03ab';      int8:='\u00F2'
+</code>
+<code | Float>
+f1:=3.0f;    f2:=3f;    f3:=3.0F;    f4:=123_456.0f;
+f5:=3e6f;    f6:=0.2e+6f;            f7:=1_2.3_7e-5_6f;
+</code>
+<code | Decimal>
+d1:=4d;    d2:=4.0;    d3:=4.00;    d4:=123_456d;
+d5:=3e6;   d6:=0.2e+6D;             d7:=1_2.3_7e-5_6
+</code>
+<code | Duration>
+// duration suffixes: ns, ms, sec, min, hr, day
+d:=4ns;  d:=100ms;  d:=-0.5hr;
+</code>
+===Strings===
+<code | String>
+Str s:="hello"
+
+// Multiline string supported (line feed becomes "\n";)
+Str s:="It is 73\u00B0 
+Fahrenheit outside!"  
+</code>
+<code | String interpolation>
+Str s:="The price is $price or $ {price}"
+</code>
+<code | String: triple quoted>
+echo("""Do you know "What lies beneath the shadow of the statue"?""")
+</code>
+<code | String: DSL>
+echo(Str <|no \ or $ escapes need, and multi-line works too|>)
+</code>
+===List & Maps===
+<code | List>
+list1:=Int[10, 20, 30]     // list of the three Ints 10, 20, and 30
+list2:=[10, 20, 30]        // same as above using type inference
+list3:=Str[,]              // empty list of Strings
+list4:=[[10,20], [30]]     // evaluates to Int[][]      
+list5:=Int?[1,2,3]         // can store null Int?[]      
+</code>
+<code | Map>
+map1:=[Int:Str][1:"one", 2:"two"]  // map of Strs keyed by Int
+map2:=Int:Str[1:"one", 2:"two"]    // same as above with shorthand type syntax
+map3:=[1:"one", 2:"two"]           // same as above using type inference
+map4:=Int:Str[:]                   // empty Int:Str map
+map5:=[0:["one"]]                  // evaluates to Int:Str[]
+Int:Str?[1:"one", 2:"two"]         // can store null String values
+</code>
+===URI===
+<code | URI>
+u1:=`/some/path/file.txt`
+u2:=`http://fantom.org`
+u3:=`/dir/$file` ; $file is interpolated variable.
+u1.toStr; u2.encode;   // encode url
+</code>
+===Ranges===
+<code | Ranges>
+// can be use in loops etc....
+0..5    // 0 to 5 (end is inclusive)
+0..<5   // 0 to 4 (end is exclusive)
+x..<y   // x to y-1 (end is exclusive)
+</code>
+===Type check===
+<code | Type check>
+Str#  // String type
+acme::SomeType#
+</code>
+====Statements====
+More infos: [[http://www.fantom.org/doc/docLang/Statements.html]]
+
+Note: A statement can be terminated by '';'' but it's optional, a ''NewLine'' will do, or a closing ''}''.
+Most common is to end a statement with a line break(NwLine), though a few special cases might require a '';''
+
+===Return===
+Same as most languages ''return var''. 'return' optional if only **1** statement in method ''var''
+===Local Variables===
+''var := 35''.  '':='' means variable initialization.
+===If / Else===
+<code | If example>
+if(cond) dothis else if(cond2) dothat else donothing
+if(cond) {dothis; dothat}    // multiple statement in block -> needs bracket
+</code>
+===Loops===
+''break'' and ''continue'' can be used in loops just as in Java.
+
+<code | While loops>
+while (p != null)
+  p = p.next
+</code>
+<code | For loops>
+for (i:=0; i<10; ++i)  // can't use , as in Java/c++
+  echo(i)
+</code>
+===Switch===
+Like Java **EXCEPT**:
+  - **no <del>break</del>**, if the ''case'' has at least one statement, there will be **no fall through**.
+  - **not limited to int**, you can switch on String and other objects (use equals() method).
+<code | Switch example>
+switch (method.upper)
+{
+  case "GET":  serviceGet
+  case "POST": servicePost
+  default:     methodNotSupported
+}
+</code>
+====Exception Handling====
+More infos: [[http://www.fantom.org/doc/docLang/Exceptions.html]]
+
+<code | Try catch example>
+try {something}              // Curly's are optional if only one statement in block
+catch (CastErr e) {e.trace}  // trace to stdout
+catch (Err e) {e.trace(log)} // trace to log
+catch {/*catch all else*/}
+finally {cleanup}
+</code>
+====Closures & ItBlocks====
+Detailed infos: [[http://fantom.org/doc/docLang/Closures.html]]
+
+<code | With arguments>
+f := |Int a, Int b->Int| { return a + b }
+nine := f(4, 5)
+</code>
+<code | No arguments>
+f := |,| { echo("hi there") }
+f()</code>
+<code | Binded variable>
+f := |->Str| { return first + " " + this.last } // binded var
+</code>
+<code | With suffix>
+evens := list.findAll() |Int v->Bool| { return v%2==0 }
+</code>
+===Iteration===
+<code | List / maps iteration>
+list := ["one", "two", "three"]
+list.each |Str val, Int index| { echo("$index = $val") }
+list.each |Str val| { echo(val) }
+</code>
+<code | Type inference>
+list.each |v| { echo(v) }
+odds = [1, 2, 3, 4, 5].findAll |v| { v.isOdd }
+</code>
+===ItBlock===
+<code | It blocks: .each>
+["a", "b", "c"].each |Str s| { echo(s.upper) }  // long hand
+["a", "b", "c"].each { echo(it.upper) }         // short hand
+["a", "b", "c"].each { echo(upper) }     // implicit it call
+</code>
+<code | It blocks: .with>
+// Apply an IT block to an expression
+list := Str[,].with { fill("x", 3) }   // explicit call to with
+list := Str[,] { fill("x", 3) }        // implicit call to with
+</code>
+====Expressions====
+More Infos: [[http://www.fantom.org/doc/docLang/Expressions.html]]
+Note that operators are just mapped to methods, ''a + b'' is just a shortcut for ''a.plus(b)'' etc...
+Which by the way mean you can overload them, see: [[http://www.fantom.org/doc/docLang/Expressions.html#shortcuts|Expressions shortcuts]]
+===Common operators===
+Basically the same as Java.
+**Common operators**: ''+ - * / % << >> & | ^ ! ++ -- ~ == != <= >= || &&''
+**Ternary**: ''condition ? value1 : value2''
+===Indexing Operator===
+Shortcut to ''get'' and ''set'' methods.
+<code | Indexing>
+obj[0]                     //same as obj.get(0)
+obj[-1]                    //same as obj.get(obj.size-1)
+obj[0] = 3                 //same as obj.set(0,3)
+obj[-1] = 3                //set last item in obj with value 3
+obj[0..2]                  //slice of obj (0,1,2)
+obj[0..<2]                 //slice of obj (0,1)
+</code>
+===Null check operators (Cool)===
+**Elvis**: ''name ?: defaultName''  is shortcut for: ''name != null ? name : defaultName''
+**Safe invoke**: ''email := user?.email'' same as ''if(user!=null) email=user.email''
+**Dynamic safe invoke**: Same for dynamic calls. ''email := user?->email''
+===Other operators===
+**Variable Initialization**:  '':='' (Define & assign variable initial value)
+**Range**: ''..'' or ''..<'' (exclusive end)
+**Object equality** (Same object): ''===''(equals), ''!==''(!equals)
+**Type checking**: ''is'' ''isnot''. Example ''bool := email is Int'' (check email is an Integer)
+**Casting**: ''as''. Example: ''val := number as Float'', same as ''val := (Float) number''
+**Simples (Serialization)**: ''Version("3.2")'' is same as ''Version.fromStr("3.2")''
+**Compare**: ''<=>'' Compare and return an Int(-1,0,1) (compare method).
+==It Blocks==
+<code | It Blocks>
+address := Address{street = "123 Happy Lane"; city   = "Houston";}
+
+// old fashion
+address := Address(); address.street="123 Happy Lane"; address.city="Houston";
+</code>
+==Collections (Sp. itBlock)==
+'',''(**trailing comma**). Calls it.add(suffixedItem).
+Example: ''a,b,d'' is same as ''it.add(a).add(b).add(d)'', especially nice for Swing/Fwt.
+<code | Collection operator use>
+// Notice the trailing comma after MenuItem definition, it does menu.add(menuItem);
+menu := Menu{  text = "File";  MenuItem { text = "Open";}, }
+
+//old fashion:
+menuItem := MenuItem(); menuItem.text="Open";
+menu := Menu(); menu.text = "File"; 
+menu.add(menuItem);
+</code>
+====Reflection====
+More Infos: [[http://www.fantom.org/doc/docLang/Structure.html]]
+
+<code | Reflection>
+Int#plus                      // Refer to Method plus of class Int
+Pod.find("acmeFoo")           // lookup a pod (package)
+someObj.typeof                // lookup an object type
+Slot.find("myPod::Foo.xyz")   // lookup a slot(ex: method) by its name
+method.call([arg0, arg1])     // invoke method using reflection
+</code>
+====FFI : Java / C#====
+More Infos: [[http://fantom.org/doc/docLang/JavaFFI.html]]
+
+<code | Example>
+using [java] java.lang::Math
+//....
+Math.abs(someval)
+</code>
+See an example here: [[Fan Java FFI example- Implement Java_interface from fan]]
+====Symbols====
+Symbols go in pod.fan.
+See: [[http://www.fantom.org/doc/docLang/Symbols.html]]
+====Facets====
+More Infos: See [[http://www.fantom.org/doc/docLang/Facets.html]]
+Facets are the equivalent of Annotations in java:
+<code | Facets example>
+@serializable
+@version=Version("1.2")
+class Account
+{
+}
+</code>
+=====Advanced Topics=====
+Compile to javascript, deployment, repos, serialization, concurrency, actors, naming, urispace, typedb, logging, localization, DSL
+See [[http://www.fantom.org/doc/docLang/index.html]]
+====Tools====
+fan, fansh, fand, fanp etc...
+See: [[http://www.fantom.org/doc/docTools/index.html]]
+====API's====
+See: [[http://www.fantom.org/doc/index.html]]

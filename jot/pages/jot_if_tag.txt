@@ -1,0 +1,25 @@
+======JOT If Tag======
+
+=====Java view=====
+<code | Java>
+// get the user from the session or whatever
+MyUser user=(MyUser)session.getAttribute("user");
+// only add a "user" variable if logged in.
+if(user!=null)
+ addVariable("user",user);
+</code>
+
+=====View (Html Template)=====
+<code | Template>
+<jot:if eval="user">
+  Hello <jot:var value="user.name"/> !
+</jot:if>
+<jot:if eval=" ! user">
+  Hello Guest !
+</jot:if>
+</code>
+
+=====Generated Html=====
+<code | Html>
+Hello John !
+</code>

@@ -1,0 +1,253 @@
+====== The MP3 Player i built for my car ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+{{20060203171744204-2-topView.gif}} {{20060203171800202-0-trunkview.gif}}
+
+^ Page Creation ^ Last Update ^ Actual Total Cost ^	
+| 04/19/00 | 02/11/01 | 127 US$ |
+
+
+{{topview.jpg}} {{trunkview.jpg}}
+
+=====Current Status:=====
+
+I'm currently updating this page as my project is advancing, there is was no guarantee that the project will would work at the end;-)
+
+**07/22/00** The Mp3 box is now up and running (however quite different that the original idea) in my trunk.
+
+**10/31/00** Still running fine after more than 3 month, I'm now working on a control device.
+
+**02/11/01** It now have the keyboard and text to speech since 2 month, and is running fine since 6 month (a little dusty though :-).
+
+=====The original Idea=====
+
+What I want to do:\\
+A mp3 box for my car which will as small as possible without spending a lot of money,work with a hard drive rack, so I can handle a large amount of songs from home to car.
+
+Since I moved there from France without almost anything I have to buy all the components,I've made some computer and electronics studies so I'm not afraid to built it myself, also I want it to be extra-cheap.
+
+=====Materials=====
+I need the "computer part" so it's a motherboard, a cpu, a video card(at least for the setup) and an audio card.
+The computer parts section for details
+
+The computer requires a power supply It exists some "inverters" which convert the 12 volts of the car battery to 110v so than you can plug your computer in, but I think they are expensive for what they are, so I will do the power supply by myself (and blow up the condominium ;-)
+
+The computer needs in reality the following voltages (which are in your computer box transformed by the power supply) [ground, -5, +5, -12, +12] when the card as only [ground, about +12].Also the car battery delivers an average 12v which can be between 8v and 14v, when the computer must have constant power.
+
+====The Power supply section====
+What I actually did (including errors and change of directions)
+
+====The Hardware====
+For the cpu I was looking for at least 90 Mhz which is the minimum to unencode 128kbps mp3's
+
+For the mother board I was looking for a card with built in audio and video so that it doesn't needs any additional extension cards which would expend a lot the depth of my mp3 box.
+
+I got it from ebay on 04/20/00 \\
+
+^ Item ^ Price ^
+| Socket 7 Pentium Motherboard This is a Brand New Motherboard. Accepts up to 166MHZ Processor. It Has ATI Video on Board as well as Opti Viper Sound on Board. 2 IDE controllers 1 Floppy Controller 4 72pin SIMM slots. PS/2 Mouse and Keyboard Connectors. These fit in a Desktop case with a riser card or no riser if you use an external modem. Buyer to pay shipping cost of $6.00 for each board in the lower 48. (I got a good price) | 10$+6$(ship.) |
+| Intel 100 Mhz CPU with heat sink (a bit expensive) | 13$+5$(ship.) |
+| 32 megs of EDO memory | I had it | 
+| A 8 GB Hard drive | I had it |
+
+**04/26/00** I just received my Cpu (1) and motherboard (2) , check out what's good on it: It's flat and have video and audio built in (3) :
+
+{{motherboard.jpg}} {{audioconnector.jpg}} {{cpumem.jpg}}
+
+**04/29/00**  Ok I'm now ready to test the motherboard and cpu, I make the test on a standard pc power supply, First I have to find out how two plug the two power connectors (+5v, ground) and (-5V,-12V,12V) to the motherboard, a check of the motherboard circuit under the power supply plugs helps me to find out (4) , I especially noticed that the -5V is unused on this board, I will anyway implement it on my power supply so it will still works if I change the motherboard. 
+
+I had no idea of what where the jumper settings for this motherboard (no doc), so I planned to start it and look at the cpu clock on the bios, before it had time to burn, I got lucky there, the cpu clock was at 90 Mhz which is fine.
+
+I'm now ready to check the board, first let's make a good working area (5) .Here is what I used for testing (6) , a old screen to check what's going on, a power supply to power the motherboard, and a keyboard.
+
+Fist I don't have any (working) floppy drive or network card to put on this board, so I start to install the system (redhat 6.1), plugging the Hard drive to another computer, installation was ok, when I put it back to the mp3 board, I had to play with jumpers since the old bios needed to see a 2Gb Hard drive. Then I was able to start the system for the fist time, and it boot fine (yep!)
+
+{{boardalim.jpg}} {{mainview.gif}} {{workview2.jpg}}
+
+
+**04/29/00** The system does not work completely(audio drivers), so I have to install some more stuffs, since it sucks two have to plug the hard drive in another computer each time for that, and that I have neither a floppy drive or a network card, but I have a cd burner(erasable) and cd drive, I installed a carom drive from another computer to be able to exchange files.
+
+**07/10/00** The hardware is now working ok, let's focus on the system now.
+
+**11/1/00** I jus decided to add a keypad to control the mp3 software bahavior, i just bought a keypad for that. (12)
+^ Item ^ Price ^
+| 17 keys ps2 grey keypad | 12$ |
+
+{{ 20060203171716856-2-keypad.gif }}
+
+
+**12/28/00** I plugged the keypad, with a ps/2 extension, going from the trunck to the front seat.However I got some trouble since the keypad was not working at boot time, I noticed that if i then unplug/plug it back, it then works!
+
+I think it's probably because the extension is so long that the keypad can't initialise properly at boot time.However plug and unplug was boring so now there is one of the button on the keypad which does the job (it opens or closes the ground wireof the keypad).
+So now I can skip songs, go backward, next, faster, slower .... and hear the song title through the text to speech ! cool! 
+
+=====The System=====
+
+I'm thinking of using QNX since it's tiny and loads extremely fast, it supports Sound blaster compatible cards, I have to check if the motherboard sound card is compatible, if not I might compile a small Linux kernel.
+
+{{ compile.gif }}
+
+**04/28/00** I figured out that QNX will not make it, so I will try a small linux kernel (RedHat 6.0).
+
+**04/29/00** Ok Everything works perfectly except one small thing ... the sound card :-( ... which is onBoard opti 82c924, linux detects it as an opti 16, but can't initialize it (device busy)
+
+after some search I find out that this card is supported but only using isapnptools and MSS drivers, so I tried that but still can't makes it work.
+
+I will try with Open Sound System from 4front tech (20$, but in eval right now), I have some kernel incompatibility and need to recompile it. I download the last stable one (2.2.14) and started the compilation , ... about 1 hour on the pentium 90 (I added a fan so it doesn't burn)
+
+**04/30/00** I messed up, I took the Multi-processor kernel and it's not what I want, I decided to just get the last redHat(6.2) from there web site, the iso image is 640Mb and even on my DSL line it will take some hours, so I go to the beach ;-)
+
+**05/20/00** Have been busy at work, ok, the onboard soundcard still doesn't work, whatever I tried, drivers told me that the resource was busy, might be a jumper on the motherboard or a IRQ conflict but I haven't any doc or time.
+
+So i decide to add an external soundcard, I will use an ISA angle connector so I will be able to put it flat (parallel to the motherboard, to avoid my MP3box to become huge.
+I got an old (but kick' ass) SB Awe 64 Gold Isa that I will use..
+
+^ Item ^ Price ^
+| SoundBlaster AWE 64 Gold ISA. | Priceless ;-) |
+
+I couldn't find the stupid angle connector (sorry I'm new in this country, and even if it's suppose to be the high -tech country, it's hard to find electronics components there (those more than public but less than professional), and what's again I want the thing up and running soon now.
+
+It means that the mp3box will be bigger which is ok for two raisons, I have a big trunk, i will make it a size which will allow me to fix it easily in the trunk.
+
+**06/10/00** Now that the player is working ok, I focused of improving performance, since I'm lazy about doing much more, I decided to not do an anti-crash electronic thing, instead the pc will crash each time I'm turning off my engine.
+
+So what I did is mount read only all the partition which can (i just let / & /boot rw), the mp3 partition being read only (so that a crash doesn't affect it), how by the way i did a MP3 partition, why ? because if the system is dead i can reinstall it in the other partitions letting the mp3 intact.
+
+Next step was increasing the boot time, since I don't want the music to start after an hour.
+What I did for that (despite compiling a minimal functionalities kernel previously) is to go in /etc/services and remove the tons of services I don't need (like ftp, telnet and others), the second step was to go in my /etc/rc.d/rc3.d/ and to remove most of the daemons I don't want which includes a lot, the most time consuming being apache, kituzu (some weird name anyway : hardware detection) and linuxconf).
+
+The last thing was to disable fsck on the remaining rw partition (because since i crash each time it would run a looong check at each boot), I just disable the call by modifying a bit the /etc/rc.d/rc.sysinit script
+I also set lilo so that it boots right away. After what I have a power to music time under 30 secondes which is cool enough.
+
+**10/26/00** I Removed for the first time the box from my trunk (where it have been running fine for 4 month) to add some songs, that was a good time too to make a check, so i did run a fsck, which found a shared cluster on some /var/whatever files, which is nothing, i just choose to duplicate the cluster and that was it, so after 4 month of three "on-demand" crash a day Linux is still alive and kick in'.
+The Software:
+
+**06/02/00** Ok this system is now playing music ! I finally bought a license of OSS from 4front tech because They have a very good AWE64 driver and that it's pretty cheap (20$)
+
+**06/04/00** I first used Mpg123 which I like, at first it looked fine, but after some time I found that it was actually making some micro-skip, I first was thinking my 100 mhz cpu was too slow, so I tried with a 166 Mhz, but same result, so I tried freeAmp which was working fine, anyway I want my player to play randomly from my 1500 files playlist, and freeamp was really bad at that, usually playing 2 following songs in a row, So I contacted the guy which wrote mpg123 and he told me the version I had was sucky (comming from redhat), I then got the sources, recompiled and got mpg123 working great as I wanted too.
+
+So now mpg123 is running at boot time from the rc.local file, and play randomly through my playlist forever. I need at list to had a "skip" control to my box sometimes.
+
+**12/29/00** I now have a keypad to command mpg123, i had to modify a bit one of the include files declaring the keys in mpg123, so that it uses the keypad keys, and tghen recompile it. works fine.
+
+**12/30/00** I now added text to speech (it's vocal synthesizer), what for ?, i didn't want to put a screen since it's painfull, expansive and needs a lot of ugly wires, however i was always in the car with afriend, and while listening a song, he would say "who is that ?", and i would not know. So what i did is to trandform all the song titles in sounds, i wrote a litte script which uses Festival(free linux Text to speech), the script was taking each title ie "Red hot chili pepers, califonification" and transfoming that to a wav saying "Red hot chili pepers, califonification"
+
+after that i modified the mpg123 code a little bit more, so that when i press a specific key on the keypad it plays the wav saying the coresponding title.
+It works great, however festival sometimes sounds really robotic(click here to have an example) .. which actually gives my friends a lot of fun!
+
+**01/03/00** I notices than mpg123 was not randoming very well on my 2000 songs playlist(random but often play the same ones), so I modified the code so taht the random is better adding a random on a bigger number + a constant so that the seed is different at each restart.
+
+=====Packaging & wiring=====
+
+**06/07/00** The mp3 box now working is now more or less a mother board coupled to a couple of peripheral lying as a dead fish on my table.
+And I have to package that, the problem being that I do electronic or software but I don't do packaging at all.
+
+After thinking about the thing i first thought about using wood, because it doesn't require expensive tools and is easy to work with, but after thinking about it I did realise that wood is not a good idea at all, first it's heavy, second it will get really warm in a wood box (which is my main concern), thirdly ... hum it sucks. 
+
+What about metal? no way, that's hard to work with, get even warmer inside, and is not flexible enough , I mean a going on a bump with my car will not make the metal box flex, so it will be the computer components which will get the all chock.
+
+So finally I found the good material ... The fantastic plastic ... and transparent one (more geeky ;-) and easier to check), First I didn't know where to get some until a friend point me to the dream place, Tap Plastic so those guys sells plastic, but can also give you advices, cut the plastic at your custom size, and even make the project you want just by you giving schemas.
+However Being not to lazy today I decided to just have the box sides being cut at the right side and to put all together myself.So I did put the all box together (looks like an aquarium), then I added a couple of holes for connections, and a big fan on top (Seems obvious but apparently pc-makers don't know that heat is trying to go up).
+
+First I added the mother board which stays on 4 small plastic pieces at each corners, which makes the board suspend and flexible, so that it will absorb shocks. I THEN ADDED CPU, MEMORY AND SOUND CARD ON IT. (8)
+
+Then I added the disk drive, which is suspended over the motherboard on a flexible plastic bar and mounted vertically, so that the shocks would not crash the head on the disc but just move along it. (9)
+
+The power supply have also been added on flexible plastic bar suspended over the mother board, not that it risk a lot on chocks, but because it's this way closer to the exhaust fan, which is good since the power supply will be the main source of heat, and that I don't want this heat to surround the cpu. (10)
+
+^ Item ^ Price ^
+| 6 translucid plastic box sides (5 clear, one black) cut at me from tap plastic | 15$ |
+| Plastic solvent (to melt "stick" together pieces of plastic), 6 foot long plastic bars, for the peripherals suspension, couple of other plastic accessories | 6$ |
+| A Powerful fan to blow out the heat from the box | 2$ |
+| A couple of wires and electric connectors | 4$ |
+
+{{20060203171716657-1-hdview.gif}} {{20060203171743998-1-sideview.gif}} {{topview.jpg}}
+
+
+**06/18/00** Now that the box is working at home, I still have to transplant it into the car, which means I'm starting the wiring section, fist I did connect the mp3 box with short cheap wires to the cigarette lighter, and the audio output to a small external speaker for testing, it was working cool, but what I want is the sound to go to my good chrysler infinity sound system. Fist I was thinking I will find some input plug on the radio, big mistake, not even a headphone kind entry to plug a cd, nothing either on the back, well there is the cd charger plug, but I have a cd charger so i prefer to keep it, and anyway it's a "digital signal" plug so I can't do much with it anyway. fu#$!
+
+I will not stay on a defeat like that, so I tried to plug directly to the speaker, but of course the signal is too low (not amplified), then I opened the radio put it apart and try to find a way to plug the input somewhere on the radio "motherboard ;-)", But chrysler did a very good job of avoiding people to add there own audio adds-on instead to by them from chysler, so I was fuc#$t again! 
+
+Then I did think of a poor solution which would be to plug directly to the audio amplifier I have, which is crappy since I cant take advantage of the radio settings then, however I tried, I did found the amplifier under the passenger front seat, Horrified I was thinking it was crazy since my car is a convertible and that anybody would be able to grab it, I was so wrong !, you need to remove the seat first, which if possible to do, was not with my tools, so all i managed to do is accessing the connection doing some yoga in between the front and rear seats.
+
+In any case the chysler anti-do-it-yourself-enhanced-protection was great agin, no breech, this time I'm really fuck#$!
+
+**06/28/00** I've been spending the last three days telling my friend that chrysler radio sucks, until I went to the car of a friend of a friend which reveals me the truth, I was a stupid idiot, i did almost killed myself under my car seats when there was a so easy solution !
+
+Whatever, that was it ? The guy in question had a portable cd player, which was plugged in the radio deck through a fake cassette, fantastic ! How did I forgot about this trick !
+
+I had a solution ! just by one of this "fake tape" and plug it to my radio cassette deck. so I got one, I did got a good one since I wanted the signal to be good, so I got a sony which i believe is a good brand for audio. that was 15$. Everyone know that this tape thing is not working with some weird or old tape deck, i know chrysler enough to make a bet it will not work in mine ! But I was wrong it did !!
+
+**07/03/00** Ok the mp3 box is now plugged to the cigarette lighter plug for power and to the cassette deck for audio, and is located behind the passenger seat for now (because the tape wire is too short to go all the way to the trunk)
+
+I let that for a while since it was working, The pack is that I had to unplug it from the cigarette lighter plug, which is always alimented, to turn it off, this is until last day when i forgot to unplug it, result ... dead battery, not cool so I decide to finish my installation properly.
+
+The goal is too put the damn thing in the trunk, so I made 15 feet wires for the power supply and audio to test that. I put the power on, and damn it was not working anymore, the power was going and stopping all the time by itself. First I thank that I had inverse the power supply polarity, but that was actually fine, then i found out that it was actually the power converter which was shutting itself on and off, i read the thing manual, and found the interesting part, "if the battery i too low the converter will shut down by itself ...", But what, my battery is not to low!
+
+Ok the raison was just that i used really cheap tiny long wires so the 12 v from the battery were dropping to 10.5V at the other end of those wires, it was just fixed by using bigger and better wires.
+
+Then I wanted to make a good discrete wiring, which took me some times, but now the all thing is invisible, going from the trunk to underneath the back seat then along the right doors under the carpet all the way in the dash board to the radio.
+
+Because the audio wires were going all this way too there was some interference in the signal, I then replaced the wires with bigger Shielded (inside a metal tube which protect from the interference) once.
+
+The signal is now pretty good, putting trebles at max and high volume i did found there was still some small interferences but nothing really audible with normal settings, so I let it like that (i know it could be possible to make a small noise filter with a couple of capacitors anyway).
+
+The box is now in it's final shape and running fine! Look at it! (11) (8)
+(11)
+
+{{ trunkview.jpg }}
+
+**12/28/00** I added the keypad, just a ps2 extension going from the trunck to the main console under the floormat.
+
+I add a unused phone support in my car ... it's now a keypad support :-)
+
+=====The Power Supply=====
+
+I will do that after I checked everything works on the in-home power supply.
+
+**06/09/00** Last day I was at Fry's (the most crappy store i know ;-) 80% of the stuffs there have already been returned 5 times or more, and the sales man english is not even as "ok" than mine, but is still better than there tech vocabulary), anyway when I was there i find out that a power converter 110v to 12 v 150W cost only 30$, when the one I want to built would cost more and probably never work, so yes it will take a lot of room to have a computer power supply + a power converter, but remember I already had to use a big box because of the sound card, so now I have plenty of room.
+
+It's also not nice or power efficient, but remember I want the thing to be cheap, working soon and am Lazy! So that will be the power supply: the power converter(12v to 110v) coupled to an power supply took from an old pc (110v to 12v,5v ...), I know it sucks ;-)
+
+=====The current result=====
+
+**07/12/00** The result is a working Mp3 player, now let's compare too the "what I wanted to do list". I wanted it to be small, it isn't (it's not huge either) and quite light, i wanted the HD to be in a rack but it's not, but well, I changed my mind, because I though it would overheat if mounted in a rack, and it would, I wanted it to be cheap, I got that, about a hundred bunks for a mp3 player that's cool cheaper than a cd player! It is also pretty descrete (not much connections) and no mess in the car.
+
+**08/22/00** We just got a 10 hours drive form the bay area to boise idaho, with the box playing continuously, without a hitch! The temperature was pretty high, upper 80 but the box didn't overheat, thank you big Fan!
+
+**09/19/00** I got the first overheat! but the conditions where exceptional too. It was on a 6 hours drive from bay area to northern california with records temperatures ranging from 99 to 105 degrees fahrenheit !
+
+So after 5 hours and a half the mp3 just stopped, i had my idea why(damn it was hot!). In any case at the first stop I open the truck and realized it was really hot inside so no wonder, i let it opened for a while, restart the engine and the music was going on again. So no problem, the computer cpu is protected anyway and shutting down by itself which is good.
+
+I just wanted to point out there that a big cooling system (fan) is really important in such conditions (you can forget it if you live in Minnesota though :-).
+
+**10/28/00** The box have been running fine for 4 month already, I just made a small update and checked the hard drive, no major problem.
+
+**11/14/00** I've been going to ski this weekend at lake Tahoe (CA), the snow was good for the saison openning, but it have been cold. Aound 5 at night so I was a little concern about the box working at this cold (a bottle of water was entirely frozen in the trunk), but it did work without problem (i was only concern for the HD aniway, which could have "shrink a bit" on those low temps. So you can forget about the weather being to cold (once again except if you live in Minesota ;-)
+
+**01/04/01** I now have a keypad to control the music playback and also to play the song title though the speaker using text to speech technology.
+I think it's pretty much done now, not much features to add.
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>

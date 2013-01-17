@@ -1,0 +1,338 @@
+======Tethering With Blackberry Pearl On Linux======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+
+WARNING: **I have made a new application just for tethering a blackberry on Linux, this should be much simpler than those old instructions, please follow this link:
+[[bbtether | BBTether - Easy Tethering for Blackberry on Linux]]**
+
+
+**Try this first: [[bbtether | BBTether - Easy Tethering for Blackberry on Linux]]**
+
+=====Old fashionned way=====
+If you have questions/and or suggestions about this article, you can contact me at:
+tcolar@colar.net
+
+NOTE: If you are going to use this, you should save this page now, to your laptop, cause when you are gonna need it, you probably won't have a connection :-)
+
+
+WARNING: This whole setup is sort of screwy, but hey it works !
+
+
+WARNING: Tethering will cost you a lot of money unless you have an unlimited data plan. Some phone companies, forbid it unless you ahve a special plan, some other allow it but won't support it, some just plain disallow it.
+
+
+I believe tethering should be allowed, but you should use that only as needed when on the road, users who use GB of data on a tether connection annoy me because 1) sooner or later they will be blocked anyway, 2) if too many people do that, phone companies might block tethering unless you buy an Expensive plan !
+You are not helping anybody if you do this, be reasonable and enjoy tethering when you really need it, ex: in a crunch on the road.
+
+===== Introduction =====
+OK, i spent a **LOT** of time getting this dammed thing to work, but i did it !
+First let me talk about the few options i tried:
+  * Barry: this project on source forge provides a synchronization and they started modem support but it does not work yet.
+  * XmBlackberry: This is the project that DOES work, however the site is very 'bare bone' and almost no documentation exists. On top of that the latest time they made a release was over a year ago and that did not work. I was able to make it work with the live CVS version, though it was a pain to compile and get going.
+
+NOTE: **I only managed to get tethering to work using BOTH Barry(to recognize the device properly) and XmBlackberry(modem support), so we will install both** 
+
+
+I used Ubuntu Feisty Fawn for this doc, though same idea should work on other linux distros.
+My device is a Blackberry Pearl (8100)
+My Carrier is TMobile.
+
+This works with the USB cable and not Bluetooth, i prefer the USB cable anyhow, it's faster and less chance to loose/forget my phone if tied to the laptop :-)
+
+=====Installing XmBlackberry from sources=====
+The main issues i had here are:
+  * XmBlackberry only works with the pearl with the CVS version.
+  * The CVS version of XMBlackBerry will only compile with openmotif2.3 (2.2) won't work
+  * Debian does not have a packaged version of openmotif2.3 (the libmotif3 package is openmotif2.2)
+
+If you use motif2.2 you will get errors like this:
+'' undefined reference to 'XmVaCreatePushButton' ''
+
+So as a result of all that the first step is to install openmotif2.3 from sources.
+
+==== Prerequisites ====
+
+WARNING: If you have never compiled anything from sources before you will need at least to install those first (compiler)
+<code>
+sudo apt-get install libc6-dev g++ gcc make build-essential
+</code>
+
+
+To compile/install all those things i had to install the following packages first (not sure if i really needed ALL of those though)
+<code>
+sudo apt-get install libtool autoconf automake cvs libglib2.0-dev libxml2-dev libssl-dev libopensync0-dev libxt-dev x11proto-print-dev libxmu-dev libxft-dev libfreetype6-dev libXp-dev flex byacc libgd2-xpm-dev libxaw-headers libxaw7-dev libreadline5 libreadline5-dev
+</code>
+
+Openmotif would not compile because libfreetype-dev installed files not where openmotif expected them (freetype & freetype2 dir), to compile i add to do this:
+
+WARNING: not sure if that is a safe thing to do(probably OK), so you might want to revert this after (move back) after compiling openmotif.
+<code>
+cd /usr/include/
+sudo mv freetype freetype-back
+sudo mv freetype2/freetype/ .
+</code>
+
+
+I also had to do this, to get XmBlackberry to run later:
+<code>
+sudo ln -s /usr/X11R6/lib/libXm.so.4 /usr/X11R6/lib/libXm.so.3
+</code>
+
+====Installing OpenMotif 2.3====
+
+NOTE: if you have motif3 you might need to remove it first. **Honestly i'm not sure if it's a good idea, so don't do this unless you have to**.
+<code>
+sudo apt-get remove libmotif3 libmotif-dev motif-clients
+</code>
+
+
+Installing motif2.3:
+<code>
+cd ~
+wget ftp://ftp.ics.com/openmotif/2.3/2.3.0/openmotif-2.3.0.tar.gz
+tar xzvf openmotif-2.3.0.tar.gz
+cd openmotif-2.3.0/
+./configure
+make
+sudo make install 
+</code>
+
+====Installing XmBlackberry====
+
+XmBlackberry needs Xlt installed (from source)
+
+===Installing libXlt===
+<code>
+cd ~
+cvs -d :pserver:anonymous@xlt.cvs.sourceforge.net:/cvsroot/xlt co Xlt
+cd Xlt
+./CVSMake
+./configure --prefix=/usr
+make
+sudo make install
+</code>
+
+===XmBlackBerry===
+Get XmBlackberry source code
+
+<code>
+cd ~
+cvs -d:pserver:anonymous@xmblackberry.cvs.sourceforge.net:/cvsroot/xmblackberry co XmBlackBerry
+</code>
+
+**Inside** xmBlackberry folder get libusb source code.
+<code>
+cd XmBlackBerry/
+cvs -d :pserver:anonymous@libusb.cvs.sourceforge.net:/cvsroot/libusb co libusb
+</code>
+
+Compile/Install XMBlackberry
+<code>
+./CVSMake
+./configure --enable-maintainer-mode --disable-shared
+make
+sudo make install
+</code>
+
+Install libusb as it will be needed by Barry
+<code>
+cd libusb
+sudo make install
+</code>
+
+===OpenSync===
+Install openSync (part of XmBlackberry)
+<code>
+cd ..
+cd opensync
+make
+sudo make install
+</code>
+
+=====Installing Barry=====
+
+<code>
+cd ~
+wget "http://downloads.sourceforge.net/barry/barry-0.8.tar.bz2?modtime=1186171933&big_mirror=0"
+tar xjvf barry-0.8.tar.bz2
+cd barry-0.8
+sh buildgen.sh
+./configure --prefix=/usr
+make
+sudo make install
+</code>
+
+=====Running XmBlackberry=====
+
+WARNING: you will notice i run most of the following command with sudo, that is because otherwise it would fail, due i think to USB device permissions on Debian, ideally it would probably be best to fix those permissions rather than tun those thing under sudo.
+
+
+NOTE: PLUG YOUR BLACKBERRY NOW WITH THE USB CABLE.
+
+
+There is an issue whereas the module usb_storage takes over the Blacberry device as soon as it is plugged in and thus XmBB can't use/see it.
+
+We are gonna run Barry's bcharge, this has two uses here:
+1) It will regrab the device from usb_storage
+2) It will set the BB charging current to 500ma instead of 100ma, this will make the BB happy (no more warning) and allow it to dialog correctly with XmBB.
+
+<code>
+sudo bcharge -o
+</code>
+
+Note: Because of a driver issue on the pearl and some version of barry, you might have to run bcharge twice, sounds odd, but is needed, as you will see on the second call the device will be found (**if found the first time then don't do this or it might give trouble !**)
+<code>
+sudo bcharge
+sudo bcharge -o
+</code>
+
+
+Now, the device should be found. Example: ''sudo btool -l''
+<code>
+Blackberry devices found:
+Device ID: 0x80xxxx. PIN: 241xxxx, Description: RIM 8100 Series Colour GPRS Handheld
+</code>
+
+
+NOTE: you can had Barry to udev, so it automatically runs when the BB is connected.
+''cp /home/thibautc/barry/udev/*b* /etc/udev/rules.d/''
+
+I haven't tried this yet.
+
+Now we are ready to run XmBlackberry.
+''sudo /usr/local/bin/XmBlackberry''
+
+Once XmBlackBerry opens, click the ''Options'' Menu, this should dump something like this on the console:
+<code>
+XmBlackBerry.c:OptionPopupCallback(995) - GPRS modem device /dev/pts/0
+</code>
+
+If you see that, you are in  business ! it found your GRPS modem !
+
+Note **"/dev/pts/0"**, this is going to be your modem device.
+If you have other device it might be another number rather than 0, note this.
+
+
+=====Tethering & connecting to GPRS / EDGE=====
+NOTE: **You will want to have XmBlackberry up to be able to use the BB modem, so if not already running, restart it now.**
+
+
+==== PPP scripts ====
+
+I found multiple pp scripts online, but none of them worked as-is, by combining some i found something working for me:
+
+You will need to create those two files:
+
+WARNING: if you don't use t-mobile, you will have to adjust the 'AT+CGDCONT=1,"IP","wap.voicestream.com"' line.
+
+<code | sudo vi /etc/chatscripts/blackberry>
+ABORT BUSY ABORT 'NO CARRIER' ABORT VOICE ABORT 'NO DIALTONE' ABORT 'NO DIAL TONE' ABORT 'NO ANSWER' ABORT DELAYED ABORT ERROR
+SAY "Initializing\n"
+'' ATZ
+SAY "ATE\n"
+OK 'AT+CGDCONT=1,"IP","wap.voicestream.com"'
+OK 'AT'
+OK 'ATDT*99***1#'
+SAY "Dialing\n"
+</code>
+
+WARNING: If XmBlackberry found your device somewhere else that /dev/pts/0 then adjust the file. T-Mobile use blank user and password, other carriers might want something else, adjust as needed.
+
+<code |  sudo vi /etc/ppp/peers/blackberry>
+debug debug debug
+nodetach
+/dev/pts/0
+115200
+connect "/usr/sbin/chat -f /etc/chatscripts/blackberry"
+nomultilink
+defaultroute
+noipdefault
+ipcp-restart 7
+ipcp-accept-local
+ipcp-accept-remote
+#need lcp-echo turned off, at least for t-mobile, otherwise c0onnectin
+# disconnects after few mn of inactivity.
+# thanks to 'loon' for this info
+lcp-echo-interval 0
+lcp-echo-failure 999
+modem
+noauth
+nocrtscts
+noipdefault
+novj # refused anyway, no point in trying every time
+usepeerdns
+user ""
+password ""
+</code>
+
+
+Once this is setup, you are ready to get connected ... Finally !
+
+''sudo pppd call blackberry''
+
+If all goes well you should get something like this:
+<code | sudo pppd call blackberry>
+Initializing
+Dialing
+Serial connection established.
+using channel 15
+Using interface ppp0
+Connect: ppp0 <--> /dev/pts/0
+sent [LCP ConfReq id=0x1 <asyncmap 0x0> <magic 0x682edbe8> <pcomp> <accomp>]
+rcvd [LCP ConfReq id=0x10 <asyncmap 0x0> <auth chap MD5>]
+.....
+sent [PAP AuthReq id=0x1 user="thibautc-laptop" password=<hidden>]
+.....
+PAP authentication succeeded
+sent [CCP ConfReq id=0x1 <deflate 15> <deflate(old#) 15> <bsd v1 15>]
+......
+local  IP address 10.169.13.231
+remote IP address 169.254.1.1
+primary   DNS address 66.94.9.120
+secondary DNS address 66.94.25.120
+Script /etc/ppp/ip-up started (pid 20529)
+Script /etc/ppp/ip-up finished (pid 20529), status = 0x0
+........
+</code>
+
+Make sure all your other interfaces (wireless/ethernet) are down, and enjoy browsing the web using your BB modem !
+
+TIP: I actually posted this page using my Tethered connection !!
+
+=====Links=====
+I used a compilation of other docs to get to this results, among others:
+
+[[http://sourceforge.net/projects/barry/]]
+[[http://sourceforge.net/projects/xmblackberry]]
+[[http://www.netdirect.ca/software/packages/barry/hacking.php]]
+[[http://www.blackberryforums.com/linux-users-corner/87609-7290-gprs-modem-over-usb-linux-success.html]]
+[[http://www.blackberryforums.com/linux-users-corner/65653-howto-use-bcharge-charge-your-bb-under-linux.html]]
+[[http://www.fibble.org/BlackBerry%208800]]
+[[http://forums.fibble.org/viewtopic.php?t=29]]
+[[http://www.blackberryforums.com/mac-users-corner/67792-8100-bt-modem-works-few-mins-then-disconnects.html]]
+[[http://www.blackberryforums.com/general-8700-series-discussion/56147-8703e-modem-under-linux-works.html]]
+
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>

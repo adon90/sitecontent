@@ -1,0 +1,5 @@
+======JavaOnTracks Anti-Spam functions======
+A few functions to help with encoding / decoding email addresses using javascript when inserting them into a web page, so that they can't be easily harvested by robots.
+
+See the [[http://java-on-tracks.sourceforge.net/javadoc/javaontracks/latest/javadoc/net/jot/web/util/JOTAntiSpam.html | Javadoc here]] for more infos.
+

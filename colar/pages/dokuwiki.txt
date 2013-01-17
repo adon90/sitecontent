@@ -1,0 +1,281 @@
+====== DokuWiki Installation ======
+
+[[http://wiki.splitbrain.org/wiki:dokuwiki | DokuWiki home.]]
+
+===== Upgrade =====
+I installed using emerge on gentoo, however that gave me an old version, so i needed to update.
+<code>
+wget "http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-2006-03-09.tgz?id=projects%3Adokuwiki&cache=cache"
+mv dokuwiki-2006-03-09.tgz\?id\=projects\:dokuwiki\&cache\=cache dokuwiki.tgz
+tar xzvf dokuwiki.tgz
+cd /var/www
+mv dokuwiki dokuwiki.back
+mv /root/dokuwiki-2006-03-09/ dokuwiki
+chown -R apache:apache dokuwiki
+cd dokuwiki
+cp -r ../dokuwiki.back/data/* data/
+cp ../dokuwiki.back/conf/local.php conf/
+cp ../dokuwiki.back/conf/acl* conf/
+cp ../dokuwiki.back/conf/users* conf/
+cp -r ../dokuwiki.back/lib/tpl/thibaut/ lib/tpl/
+cp -r ../dokuwiki.back/lib/plugins/discussion lib/plugins/
+</code>
+
+Also needs to add again the tpl_log method to template.php, see logging section (scroll down)
+, reinstall the sidebar plugin adn fxixing my template (diff)
+
+=====Enabling ACL=====
+(use authentication / permissions)\\
+I wanted only I to be able to edit (most) pages \\
+
+[[http://wiki.splitbrain.org/wiki:acl]]\\
+See conf/users.auth.php and set my user group to "admin" for my user name and define which pages requires admin or not.
+
+=====Plugin manager=====
+[[http://wiki.splitbrain.org/plugin:plugin_manager | Plugin manager infos]]\\
+Enabling it:
+<code php>
+#in conf/local.php
+$conf['pluginmanager'] = 1; 
+</code>
+Then go to Admin / Manage plugins
+
+===== Logging/Stats =====
+Follow this guide:\\
+[[http://wiki.splitbrain.org/wiki:tips:logging]]
+
+=====Enabling Discussions=====
+
+WARNING UPDATE: i now removed this addon because some robots where adding ads automatically .. annoying!
+
+I don't want people to edit my pages, but comments are welcome.\\
+http://wiki.splitbrain.org/wiki:tpl:discussion\\
+Add this at the very top of main.php:
+<code php>
+#Note: do not add any empty lines ! (line feeds)
+<?php
+include(DOKU_PLUGIN.'discussion/discussion.php');
+?>
+</code>
+Search for the following code passage\\
+<code php>
+<!-- wikipage start -->
+<?php tpl_content()?>
+<!-- wikipage stop -->
+</code>
+and after that paste these three lines in\\
+<code>
+<!-- discussion start -->
+<?php tpl_discussion()?>
+<!-- discussion stop -->
+</code>
+
+=====Fixing Code highliting=====
+Code highliting using < code >< /code > is great, however one of the features is to provide links to the api in the listing.\\
+For example in a java file if you have say **String s="xx"**, it will place a link on "String" which will send you to the sun API doc for String (though google)\\
+It's a nice feature, but i rather turn it off for two reason:
+  * When you copy the code (^C) it copies the link url, which will mess the code once pasted in an IDE.
+  * It uses "Keywords", so if a keyword like Entity(clas name) is used in several packages it might send you to the wrong api doc, which is very confusing.
+
+Anyhow here is how i turned if off\\
+Edit [dokuwiki_home]/inc/parser/xhtml.php\\
+And replace around line 582\\
+<code php>
+            // Default to Google I'm feeling lucky
+            $url = 'http://www.google.com/search?q={URL}&amp;btnI=lucky';
+</code>
+By
+<code php>
+             // Default to Google I'm feeling lucky
+            $url='';
+            #$url = 'http://www.google.com/search?q={URL}&amp;btnI=lucky';
+</code>
+In other words set $url to an empty string, which turns off links.
+
+=====Fixing Indexing =====
+By default dokuwiki, only allow pages to be crawled by search engines, if they haven't changed in the last 5 days.\\
+Since i always update my page, it would never get indexed.\\
+
+Also enabling the 'useslash' option makes much friendlier URL's (no parameters),
+so is much easier for spiders to follow (and for user to read).
+
+Creating a sitemap also helps, so enable 'sitemap', and use it in google, [[http://www.google.com/webmasters/sitemaps/login?hl=en | see here]]
+
+So i added this to my local.php
+
+<code php>
+$conf['indexdelay']=0;
+$conf['useslash']=1;
+$conf['sitemap'] = 1
+</code>
+
+To build the initial sitemap index (though it shoudl be automatic)
+<code>
+cd /var/www/dokuwiki
+touch sitemap.xml.gz
+chown apache:apache sitemap.xml.gz
+</code>
+
+Then go here: [[http://www.google.com/webmasters/sitemaps/login]] and register / login \\
+Do "add site" and enter the url of the sitemap http://www.yourwikisite.com/sitemap.xml.gz\\
+
+===== Sidebar plugin =====
+
+//These instructions assume you have a basic understanding of php, html & css and understand how to successfully create your own Dokuwiki template.//
+
+  - Add the two sidebar files, //tplfn_sidebar.php// & //sidebar.css//, to your template folder.
+  - Make the following additions/changes to your template's //main.php// file:
+    * Near the top of your template's main.php file and within the ''<?php ?>'' tags add the following:<code php>// include functions that provide sidebar functionality
+@require_once('tplfn_sidebar.php');
+
+// determine the sidebar class
+$sidebar_class = "sidebar_{$conf['sidebar']['layout']}_{$conf['sidebar']['orientation']}";
+
+</code>
+    * Within the ''<head>'' element and adjacent to any existing style sheet ''<link>'' add the following line: <code html>  <link rel="stylesheet" media="screen" type="text/css" href="<?php echo DOKU_TPL; ?>sidebar.css" />
+</code>
+    * Change the ''<body>'' tag to <code html><body class="<?php echo $sidebar_class; ?>"></code>Note: If your ''<body>'' tag already has a class modify the ''body'' tag as to look similar to:<code html><body class="myclass <?php echo $sidebar_class; ?>"></code>
+    * At the appropriate place within your template add the following line to display the sidebar: <code><div id="sidebar"><?php tpl_sidebar(); ?></div></code> The sidebar comes styled so that the above line can be placed between the closing ''</div>'' of ''div.content'' and ''<div class='clearer'>&nbsp;</div>''
+  - alter the sidebar styles as desired.
+
+===== My template =====
+
+Diff between default and my template
+
+<code diff>
+diff default/design.css thibaut/design.css
+11c11
+<   font: 80% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
+---
+>   font-family: Trebuchet MS, Verdana, Lucida, Helvetica, Arial, sans-serif;
+17a18,23
+> a {
+>   font-family: Trebuchet MS, Verdana, Lucida, Helvetica, Arial, sans-serif;
+>   color: #5555bb;
+>   font-weight: bold;
+>   text-decoration: none;
+> }
+225c231
+<   color:Purple;
+---
+>   color:#5555bb;
+300c306
+<   font-size:80%;
+---
+>   font-size:100%;
+diff default/footer.html thibaut/footer.html
+6c6
+<  * create your own complete new template instead.
+---
+>  * create your own complete new template instead.
+8,9d7
+<
+< $tgt = ($conf['target']['extern']) ? 'target="'.$conf['target']['extern'].'"' : '';
+12,21c10,11
+< <div class="footerinc">
+<   <a <?php echo $tgt?> href="<?php echo DOKU_BASE; ?>feed.php" title="Recent changes RSS feed"><img src="<?php echo DOKU_TPL; ?>images/button-rss.png" width="80" height="15" alt="Recent changes RSS feed" /></a>
+<
+<   <a <?php echo $tgt?> href="http://creativecommons.org/licenses/by-nc-sa/2.0/" rel="license" title="Creative Commons License"><img src="<?php echo DOKU_TPL; ?>images/button-cc.gif" width="80" height="15" alt="Creative Commons License" /></a>
+<
+<   <a <?php echo $tgt?> href="https://www.paypal.com/xclick/business=andi%40splitbrain.org&amp;item_name=DokuWiki+Donation&amp;no_shipping=1&amp;no_note=1&amp;tax=0&amp;currency_code=EUR&amp;lc=US" title="Donate"><img src="<?php echo DOKU_TPL; ?>images/button-donate.gif" alt="Donate" width="80" height="15" /></a>
+<
+<   <a <?php echo $tgt?> href="http://www.php.net" title="Powered by PHP"><img src="<?php echo DOKU_TPL; ?>images/button-php.gif" width="80" height="15" alt="Powered by PHP" /></a>
+<
+<   <a <?php echo $tgt?> href="http://validator.w3.org/check/referer" title="Valid XHTML 1.0"><img src="<?php echo DOKU_TPL; ?>images/button-xhtml.png" width="80" height="15" alt="Valid XHTML 1.0" /></a>
+---
+> <div align="center" class="footerinc">
+>   <a target="_blank" href="<?php echo DOKU_BASE; ?>feed.php" title="Recent changes RSS feed"><img src="<?php echo DOKU_TPL; ?>images/button-rss.png" width="80" height="15" alt="Recent changes RSS feed" border="0" /></a>
+23c13
+<   <a <?php echo $tgt?> href="http://jigsaw.w3.org/css-validator/check/referer" title="Valid CSS"><img src="<?php echo DOKU_TPL; ?>images/button-css.png" width="80" height="15" alt="Valid CSS" /></a>
+---
+>   <a target="_blank" href="http://www.php.net" title="Powered by PHP"><img src="<?php echo DOKU_TPL; ?>images/button-php.gif" width="80" height="15" alt="Powered by PHP" border="0" /></a>
+25c15
+<   <a <?php echo $tgt?> href="http://wiki.splitbrain.org/wiki:dokuwiki" title="Driven by DokuWiki"><img src="<?php echo DOKU_TPL; ?>images/button-dw.png" width="80" height="15" alt="Driven by DokuWiki" /></a>
+---
+>   <a target="_blank" href="http://wiki.splitbrain.org/wiki:dokuwiki" title="Driven by DokuWiki"><img src="<?php echo DOKU_TPL; ?>images/button-dw.png" width="80" height="15" alt="Driven by DokuWiki" border="0" /></a>
+Common subdirectories: default/images and thibaut/images
+diff default/layout.css thibaut/layout.css
+29c29
+<   float:right;
+---
+>   float:center;
+32c32
+<   text-align:right;
+---
+>   text-align:center;
+37c37
+<   color: __medium__;
+---
+>   color: #8888ee;
+diff default/main.php thibaut/main.php
+2a3,10
+>
+> <?php
+> include(DOKU_PLUGIN.'discussion/discussion.php');
+> tpl_logFile();
+> @require_once('tplfn_sidebar.php');
+> $sidebar_class = "sidebar_{$conf['sidebar']['layout']}__{$conf['sidebar']['orientation']}";
+> ?>
+>
+25a34
+>   <link rel="stylesheet" media="screen" type="text/css" href="<?php echo DOKU_TPL; ?>sidebar.css" />
+30c39
+< <body>
+---
+> <body class="<?php echo $sidebar_class; ?>">
+38,40d46
+<       <div class="pagename">
+<         [[<?php tpl_link(wl($ID,'do=backlink'),$ID)?>]]
+<       </div>
+52,53c58
+<         <?php tpl_button('edit')?>
+<         <?php tpl_button('history')?>
+---
+>         <?php tpl_button('login')?>
+81,82c86
+<
+<   <div class="page">
+---
+>   <div class="page" style="float:right; width:77%; margin-right:1%; margin-left:0px">
+86c90,97
+<   </div>
+---
+>     <?php tpl_discussion()?>
+>   </div><!--end page-->
+>
+>   <div id="sidebar"><?php tpl_sidebar(); ?></div>
+>
+>
+> <div class="clearer">&nbsp;</div>
+>
+88d98
+<   <div class="clearer">&nbsp;</div>
+112,116d121
+<         <?php tpl_button('admin')?>
+<         <?php tpl_button('profile')?>
+<         <?php tpl_button('login')?>
+<         <?php tpl_button('index')?>
+<         <?php tpl_button('top')?>&nbsp;
+Only in thibaut: sidebar.css
+diff default/style.ini thibaut/style.ini
+35,36c35,36
+< __extern__    = "#436976"
+< __existing__  = "#090"
+---
+> __extern__    = "#5555bb"
+> __existing__  = "#5555bb"
+Only in thibaut: tplfn_sidebar.php
+</code>
+
+===== Extra smiley's =====
+
+Added to conf/smileys.conf
+<code>
+NOTE        note.gif
+WARNING     warning.gif
+</code>
+
+Added those images to /lib/images/smileys/ \\
+{{note.gif}} {{warning.gif}}
+
+~~DISCUSSION~~

@@ -1,0 +1,43 @@
+====== JOT standard tag overwriting Example ======
+
+===== Java View =====
+<code | Java>
+	public void prepareViewData() throws Exception
+	{
+                //blocks
+		JOTViewBlock block1=new JOTViewBlock();
+		block1.setVisible(false);
+		
+		JOTViewBlock block2=new JOTViewBlock();
+		block2.setContent("newText");
+
+		addBlock("block1", block1);
+		addBlock("block2", block2);
+        }
+</code>
+
+
+
+===== HTML view (template) =====
+<code | Template>
+<html>
+<body>
+<jot:block id="block1">
+This block will be hidden
+</jot:block>
+<jot:block id="block2">
+This content will be replaced
+</jot:block>
+<jot:block id="missing"/>
+</body>
+</html>
+</code>
+
+===== Generated HTML =====
+<code | Html>
+<html>
+<body>
+newText
+</body>
+</html>
+</code>

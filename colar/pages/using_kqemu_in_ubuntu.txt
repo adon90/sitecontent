@@ -1,0 +1,43 @@
+======Using KQEMU in Ubuntu======
+
+QEMU allows you to run virtula images of OS's (like vmware).
+KQEMU is a kernel module for qemu, it **GREATLY** improves QEMU performance.
+
+KQEMU needs to be compiled from source (since it's a kernel module), however we will use module-assistant to greatly simplify this process.
+<code>
+sudo apt-get install module-assistant kqemu-source
+sudo module-assistant auto-install kqemu
+</code>
+
+NOTE: **After a kernel upgrade you will need to rerun ''sudo module-assistant auto-install kqemu'' **
+
+
+Now. it's installed, however we need to do a few more things:
+<code | creating kqemu user & group>
+sudo addgroup --system kqemu
+sudo adduser $USER kqemu 
+# this will "update" your group list in your current shell, so you are part of 'kqemu' group right away.
+newgrp kqemu
+</code>
+Edit UDEV rules 
+<code | sudo vi /etc/udev/rules.d/60-kqemu.rules>
+KERNEL=="kqemu", NAME="%k", GROUP="kqemu", MODE="0660" 
+sudo /etc/init.d/udev reload
+</code>
+Load kqemu module now:
+<code | manually load kqemu right away>
+sudo update-modules
+sudo modprobe kqemu
+</code>
+If you want it to start automatically at boot add this to /etc/modules
+<code | Add to /etc/modules>
+kqemu
+</code>
+
+Now we can start qemu and it should use kqemu now (it will show a warning on the console if it fails to use kqemu).
+
+''qemu -m 500M debian.qcow''
+
+NOTE: **If you don't have any qemu images yet, [[creating_a_qemu_image_and_installing_debian_in_it | See here how to create one.]]**
+
+

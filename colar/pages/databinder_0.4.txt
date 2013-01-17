@@ -1,0 +1,12 @@
+====== DataBinder 0.4 install ======
+
+After getting wicket1.2 and databinder 0.4 [[http://technically.us/n8/ | here]]\\
+extract both files, and in each folder (wicket & databinder) run ''mvn install''
+
+
+Then go in your project folder and edit pom.xml\\
+replace the databinder dependency from 0.3 to 0.4\\
+
+That should be all that is needed.
+
+Might want to read the [[http://wicket-wiki.org.uk/wiki/index.php/Migrate-1.2 | wicket 1.2 migration guide]]

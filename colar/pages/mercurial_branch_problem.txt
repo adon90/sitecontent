@@ -1,0 +1,36 @@
+======Mercurial / Bitbucket branch problem======
+
+I want to create a branch to maintain an older version of my project.
+
+Here is what I did:
+''cd myprj''
+
+I want to create my branch from rev 833
+''hg update -r 833''  
+
+''hg branch newbranch''
+
+''hg commit -m "made a new branch from revision 833"''
+
+**It doesn't want to create the branch unless i use -f, is that normal ?**
+''hg push -f ''      
+
+I think i'm already in the branch,  but just to make sure:
+''hg up -C newbranch''
+
+Then I make a change to a file
+''echo "1" >> dummy.txt''
+
+Then I commit/push, expecting it will commit to the branch 'newbranch'
+''hg commit "Change to dummy.txt"''
+
+''hg push''
+
+Now when I look in bitbucket, **it appear my change went into the tip and not the branch**.
+
+Also accoording to Merucurial doc, if i want to switch back to the "trunk", i would do:
+''hg up -C default'' or ''hg up -C main''
+
+But **Bitbucket does not have any default or main branch** even though the doc seem to say it should have created 'default' on the very first commit to that project
+
+**Anybody knows what I'm doing wrong ????**

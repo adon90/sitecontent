@@ -1,0 +1,212 @@
+======Berry4All FAQ's & Troubleshooting======
+Tip: If it does not want to connect and you have a 3G service, **try setting your phone to 2G**, apparently some providers block tethering when in 3G mode ... it's sometimes possible to switch back to 3G after the connection is established
+
+
+TIP: I was told by several peolle that on the newest debian/ubuntu (11.04) distros, ppd would only work with full paths to config files
+So you might need to edit your provider file (ex: bbtether/conf/att and use a full path, example, replace:
+''connect "/usr/sbin/chat -f conf/claro-chat" ''
+with something like:
+''connect "/usr/sbin/chat -f /home/john/bbtether/conf/claro-chat" ''
+
+
+=====FAQ's=====
+TIP: **If you need help, you can contact me through twitter [[http://twitter.com/tcolar|@tcolar]].**
+
+===How do I make a one click launcher / start icon ===
+In gnome, right click the desktop and select "create launcher"
+in the launcher tab / command field enter: (** replace /home/me/berry4all/ with the path you installed berry4all at**)
+
+''/bin/bash -c "cd /home/me/berry4all/ && gksudo ./berry4all.sh"''
+
+Click it to start it.
+
+===My DNS (/etc/resolv.conf) does not get updated on it's own, can I make a script to do that too ? ===
+Sure, look at berry4all output to find what the DNS server for tethering is, lines like those:
+<code>
+...
+primary DNS address 75.116.63.154
+secondary DNS address 75.116.127.154
+...
+</code>
+
+Then create(editor) a resolv-berry.conf file in the berry4all folder
+<code | resolv-berry.conf>
+nameserver 75.116.63.154
+nameserver 75.116.127.154
+</code> 
+
+Create(editor) a berry4all launch script, like so (same folder):
+<code | berry4all-mine.sh>
+cp /etc/resolv.conf resolv.conf.back
+cp resolv-berry.conf /etc/resolv.conf
+./berry4all.sh
+#cp resolv.conf.back /etc/resolv.conf
+</code>
+
+Then run it from command line like so:
+
+''cd /home/me/berry4all'' ''sudo ./berry4all-mine.sh''
+
+Or create a gnome shortcut with command like this:
+
+''/bin/bash -c "cd /home/me/berry4all/ && gksudo ./berry4all-mine.sh"''
+
+Was told (Gus K.) that on Fedora/RH, this works better:
+''cd /tmp/bbtether && beesu bash ./berry4all-mine.sh''
+
+
+===Will i be charged by my provider - How much===
+It is hard to answer this, every provider/plan is different, you can try to find that info on the provider plan / site.
+Or you can try it just a little, say 1mb and check the bill :-)
+Either way usually you will want some sort of unlimited data plan, some providers might also have a dedicated tethering plan.
+Myself i use the t-mobile 19.99 unlimited data plan, note that unless you have a special tethering plan, it's probably best not to abuse tethering usage, many provider have an undocumented 5GB monthly cap.
+Either way i say, be reasonable, otherwise they might all start charging extra which would suck.
+
+**Usually you need an unlimited data plan or tether plan**.
+
+T-mobile usually works and does not charge anything, though it's slow..
+
+Verizon, if you don't have a tether/data plan, will present you with a page asking to sign-up : 15$/month I think.
+
+Many providers have an undocumented 5GB monthly cap .. but seriously that's a lot !
+
+===There is no config for my provider yet===
+The best thing then is to try and modify the generic config files.
+They are named ''bbtether/conf/generic'' and ''bbtether/conf/generic-chat''
+
+At the minimum, you will need to change the APN in ''generic-chat'' (replace 'wap.voicestream.com')
+Example:
+''OK 'AT+CGDCONT=1,"IP","wap.myprovider.com"'''
+
+You might also need to set the correct 'user' and 'password' values in the ''generic'' file
+''user "web"''
+''password "web"''
+
+Sometimes the 'phone number' line in ''generic-chat'' needs to be changed, examples:
+''OK 'ATD*99#' ''
+''OK 'ATD*99***1#' ''
+''OK 'ATD*99***4#' ''
+''OK 'ATDT#777' ''
+
+Here are some good links to find the proper APN, user & password for your phone providers:
+[[http://www.quickim.com/support/gprs-settings.html]]
+[[http://www.unlocks.co.uk/gprs_settings.php]]
+
+TIP: **If you do get a new provider working please send me the 2 config files and the name of the provider so I can add it to the standad distribution**
+
+===What speed to expect===
+**Here is some speed data for information.**
+With my provider t-mobile, it uses GPRS or EDGE (preferably), according to [[http://en.wikipedia.org/wiki/General_Packet_Radio_Service|this wikipedia page]] the max download speed are 80kbps for GPRS and 236kbps for Edge), that's in kilo**bit** per second, your browser often shows speed in KB (kilo**BYTES**), so they will appear 8 times slower (~10KB to ~30KB).
+In my download test i got between 8KBs and 27KBs (or 2x to 6x modem speed) so that seems right.
+If you are on a 3G network it should be faster obviously. for example EV-DO can go up to 700kbits/s (~12 times modem or about a low end DSL). One user on Sprint(CMDA) reported ~650kbps.
+
+**It IS possible to get faster speed by**:
+Editing your ppp file (ex: conf/tmobile) and **change the line that says ''115200'' to a higher value** (power of 2),
+for example: ''230400'' or  ''460800'' or ''921600'', the higher the better, as long as your phone can handle it.
+
+**You can also improve performance quite a lot by turning OFF logging** (especially verbose logging)
+
+=====Troubleshooting=====
+===Firefox says "Offline Mode"===
+On some version of linux (ubuntu) firefox goes into offline mode if the NetworkManager is not connected.
+You can fix this by de-selecting (in firefox) **File -> Work Offline.**
+===It fails to connect .. or disconnects right away===
+I've been told by multiple users that **it sometimes does NOT work in 3G mode**.
+In this case you can switch the phone to 2G only(Edge) to tether.
+So far I don't know why it is the case (I don't have 3G myself).
+===It disconnects after a few minutes===
+Try commenting out ''novj'' in the conf file for your provider.
+===It's connected by i can't seem to browse to anything ===
+Check that the /etc/resolv.conf got updated correctly, on some systems it does not.
+See: [[#my_dns_etc_resolv_conf_does_not_get_updated_on_it_s_own_can_i_make_a_script_to_do_that_too_]]
+===No Carrier===
+If you get "No Carrier", you probably need to fix the pppd config.
+Some like Verizon require you to put your actual phone number in there.
+so see the file conf/yourprovider  and see if you need to edit anything.
+
+Also it is possible your plan juts has tethering blocked (you might have to call them to get it turned on)
+
+**It seems Sprint has blocked tethering all together since around Oct 09 !**
+[[http://community.sprint.com/baw/message/124503]]
+===Why needs to run as root?===
+Basically for it to work without being root, we need to tell UDEV (which detects and setup the device)to set different permissions.
+
+Here is how it works and what to do in details: 
+[[http://bitbucket.org/tcolar/berry4all/src/tip/src/bbtether/udev/README.txt]]
+
+Or for the quick version (**you probably should still check the infos in the previous link**)
+<code | Make RIM device WORLD read/writable>
+cd bbtether
+sudo cp udev/99-bbtether.rules /etc/udev/rules.d/
+sudo udevcontrol --reload-rules
+# unplug and replug blackberry
+# verify permissions: ls /dev/usbdev* -lai
+</code>
+WARNING: If you use any PPP options that requires to be root, you will need to removed them, for example you cannot use "noauth" in your ppp config file (ex : conf/tmobile)
+
+You should now be able to use berry4all as a regular user.
+===Can't claim interface===
+Another program is probably holding the interface:
+try to look at ''lsmod'' output or ''dmsg'' after plugging the device.
+
+**OS X: on mac, the "PocketMac" software grabs the blackberry and will not let Berry4All Talk to it !**, you will have to de-install it, and maybe also run ''sudo rm -rf /System/Library/Extensions/Blackberry*'', then reboot. You can use the command''sudo kextstat'' to try to find find what is grabbing the BB.
+
+===Connects to modem but no internet===
+**This is VERY important, if not set correctly, you won't be able to authenticate/connect**
+You have to make sure your APN is set correctly in the blackberry itself.
+See [[http://pinstack.com/carrier_settings_apn_gateway.html | Here]] for correct settings per country/carrier.
+You enter those settings(except DNS) on the BB under options/adv. options/TCP
+I think, you **have to** reboot the BB for this change to take effect (remove battery).
+===Can't ping===
+Don't rely on ping, it's often blocked / not working when tethering.
+Just browse the web: ex: Firefox (make sure it's not in offline mode).
+===PPPD won't connect:===
+You mihgt have to create your own ppp files in the conf folder (for example att and att-chat)
+**If you get a new provider working, please send it to me.**
+
+**ppp password**: For some provider you will need to enter your login/password (ex: see conf/verizon)
+===Blackberry does not get a DNS /IP address & Serial loopback errors===
+First, make sure no other pppd are running (sudo killall pppd -9)
+or maybe some other bbtether process (check with ''ps axf | grep bbtether''), kill if any.
+
+Also make sure the APN is set correctly in your phone (see above)
+
+===Got an IP, yet does not seem to work===
+First, you need to make sure you have **"usepeerdns"** in the ppp conf file (ex: conf/tmobile) for this to work.
+Still, **some linux distros do not update /etc/resolv.conf properly**, the DNS server assigned by PPPD should show in there.
+If it's not there, pppd probably wrote it somewhere else (ex: /etc/local/resolv.conf or /etc/pppd/resolv.conf), you either need to copy it manually, or make a link or better, fix the /etc/ppp/ip-up so it writes to /etc/resolv.conf .
+
+Also if you get an error in the logs ''/usr/sbin/pppd: The remote system is required to authenticate itself'',
+you will want to add/uncomment the option ''noauth'' to your conf file (ex: conf/sprint)
+
+===Resetting===
+Sometimes it seems the modem works best if you unplug the blackberry, switch it completely off and back on(reboot) and then try again (it should not be necessary anymore).
+
+===Device busy errors===
+You might have another kernel module grabbing the device.
+
+BBTether will try to remove berry-charge module for you (causes issues)
+
+You can also try this (not sure it's necessary):
+===Not finding Modem Endpoints(-1,-1)===
+If bbtether does not find any endpoints (or only one pair) that is not right (there should be at least 2 pairs)
+I have seen this happen before on bad blackberry firmware.
+It gets resolved by upgrading the Blackberry firmware (from windows)
+===Kernel 2.6.28 broken libusb===
+Kernel 2.6.28 is broken with libusb, so don't use that kernel or patch it.
+See [[http://marc.info/?l=linux-usb&w=2&r=1&s=libusb+broken+on+2.6.28+x86_64&q=b|bug report here]]
+===ImportError: No module named usb===
+That emans pyusb is not installed properly, you can try reinstalling it, or on OSX you might have to [[bbtether_compile_pyusb|compile it]].
+===Could not determine local IP address===
+If you see the error "Could not determine local IP address" in the log, you can try adding/removing the option 'noipdefault' to the ppp config file( NOT the chat file) and see if that helps.
+===3G mode and no connection===
+If it does not want to connect and you have a 3G service, try setting your phone to 2G, apparently some providers block tethering when in 3G mode ... it's sometimes possible to switch back to 3G after the connection is established
+===Other issues===
+You can try adding the "-m" option (data mode) and see if that helps.
+=====Getting Help=====
+You will want to run with the verbose option in preferences(or -v option in command line)
+And send me the log file: [[mailto:tcolar@colar.net]]
+
+I might need you to provide me an USB trace from windows if i cannot reproduce the problem or don't have the same hardware.
+In this case see: [[Creating an USB Trace under windows]]
+

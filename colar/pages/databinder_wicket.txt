@@ -1,0 +1,43 @@
+======Databinder/Wicket======
+
+Well I continued my reviews of frameworks solutions, and the more i look the more i find :-) \\
+Seriously there must be like 50+ out there.
+
+Anyhow, i had settled on Trails which is pretty nice, and relies on: \\
+- Spring \\
+- Hibernate \\
+- Tapestry \\
+I like hibernate a lot for the DB part, and i like tapestry because it keeps html "clean", as in ediatble in regular apps like Dreamweaver. Anything that does not missed the point IMO.\\
+(ie: JSF generated pages are a joke !)\\
+
+Anyway Trails is all good for that and i got it intstalled and running, but after using it for a while i still find this too heavy for what i want to do (simple and lightweight).
+
+So anyway while browsing some more i came accross [[http://wicket.sourceforge.net/ | wicket]] which basically is like tapestry but even simpler and cleaner.\\
+It keeps HTML pure, which will make web designer happy, yet is powerfull and best of all uses simple components objects !!
+
+I was all excited, but then i figured, it missed something for managing the database, but i figured i could just use hibernate with wicket.
+
+That's when i found [[http://databinder.net/ | DataBinder]], which is basically Wicket + Hibernate" bundled and ready to use.
+
+This seem perfect for me.\\
+I just installed it and will start playing with it. 
+
+The install was a little more involved that expected:\\
+[[DataBinder | My DataBinder Installation notes]] \\
+But overall it seem to be definitely worth it.
+
+=====Update=====
+Well yesterday i just got Databinder starting to work right.
+I was having a [[wicket_databinder_code#Model not mapped error | tricky issue]]
+
+Anyhow, now I'm ready to start testing the authorization/authentication stuffs in wicket 1.2 (beta).
+
+The great thing is Databinder 0.4 built on top of wicket 1.2 just got release today !\\
+[[http://technically.us/n8/ | It's available here]]
+
+The cool thing is that the examples have been updated to use Ajax, while i'm not a big fan of ajax (ie: javascript is crap), it's good for the end user, and wicket ajax libraries apparently make a great job of hiding the javascript goriness and being very browser compliant.
+
+Time to install all this !
+
+Here are my [[DataBinder 0.4 | install notes]].
+

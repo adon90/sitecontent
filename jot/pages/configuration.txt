@@ -1,0 +1,144 @@
+====== Configuration ======
+
+The Configuration is done in the jot.properies file.
+
+===== jot.properties Location =====
+
+The file will automatically be found and parsed at run time. 
+
+Here is where the file is looked for (in this order):
+  * If the "jot.prefs" java property was defined (java - Djot.prefs=c:\jot.properties myApp), then we will use that file.
+  * In the application runtime directory. If the file jot.properties is found in the runtime directory (ie: System.getProperty("user.dir")), it will use it.
+  * In the user OS home directory (ie: java System.getProperty("user.dir")).
+  * In c:\etc\ (windows) or /etc/ (others)
+
+===== Configuration Elements =====
+
+
+==== Logging ====
+  * jot.logger.levels=
+Define which log levels to Enable, levels (0-50) are to be used by the user, levels 80-99 are used internally by JOT.\\
+See [[log levels| here for a description of the log levels]].\\
+Example: jot.logger.levels=0-9,80-99
+
+  * jot.logger.folder.windows=
+Define the folder where the log files should be stored, when the application is run on windows\\
+Example: jot.logger.folder.windows=c:\\tmp
+
+  * jot.logger.folder.others=
+Define the folder where the log files should be stored, when the application is run on windows\\
+Example: jot.logger.folder.windows=/tmp
+ 
+  * jot.logger.print_stack_trace=
+This should be set to true or false, if enabled when an exception occurs and logged with JOTLogger.throwException(), the full Exception trace will be logged.  Defaults to true.\\
+Example: jot.logger.print_stack_trace=true
+
+  * jot.logger.print_to_console=
+Set this to true if you want all logged entries to also be dumped to the console, this is useful foe debugging. Defaults to false. 
+Example: ot.logger.print_to_console=false
+
+==== Database(s) ====
+If you are planning to use a database, you should define it here.
+
+IF you are going to use the built-in file system database (jotdb), you should set those:
+  * db.fs.root_folder.windows=
+This is the folder where the database data will be stored (when running on windows)\\
+Example: db.fs.root_folder.windows=c:\\jotdatabase
+
+  * db.fs.root_folder.others=
+This is the folder where the database data will be stored (when not running on windows)\\
+Example: db.fs.root_folder.others=/var/jotdatabase
+
+  * jot.db.properties_files=
+Set your database(s), this is a comma separated list of database configurations (properties files)\\
+The file should be in the same folder as jot.properties\\
+Example: jot.db.properties_files=defaultDb.properties, myOtherDb.properties
+
+Here is an example database property file (defaultDB.properties):
+<code properties>
+#db type   either 'jdbc' (for standard jdbc databases) or 'jotdb' (jot builtin plain-text file system database)
+db.type=jdbc
+#unique name you choose to identify this DB (name you will use as 'storagename' in the program)
+db.name=default
+
+#If you have a jdbc type database: 
+#required
+db.jdbc.url=jdbc:postgresql://127.0.0.1:5432/jotdb
+db.jdbc.password=
+db.jdbc.driver=org.postgresql.Driver
+db.jdbc.user=postgres
+
+#optional options
+#db.jdbc.max_connections=10
+#db.jdbc.is_unicode=false
+# Database encoding ie:Cp037. Leave encoding undefined to use the database default encoding.
+#db.jdbc.encoding=
+</code>
+
+
+
+==== Mail server(s) ====
+If you are planning to send emails from your program and use the mail API, you should define a mail server.\\
+FIXME TBD: Also If you want to receive Exception trace/debugging infos when using JOTLogger.emailToDev(), you should define your mail server as well.
+
+  * jot.mailer.properties_files
+Set your mail servers, this is a comma separated list of mail servers configurations (properties files)\\
+The file should be in the same folder as jot.properties\\
+Example: jot.mailer.properties_files=defaultMailer.properties
+
+Here is an example mail server property file (defaultMailer.properties):
+<code properties>
+mailer.name=default
+mailer.from=me@company.com
+mailer.domain=company.com
+mailer.host=mail.company.com
+mailer.replyTo=me@company.com
+mailer.bounceTo=me@company.com
+mailer.port=25
+</code>
+
+
+===== Example jot.properties file =====
+<code properties>
+##Logger
+# enter a list of the log levels you want enabled. Ie: 0-9,11,12
+# 80 to 89 are jot logs, 90 to 95 are SQL logs
+jot.logger.levels=0-9,80-99
+# folder where the log files (jot*.log) will be saved, ie: /var/log/jot/
+# WARNING: Backslashes have to be doubled.
+jot.logger.folder.windows=c:\\tmp
+jot.logger.folder.others=/tmp
+# Display the full java trace when JOTLogger.throwException() is called (default: true)
+jot.logger.print_stack_trace=true
+# Outputs all logs to the console too (not just the log file), for debugging(Default: false)
+jot.logger.print_to_console=true
+
+## Databases : comma separated list of DB config files (properties)
+# you can specify either  just a file name (should be located in same folder as this), or a full(absolute) path
+jot.db.properties_files=defaultDb.properties
+# When using the builtin "filesystem" database, we need to define a database data folder
+db.fs.root_folder.windows=c:\\jotdatabase
+db.fs.root_folder.others=/var/jotdatabase/
+
+## Mail servers : comma separated list of Mail server config files (properties)
+# you can specify either  just a file name (should be located in same folder as this), or a full(absolute) path
+jot.mailer.properties_files=defaultMailer.properties
+</code>
+
+
+
+
+===== Debian / java policy =====
+
+Exception starting filter JOTMainFilter
+java.security.AccessControlException: access denied (java.io.FilePermission /tmp read)
+
+
+vi /etc/tomcat5/policy.d/04webapps.policy
+<code>
+grant{
+    permission java.io.FilePermission "/tmp", "read,execute";
+    permission java.io.FilePermission "/tmp/jot*", "read,write,execute,delete";
+    #permission java.util.PropertyPermission "jot.prefs", "read";
+  };
+</code>

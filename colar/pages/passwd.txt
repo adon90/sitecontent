@@ -1,0 +1,13 @@
+
+===p1 - sens===
+TCU, trade, aexpr
+
+===p2 - wrk===
+wrk
+mykplan : teabow42
+
+===p3 - norm ===
+amz, twit, fb
+
+===p4 stup ===
+others

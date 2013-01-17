@@ -1,0 +1,62 @@
+======Migrate Git directory to it's own repository======
+
+So say we have an existing Git project "CoolProject" like this
+  - projects/coolproject/
+  - projects/coolproject/subproject/
+
+So it was all and well, but now we think it would make much more sense for **subproject** to be it's own project with it's own git repo.
+
+But we'd like to move that without loosing all the history and stuff.
+
+As usual Git can do it, as usual it's not all that easy to figure out:
+
+First we create a temporary clone of the project in /tmp
+
+<code>
+git clone --no-hardlinks git@bitbucket.org:myusername/coolproject.git /tmp/coolproject
+</code>
+
+Then we make SubProject the root, removing the rest, by using git filter-branch
+
+<code>
+cd /tmp/coolproject
+git filter-branch --subdirectory-filter subproject  --prune-empty --tag-name-filter cat -- --all
+</code>
+
+Then we create a new clone of that for a clean-trimmed down project:
+
+<code>
+ git clone file:///tmp/coolproject/ /tmp/subproject
+</code>
+
+Now do some cleanup to remove all history stuff we no longer care about and reduce the repo size:
+
+<code>
+cd /tmp/subproject
+ git reflog expire --expire=now --all
+git repack -ad
+git gc --prune=now
+</code>
+
+Now maybe we have created an empty repo for subproject on bitbucket or somewhere else, so we can do the "initial" push/mirror there:
+<code>
+git push --mirror git@bitbucket.org:myusername/subproject.git
+</code>
+ 
+Finally, now that it's in a clean state, we can pull the clean project from the new repo:
+
+<code>
+cd ~/projects/
+git clone git@bitbucket.org:myusername/subproject.git
+</code>
+
+Now we have a nice new clean subproject project in **projects/subproject** , only thing left would be to remove SubProject from CoolProject and push that if you want to
+
+<code>
+cd ~/projects/coolproject/
+git rm -r subproject
+git commit -m "removal of subproject"
+git push
+rm -rf subproject
+</code>
+

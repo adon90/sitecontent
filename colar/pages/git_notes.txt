@@ -1,0 +1,37 @@
+======Git Notes======
+
+Notes to myself on using Git.
+Started using Git at new job.
+
+Since i wrote that, I've started using SourceTree a most excellent GIt GUI.
+
+WARNING: As of Netebans 7.0, you still can NOT switch branch ("change revision" create a separate head)
+
+
+===Fix in a branch and then merge into trunk===
+<code>
+# switch to 1.8.x branch
+git checkout 1.8.x   
+git pull origin 1.8.x
+# commit & push my change(s)
+git commit -a -m "various fixes :)"
+git push origin 1.8.x
+
+# Note: if merging all, use git merge ... want to merge specific changeset here
+
+# Now merge that changeset into trunk/master and push it:
+git checkout master
+# 900510fd is the changeset number
+git cherry-pick 900510fd
+git commit
+</code>
+
+===Finding my own commits===
+<code>
+ git log --author thibaut
+</code>
+
+===Look at a changeset===
+<code>
+git show e9689e933be08f0c7ce6699d3d35d42200efb213
+</code>

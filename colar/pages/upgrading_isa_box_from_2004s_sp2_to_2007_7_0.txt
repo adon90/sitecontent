@@ -1,0 +1,265 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======Upgrading ISA box from 2004S SP2 to 2007 / 7.0 SP3======
+
+We want to upgrade our ISA boxes (B2B / B2C servers and developper workstations) to 2007 SP1 (7.0)
+We are currently on 2004s SR2 (SP13)
+
+Those boxes are Linux86_64
+
+WARNING: 2007 requires 64 bits, so other windows32 and linux32 boxes had to be reinstalled fully with 64bits OS.
+
+=====SAP Doc about the upgrade:=====
+[[https://websmp204.sap-ag.de/crm-inst]]
+crm products -> crm server components -> platform/DB
+
+Upgrade to 2007 doc:
+/media/sap/sapdocs/2007/upgrade_java.pdf  ([[https://websmp204.sap-ag.de/~sapidb/011000358700001185282007E]])
+
+Check the notes for the upgrade:
+[[https://websmp130.sap-ag.de/sap(bD1lbiZjPTAwMQ==)/bc/bsp/spn/sapnotes/index2.htm?numm=1072161]]
+
+=====Preparation=====
+TIP: **Make sure the admin password in the secure store in configtool is up to date with the actual administrator passord**, otherwise it will fail halfway through.
+To do that you can use visual admin to log into the system as "administrator" once you have the password right, go in configtool secure store and copy it there under "admin password" and then press "update" and save, then restart the j2ee (stopsap, startsap).
+
+
+TIP: **You will also want to make sure you know the correct SDM password**, start the SDM (/usr/sap/S2C/JC01/SDM/program/RemoteGui.sh) and connect to the system to make sure you have the right password, the SDM password does not change when you chnage the j2ee password, so oftentimes it's different (ex: the password you choose during the original installation).
+
+
+TIP: **You will also want to go enter a password for the ume admin or it will fail at step 72, so better to fix it now, see [[#running_jupgrade]]**
+
+
+
+Mount the sap cd from my machine:
+''smbmount //frenchie/sapcd /mnt/sapcd/ -o username=th****''
+
+  * Upgrade the JVM -> We are already of to date (1.4.2.x)
+  * Upgrade the SDM -> we have a recent enough version > 2004SP15
+  * Upgrade the DB(oracle 10.2+ or maxdb 7.00.33+) -> already up to date on some box(10.2.x)
+Patching DB:
+On a developer machine (Linux64) we had to patch MaxDB, since we where at 7.6.00.18 and we need >7.6.00.33.
+See [[Patching MaxDB]]
+
+  * **Undeploy obsoleted components if necessary**
+As explained in the SAP note, you might have to undeploy this removed component with SDM if you have them (**WE DON'T have them**)
+<code>
+ tc/mobile/admin/ea
+ tc/mobile/admin/mds/service
+ tc/mobile/admin/services
+ tc/mobile/admin/ui
+ tc/mobile/admin/ump
+ tc/mobile/monitor/ui
+</code>
+
+<code | undeploy with SDM>
+xhost +
+su - sidadm
+cd /usr/sap/SID/JC00/SDM/program/
+export DISPLAY=:0.0
+./RemoteGui.sh 
+</code>
+connect with password
+go to undeployment
+select the components listed earlier and click undeploy / next / next / finish ... close SDM.
+
+  * **Create the jupgrade directory:**
+<code>
+sudo mkdir /usr/sap/jupgrade
+sudo chown sidadm:sapsys /usr/sap/jupgrade
+sudo chgrp 755 /usr/sap/jupgrade
+</code>
+
+  * **Get latest JUpgrade patches**
+Search for latest "FIX_J_CRM60" at sap marketplace ([[https://websmp201.sap-ag.de/swdc]])
+For us it is: JCRM60_8-20000914.SAR
+
+I Downloaded and extracted it with sapcar (you migth have to download sapcar for your OS first)
+''../../Others/SAPCAR_0-10003688_lin32_.exe -xvf JCRM60_8-20000914.SAR''
+
+Copy it into /usr/sap/jupgrade
+<code>
+sudo cp /mnt/sapcd/SAP_DVDS/2007_SR1/FIX_J_CRM60.UPG /usr/sap/jupgrade/
+sudo chown sidadm:sapsys /usr/sap/jupgrade/FIX_J_CRM60.UPG
+</code>
+
+  * **GET SP3 packages**
+The CD is SP0, a lot of fixes where released with SP3, so we want that
+Got SP3 stuffs from: http://service.sap.com/sp-stacks
+Some package can't be downloaded, they that need approval in solution manager(annoyance), allow them with solution manager
+
+See here [[How to approve packages for download in solution manager]]
+  * **Copy new packages componentss to EPS/in:**
+<code>
+#remove any old packages from EPS/in
+sudo rm -rf /usr/sap/trans/EPS/in/*
+#  SKIP copy from new java component DVD</del>
+#  SKIP sudo cp /mnt/sapcd/SAP_DVDS/2007_SR1/51033093_java_components/J2EE_OSINDEP/UT_CRM/*sca /usr/sap/trans/EPS/in/
+# copy downloaded patches for SP1 (see previous listing)
+sudo cp /mnt/sapcd/PATCHES_SP\'s/2007/SP03/* /usr/sap/trans/EPS/in/
+# also copy whichever platform-Dependant things we need (igs,kernel)
+sudo cp /mnt/sapcd/PATCHES_SP\'s/2007/SP03/Linux_64/* /usr/sap/trans/EPS/in/
+# and set permissions correctly
+sudo chown sidadm:sapsys /usr/sap/trans/EPS/in/*
+sudo chmod 755 /usr/sap/trans/EPS/in/* 
+</code>
+
+TIP: Once one box (QA) is done succesfully, we can just copy over the components through SCP (faster)
+ 
+''scp user@otherbox://usr/sap/trans/EPS/in/* /usr/sap/trans/EPS/in/''
+ 
+
+
+=====Running the JPrepare step=====
+The prepare step can be run ahead of time while the system is still up and online.
+FIXME: It takes about 30 mn
+
+HAVE sap running (startsap if necessary)
+
+log as sidadm (''su - sidadm'')
+
+Start jprepare:
+<code>
+cd /mnt/sapcd/SAP_DVDS/2007_SR1/51033255_25SAP_CRM_2007_Upgrade_Master_all_os/
+./JPREPARE
+</code>
+
+JPREPARE can be controlled remotely which is much more convenient than on the server itself:
+From your desktop machine go to: [[http://upgradedhost:6239]] and click "**Start J2EE Upgrade Frontend**"
+(page 48), select the JVM to run it.
+
+Note: On linux 64 bits this java webstart gui sometimes does not work, so you can use instead the native gui at /usr/sap/jupgrade/exe/startgui either locally **OR Remotely**
+
+press **Continue** and again **Continue**
+
+It should find the new **FIX_J_CRM60.UPG** and restart itself
+
+so we need to go to [[http://upgradedhost:6239]] again and click "**Start J2EE Upgrade Frontend**" again
+
+Press **continue**, it will ask for the upgrade keyword, the first time you run it it is "**18915995**" found in the sap upgrade note.
+
+and press "**continue**" again, then "**confirm**"
+
+It will now start making it's checks.
+Then it will ask for a **solution manager key**, to be retrieved using the solution manager server.
+See [[Creating a SAP Solution Manager key]]
+
+Then it will ask for a **(new) temporary SAP* password**, specify one and remember it in case something goes wrong.
+
+Then it will ask for the **SDM password**
+WARNING: make sure it's the correct working password for SDM(check first) or upgrade will fail badly later.
+
+
+NWDI control : **No** (we don't use it yet)
+
+**verify the parameters.**
+
+It will then asks for the **crm java, kernel and java components CD's**, for example:
+  * /mnt/sapcd/SAP_DVDS/2007_SR1/51033093_java_components/
+  * /mnt/sapcd/SAP_DVDS/2007_SR1/51033262_9NW_2004s_SR2_Kernel_LNX_X86/
+  * /mnt/sapcd/SAP_DVDS/2007_SR1/51033265_2007_java_components/
+
+On the update screens it will find the support package form trans/EPS/in
+**Make sure everything is 7.0 SP15 (or 6.0 SP2 for crm components)**, might have to select "**scan inbox**" and re-run. (struts and tealeaf will stay at 100)
+
+Component list: **Change all those that say "keep" to "scan inbox"** then click the **"rebuild"** button and press **continue** so it picks-up the crm components.
+
+**provide the path to jdk1.4 if requested** (/opt/ibm....)
+
+Once prepare completes, **verify all the steps have "succeeded"** -> no warnings / errors and click "**continue**" to exit Prepare.
+
+=====Running JUPGRADE=====
+Most of the upgrade step will have your system down and not available
+
+Still logged as <SIDadm> start JUPGRADE
+
+Make a backup of the jupgrade dir in case something goes wrong during the upgrade ''sudo cp -rf /usr/sap/jupgrade/ /usr/sap/jupgrade_back'' , Note that you need 5GB+ of avail disk space to back this up !
+
+<code>
+cd /usr/sap/jupgrade/exe/
+./UPGRADE
+</code>
+
+Go to [[http://upgradedhost:6239]] again and click "**Start J2EE Upgrade Frontend**"
+click "**CONTINUE**" and the upgrade start the first ~10 steps. (for ~2mn)
+
+After a few steps (~2mn) it will warn you about entering **"offline" mode, review this screen and make sure you are in compliance.**, then press **Continue** (9:47)
+
+FIXME: It takes ~1h, and hopefully will go through all the steps without errors.
+
+
+NOTE: At step 72 (UNDEPLOY_APPLICATIONS) it would fail because it could not connect to the j2ee as SAP*
+Even though i expec ted the Upgrade tool to set this for me (as it says in the upgrade guide), it didn't.
+<code>
+com.sap.sdt.j2ee.phases.PhaseTypeSDMProcess
+com.sap.sdt.ucp.phases.PhaseException
+Error while executing SDM process phase with action UNDEPLOY_LIST. See /usr/sap/jupgrade/log/UNDEPLOY_LIST_UAP_01.LOG for details.
+Cannot login to the SAP J2EE Engine using user and password as provided in the Filesystem Secure Store. Enter valid login information in the Filesystem Secure Store using the SAP J2EE Engine Config Tool. For more information, see SAP note 701654.
+com.sap.sdm.serverext.servertype.inqmy.extern.DeployManagerAuthExceptionWrapper: Wrong security credentials detected while trying to obtain connection to the J2EE Engine.
+</code>
+So i had to manually set it:
+  * Start the config tool and connect to default DB(local)
+  * Click the "Pen" icon (tooltip:"switch to configuation edit mode")
+  * Browse to cluster-data/server/cfg/services/
+  * Click the new "Pen" icon (tooltip: "Switch to edit mode")
+  * Double click on "Property sheet : com.sap.security.core.ume.service" 
+  * Re-enter the SAP* password you choose earlier.
+<code>
+ume.superadmin.password: sompass
+</code>
+  * Click OK when done.
+  * Close config tool.
+  * **(Re)Start j2ee (stopsap,startsap)**
+Now in the Upgrade tool, do continue, repeat phase and it should work.
+
+
+For info: Step 73 (deploy online) is the slowest (~20 mn)
+
+It will warn you again at end of downtime -> press continue.
+It will prompt you again to send an upgrade form email -> continue
+Press Exit.
+
+
+====New TREX settings ====
+Unless you configure the trex connection on the ISA box, all the B2B. B2C catalog won't work and display an error (new in 2007)
+<code>
+The catalog that you have selected is currently unavailable, try again later.
+</code>
+
+See [[https://websmp230.sap-ag.de/sap(bD1lbiZjPTAwMQ==)/bc/bsp/spn/sapnotes/index2.htm?numm=1157686 | Note: 980678]]
+TIP: I don't understand why they don't retrieve this data from the TREX CRM connection as it did in earlier version, now(since 2007) you have to maintain this manually both on the ISA and the CRM box !
+
+Anyway, what you have to do is:
+  * Use SAGUI to connect to the CRM box and launch transaction SM59(rfc's) go to tcp/ip and find the TREX connection, and note that RFC's name (EX: TRX_RFC_XYZ)
+  * Start transaction SE37 (edit/run functions) and find "TREX_EXT_SHOW_SERVERS" and run it with those arguments: Server Type = '4', IS_ACTIVE = 'X', RFC: TRX_RFC_XYZ (use the actual RFC name you found in the previous step), run the transaction
+  * Look at the transaction results, and you should find the TREX connection settings, such as: host: trexdev.corp.com,   port: 33101, remember those
+
+Now that we got this data, we need to go put it in visual administrator:
+  * Start visual administrator and connect to the ISA server (local)
+  * Browse to SID/server/services/TREX service
+  * Select "communication.nonproxyhosts" and enter your trex server hostname here (Ex: trexdev.corp.com) and click update
+  * Select "nameserver.address" and enter a value like: tcpip://<nameserverhost>:<nameserverport>  Ex: tcpip://trexdev.corp.com:33101     click Update
+  * Select "nameserver.backupserverlist" and enter the same data (unless you do have backup trex servers) and click Update
+  * Press Save (floppy icon) and quit visualadmin
+  * Restart the sap engine (stopsap,startsap)
+
+
+=====Verify all components where updated correctly=====
+Kernel should be at 144
+MaxDB should be at 7.7.02
+Java components should be at SP15
+
+
+CRM comps at 6.0 SP2 (except crmdic: 5.0SP12)
+
+{{ 2007/Screenshot-2.png }}
+
+{{ 2007/Screenshot-3.png }} 
+
+=====Free disk space=====
+Once the upgrade is completed and validated you can do some cleanup.
+
+You can remove the upgrade backup folder ''rm -rf /usr/sap/jupgrade_back''
+and if you need more space you can clean EPS/in as well: ''rm -rf /usr/sap/trans/EPS/in/*''
+

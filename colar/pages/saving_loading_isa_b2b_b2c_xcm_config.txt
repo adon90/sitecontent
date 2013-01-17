@@ -1,0 +1,69 @@
+======Configuring a B2B/B2C site======
+
+=====Configuring from scratch=====
+
+**Common to all sites:**
+
+Setting up the shopadmin:
+[[http://127.0.0.1:50000/shopadmin/admin/xcm/init.do]]
+
+You need to restart the shopadmin application now (in Visual admin)
+
+Configuring the Shopadmin:
+[[http://127.0.0.1:50000/shopadmin/shopadmin/init.do]]
+
+Setting/Configuring the web shop:
+[[http://127.0.0.1:50000/webcatadmin/admin/xcm/init.do]]
+
+restart the webcatadmin app now.
+
+**For ecah B2B/B2C app:**
+(replace the first /b2c by your actual application name).
+
+[[http://127.0.0.1:50000/b2c/admin/xcm/init.do]]  (Main XCM + IPC XCM)
+
+restart the b2c/b2b app now.
+
+=====Saving the Config=====
+
+For each link click "XCM settings" and then download both files.
+Note: save in different folders, since they have the same names.
+
+
+**Common:**
+[[http://127.0.0.1:50000/shopadmin/admin/xcm/init.do]]
+[[http://127.0.0.1:50000/shopadmin/shopadmin/init.do]]
+[[http://127.0.0.1:50000/webcatadmin/admin/xcm/init.do]]
+
+**For each B2C/B2B app:**
+[[http://127.0.0.1:50000/b2c/admin/xcm/init.do]] (save the main XCM)
+Then change the "Application configuration for" combo to "IPC"
+and save again the IPC XCM files.
+
+=====Loading the config (from a save)=====
+
+You can reload the files you saved uploaded from the same links.
+For each link: click "XCM settings", and **then click "edit"** to go to edit mode, this will give you the "upload" fields.
+
+Warning: After uploading the files, **do not forget to click 'Display' to go back to display mode**, otherwise you risk locking yourself out and won't be able to edit for a while.
+
+Note: for PCF we have the XCM files saved under Subversion (xcm_bcakups project)
+
+Warning: when uploading any of those config files from saves, **you will have to go retype the jco passwords** under components/customer/JCO otherwise they won't work (encryption).
+
+
+**Common:**
+[[http://127.0.0.1:50000/shopadmin/admin/xcm/init.do]]
+[[http://127.0.0.1:50000/shopadmin/shopadmin/init.do]]
+[[http://127.0.0.1:50000/webcatadmin/admin/xcm/init.do]]
+
+**For each B2C/B2B app:**
+[[http://127.0.0.1:50000/b2c/admin/xcm/init.do]] (save the main XCM)
+Then change the "Application configuration for" combo to "IPC"
+and save again the IPC XCM files.
+
+
+Restart shopadmin,webcatadmin and the b2c/b2b apps or simply restart the whole AP stack.
+
+
+

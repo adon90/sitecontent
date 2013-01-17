@@ -1,0 +1,91 @@
+<code>
+~/fan-1.0.44$ fan -pods
+Fan Launcher
+Copyright (c) 2006-2008, Brian Frank and Andy Frank
+Licensed under the Academic Free License version 3.0
+
+Java Runtime:
+  java.vm.name:    Java HotSpot(TM) Client VM
+  java.vm.vendor:  Sun Microsystems Inc.
+  java.vm.version: 1.5.0_16-b02
+  java.home:       /usr/lib/jvm/ia32-java-1.5.0-sun-1.5.0.16/jre
+  fan.home:        /home/thibautc/fan
+  sys.version:     1.0.41
+
+Fan Pods [780ms]:
+  testJava            1.0.41
+  email               1.0.41
+  docLang             1.0.41
+  sql                 1.0.41
+  docLib              1.0.41
+  fwt                 1.0.41
+  sys                 1.0.41
+  docIntro            1.0.41
+  obix                1.0.41
+  compiler            1.0.41
+  fand                1.0.41
+  testCompiler        1.0.41
+  build               1.0.41
+  docCompiler         1.0.41
+  testWeb             1.0.41
+  testNative          1.0.41
+  fluxText            1.0.41
+  webapp              1.0.41
+  docTools            1.0.41
+  json                1.0.41
+  icons               1.0.41
+  testSys             1.0.41
+  fandoc              1.0.41
+  inet                1.0.41
+  flux                1.0.41
+  docCookbook         1.0.41
+  web                 1.0.41
+  compilerJavascript  1.0.41
+  fansh               1.0.41
+  wisp                1.0.41
+  Hello               1.0
+  xml                 1.0.41
+  webappClient        1.0.41
+  compilerJava        1.0.41
+
+</code>
+
+
+<code>
+~/fan-1.0.44$ ls -1 lib/fan/
+build.pod
+compilerJava.pod
+compilerJs.pod
+compiler.pod
+docCompiler.pod
+docCookbook.pod
+docIntro.pod
+docLang.pod
+docLib.pod
+docTools.pod
+email.pod
+fandoc.pod
+fand.pod
+fansh.pod
+flux.pod
+fluxText.pod
+fwt.pod
+gfx.pod
+icons.pod
+inet.pod
+json.pod
+obix.pod
+sql.pod
+sys.pod
+testCompiler.pod
+testJava.pod
+testNative.pod
+testSys.pod
+testWeb.pod
+webappClient.pod
+webapp.pod
+web.pod
+wisp.pod
+xml.pod
+
+</code>

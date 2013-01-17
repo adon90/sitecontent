@@ -1,0 +1,9 @@
+====== IPC create DB Shots ======
+
+{{createdb.jpg}}
+
+{{ipc6.jpg}}
+
+{{ipc7.jpg}}
+
+{{ipc8.jpg}}

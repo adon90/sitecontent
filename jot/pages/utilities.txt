@@ -1,0 +1,62 @@
+======JavaOnTracks Utility Features======
+
+A number of other small utilities are available in JavaOnTracks, mostly a collection of small function/utilities I've needed over and over during my years developing Java applications.
+
+Most of those utilities are to be found in those two packages:
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/utils/package-summary.html]]
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/web/util/package-summary.html]]
+
+Here are some of the things to be found:
+
+====Basic Email sender====
+This is a very basic piece of code that allow you to send emails directly through an email server (SMTP), it is very basic and does not support attachments etc... but is tiny and has no dependencies, you basically give the smtp server host name and port, and then can send some quick plain text emails.
+
+For anything more advanced you should use JavaMail, but when you need something quick and easy this will do.
+
+TIP: The "send()" method is threaded, so your program won't be stuck while waiting for the email to be sent.
+
+
+See the [[http://www.colar.net/jotdoc/javaontracks/net/jot/utils/package-summary.html | JOTEmailSender]] class for more infos.
+
+Basically to use it, you create an instance when you start your application or when you need it), example:
+<code | Emailer initialization>
+public static JOTEmailSender getEmailer()
+    {
+        if (emailer == null)
+        {
+            synchronized (WikiUtilities.class)
+            {
+                emailer = new JOTEmailSender();
+                emailer.setHost("mail.mycomp.com");
+                emailer.setPort(25); // 25 is default
+                emailer.setDomain("mycomp.com"));
+                emailer.setFrom("spammer@mycomp.com");
+                emailer.setBounceTo("spammer@mycomp.com");
+                emailer.setReplyTo("spammer@mycomp.com");
+            }
+        }
+        return emailer;
+    }
+</code>
+
+Then we can send an email whenever:
+<code | send email>
+   getEmailer().send(e"me@me.com, you@you.com", "Test Email", "blah blah blah");
+</code>
+
+
+====HTML Utilities====
+See JOTHTMLUtilities for utilities helping to convert text into HTML, for example replacing ''&'' with ''&'', ''\n'' by ''<br/>'' etc...
+It has flags you can set to tell it what to convert, for example convert curley characters, smileys or not etc...
+
+<code| JOTHtmlUtilities>
+html = JOTHTMLUtilities.textToHtml(text, JOTHTMLUtilities.ENCODE_HTML_CHARS | JOTHTMLUtilities.ENCODE_LINE_BREAKS);
+</code>
+
+====Other Utilities====
+This is a set of other utilities i often need, mostly a lot of files/folder management (move/delete, recursively delete, calculate folder size etc...), also some helper to zip/unzip whole folders recursively.
+Some other validation methods: string length, email address etc..
+Also a String "replaceAll()" method, which does a "normal" replace rather than the confusing replaceAll method available in java 1.4+ String.replaceAll (which interprets characters such as $ causing issues if you are not careful) 
+
+See the javadoc of the Class [[http://www.colar.net/jotdoc/javaontracks/net/jot/utils/JOTUtilities.html | JOTUtilities]] for more infos.
+

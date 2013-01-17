@@ -1,0 +1,274 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======Researching a memory leak in Java on SAP ISA======
+During October '09 We discovered issues at my work with our Internet Sales sites.
+Those are based on SAP Internet Sales 2007 (CRM 2007) which are J2EE based applications.
+
+**It took me a while to find the root of the issue (Memory leak), but I learned a lot in the process and wanted to share some of that.
+This could be useful to anybody trying to track down memory/performance issues on a J2EE stack, whether SAP based or not.**
+
+While I was working on this, I was in contact with SAP about the issue (customer message), they eventually confirm the (huge) bug in their code and provided a fix(see SAP Note #1398828) but it took a bit of effort to convince them it was not a bug in OUR code.
+
+I also got substantial, unexpected, help from a twitter buddy, [[http://twitter.com/jpapejr | John Pape]], we talk a lot about Blackberries(he uses my [[http://www.berry4all.com | Berry4all]] software), Hockey, Java and other geeky stuff.
+
+Anyway I didn't know that not only he works at IBM(our JVM vendor) but also is a high level support expert for Websphere and is VERY familiar with diagnosis of Java issues and the IBM JVM.
+
+**I could not have found a more relevant person to help me with this issue. Thanks so much for landing a hand!**
+
+**And I though twitter was mostly useless !**
+
+TIP: **Here is John Pape blog, lots of good infos for any Java developer, whether using Websphere or not:**
+[[https://www.ibm.com/developerworks/mydeveloperworks/blogs/johnsrandommusings/]]
+_
+
+=====Our Setup=====
+We run some E-commerce sites based on SAP's Internet Sales 2007 (B2C & B2B), those sites get average traffic ~15,000 users sessions a day.
+  - This is J2EE base technology, and still requires to run on Java 1.4 (which does not help with diagnosis of problems)
+  - We run this on a x86_64 server with 8GB of Ram[Upgraded to 16BG during this issue tracking], 2 dual core Xeon 5420.
+  - We Use the IBM JVM 1.4.2.13 x86_64 [Best JVM for SAP on x86_64]
+=====The problem=====
+Early September we started noticing the J2EE server sometimes restarting itself and sometimes just plain crashing (needing manual restart).
+
+This of course lead to some downtime and other issues.
+=====Researching the problem=====
+This is the tough part of course.
+
+The first thing we noticed where very unusual traffic patterns, as shown in this graph (Sessions over time)
+
+{{ graph.gif }} 
+
+Usually we average ~500 active sessions, but in this graph you can see rapid "bursts" of sessions every 2 hours.
+We figured that might have been the cause of the problems because that is unusual.
+
+A 1000 session burst in 20mn is very unusual ... but even in SAP where a session is relatively "heavy" this should be able to be handled.
+
+This turn out to be the Google Ad bot being overzealous after our marketing department changed keywords.
+<code | Example adbot request>
+209.85.238.200 - - [02/Nov/2009:15:07:41 -0800] "GET /some/page?lid=6070Agyh&pcrid=3269128508 HTTP/1.1" 200 8635 "-" "AdsBot-Google (+http://www.google.com/adsbot.html)"
+</code>
+
+While this was not the issue on it's own ... we figure we wanted to prevent such large burst (we don't want performance slowdown for the customer), so we added some tarpitting(slowing down) using Apache mod_security2 for the Google Adsbot.
+
+Tarpitting was a good option because we do not want to block or return error code to the AdsBot of course because it would be detrimental to our SEO.
+====Misleading data====
+**It's very easy to get going on the wrong track** when researching this kind of issues.
+
+Here are a few examples of misleading tracks in this case:
+  - While the Google Adbot traffic was abnormal it turned out not to be the cause of the problem (though it helped expose it)
+  - The server restarts where causing "confusing" timeout errors on our content server (Turn out to be a cause rather than an effect)
+  - Errors in log files can be very misleading ... once again you might see the side effect rather than the root cause.
+
+**Make sure you find the CAUSE of the problem and don't waste time identifying a side-effect instead** 
+It can be difficult to distinguish the problem cause VS it's effects.
+
+====Getting more data to find the problem====
+The issues was not easily reproductable on our QA system through a load test, so we had to diagnose it on the production system ... which greatly limits what can be done without affecting the customer.
+
+So we had to enable some more logging, error tracing and so on (Ironically the probelm was a memory leak in the SAP Logging API ... so it made the issue worst .. but helped identyfing it).
+
+===Step1: Digging in the logs===
+OK, so here are the first thing we need to get more infos about the issue:
+
+  - Firstly we looked at the existing server logs and **found evidence of OutOfMemory issues**, and confimed memory usage was abnormal on the Memory graph:
+
+It can be difficult to find the issues in SAP log files, because there are a lot of data in there and many "normal" traces (for example when a user close his browser while data is being sent).
+So it's time consuming, but using search tools like 'grep' helps.
+
+<code |  example searching with grep>
+cd /usr/sap/X2C/JC01/j2ee/cluster/server0/log
+grep Exception *trc *log -A 20 | more
+</code>
+
+Found this:
+<code | OOM stacktrace>
+defaultTrace.0.trc: {0}#1#java.lang.OutOfMemoryError
+defaultTrace.0.trc-	at java.lang.reflect.Array.newArrayImpl(Native Method)
+defaultTrace.0.trc-	at java.lang.reflect.Array.newInstance(Array.java:283)
+defaultTrace.0.trc-	at com.ibm.jvm.ExtendedSystem.resizeArray(ExtendedSystem.java:55)
+defaultTrace.0.trc-	at java.util.ArrayList.ensureCapacity(ArrayList.java:192)
+defaultTrace.0.trc-	at java.util.ArrayList.add(ArrayList.java:386)
+defaultTrace.0.trc-	at com.sap.isa.core.logging.IsaLocation.getInstance(IsaLocation.java:46)
+defaultTrace.0.trc-	at com.sap.isa.businessobject.BusinessObjectBase.<init>(BusinessObjectBase.java:139)
+...... more 
+</code>
+
+Then I looked at the memory graph in SAP's J2EE and that confirmed abnormal behavior.
+
+{{ memleak.png }} 
+
+**Now when looking at the memory graph you have to really keep in mind how whatever Garbage collection you are using works, it can be "normal" for all the memory to appear to get used and never go down (ie: the GC might only going to kick in when memory is almost all used)**
+
+IBM and Sun have many detailed papers on how each GC algorithm works, and it's definitely worth a read before interpreting GC data and Memory graphs because it can be misleading otherwise.
+
+**It's really worth reading the JVM doc, for example in my case the very detailed [[http://www.ibm.com/developerworks/java/jdk/diagnosis/142AMD.html | IBM JDK1.4 Diagnosis PDF]]**
+
+Anyway, now we know our issue is an OutOfMemory Exception ... now the first question I had about this where:
+  - Why OutOfMemory when the memory graph shows for example 500M available ... this can't be right.
+  - Why would the logging mechanism use much memory, this should just write to file.
+  - The graph showed very sudden spikes in allocated memory at times (example from 500M to 2GB at once) ! 
+
+I figure maybe there was something like the logger was failing to write to file(permissions for examples) and holding the data in memory. but there was no such feature.
+
+Because this is SAP code I didn't have easy access to the source code to check what it's doing in there, I assumed that couldn't be using memory. - **WRONG** -
+
+WARNING: **Do not assume anything, confirm it !**
+It's not always logical and sometimes there are multiple issues making it appear "Illogical".
+
+
+**Also I was very curious about those sudden "spike" in allocated memory (abnormal).**
+
+So my next step was to confirm / find out more about the OutOfMemoryError(OOM).
+
+===Step2: Getting more data about the OOM===
+The two most useful data point you can use to work on an OOM are **Heap dumps**(data about allocated memory) and **Garbage Collection logs**.
+
+If you run a Java 1.5 or newer JVM, there are many nice tools, because I was on Java 1.4 my options where more limited.
+
+I've actually ran SAP on java6 before just for this,using VisualVM, see [[profiling_sap_isa_j2ee_webas_with_netbeans]].
+
+In this case that wasn't an option of course, because the issue was on the production server and of course we won't even try running Java6 there(not suppoorted by SAP)
+
+**So First we added some JVM parameters to get more data**: (For SAP that goes in configtool: cluster/instance/server
+<code>
+-verbose:gc
+-Xverbosegclog:GC.log
+-Xdump:system:events=user,request=exclusive+prepwalk+compact
+-Dibm.dg.trc.print=st_verify
+</code>
+
+''-verbose:gc'' requests Verbose Grabage Collcetion infos.
+
+''-Xverbosegclog:GC.log'' asks for the GC infos to be in it's own file (otherwise it's mixed with other stdout and can't be analyzed in tools)
+
+''-Xdump:system:events=user,request=exclusive+prepwalk+compact'' With out IBM JVM 1.4.2.13 this requests Core, Heap and Thread dumps to be written in case of a JVM/GC error (or compaction which usaully only happens after memory allocation failed). 
+
+Note that this writes very large files to disk (2x memory size) so make sure you have disk space.
+
+''Dibm.dg.trc.print=st_verify'' [[http://www-01.ibm.com/support/docview.wss?uid=swg21176363 | See IBM doc]], gives infos on heap fragmentation (which can cause OOM errors even though Mem is 'available')
+
+WARNING: I wanted to note that **with '-Xdump', large dump files where written to disk**, in Som cases the JVM can recover from the error, then shortly fail again .. and again ... **leading to filling up the hard drive in a hurry**, which could cause your J2EE to then not be able to restart (learned the hard way) [There is an option to limit how many, can't find it at the moment]
+
+===Step3: Analyzing the data===
+Now If the server crashes or get an OOM you will get the follwoing files:
+**core, heapdump, JavaCore and Snap**
+
+The ones of interest in this case are the core and heapdump files(Memory data), JavaCore and Snap contains infos about the threads.  
+
+**You can also request a dump manually**, at any time, by sending a "kill -3" signal to the JVM. see:  [[profiling_sap_isa_j2ee_webas_using_eclipse_memory_analyzer_mat_]]
+
+**Tools:**
+There are lots of tools available for analyzing heap dumps, here are some I used:
+  - [[http://visualvm.dev.java.net/ | VisualVm]] from Sun (nowadays part of the Sun JDK distro) 
+  - [[http://www.eclipse.org/mat/ | Eclipse Memory Analyzer]] **which was actually orignaly developped by SAP and released opensource, thanks!**.
+  - [[https://www14.software.ibm.com/webapp/iwm/web/reg/download.do?source=AW-0N6&S_PKG=0N6???=en_US&cp=UTF-8 | IBM Dump analyzer]]
+  - [[http://www.alphaworks.ibm.com/tech/gcdiag | IBM Garbage Collection Analyzer]] - Let you see what the GC is doing from the GC logs.
+  - [[http://publib.boulder.ibm.com/infocenter/javasdk/tools/index.jsp?topic=/com.ibm.java.doc.igaa/_1vg00014884d287-11c3fb28dae-7feb_1008.html | MDD4J ]] (I didn't try that one)
+
+In my case Eclipse MAT was the first choice because I have to analyse an IBM java 1.4 dump (VisualVm does not support that I believe).
+
+**I have detailed infos on using MAT to analyze an IBM dump here**: [[profiling_sap_isa_j2ee_webas_using_eclipse_memory_analyzer_mat_]]
+
+**Also See this excellent post on finding memory issues using MAT**: 
+[[http://www.sdn.sap.com/irj/scn/weblogs?blog=/pub/wlg/6856%3Fpage%3Dlast%26x-maxdepth%3D0|Finding Leaks with MAT]]
+
+**Both MAT and the IBM heap analyzer immediatly zeroed in on the leak being in the logger(ISALocation)** just as the OOM said: 
+
+{{ heapanalsizer.png }} 
+
+Also using the GC log analysis tool, I could see the leak and that pointed to IsaLocation as well.
+
+{{ garbage.png }} 
+
+Now looking in the GC.log I could see ever growing Memory allocation requests during the day
+<code | Interesting lines only>
+<minimum requested_bytes="206119888" />    // 200M !
+<minimum requested_bytes="309179824" />    // 309 M !
+<minimum requested_bytes="463769728" />    // 460M !
+<minimum requested_bytes="1565222800" />   // 1.5 GB
+<minimum requested_bytes="3679523456" />   // 3.6 GB
+</code>
+
+**Only cow ! what makes such insane allocations ??**
+
+This also explains why it would OOM even though it appears some memory was available, if 1GB is avail but it requests 1.5GB it won't happen.
+
+Well I already know it is ISALocation .. but would it not be nice to catch it in the act ?
+
+===Step4: Catching it in the act===
+**Turn out most JVM can catch the large memory allocation culprit on the fly (very handy)**
+
+For example on a JVM 5.0+ you can use ''-Xdump:stack:events=allocation,filter=#10M'' (will trace each allocation request over 10MB)
+
+See: [[http://publib.boulder.ibm.com/infocenter/javasdk/v5r0/index.jsp?topic=/com.ibm.java.doc.diagnostics.50/diag/tools/gcpd_stackevents.html]]
+
+In my case I'm on a JVM 1.4 so that wasn't an option, so I tried the env variable ''ALLOCATION_THRESHOLD'' as explained here:
+[[http://www-01.ibm.com/support/docview.wss?rs=180&uid=swg21236523]]
+
+However for some reason that did't work for me ... maybe I did not set the variable in the right place or maybe the SAP environment ignored it ... I don't know.
+
+Anyway John pape at IBM provided me an internal IBM tool called "object profiler" that does the same thing but does not need an env variable and that worked great.
+
+Added this JVM parameter: ''-Xrunobject_profiler:limit=10000000,depth=50,output=objprof.txt''
+
+And installed the library (libobject_profiler.so) in the J2EE binary path (/usr/sap/X2C/JC01/exe)
+
+Now that showed me the same allocations requests as where in GC.log BUT also the trace of where it was requested from, example:
+<code | example of object_profiler output>
+18: 20091103 07:41:58 PST: Large allocation size 1043481872 type = array of java.lang.Object Objects
+	at java.lang.reflect.Array.newArrayImpl(Array.java:native or compiled code)
+	at java.lang.reflect.Array.newInstance(Array.java:native or compiled code)
+	at com.ibm.jvm.ExtendedSystem.resizeArray(ExtendedSystem.java:native or compiled code)
+	at java.util.ArrayList.ensureCapacity(ArrayList.java:native or compiled code)
+	at java.util.ArrayList.add(ArrayList.java:native or compiled code)
+	at com.sap.isa.core.logging.IsaLocation.getInstance(IsaLocation.java:native or compiled code)
+	at com.sap.isa.core.RequestContext.<init>(RequestContext.java:native or compiled code)
+//..... more trace ......
+</code>
+
+**So anyway at this point there was no question some ArrayList used in IsaLocation was ever growing and we provided all that data to SAP and they acknowleged the issue and fixed it (#note: 1398828)**
+====The Bug in SAP's code==== 
+Later on I was able to gte my hand on SAP's code for IsaLocation, and here is the interesting part:
+<code  IsaLocation>
+public class IsaLocation {
+  private static List allocatedClasses= new ArrayList();
+// ......
+ public IsaLocation() {
+  }
+ 
+  /**
+   * <p>The method to retrieve the logging object. The name should
+   * contain the packagename and classname. 
+   * @param name - the name of the current location.
+   */
+  public static IsaLocation getInstance(String name) {
+  	    try {
+			Class clazz = IsaLocation.class.getClassLoader().loadClass(name);
+			allocatedClasses.add(clazz);
+		} catch (ClassNotFoundException e) {
+			if(log.isDebugEnabled())
+			    log.debug("Add class " + name + " failed ", e);
+		}
+        return new com.sap.isa.core.logging.sla.IsaLocationSla(name);
+  }
+// more code 
+</code>
+
+So basically getInstance() was just filling up a static arrayList with Class objects everytime it was called, **which is a lot**, since it's the logger.
+
+The ArrayList implementation increases the array size a bunch when it gets full (I guess about doubles in size, too lazy to check, javadoc doesn't specify) and that explained the large allocations requests(ever larger) I would see.
+
+That array was never emptied, or even used, in case you wonder ... SAP fix was to remove that array all together.
+
+No clue how such piece of code ended-up there ... maybe it was for debugging and got forgotten ??
+
+Either way if you are looking for a piece of code to get an OOM dump this will do great !
+====Conclusion====
+Well the thing to know if that there are excellent tools out there to help you, also triple check your hunch and don't guess or assume anything from just one set of data.
+
+Here is a graph showing the memory use the day BEFORE applying the leak fix, and the day AFTER, much better !
+{{ mem_bef_after.png }} 
+
+Here is MAT not showing anything abnormal (Used to show IsaLocation using GB of Memory):
+{{ mat_2.png }} 
+

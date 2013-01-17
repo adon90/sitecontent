@@ -1,0 +1,228 @@
+====2009 NHL Playoffs - TV schedule====
+NOTE: **All times PST (Pacific time)**
+
+
+Also my Picks here: [[2009_playoffs_predictions]]
+
+<html>
+<table border="1">
+<caption>Sheet1</caption>
+<tr>
+<td  valign="bottom"  align="left" >Day</td>
+<td  valign="bottom"  align="left" >April</td>
+<td ></td>
+<td  valign="bottom"  align="left" >Bruins Habs</td>
+<td  valign="bottom"  align="left" >Caprs Rangers</td>
+<td  valign="bottom"  align="left" >Devils Canes</td>
+<td  valign="bottom"  align="left" >Peng Flyers</td>
+<td  valign="bottom"  align="left" >Sharks Ducks</td>
+<td  valign="bottom"  align="left" >Wings Jackets</td>
+<td  valign="bottom"  align="left" >Canucks Blues</td>
+<td  valign="bottom"  align="left" >Hawks Flames</td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >We</td>
+<td  valign="bottom"  align="right" >15</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC Vers</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >7pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Th</td>
+<td  valign="bottom"  align="right" >16</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >7:30 CBC Vers</td>
+<td  valign="bottom"  align="left" >4pm Versus</td>
+<td ></td>
+<td  valign="bottom"  align="left" >5:30 Versus</td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Fr</td>
+<td  valign="bottom"  align="right" >17</td>
+<td  valign="bottom"  align="left" ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC Vers</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >7pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Sat</td>
+<td  valign="bottom"  align="right" >18</td>
+<td ></td>
+<td  valign="bottom"  align="left" >5pm CBC,Ver</td>
+<td  valign="bottom"  align="left" >10am: NBC</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Sun</td>
+<td  valign="bottom"  align="right" >19</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >12pm CBC NBC</td>
+<td colspan="2"  valign="bottom"  align="left" >7pm CBC Vers</td>
+<td  valign="bottom"  align="left" >4pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Mo</td>
+<td  valign="bottom"  align="right" >20</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td  valign="bottom"  align="left" >4pm Versus</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >6:30 Versus</td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Tu</td>
+<td  valign="bottom"  align="right" >21</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC Vers</td>
+<td colspan="2"  valign="bottom"  align="left" >7:30 CBC Vers</td>
+<td  valign="bottom"  align="left" >5pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >We</td>
+<td  valign="bottom"  align="right" >22</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td  valign="bottom"  align="left" >4pm Versus</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >? Versus</td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Th</td>
+<td  valign="bottom"  align="right" >23</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC Vers</td>
+<td colspan="2"  valign="bottom"  align="left" >7:30 CBC Vers</td>
+<td ></td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Fr</td>
+<td  valign="bottom"  align="right" >24</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm Versus</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >7pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Sat</td>
+<td  valign="bottom"  align="right" >25</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >11am CBC NBC</td>
+<td  valign="bottom"  align="left" >7pm CBC Vers</td>
+<td  valign="bottom"  align="left" >4pm Versus</td>
+<td ></td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Sun</td>
+<td  valign="bottom"  align="right" >26</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >11am NBC</td>
+<td  valign="bottom"  align="left" >? Versus</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >5pm CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Mo</td>
+<td  valign="bottom"  align="right" >27</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >12pm CBC Vers</td>
+<td  valign="bottom"  align="left" >? CBC Vers</td>
+<td ></td>
+<td ></td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >Tu</td>
+<td  valign="bottom"  align="right" >28</td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >? Versus</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >? CBC Vers</td>
+<td ></td>
+</tr>
+<tr>
+<td  valign="bottom"  align="left" >We</td>
+<td  valign="bottom"  align="right" >29</td>
+<td ></td>
+<td  valign="bottom"  align="left" >4pm CBC</td>
+<td ></td>
+<td ></td>
+<td ></td>
+<td  valign="bottom"  align="left" >? CBC Vers</td>
+<td  valign="bottom"  align="left" >? Versus</td>
+<td ></td>
+<td ></td>
+</tr>
+</table>
+<p><table border="1">
+<caption>Sheet2</caption>
+<tr>
+<td ></td>
+</tr>
+</table>
+<p><table border="1">
+<caption>Sheet3</caption>
+<tr>
+<td ></td>
+</tr>
+</table>
+</html>

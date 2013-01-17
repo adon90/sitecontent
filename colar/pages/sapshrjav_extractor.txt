@@ -1,0 +1,212 @@
+====== SAPSHRJAV extractor ======
+
+SAP tries to force you to use the NWDI with crm50 (netweaver 2004s), this is a pain (see [[b2c_no_nwdi]]).
+
+Anyhow they made it pretty hard to get the sources / libraries if you dont use the NWDI.
+
+Here is a small, very ugly but fully functional script which extract a SAPSHRJAV file for you, and gets out all the sap sources and libraries, which makes it very easy to then add them to a project in Eclipse.
+
+Here it is:
+
+<code java>
+/*
+ * Created on Jun 14, 2006
+ *
+ * To change the template for this generated file go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ */
+package com.pcf;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+public class ScaExtractor {
+
+	private static int sourceCpt=0;
+	private static int libCpt=0;
+
+	public static void extractShrjav(String shrjavFile, String destFolder)
+	{
+		new File(shrjavFile).mkdirs();
+		try
+		{
+		// Enumerate each entry
+        for (Enumeration entries = enumerateZip(shrjavFile); entries.hasMoreElements();) 
+        {
+            // Get the entry name
+            String zipEntryName = ((ZipEntry)entries.nextElement()).getName();
+
+            new File(destFolder+"/"+"BUILDARCHIVES").mkdirs();
+            
+            // the shr contains multiple "components" zipped
+           	if(zipEntryName.matches("^BUILDARCHIVES/.*.zip$"))
+            {
+                System.out.println("Found Component:"+zipEntryName);
+                Vector buildArchives=extractEntry(shrjavFile,destFolder,zipEntryName);
+                for(int i=0; i!=buildArchives.size();i++)
+                {
+                	String archive=(String)buildArchives.get(i);
+                    //System.out.println("Archive:"+archive);
+                    for (Enumeration archiveEntries = enumerateZip(archive); archiveEntries.hasMoreElements();) 
+                    {
+                    	// each component contains multiple "PPA" (=~ component data)
+                        String archiveEntryName = ((ZipEntry)archiveEntries.nextElement()).getName();
+                        if(archiveEntryName.matches("^.*ppa$"))
+                        {
+                            String ppaFolder=archive.substring(0,archive.length()-4)+"_"+archiveEntryName;
+                            //System.out.println("\t Found PPA:"+archiveEntryName+" -> "+ppaFolder);
+                            Vector ppaArchives=extractEntry(archive,ppaFolder,archiveEntryName);
+                            for(int j=0; j!=ppaArchives.size();j++)
+                            {
+                            	String ppaArchive=(String)ppaArchives.get(j);                            	
+                                //System.out.println("PPA path:"+ppaArchive);
+                                for (Enumeration ppaEntries = enumerateZip(ppaArchive); ppaEntries.hasMoreElements();)
+                                {
+                                	// each PPA contains a src.zip and multiple linraries (dependencies)
+                                	String ppaEntryName=((ZipEntry)ppaEntries.nextElement()).getName();
+                                	//System.out.println("\t\t Found file: "+ppaEntryName);
+                                    if(ppaEntryName.matches("^src/java/src.zip$"))
+                                    {
+                                    	// extracting the source Zip file.
+                                        Vector srcEntry=extractEntry(ppaArchive,destFolder,ppaEntryName);                           	
+                                        for(int k=0; k!=srcEntry.size();k++)
+                                        {
+                                           	String srcFile=(String)srcEntry.get(k);                            	
+                                            System.out.println("\t\t Found Source package:"+ppaArchive);
+                                            for (Enumeration srcEntries = enumerateZip(srcFile); srcEntries.hasMoreElements();) 
+                                            {
+                                            	// extrcating the content of the source zip
+                                                String srcEntryName = ((ZipEntry)srcEntries.nextElement()).getName();
+                                                //System.out.println("\t\t Found Source:"+srcEntryName);
+                                                sourceCpt++;
+                                                extractEntry(srcFile,destFolder,srcEntryName);
+                                            }
+                                        }
+                                    }
+                                    if(ppaEntryName.matches("^lib/java/.*jar$"))
+                                    {
+                                    	// extracting the libraries (jar)
+                                    	System.out.println("\t\t Found library: "+ppaEntryName);
+                                    	libCpt++;
+                                        extractEntry(ppaArchive,destFolder,ppaEntryName);                           	
+                                    }
+                                //extractEntry(ppaArchive,destFolder,"src");  
+                                }
+                            }
+                        }
+                        }
+                }
+                
+            }
+        }
+		}catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+       	System.out.println("Libraries found: "+libCpt+", they are in: "+destFolder+"/lib/java");
+       	System.out.println("Java files found: "+sourceCpt+", they are in: "+destFolder+" (com & web-inf)");
+    }
+
+	/*
+	 * return a zip file content list
+	 */
+	private static Enumeration enumerateZip(String zipFile) throws Exception
+	{
+		ZipFile zip=null;
+
+		try
+		{
+		zip=new ZipFile(zipFile);
+	    
+        // Enumerate each entry
+        return zip.entries();
+    	
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return zip.entries();
+	}
+	
+	/*
+	 * Extract a zip and returns the created files list
+	 */
+	public static Vector extractEntry(String zipFile, String destFolder, String entry)
+	{
+		new File(destFolder).mkdirs();
+        Vector results=new Vector();
+		try {
+	        // Open the ZIP file
+			ZipFile zip=new ZipFile(zipFile);
+	    
+	        // Get the first entry
+	        ZipEntry zipEntry=zip.getEntry(entry);
+	        
+	        //create folders if necessary
+	        
+	        
+	        if(!zipEntry.isDirectory())
+	        {
+	        BufferedInputStream is =
+	             new BufferedInputStream(zip.getInputStream(zipEntry));
+	           int currentByte;
+	           // establish buffer for writing file
+	           byte data[] = new byte[1024000];
+
+	           // write the current file to disk
+	           String destFile=destFolder+"/"+zipEntry.getName();
+	           results.add(destFile );
+	           new File(destFile).getParentFile().mkdirs();
+	           FileOutputStream fos = new FileOutputStream(destFile);
+	           BufferedOutputStream dest =
+	           new BufferedOutputStream(fos, 1024000);
+
+	           // read and write until last byte is encountered
+	           while ((currentByte = is.read(data, 0, 1024000)) != -1)
+	           {
+	             dest.write(data, 0, currentByte);
+	           }
+	           dest.flush();
+	           dest.close();
+	        }
+	        else
+	        {
+	        	new File(destFolder+"/"+zipEntry.getName()).mkdirs();
+	        }
+	    
+	    } catch (IOException e) 
+	    {
+	    	e.printStackTrace();
+	    }
+	    return results;
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) 
+	{
+		/*
+		 * param1: sapshrjav SAR file
+		 * param2: temp extract folder
+		 */
+                 String scaFolder="/tmp/scas/";
+                 String destFolder="/tmp/extract/";
+                 File[] files=new File(scaFolder).listFiles();
+		 for(int i=0;i!=files.length;i++)
+                 {
+                    extractShrjav(files[i].getAbsolutePath(),destFolder);
+                 }
+	}
+
+}
+
+</code>

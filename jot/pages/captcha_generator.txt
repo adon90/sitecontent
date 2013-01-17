@@ -1,0 +1,96 @@
+======CAPTCHA Generator======
+A CAPTCHA is a user-challenge to validate an HTML Form entry.
+Basically, it displays an image to the user with some scrambled letters/numbers in it, that the user have to read and type in a text field.
+
+The whole idea behind this is that it should be difficult for a robot/computer to do it, and abuse your forms (Ex: post spam).
+
+What makes my implementation special is that it **does NOT require a graphic environment(AWT)**, so that means it can run on a headless system(server) without having to mess with the application server or having to run Java with AWT in headless mode.
+
+=====How to use=====
+====Generate and write  a CAPTCHA image to a file====
+<code | Generate a CAPTCHA into a file>
+// We need an image writer, currently we only have one for BMP format(works in all browsers i tried).
+// You could also create your own writer by implementing JOTAbstractImageWriterInterface
+JOTBMPImageWriter writer=new JOTBMPImageWriter();
+// Use the standard generator
+JOTSTDCaptchaGenerator gen= new JOTSTDCaptchaGenerator();
+// create a captcha image in /tmp
+String code=gen.writeToFile(writer, new File("/tmp/captcha.bmp"));
+// the variable code contains the "code" embedded in the image (Ex: FK5J9)
+</code>
+====Use the built-in CAPTCHA View to send/validate a Captcha====
+If you use JavaOnTracks as your framework, then you can simply use the [[http://java-on-tracks.sourceforge.net/javadoc/javaontracks/latest/javadoc/net/jot/web/captcha/JOTSendCaptchaView.html|builtin view]] and have next to nothing to do to send a captcha to a browser and validate it.
+If Not, see the next section "Send directly a CAPTCHA image to a browser"
+Note that the built-in view as an extra feature allowing to block the CAPTCHA generation after to many attempts to avoid overload/brute force cracking.
+
+Note that this is longer, because it is a full Example.
+<code | the JOTForm with a captcha element>
+public class MyForm extends JOTGeneratedForm
+{
+  public void layoutForm(JOTFlowRequest request)
+  {
+    addFormField(new JOTFormCaptchaField("captcha", "Captcha:", "submitCaptcha.do", JOTSendCaptchaView.getGenerator()));
+  }
+  public Hashtable validateForm(JOTFlowRequest request) throws Exception
+  {
+    JOTFormElement captcha = get("captcha");
+    String userCode=captcha.getValue();
+    String code = (String) request.getSession().getAttribute(JOTSendCaptchaView.CAPTCHA_SESSION_ID);
+    // compare code and usercode and take action
+  }
+}
+</code>
+<code | view>
+public class MyFormView extends JOTGeneratedFormView
+{
+	public void prepareViewData() throws Exception 
+	{
+		MyForm form=(MyForm)getForm(MyForm.class);
+		request.setAttribute(JOTGeneratedFormView.GENERATED_FORM,form);
+		super.prepareViewData();
+	}
+}
+</code>
+<code | form.html>
+<html>
+                    <jot:var value="generatedForm"/>
+</html>
+</code>
+<code  | flow.conf>
+Request /testCaptcha
+	RenderPage foo.bar.MyFormView /form.html 
+Request /submitCaptcha
+	ProcessForm foo.bar.MyForm
+	IfResult validation_failure ContinueTo testCaptcha
+	ContinueTo wherever
+</code>
+====Send directly a CAPTCHA image to a browser====
+If you are not using JavaOnTracks as our framework(say struts or plain servlet), here is what to do:
+<code | minimal captcha HTML page>
+<html>
+<img src="captcha.do">
+<form action="checkcaptcha.do">
+<input name="code" type="text">
+<input type="submit">
+</form>
+</html>
+</code>
+<code | captcha.do servlet (sends the image to the browser)>
+// in real code you would only create the writer/generator once and reuse it, rather that create one for each request
+JOTBMPImageWriter writer=new JOTBMPImageWriter();
+JOTSTDCaptchaGenerator gen= new JOTSTDCaptchaGenerator();
+// will write the capctha to "repsonse" (and close it) 
+String code=gen.writeToBrowser(writer, response);
+// save the code so we can validate it later
+session.setAttribute("captcha_code",code);
+</code>
+<code | checkcaptcha.do servlet (validates the user code entry)>
+String userCode=request.getParameter("code");
+String code=(String)session.getAttribute("captcha_code");
+// check userCode vs code and take action accordingly
+</code>
+=====JavaDoc=====
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/captcha/package-summary.html]]
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/captcha/generators/package-summary.html]]
+[[http://www.colar.net/jotdoc/javaontracks/net/jot/web/captcha/package-summary.html]]
+

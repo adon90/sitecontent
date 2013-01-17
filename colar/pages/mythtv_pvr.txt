@@ -1,0 +1,794 @@
+====== MythTV PVR ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+I have been using Mythtv since 2005, and it's very neat.
+This doc is only partial and from memory since i write it after installing.
+
+=====What it does for me=====
+I use it to record TV, and watch/pause live TV.\\
+I can also use it to burn a movie to a DVD, and rip a DVD to the hard drive.
+
+I also use it to store some of my music (rip my CD's) and play it back, as well as play online streams using mythstream.
+
+=====My Hardware=====
+I use an older Emachine (1.8Ghz).\\
+It has a 40GB HD for the O/S and for the live TV cache, plus an external 200GB firewire hardrive for media storage (=~100h of video.)\\
+I use an [[http://www.hauppauge.com/pages/products/data_pvr150.html | hauppauge PVR150]] card as the tuner, the video card is some generic S3 card.\\
+I also have an universal remote from fry's, because i lost the PVR150 remote, and it wasn't very good anyhow (back then).
+
+=====The Software =====
+I use [[http://www.mythtv.org/ | MythTV]] for the software, in my opinion this is the best setup available (full feature, stable and free).
+
+At first i used mythtv on gentoo, but it is a MAJOR pain to install and configure.
+
+I now use [[http://www.mysettopbox.tv/knoppmyth.html | Knoppmyth]], which is a distro made for one and only one goal: run mythtv.\\
+On top of that it provides a lot of extra features, and comes with all the needed drivers.\\
+So if you configure installing a media center using mythtv, the way to go is knoppmyth (unless you are sadistic).
+
+==== Setup ====
+Well nothing to special here, just download and burn the Knopmyth CD and boot of it to install it.
+
+Juts follow the guides here:\\
+[[http://www.mysettopbox.tv/pamphlet.html]]\\
+[[http://www.mythtv.org/wiki/index.php/User_Manual:Index]] \\
+
+==== Partitions ====
+I changed my parttions from the default, because i use an external (firewire) HD for the video storage.\\
+So i have my partitons as follow \\
+  * Disk1 (IDE 40GB internal) \\
+hda1: /      3GB, system partiton\\
+hda2: swap   600MB \\
+hda3: /cache 4GB, live TV cache (about 100mn of paused TV) \\
+hda4: /tmp   30GB: temporary files, i use that for example for encoding DVD's. \\
+
+  * Disk2 (Firewire 200GB external) \\
+sda1: /myth  200GB    this is the storage for all the media files (videos, recording, music etc ...)
+
+Here is my /etc/fstab
+<code>
+# /etc/fstab: filesystem table.
+#
+# filesystem  mountpoint  type  options  dump  pass
+/dev/hda1  /  auto defaults,errors=remount-ro  0  1
+/dev/hda2 none swap defaults 0 0
+/dev/hda3 /cache auto defaults,auto 0 0
+/dev/hda4 /tmp auto defaults,auto 0 0
+/dev/sda1  /myth  auto  defaults,auto  0  2
+
+proc  /proc  proc  defaults  0  0
+sysfs /sys   sysfs defaults  0  0
+/dev/fd0  /floppy  vfat  defaults,user,noauto,showexec,umask=022  0  0
+</code>
+
+===== Upgrading to myth 0.20 =====
+I use Knoppmyth R5D1, it uses mythtv 0.19\\
+Mythtv 0.20 provides some great new tools, motable mytharchive which allows to burn dvd's of videos and recordings.\\
+Here is how to upgrade to myth 0.20 and install mytharchive dependencies\\
+To get a shell press CTRL+ALT+F1,   to go back to myth press CTRL+F7
+<code>
+echo "deb ftp://knoppmyth.net/R5 ./"  >> /etc/apt/sources.list 
+apt-get update
+dpkg -r libmyth-0.19 libmyth-0.19-dev mythtv mythtv-backend mythtv-common mythtv-database mythtv-debug mythtv-doc mythtv-frontend mythplugins mythburn-ui
+rm -fr /usr/share/mythtv/mythweb
+apt-get install mythtv mythplugins myththemes mythstream mythstreamtv
+rm -fr /var/www/mythweb
+ln -sf /usr/share/mythtv/mythweb /var/www 
+apt-get install python-mysqldb python-imaging mjpegtools ffmpeg
+</code>
+
+WARNING You have to go to the "archive" in the setup, to define the mytharchive temporary directory, you should create a new directory (owned by mythtv).
+<code>
+# note: in my setup /tmp is 30GB +, in default knoppmyth instalation /myth is probably a better choice (larger partition).
+mkir /tmp/mytharchive
+chown mythtv:mythtv /tmp/mytharchive
+</code>
+** Wherever you put that directory, there should be a lot of free space preferably 10GB+, otherwise you will get all kind of errors when the disk gets full **
+
+NOTE Using mytharchive is kinda confusing, you have to go to optical drives-> myth archive -> select files, and pick the files you will want to burn. THEN back out and go tu "Burn DVD" ...
+
+===== Issues and resolutions=====
+==== Ripping DVD's ====
+If you want to copy(rip) your own DVD's to the computer, you will need the decryption library.\\
+
+It is my belief i should be able to copy/backup my own DVD (that i have paid for) as i wish, unfortunately, the greedy monopolistic media companies in the US, had the greedy corporate run US government pass a law that makes this illegal. (well in any case it's illegal to decrypt a DVD, and without decrypting it you can't do much, like say convert it to mp4).
+
+In any case to rip an encrypted DVD you will need the CSS library, which basically is used to crack the encryption, and thus is in theory illegal in the US.\\
+Because of that, it does not come pre-install with knoppmyth, however there is a script you can run to install it.\\
+If you don't DVD ripping will fail.
+
+Here is how to install it:
+<code bash>
+# first you need to access a shell
+# if you are in the mythtv frontend, you can press "CTRL-ALT-F1" to get to a shell
+# log as root (or mythtv and then su as root), and run:
+/usr/share/doc/libdvdread3/examples/install-css.sh
+</code>
+
+After that, you should be able to rip DVD's.
+
+Note: when ripping the DVD, you need to press "0" (ZERO) to start the rip, this confused me at first.
+
+==== Playing back DVD's and other videos====
+
+First after adding new videos, you need to go to setup->video library , this will refresh the list fo videos.
+
+Second problem was that on my install (knoppmyth), i t would fail to play the videos.\\
+The reason why, was that the path to mplayer was set improperly.
+
+I found that mplayer was installed in /usr/bin   (by running 'which mplayer' on a shell)\\
+So i had to go to: \\
+**setup->media settings->video settings->playback** \\
+and change /usr/local/bin/mplayer......  into /usr/bin/mplayer......
+
+==== Remote control ====
+{{URC6131.jpg}}
+
+As i said i lost my Hauppauge remote and was not any good in the first place.\\
+So i bought [[http://www.ofausa.com/remote.php?type=URC%206131 | this cheap universal remote]] (URC-6131) at Fry's and use it with the PVR150 I/R receiver instead.
+
+There is a good doc on using/setting this up here:\\
+[[http://www.vulturesnest.net/mythtvremote.html]]
+
+However, i found the keys mapping to not be quite the way i wanted, so i modified them.\\
+It is not all perfect, but it does all the most useful things like play, pause, change channel, sound, FF,RW, guide and things like that.
+
+Here are my LIRC config files:
+
+NOTE: i have  ran this command, so that i only have one lirc file (there seem to be two by default and it's confusing and seem not to work right)
+<code>
+cd /home/mythtv
+rm .lircrc
+ln -s .mythtv/lircrc .lircrc
+</code>
+
+File: /home/mythtv/.mythtv/lircrc
+<code conf>
+#Thibaut Colar ... Hauppauge receiver with URC-6131 remote
+
+# Channel Up
+begin
+prog = mythtv
+button = CH+
+repeat = 3
+config = Up
+end
+
+# Channel Down
+begin
+prog = mythtv
+button = CH-
+repeat = 3
+config = Down
+end
+
+# OK/Select
+begin
+prog = mythtv
+button = SELECT
+config = Return
+end
+
+# Play
+begin
+prog = mythtv
+button = PLAY
+config = Return
+end
+
+# Stop
+begin
+prog = mythtv
+button = STOP
+config = Esc
+end
+
+# Escape/Exit/Back
+begin
+prog = mythtv
+button = EXIT
+config = Esc
+end
+
+# Power Off/Exit
+begin
+prog = mythtv
+button = OFF
+config = Esc
+end
+
+# Pause
+begin
+prog = mythtv
+button = PAUSE
+repeat = 3
+config = P
+end
+
+# Mute
+begin
+prog = mythtv
+button = Mute
+repeat = 3
+config = F9
+end
+
+# Fast forward (30 sec default)
+begin
+prog = mythtv
+button = REW
+repeat = 3
+config = Left
+end
+
+# Rewind (10 sec default)
+begin
+prog = mythtv
+button = FFW
+repeat = 3
+config = Right
+end
+
+# Skip forward (10 min default)
+begin
+prog = mythtv
+button = SKIP
+repeat = 3
+config = PgDown
+end
+
+# Skip backward (10 min default)
+begin
+prog = mythtv
+button = REPLAY
+repeat = 3
+config = PgUp
+end
+
+# Record
+begin
+prog = mythtv
+button = REC
+repeat = 3
+config = R
+end
+
+# Delete  N/A
+begin
+prog = mythtv
+button = BLANK
+repeat = 3
+config = D
+end
+
+# OSD browse
+begin
+prog = mythtv
+button = GUIDE
+repeat = 3
+config = O
+end
+
+# Display EPG while in live TV,
+# View selected show while in EPG
+begin
+prog = mythtv
+button = MENU
+repeat = 3
+config = M
+end
+
+# Scroll up
+begin
+prog = mythtv
+button = RIGHT
+repeat = 3
+config = Right
+end
+
+# Scroll down
+begin
+prog = mythtv
+button = LEFT
+repeat = 3
+config = Left
+end
+
+# vol +
+begin
+prog = mythtv
+button = VOL+
+repeat = 3
+config = ]
+end
+
+# vol down
+begin
+prog = mythtv
+button = VOL-
+repeat = 3
+config = [
+end
+
+# Bring up OSD info
+begin
+prog = mythtv
+button = INFO
+repeat = 3
+config = I
+end
+
+# Change display aspect ratio
+begin
+prog = mythtv
+button = PIP
+repeat = 3
+config = W
+end
+
+# Seek to previous commercial cut point
+begin
+prog = mythtv
+button = YELLOW
+repeat = 3
+config = Q
+end
+
+# Seek to next commercial cut point
+begin
+prog = mythtv
+button = BLUE
+repeat = 3
+config = Z
+end
+
+# Numbers 0-9
+
+begin
+prog = mythtv
+button = 0
+repeat = 3
+config = 0
+end
+
+begin
+prog = mythtv
+button = 1
+repeat = 3
+config = 1
+end
+
+begin
+prog = mythtv
+button = 2
+repeat = 3
+config = 2
+end
+
+begin
+prog = mythtv
+button = 3
+repeat = 3
+config = 3
+end
+
+begin
+prog = mythtv
+button = 4
+repeat = 3
+config = 4
+end
+
+begin
+prog = mythtv
+button = 5
+repeat = 3
+config = 5
+end
+
+begin
+prog = mythtv
+button = 6
+repeat = 3
+config = 6
+end
+
+begin
+prog = mythtv
+button = 7
+repeat = 3
+config = 7
+end
+
+begin
+prog = mythtv
+button = 8
+repeat = 3
+config = 8
+end
+
+begin
+prog = mythtv
+button = 9
+repeat = 3
+config = 9
+end
+
+
+### MPlayer lirc setup
+
+# Show OSD
+begin
+prog = mplayer
+button = MENU
+repeat = 3
+config = osd
+end
+
+# Pause playback
+begin
+prog = mplayer
+button = PAUSE
+repeat = 3
+config = pause
+end
+
+# Skip ahead a minute if playing
+# If paused, resume playing
+begin
+prog = mplayer
+button = PLAY
+repeat = 3
+config = seek +1
+end
+
+# Stop playback and exit
+begin
+prog = mplayer
+button = STOP
+repeat = 3
+config = quit
+end
+
+# Mute
+begin
+prog = mplayer
+button = Mute
+repeat = 3
+config = mute
+end
+
+# Seek back 10 seconds
+begin
+prog = mplayer
+button = REW
+repeat = 3
+config = seek -10
+end
+
+# Seek forward 30 seconds
+begin
+prog = mplayer
+button = FFW
+repeat = 3
+config = seek +30
+end
+
+# Quit
+begin
+prog = mplayer
+button = EXIT
+repeat = 3
+config = quit
+end
+
+# Seek forward 10 minutes
+begin
+prog = mplayer
+button = SKIP
+repeat = 3
+config = seek +600
+end
+
+# Seek backward 10 minutes
+begin
+prog = mplayer
+button = REPLAY
+repeat = 3
+config = seek -600
+end
+
+# Toggle full-screen
+begin
+prog = mplayer
+button = FULL
+repeat = 3
+config = vo_fullscreen
+end
+
+### Xine lirc setup
+
+begin
+prog = xine
+button = PLAY
+repeat = 3
+config = Play
+end
+
+begin
+prog = xine
+button = STOP
+repeat = 3
+config = Stop
+end
+
+begin
+prog = xine
+button = OFF
+repeat = 3
+config = Quit
+end
+
+begin
+prog = xine
+button = PAUSE
+repeat = 3
+config = Pause
+end
+
+begin
+prog = xine
+button = CH+
+repeat = 3
+config = EventUp
+end
+
+begin
+prog = xine
+button = CH-
+repeat = 3
+config = EventDown
+end
+
+begin
+prog = xine
+button = VOL-
+repeat = 3
+config = [
+end
+
+begin
+prog = xine
+button = VOL+
+repeat = 3
+config = ]
+end
+
+begin
+prog = xine
+button = SELECT
+repeat = 3
+config = EventSelect
+end
+
+begin
+prog = xine
+button = EXIT
+repeat = 3
+config = Menu
+end
+
+begin
+prog = xine
+button = FFW
+repeat = 3
+#config = SpeedFaster
+config = SeekRelative+60
+end
+
+begin
+prog = xine
+button = REW
+repeat = 3
+#config = SpeedSlower
+config = SeekRelative-60
+end
+
+begin
+prog = xine
+button = FULL
+repeat = 3
+config = Volume+
+end
+
+begin
+prog = xine
+button = BLANK
+repeat = 3
+config = Volume-
+end
+
+begin
+prog = xine
+button = Mute
+repeat = 3
+config = Mute
+end
+
+begin
+prog = xine
+button = MENU
+repeat = 3
+config = RootMenu
+end
+
+begin
+prog = xine
+button = SKIP
+repeat = 3
+config = EventNext
+end
+
+begin
+prog = xine
+button = REPLAY
+repeat = 3
+config = EventPrior
+end
+
+begin
+prog = xine
+button = INFO
+repeat = 3
+config = OSDStreamInfos
+end
+
+begin
+prog = xine
+button = RED
+repeat = 3
+config = Quit
+end
+
+begin
+prog = xine
+button = RED
+repeat = 3
+config = Quit
+end
+</code>
+
+File: /etc/lirc/licrd.conf
+<code conf>
+#Thibaut Colar ... Hauppauge receiver with URC-6131 remote
+#
+# filename:			 RC-5
+# encoding:			 shift encoded, RC-5
+# brand:             Philips (and others)
+# model:             all
+# supported devices: all
+#
+#------------------------------------------------------------------------------
+
+begin remote
+
+  name  PHILIPS_RC-5
+  bits           11
+  flags RC5|CONST_LENGTH
+  eps            20
+  aeps            0
+
+  header          0     0
+  one           889  889
+  zero          889  889
+  plead         889
+  ptrail          0
+  foot            0     0
+  repeat          0     0
+  pre_data_bits   2
+  pre_data       0x02
+  post_data_bits  0
+  post_data      0x0
+  pre             0     0
+  post            0     0
+  gap          113792
+  toggle_bit      2
+  frequency    36000
+  duty_cycle   50
+
+      begin codes
+	0	0x0000000000000140
+	1	0x0000000000000141
+	2	0x0000000000000142
+	3	0x0000000000000143
+	4	0x0000000000000144
+	5	0x0000000000000145
+	6	0x0000000000000146
+	7	0x0000000000000147
+	8	0x0000000000000148
+	9	0x0000000000000149
+	GUIDE	0x000000000000014a
+	SELECT	0x000000000000014b
+	POWER	0x000000000000014c
+	Mute	0x000000000000014d
+	Move	0x000000000000014e
+	VOL+	0x0000000000000150
+	VOL-	0x0000000000000151
+	PREVCH	0x0000000000000152
+	NEXTCH	0x0000000000000153
+	SLOMO	0x0000000000000154
+	ANGLE	0x0000000000000155
+	MENU	0x000000000000015d
+	SUBT	0x000000000000015e
+	CH+	0x0000000000000160
+	CH-	0x0000000000000161
+	PIP	0x0000000000000162
+	Swap	0x0000000000000163
+	PAUSE	0x0000000000000169
+	PVRMENU	0x000000000000016e
+	EXIT	0x0000000000000171
+	REW	0x0000000000000172
+	REPLAY	0x0000000000000173
+	FFW	0x0000000000000174
+	PLAY	0x0000000000000175
+	STOP	0x0000000000000176
+	REC	0x0000000000000177
+	SKIP	0x0000000000000178
+	Prev	0x000000000000017b
+	INFO	0x000000000000017c
+	TV/VID	0x000000000000017e
+	Audio	0x000000000000017f
+	THDN	0x0000000000000268
+	THUP	0x0000000000000269
+      end codes
+
+end remote
+
+begin remote
+
+  name  PHILIPS_RC-5_ALT
+  bits           13
+  flags RC5|CONST_LENGTH
+  eps            20
+  aeps            0
+
+  one           889   889
+  zero          889   889
+  plead         889
+  gap          113792
+  min_repeat      1
+  toggle_bit      2
+
+  frequency    36000
+  duty_cycle   50
+
+      begin codes
+          LEFT                     0x0000000000000155
+          RIGHT                    0x0000000000000156
+      end codes
+
+end remote
+</code>
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>

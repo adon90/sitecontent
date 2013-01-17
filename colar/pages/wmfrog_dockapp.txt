@@ -1,0 +1,40 @@
+====== WmFrog DockApp ======
+{{wmfrog.png}}
+
+This is a weather application, it shows the weather in a graphical way. The artwork look like a kiddo did it, but that's part of the charm.... ok i did it when i was 25, i'm a programmer not a designer OK :-)
+
+=====Features=====
+  * Shows: clouds (clear, few, scattered, broken, overcast ...)
+  * Shows: Precipitations: (drizzle, rain, snow, ice christals : light/moderate or heavy)
+  * Shows: Special weather (Blowing wind / Freezing / Thunderstorm, funnel cloud...)
+  * Shows: Humidity perentage.
+  * Shows: Wind speed (average & gust)
+  * Shows: Wind Direction.
+  * Shows: Temperature (Celcius or Fareinheit).
+  * Shows: Station name and weather report time.
+
+=====download=====
+Current version is 0.3.0 (29/11/2010), download it here: \\
+[[http://bitbucket.org/tcolar/wmfrog/downloads]]
+
+=====changes=====
+You can find the latest ChangeLog Here:
+[[http://bitbucket.org/tcolar/wmfrog/src/tip/wmfrog/CHANGES]]
+
+=====Requirements / Installation=====
+Please follow the latest instructions from the INSTALL file, see a copy here:
+[[http://bitbucket.org/tcolar/wmfrog/src/tip/wmfrog/INSTALL]] 
+
+=====Bugs/Support=====
+
+Send bug reports or questions to [[mailto:tcolar-wm@colar.net]] \\
+I **might** do something about it :-) \\
+
+=====screenshots=====
+
+{{ 20060203142426547-0-wmfrog_shot.png }}
+
+Screenshot of my session (fluxbox with wmFrog instances in the slit):
+
+{{ wmfrogshot.jpg }}
+

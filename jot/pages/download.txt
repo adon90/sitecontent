@@ -1,0 +1,18 @@
+======JavaOnTracks Download======
+  * Latest (**0.1.5**): [[http://bitbucket.org/tcolar/javaontracks/downloads]] 
+====Change Log====
+===0.1.5===
+Fixes to doclet layouts
+Bug fixes in View Parser
+New CRUD forms support
+===0.1.4=== 
+Fixes:
+- "force" frames
+- Fixes in package list page(title)
+- Fixed broken links in index pages
+===0.1.3=== 
+- Fixes to javadoc doclet(0.1.2 had hard-coded path and was not usable).
+- Added support for custom doclet templates.
+===0.1.2=== 
+- Added Javadoc doclet and fixes to database layer. 
+- Deprecated internal Filesystem DB.

@@ -1,0 +1,38 @@
+======TKD Forms Simplified======
+My "Simplified" and annotated version of this:
+[[TKD_forms]]
+
+Syntax:
+N,E,S,W: directions. L:left R: right. Dbl: Double. DP: double punch. CW: clockwise CC: counter clock
+Example "1:  W(L) L Low Block, DP(R,L)" means Facing West(Left foot in front), Left arm low block, punch right hand, punch left hand
+===White Belt===
+JoonBi(ready), Kibon Poomse(fundamental forms), JahJeh(self control) or Chigi(hand attack)?? JoonBi... turn 90 cc
+1:  W(L) L Low Block, DP(R,L) turn 180 cw
+2:  E(R) R Low Block, DP(L,R) turn 180 cc
+3:  W(L) L Middle Block, L jab, R Punch  turn 180 cw
+4:  E(R) R Middle block, R Jab, L punch : turn 90 cc 
+5:  N(L) L High Block, DP(R,L) Step Forward
+6:  N(R) R High Block, DP(L,R) Stay
+7:  N(R) R/L Dbl Middle block (open hand across face), DP(R,L) Step back
+8:  N(L) L/R Dbl Middle block (open hand across face), DP(L,R) Stay
+9:  N(R) L Low Block/Back-fist, DP(R,L) Step Forward
+10: N(L) R Low Block/Back-fist, DP(L,R) Stay
+11: N(L) R Knife + block THEN R cross Knife + block Step Forward (No DP)
+12: N(R) L Knife + block THEN L cross Knife + block (No DP) turn 90 cc
+13: W(L) L Dbl Windshield blocks, DP(L,R) turn 180 cw
+14: E(R) R Dbl Windshield blocks, DP(R,L) turn 90cc
+15: N(L) L/R Dbl Inside blocks (to the side), DP(L,R)
+16: N-S-S(L) L 180 with L knife-hand THEN point L heel South, R 360 R knife-hand. Stay
+17: S(R) DP(R,L), then Dbl uppercuts(R,L)
+18: N(L) L 180 DP(L,R), Dbl uppercuts(L,R)
+Kuman(end fight) ... 
+
+**Notes:**
+
+  * 5-12: all north: Fwd, Stay, Back, Stay, Fwd, Stay, Fwd.
+Stay: after high blocks, After back-fists
+Back: Between Open Hand blocks.
+  * 11: (Order ?) Right hand facing right ear (elbow out), neck strike. Then right hand facing left hear, neck strike.
+  * 12: (Order ?) Right hand facing right ear (elbow out), neck strike. Then right hand facing left hear, neck strike.
+  * 16: Start with left facing right ear, palm facing sky. Spin 180 west and complete neck strike South.
+Then: Start with right hand facing left ear, pivot left heel toward south, Spit 360 east and complete neck strike South.

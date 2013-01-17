@@ -1,0 +1,22 @@
+======Fetching source code from GitHub from behind a firewall======
+  - Usually you would fetch code from github like this:
+**Note**: Of course replace 'user' and 'project' by actual user and project names.
+
+''git clone git://github.com/user/project.git''
+
+However Behind a firewall that might not work (port  9418)
+
+  - **In theory you can do a clone over http like**:
+
+''git clone http://github.com/user/project.git''
+
+However that seem to fail half way through most of the times.
+
+  - **If you just want a snapshot of the latest code (don't need to commit), I've found this trick**:
+
+''curl -L http://github.com/user/project/tarball/master -o project.tar.gz''
+
+I think you can also replace "master" by tags/commit numbers as well to get a specific version.
+
+  - If you need a real clone to do commits etc, then you will need to use an SSH tunnel, see:
+[[http://github.com/guides/dealing-with-firewalls-and-proxies]]

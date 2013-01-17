@@ -1,0 +1,7 @@
+====== Documentation & Other Tips ======
+  * [[SAP Tips]] \\
+SAP specific tips and installation notes/guides.
+
+  * [[General Tips]]\\
+Other Generic tips about anything and everyhting (else).
+

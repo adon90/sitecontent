@@ -1,0 +1,201 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+======ISA server 2004s, upgrading to SR2(sp13) from SP7======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+We currently run on 2004s SP7, see: [[isa_2004s]]
+
+This explains the upgrade to 2004s SR2 (SP13)
+
+Also here see the upgrade of the code base itself: [[isa no nwdi upgrading code base to sr2]]
+
+=====Upgrading the JVM=====
+We use the IBM jvm(64bits) (see note: 1090932 & 861215).
+This is the best VM for linux x86 64 bits.
+We download the new version here:
+[[https://www14.software.ibm.com/webapp/iwm/web/preLogin.do?lang=en_US&source=swg-ibmjavaisv]]
+
+It will ask for an access key that is found in the sap note.
+Then downloaded IBMJava2-AMD64-142-SDK-1.4.2-9.0.x86_64.rpm to here:
+[[\\frenchie/sapcd/java_installers/IBM-jvm/IBMJava2-AMD64-142-SDK-1.4.2-9.0.x86_64.rpm]]
+
+**On the ISA server**
+First we mount our sap download drive for easy access, you can skip that and copy the files you need by other means if you prefer (ie: ftp, ssh).
+
+<code>
+mkdir /mnt/sapcd
+smbmount //frenchie/sapcd /mnt/sapcd/ -o username=xxxx
+</code>
+
+Note, you might need to install samba-client wth yast2 to get smbmount.
+
+Now we install the new JVM:
+<code>
+rpm -Uvh /mnt/sapcd/java_installers/IBM-jvm/IBMJava2-AMD64-142-SDK-1.4.2-9.0.x86_64.rpm
+</code>
+
+/etc/java/IBMJava2.conf should still be valid since we are still in a a1.4.2 version. so we shouldn't have to run setDefaultJava either.
+
+Check the new java version got installed ''java -version''
+
+I usually reboot after that, to make sure all the apps pick the new java and test.
+
+
+(Used as part of this doc [[ISA 2004s]])
+
+Note: You might have to upgrade your Database first (Oracle, MaxDB etc...).
+
+
+=====Upgrading=====
+Get the SAP doc here: 
+https://websmp202.sap-ag.de/maintenanceNW2004s \\
+
+and Note 891983 (JSPM: Central SAP Note SAP NetWeaver 2004s)\\
+WARNING and Note: 933687 (JSPM hanging on windows with SP07)
+
+For this upgrade with use the sap DVD(SR2) 51033130
+We have them(2 DVD's) locally in: 
+[[//frenchie/sapcd/SAP_DVDS//2004s_SR2/51033130_1_spstack13/]]
+and
+[[//frenchie/sapcd/SAP_DVDS//2004s_SR2/51033130_2_spstack13/]]
+
+Use JSPM as explained here (or see section 2.2 of the PDF). \\
+
+====Upgrading the database====
+**You probably need to upgrade the database first.**
+Not explained here, see [[http://wiki.colar.net/isa_2004s#oracle_setup]] for infos.
+
+====Patching====
+This example is for linux x86_64
+
+Do all JSPM stuffs as t2cadm. (<SID>adm)  
+
+We will need to copy all the stack sar files to /usr/sap/trans/EPS/in
+
+Since i also have B2C/B2B deployed, we will upgrade that as well (vanilla b2c/b2b), from DVD: 51032269
+/frenchie/sapcd/SAP_DVDS/2004s_SR2/51032269_java_components_crm_erp/J2EE_OSINDEP
+
+Note: I created those folders manually as root and then chown them to t2cadm
+
+<code>
+sudo mkdirhier /usr/sap/trans/EPS/in
+# in case their where stuff from a previous upgrade
+sudo rm /usr/sap/trans/EPS/in/*
+sudo cd /usr/sap/trans/EPS/in/*
+#DVD1
+sudo cp /mnt/sapcd/SAP_DVDS/2004s_SR2/51033130_1_spstack13/NW70_JAVA_STACK_13/**/OSINDEP/*.SCA .
+#DVD2
+sudo cp /mnt/sapcd/SAP_DVDS/2004s_SR2/51033130_2_spstack13/NW70_ABAP_STACK_13/**/*.CAR .
+sudo cp /mnt/sapcd/SAP_DVDS/2004s_SR2/51033130_2_spstack13/NW70_ABAP_STACK_13/**/*.SAR .
+# We also need the KERNEL stuff (we did not have that on DVD so downloaded them from service.sap.com)
+# FYI: igsexe_11-20001389.sar, SAPEXE_133-20001346.SAR and SAPEXEDB_133-20001348.SAR
+#Note: we used the kernel from SP14(133) ! because of a big bug in SP13's one (114) 
+sudo cp /mnt/sapcd/2004s_patches/sp14/JSPM/LINUX_X86_64/* .
+# copy b2c/b2b stuff:
+sudo cp /mnt/sapcd/SAP_DVDS/2004s_SR2/51032269_java_components_crm_erp/J2EE_OSINDEP/UT_CRM/*.sca .
+
+# make sure permissions are good
+sudo chown -R t2cadm /usr/sap/trans/
+</code>
+
+WARNING: if you are starting from SP4 or lower, see additional steps in my SP6 doc.
+[[isa_2004s_sp06]]
+
+Note: it's also recommended to copy the latest sapcar executable in /usr/sap/trans/EPS/in/
+
+Update the JSPM itself first, using the JSPM (yes indeed !)\\
+start (as t2cadm)''go'' in /usr/sap/T2C/JC01/j2ee/JSPM/ (takes a while for the gui to comeup)\\
+<code>
+# as the desktop user run xhost+
+xhost+
+cd /usr/sap/ZTB/JC00/j2ee/JSPM
+su ztbadm -c ./go
+</code>
+
+TIP: It is best to use ssh -X rather than the xhost+ trick, for example:
+.
+'' ssh cisascr -X -l s2cadm "cd /usr/sap/S2C/JC01/j2ee/JSPM; go" ''
+.
+note that You will need to have on the client'' ForwardX11 yes'' in /etc/ssh/ssh_config for this to work
+And on the server ''X11Forwarding yes'' in /etc/ssh/sshd_config
+
+
+Enter the password to login the JSPM\\
+do "single package" and choose the JSPM patch, select it & click next\\
+
+once status says "deployed" press exit to stop the JSPM (might have to kill 'go' if it does't die)\\
+
+Now we can start the JSPM again to update all the other components\\
+
+<code>
+# as the desktop user run xhost+
+xhost+
+cd /usr/sap/ZTB/JC00/j2ee/JSPM
+su ztbadm -c "./go"
+</code>
+
+Do "single packages" and for each "cuurently installed" package select the new (latest) version in the list and click next.\\
+
+**Make sure ALL the components listed are upgraded to SR2 (Sp13 for all components, except for crm components which are called 5.0 SP6 for SR2)**
+
+=== SAP FREAKING PASSWORD ISSUES !===
+**Of course you can never upgrade ISA without having SAP screwing with the passwords (expiring it and asking for a new one and then failing to apply it properly).**
+It's been an issue since day 1 and still his ... ridiculous BS !
+So anyhow, after upgrading one of the components(J2EE ??) it will expire the password (even though we set it not to expire ever!) and then after that it will fail upgrading the other packages since it can't connect itself to the server because of the password !
+**Solution:** 
+  * Open the visual admin and go change the password there.  
+''ssh cisascr -X -l s2cadm "cd /usr/sap/S2C/JC01/j2ee/admin; go"''
+  * This only does half the job of course, so then you should start the configtool on the server and go to the secure store and put the same passord in there (admin password), then press "add" and the "save" icon. 
+''ssh cisascr -X -l s2cadm "cd /usr/sap/S2C/JC01/j2ee/configtool; configtool.sh"''
+  * Restart the J2EE engine to get it to pick the new password
+  * Then restart JSPM and RESUME the upgrade 
+'' ssh cisascr -X -l s2cadm "cd /usr/sap/S2C/JC01/j2ee/JSPM; go" ''
+
+=== Other issue with CAF ===
+When upgrading from <sp7 directly to >sp11 there is an error when deploying CAF.
+Something like this:
+<code | CAF error>
+ERROR: Not updated. Deploy Service returned ERROR: 
+                     java.rmi.RemoteException: Cannot deploy application sap.com/caf~UI~ptn~common.. 
+                     Reason: Clusterwide exception: Failed to deploy application sap.com/caf~UI~ptn~common. Check causing exception for details (trace file). Hint: Are all referenced components deployed and available on the engine?; nested exception is: 
+                     	com.sap.engine.services.deploy.container.DeploymentException: Clusterwide exception: Failed to deploy application sap.com/caf~.......
+</code>
+There is a SAP note about this issue, see: [[https://websmp130.sap-ag.de/sap(bD1lbiZjPTAwMQ==)/bc/bsp/spn/sapnotes/index2.htm?numm=1010640&nlang=EN&smpsrv=https%3a%2f%2fwebsmp101%2esap-ag%2ede | Note 1010640]]
+
+**Basically you have to manually undeploy duplicate component: sap.com/caf~UI~servicebrowser with the SDM.**
+
+'' ssh cisascr -X -l d2cadm "cd /usr/sap/S2C/JC01/SDM/program/; RemoteGui.sh" ''
+
+Then restart JSPM again and resume the upgrade.
+
+Update should complete after a while (2-3h) total.
+
+Note: **on one of the systems, the JSPM did not pick up SOME of the the new B2C/B2B components** (sap-shrweb,sap-crm-web,sap-ipcmsa,sap-shrjav,sap-crmjav), so i deployed those manually with SDM and restarted SAP J2EE.
+
+Here is what you should end-up with:
+
+[[http://cisascr:50100/sap/monitoring/ComponentInfo:]]
+
+{{sp13_shot.png}} 
+
+
+=====Post Install settings and enhancements=====
+See: [[sap_crm5_0_isa_trex_performance_settings]]
+
+===== Setup B2c =====
+See here on how to setup the ISA server/B2B/B2C sites
+
+Follow this link:
+[[Saving/Loading iSA B2B/B2C XCM config]]

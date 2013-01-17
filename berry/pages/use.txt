@@ -1,0 +1,51 @@
+======Using Berry4All======
+TIP: **We need to run under root(sudo) because usually the USB device(Blackberry) can not be read/written to by a regular user(except OS X). IF you can't or don't want to run as root, see [[#faqs]]**
+
+=====DefaultRoute=====
+
+**On OSX, you do not need to bother will defaultroute, skip to [[#GUI]]**
+
+===If your PPPD supports "replacedefaultroute"===
+Edit your relevant pppd file (ex: conf/tmobile) and uncomment (remove the # at the beginning) this line:
+''#replacedefaultroute''
+
+===If it does NOT support it===
+Then you will want to disable all the other interfaces, so no routes are available, so bbtether/pppd can set one.
+
+First you want to disable your other connections if you have some (say wifi), otherwise pppd won't be able to setup the default route and it will behave like it's not working. 
+
+To know which one run ''route'' in a shell and see which interface is listed (ex: eth1) (you can also use ''ifconfig -a'')
+
+Then bring it/them down: Ex: ''sudo ifconfig eth1 down''
+
+Now, when you run ''route'', it should list nothing.
+
+NOTE: **AFTER** you are done with bbtether, you will want to re-enable your other connection(s):
+Ex: ''sudo ifconfig eth1 up'' and possibly ''sudo /etc/init.d/networking restart''
+
+=====GUI=====
+**Until i make a proper application launcher, it will need to be started from a terminal.**
+Start a terminal.
+Go into the berry4all folder (Ex: ''cd bbtether'') and run ''sudo ./berry4all.sh''.
+**Then simply use the GUI (straightforward)**
+
+See here for an example a [[screenshot | GUI screenshot]]
+
+Warning: **If you have problems. please see the [[faqs|FAQ's]] on common errors and how to reach me if needed.**
+
+
+=====Tethering without the GUI (command line)=====
+IF you want to use tethering without the GUI (ie: don't want to install WxPython)
+<code>
+cd bbtether
+sudo python bbtether.py tmobile -v
+</code>
+TIP: If your device requires a password add it with the -P option
+Ex: ''sudo python bbtether.py tmobile -P mypass -v''
+
+
+**At this point you should be connected to internet through the blackberry.**
+See here for working [[bbtether Example Output]]
+
+When done using the connection, you can stop using ^c
+It should stop properly after a little bit.

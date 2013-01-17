@@ -1,0 +1,40 @@
+======Zoneminder notes======
+I'm using Zoneminder to control/monitor my security camera under ubuntu.
+I'm using 2 bbtv878 cards, one for 3 b/w cameras and the other for 1 color cam (one card cannot mix b/w and color)
+
+Anyway for this to work right there are a few gotchas, so those are just notes to myself:
+
+Only one card works unless I add **''noapic''** to kernel boot line (IRQ timeout problems)
+ex (Grub 1):
+<code | sudo vi /boot/grub/menu.lst >
+kernel          /boot/vmlinuz-2.6.28-15-generic root=UUID=c0642da5-130b-464d-9c04-235a508fbc1f ro quiet splash noapic
+</code>
+Note: **Probably have to redo after each kernel upgrade**
+
+
+**UPDATED**
+In new versions of ubuntu, it uses grub2, you need to edit /etc/default/grub:
+<code | sudo vi /etc/default/grub>
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash noapic hpet=force"
+</code>
+then run ''sudo update-grub''
+
+
+Card work best with following modprobe options:
+<code | /etc/modprobe.d/bttv.conf>
+options bttv card=77,77 tuner=4,4 radio=0,0 triton1=0 vsfx=0 autoload=0
+</code>
+
+===Settings===
+Just useful for me:
+
+Note: With newer version of ZM it seems my capture card only work when set to use VideoForLinux version 1.
+
+
+main: video0, channel 0, NTSC, Grey, 320 240, normal
+kid: video0, channel 1, NTSC, Grey, 320 240, normal
+out: video1, channel 0, NTSC, RGB24, 320 240, normal
+
+
+Use ful links:
+[[http://bytebasket.com/index.php?option=com_content&view=article&id=82:configuring-zoneminder-on-ubuntu-1004&catid=45:how-to&Itemid=76]]

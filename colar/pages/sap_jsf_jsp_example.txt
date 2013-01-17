@@ -1,0 +1,467 @@
+======SAP JSF JSP Example======
+
+<code html>
+<%@ page language="java" %>
+<%
+	response.setHeader("Pragma", "");
+	response.setHeader("Cache-Control", "public");
+
+%>
+<%@ page errorPage="/appbase/jspruntimeexception.jsp" %>
+
+<%@ page import="com.sap.isa.isacore.action.b2c.*" %>
+<%@ page import="com.sap.isa.businessobject.order.*" %>
+<%@ page import="com.sap.isa.businessobject.Shop" %>
+<%@ page import="com.sap.isa.core.UserSessionData" %>
+<%@ page import="com.sap.isa.businessobject.BusinessObjectManager" %>
+<%@ page import="com.sap.isa.businessobject.lead.Lead" %>
+<%@ page import="com.sap.isa.core.SharedConst" %>
+<%@ page import="com.sap.isa.ui.uiclass.BaseUI" %>
+<%@ page import="com.sap.isa.catalog.uiclass.ProductDetailsUI" %>
+<%@ page import="com.sap.isa.core.util.MessageList" %>
+<%@ page import="com.sap.isa.core.ui.context.GlobalContextManager" %>
+<%@ page import="com.sap.isa.core.ui.context.ContextManager" %>
+<%@ page import="com.sap.isa.core.util.JspUtil" %>
+<%@ page import="com.sap.isa.catalog.actions.ActionConstants" %>
+<%@ page import="java.util.Hashtable" %>
+<%@ page import="com.sap.isa.businesspartner.backend.boi.PartnerFunctionData" %>
+<%@ page import="com.sap.isa.businesspartner.businessobject.BusinessPartnerManager" %>
+<%@ page import="com.sap.isa.businesspartner.businessobject.BusinessPartner" %>
+<%@ page import="com.sap.isa.catalog.webcatalog.AttributeKeyConstants" %>
+<%@ page import="com.sap.isa.backend.crm.webcatalog.pricing.PriceCalculatorInitDataCRMIPC" %>
+<%@ page import="com.sap.isa.businessobject.webcatalog.pricing.PriceCalculator" %> 
+
+<%@ taglib uri="/isa" prefix="isa" %>
+<%@ taglib uri="/isacore" prefix="isacore" %>
+
+<jsp:useBean id="itemAttributesIterator" scope="request" type="java.util.Iterator" />
+<jsp:useBean id="currentItem" scope="request" type="com.sap.isa.catalog.webcatalog.WebCatItem" />
+
+<%
+	// The attribute SharedConst.BASKET_LOADED_DIRECT is used to determine if the item should
+	// be added directly to the basket. This is done when the basket has to be displayed directly
+	// in case of web crawler access to the shop. This happens only once when the basket hasn't been displayed
+	// because as soon as the basket is displayed the above attribute is turned to true. 
+        UserSessionData userSessionData = UserSessionData.getUserSessionData(request.getSession());
+        ContextManager contextManager =  ContextManager.getManagerFromRequest(request);
+		String str = (String) userSessionData.getAttribute(B2cConstants.BASKET_LOADED_DIRECT);
+        String nextAction = request.getParameter(ActionConstants.RA_NEXT);
+        if (null!=request.getAttribute(ActionConstants.RA_NEXT))
+        {
+                nextAction = (String) request.getAttribute(ActionConstants.RA_NEXT);
+        }
+        if (null==nextAction && null!=GlobalContextManager.getValue(ActionConstants.CV_NEXT))
+        {
+                nextAction = contextManager.getContextValue(ActionConstants.CV_NEXT);
+        }
+		if (null!=nextAction)
+			nextAction = JspUtil.encodeHtml(nextAction);
+        String detailScenario = request.getParameter(ActionConstants.RA_DISPLAYSCENARIO);;
+        if (null!=request.getAttribute(ActionConstants.RA_DISPLAYSCENARIO))
+        {
+                detailScenario = (String) request.getAttribute(ActionConstants.RA_DISPLAYSCENARIO);
+        }
+        if (null==detailScenario && null!=GlobalContextManager.getValue(ActionConstants.CV_DISPLAYSCENARIO))
+        {
+                detailScenario = contextManager.getContextValue(ActionConstants.CV_DISPLAYSCENARIO);
+        }
+        if (null==detailScenario)
+        {
+                detailScenario = "";
+        }
+		if (null!=detailScenario)
+			detailScenario = JspUtil.encodeHtml(detailScenario);
+        boolean goodScenarios = false;
+        if (detailScenario != null) {
+            if (detailScenario.equals("bestseller")) {
+                    goodScenarios = true;
+            }        
+			if (detailScenario.equals("recommendations")) {
+					goodScenarios = true;
+			}        
+            if (detailScenario.equals("cuaTable")) {
+                    goodScenarios = true;
+            }        
+        }
+        // check for query
+        String isQuery = request.getParameter(ActionConstants.RA_IS_QUERY);
+        if (null==isQuery && null!=request.getAttribute(ActionConstants.RA_IS_QUERY))
+                isQuery = request.getAttribute(ActionConstants.RA_IS_QUERY).toString();
+        if (null==isQuery && null!=GlobalContextManager.getValue(ActionConstants.CV_IS_QUERY))
+        {
+                isQuery = contextManager.getContextValue(ActionConstants.CV_IS_QUERY);
+        }
+        if (null==isQuery)
+                isQuery = "";
+		if (null!=isQuery)
+			isQuery = JspUtil.encodeHtml(isQuery);
+        String query = request.getParameter(ActionConstants.RA_CURRENT_QUERY);
+        if (null==query && null!=request.getAttribute(ActionConstants.RA_CURRENT_QUERY))
+                query = request.getAttribute(ActionConstants.RA_CURRENT_QUERY).toString();
+        if (null==query && null!=GlobalContextManager.getValue(ActionConstants.CV_CURRENT_QUERY))
+        {
+                query = contextManager.getContextValue(ActionConstants.CV_CURRENT_QUERY);
+        }
+        if (null==query)
+                query = "";
+		if (null!=query)
+			query = JspUtil.encodeHtml(query);
+		
+		boolean isMultiplePrice = false;
+		PriceCalculator pricCalc = currentItem.getPriceCalculator();
+		PriceCalculatorInitDataCRMIPC initData = null;
+		if(pricCalc != null){
+			initData = (PriceCalculatorInitDataCRMIPC) pricCalc.getInitData();
+		}
+		if(initData != null && initData.getStrategy() == AttributeKeyConstants.STATIC_DYNAMIC_PRICING)
+			isMultiplePrice = true;
+%>
+
+	<!--
+	<link href="<isa:mimeURL name="mimes/shared/style/stylesheet.css" language=""/>" type="text/css" rel="stylesheet">
+	-->
+	<!--script 
+		type="text/javascript"
+		language="JavaScript1.2" 
+		noscript="<isa:translate key="b2c.cat.jscript.proddet"/>"		
+	>
+	<%--@ include file="/catalog/js/ProductDetailB2C.js.inc.jsp"--%>
+	</script-->	
+   <isacore:ifShopProperty property = "pricingCondsAvailable" value ="true">
+   		<script src='<isa:webappsURL name="appbase/jscript/ipc_pricinganalysis.jsp"/>' 
+				type = "text/javascript">
+    	</script>
+   </isacore:ifShopProperty>
+
+  <div id="information" class="module">
+<div class="module-name"><isa:moduleName name="catalog/ProductDetailB2C.inc.jsp" /></div>
+	<%@ include file="attributeNameParser.inc.jsp" %>
+<%
+	ProductDetailsUI productdetailUI = new ProductDetailsUI(pageContext);
+	String [] args = {currentItem.getDescription()};
+	String grpTxt = WebUtil.translate(pageContext, "catalog.isa.productTitle", args); 
+	if (productdetailUI.isAccessible())
+	{
+%>
+			<a 
+				href="#groupproductdetail-end"
+				id="groupproductdetail-begin"
+				title="<isa:translate key="access.grp.begin" arg0="<%=grpTxt%>"/>" 
+			></a>
+<%
+	}
+%>
+
+<%
+	String queryTerms = request.getParameter(ActionConstants.RA_CURRENT_QUERY);
+	if (null==queryTerms && null!=request.getAttribute(ActionConstants.RA_CURRENT_QUERY))
+		queryTerms = request.getAttribute(ActionConstants.RA_CURRENT_QUERY).toString();
+	if (null==queryTerms && null!=GlobalContextManager.getValue(ActionConstants.CV_CURRENT_QUERY))
+	{
+		ContextManager ctxtManager =  ContextManager.getManagerFromRequest(request);	
+		queryTerms = ctxtManager.getContextValue(ActionConstants.CV_CURRENT_QUERY);
+	}		
+	if (null==queryTerms)
+		queryTerms = "";
+	if (null!=queryTerms)
+		queryTerms = JspUtil.encodeHtml(queryTerms);
+	Hashtable htTerms = new Hashtable();
+  	htTerms = productdetailUI.getSearchTerms(queryTerms);  
+%>
+	  <table border="0" cellspacing="0" cellpadding="0" width="100%" height="100%">
+		<tbody>
+		  <tr>
+			<td colspan="3">
+			  <table class="navPath" border="0" cellspacing="0" cellpadding="0" width="100%">
+				<tbody>
+				  <tr>
+					<td rowspan="2"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/dec_ecke_navPath.gif") %>" alt="" width="23" height="26" border="0"></td>
+					<td width="100%"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="1" height="5" border="0"></td>
+				  </tr>
+				  <tr>
+					<td>
+					  <table class="navPath" border="0" cellspacing="0" cellpadding="0" >
+						<tbody>
+						  <tr>
+							<td><span><isa:translate key="catalog.isa.productTitle" arg0="<%=JspUtil.encodeHtml(JspUtil.removeNull(currentItem.getDescription()))%>"/></span></td>
+						  </tr>
+						</tbody>
+					  </table>
+					</td>
+				  </tr>
+				</tbody>
+			  </table></td>
+		  </tr>
+		  <tr>
+			<td class="blueLine"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="1" height="1" border="0"></td>
+			<td><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/spacer.gif") %>" alt="" width="22" height="1" border="0"></td>
+			<td width="100%" height="100%"><br>
+			<% 
+				//catalog may handle this case
+				if (nextAction != null || goodScenarios) 
+				{ 
+			%>			
+                   <!--FORM name="productform" action="<isa:webappsURL name="/catalog/updateItems.do"/>" method="POST" onSubmit="return shouldSend();"-->
+                   <FORM name="productform"
+                        action='<isa:webappsURL name="/catalog/updateItems.do">
+                                        <isa:param name="<%=ActionConstants.RA_IS_QUERY%>" value="<%=isQuery%>"/>
+                                        <isa:param name="<%=ActionConstants.RA_CURRENT_QUERY%>" value="<%=query%>"/>
+                                        <isa:param name="areaid" value="workarea"/>
+                                </isa:webappsURL>'
+                onSubmit="return shouldSend();"
+                        method="POST"
+                   >
+			 <% } else {%>
+		   <FORM name="productform" action="" method="POST" onSubmit="return shouldSend();">
+<!-- Please add here your action that handles changing the quantity, working with the configuration, aso !-->
+			 <% } %>
+			  <br><br>
+	<!-- Campaign messages -->
+	<%
+	MessageList msgList = productdetailUI.getCampaignMessageList();
+	pageContext.setAttribute(AttributeKeyConstants.CAMPAIGN_MESSAGE_LIST, msgList);
+	if ((msgList != null) && (!msgList.isEmpty())){
+	%>
+    <isa:message id="messagetext" name="<%= AttributeKeyConstants.CAMPAIGN_MESSAGE_LIST %>" ignoreNull="true">
+		<div class="error">
+			<span><%=JspUtil.encodeHtml(messagetext)%></span>
+        </div>
+    </isa:message>
+	<% } %>
+	<!-- Campaign messages -->
+
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				  <tbody>
+					<tr>
+					  <td><img src="<isa:imageAttribute guids="DOC_PC_CRM_IMAGE,DOC_P_CRM_IMAGE" name="currentItem" defaultImg="mimes/shared/no_pic.gif"/>" width=160 height=160 alt="<%=currentItem.getProduct()%>"></td>
+					  <td>&nbsp;&nbsp;&nbsp;</td>
+					  <td>
+						<h3><span><%= JspUtil.removeNull(productdetailUI.getHighlightedResults(currentItem.getDescription(),htTerms)) %></span></h3>
+						<!--  Commented out ! The details are displayed in-place
+						<p><a href="javascript://" onClick="open_details();"><isa:translate key="catalog.isa.technicalData"/></a></p>
+						  -->
+						<p><span><%= JspUtil.removeNull(productdetailUI.getHighlightedResults(currentItem.getAttribute("TEXT_0001"),htTerms)) %></span></p>
+						<p><span><%= JspUtil.removeNull(productdetailUI.getHighlightedResults(currentItem.getProduct(),htTerms)) %></span></p>
+						<p>
+              <%if (isMultiplePrice == false) { %>						
+						  <table>
+						  <% java.util.Iterator pricesIterator = currentItem.readItemPrice().getPrices();
+							while (pricesIterator.hasNext()) {
+							  String st = (String) pricesIterator.next();
+						  %>
+							  <tr><td><strong><isa:translate key="catalog.isa.price"/>:</strong></td><td><span><strong><%= st %></strong></span></td></tr>
+						  <% } %>
+						  </table>
+               <%} else {%>
+                          <table>
+							<tbody>
+	                          <tr>
+	                          <td><strong><isa:translate key="catalog.isa.price"/>:</strong></td>
+	                          <td>
+	                            <table border="0" cellpadding="0" cellspacing="0">
+	                              <tbody>
+	                              <% java.util.Iterator pricesIterator = currentItem.readItemPrice().getListPrices();
+	                                  while (pricesIterator.hasNext()) {
+	                                  String st = (String) pricesIterator.next();
+	                              %>
+	                                <tr><td>&nbsp;<%= st %></td></tr>
+	                              <% } %>
+	                              </tbody>
+	                            </table></td>
+	                        </tr>
+	                        <tr>
+	                          <td><strong><isa:translate key="catalog.isa.IPCPrice"/>:</strong></td>
+	                          <td>
+	                            <table border="0" cellpadding="0" cellspacing="0">
+	                              <tbody>
+	
+	                                <tr><td>&nbsp;<%= currentItem.readItemPrice().getIPCPrice() %></td></tr>
+	                        
+	                              </tbody>
+	                            </table></td>
+	                        </tr>                                                
+							</tbody>                          		
+                          </table>
+               <%}%>  
+						</p>
+						<p>
+						<table class="list" border="0" cellspacing="0" cellpadding="3">
+<!--  No technical data title <tr>
+							 <th colspan="2">
+								<isa:translate key="catalog.isa.technicalData"/>
+							 </th>
+						   </tr> -->
+				  <% while (itemAttributesIterator.hasNext()) {
+					com.sap.isa.catalog.boi.IAttributeValue item=(com.sap.isa.catalog.boi.IAttributeValue) itemAttributesIterator.next();
+				  %>
+							<% if (!item.getAttribute().isBase() && item.getAttributeDescription() != null && item.getAttributeName().indexOf("_") != 0) {%>
+							   <tr>
+								 <td><span><%= JspUtil.encodeHtml(JspUtil.removeNull(item.getAttributeDescription())) %></span></td>
+								  <td>
+								  <%if (currentItem.getAreaAttributes() != null && currentItem.getAreaAttributes().getDescription(item.getAttributeGuid(),item.getAsString()) != null ) {%>
+								  <span><%= JspUtil.encodeHtml(JspUtil.removeNull(currentItem.getAreaAttributes().getDescription(item.getAttributeGuid(),item.getAsString()))) %></span>
+								  <% } else { %>
+								  <span><%= item.getAsString() %></span>
+								  <% } %>
+								 <%if ( !currentItem.getAttribute("_"+item.getAttributeName()).equals("") ) { %>
+								 <span><%= currentItem.getAttribute("_"+item.getAttributeName()) %></span>
+								 <% } %>
+								 </td>
+							   </tr>
+							<% } else {
+								String st = parseAttributeName(pageContext, "catalog.isa.attribute",item.getAttributeGuid());																
+								if (st != null) {
+									st = JspUtil.encodeHtml(JspUtil.removeNull(st));
+							%>
+							   <tr>
+								 <td><span><%= st %></span></td>
+								 <td><span><%= JspUtil.encodeHtml(JspUtil.removeNull(item.getAsString())) %></span></td>
+							   </tr>
+							<% } } %>
+				<%} %>
+						</table>
+						</p>
+
+						<p>
+					   <label for="item_1"><isa:translate key="catalog.isa.quantity"/>:</label>
+						 <input type="text" id="item_1" class="textInput" size="4" name="item[1].quantity" value="<%= currentItem.getQuantity() %>">
+					   <span>
+						 <% if ( currentItem.getUnitsOfMeasurement().length == 1 ){ %>
+						 <%=currentItem.getUnitsOfMeasurement()[0].trim()%><input type="hidden" name="item[1].unit" value="<%= currentItem.getUnitsOfMeasurement()[0].trim()%>"/>
+						 <%} else {%>
+						 <!-- <select name="item[1].unit" width=4 onChange=setUnit('<%= currentItem.getItemID() %>',this.selectedIndex)> -->
+						<select name="item[1].unit" width=4 onChange=setUnit('<%= currentItem.getItemID() %>',this.selectedIndex)>
+						<% for (int j = 0; j < currentItem.getUnitsOfMeasurement().length; j++) { %>
+				<option value="<%= currentItem.getUnitsOfMeasurement()[j].trim()%>"
+				<% if ( currentItem.getUnitsOfMeasurement()[j].trim().equalsIgnoreCase(currentItem.getUnit().trim()) ) {%>SELECTED<% } %> ><%= currentItem.getUnitsOfMeasurement()[j]%></option> <% }   }%>
+				</select>
+					   </span>	
+					   &nbsp;&nbsp;<a class="icon" href="#" onClick="addSingleItem('<%= currentItem.getItemID() %>')"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_basket.gif") %>" alt="<isa:translate key="catalog.isa.addToBasket"/>" width="16" height="16" border="0"></a>
+					   <a href="#" onClick="getMoreFunctions('<%= currentItem.getItemID() %>','leaflet')"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_leaflet.gif") %>" alt="<isa:translate key="catalog.isa.leaflet"/>" width="16" height="16" border="0"></a>
+					   <%
+						UserSessionData userData = UserSessionData.getUserSessionData(session);
+						BusinessObjectManager bom = (BusinessObjectManager)
+						  userData.getBOM(BusinessObjectManager.ISACORE_BOM);
+						String bp =bom.getUser().getUserId();
+						String scenario = "B2B";
+						Shop shop = bom.getShop();
+						if(shop != null)
+						  scenario = shop.getScenario();
+			try{
+		  			BusinessPartnerManager buPaMa = bom.createBUPAManager();
+		  			BusinessPartner soldTo = buPaMa.getDefaultBusinessPartner(PartnerFunctionData.SOLDTO);
+		  			if (null!=soldTo)
+		  				bp = soldTo.getId();
+						  
+			} catch(Exception ex) {
+			}
+			if(shop.isLeadCreationAllowed() && bp != null && bp.length()>0) {
+					   %>
+					   <a class="icon" href="#" onClick="createLead('<%= currentItem.getItemID() %>')"><img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/lead.gif") %>" alt="<isa:translate key="lead.create.entry.label"/>" width="16" height="16" border="0"></a>
+					   <%
+			}
+					  %>
+					   <% if (currentItem.getAttribute("CONFIG_USE_IPC") != null && currentItem.getAttribute("CONFIG_USE_IPC").equals("X") && currentItem.getConfigItemReference() != null) { //it is an "old fashion" config%>
+							<% if (currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG") != null && currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG").equals("A")) { //a "old fashion" config%>
+								<a href="javascript:getMoreFunctions('<%= currentItem.getItemID() %>','config')">
+						<%if (!currentItem.isConfigured()) { %>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_config.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } else {%>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_reconfig.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } %>
+							  </a><br>
+							<% } %>
+							<% if (currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG") != null && currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG").equals("X")) { //a "old fashion" config%>
+								<a href="javascript:getMoreFunctions('<%= currentItem.getItemID() %>','config')">
+						<%if (!currentItem.isConfigured()) { %>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_config.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } else {%>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_reconfig.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } %>
+								</a><br>
+							<% } %>
+							<% if (currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG") != null && currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG").equals("C")) { //a "old fashion" config, with special conditions%>
+								<a href="javascript:getMoreFunctions('<%= currentItem.getItemID() %>','config_special')">
+						<%if (!currentItem.isConfigured()) { %>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_config.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } else {%>
+								<img src="<%= WebUtil.getMimeURL(pageContext, "b2c/mimes/images/icon_reconfig.gif") %>" alt="<isa:translate key="catalog.isa.config"/>" width="16" height="21" border="0">
+						<% } %>
+								</a><br>
+							<% } %>
+					   <% } %>
+					   <% if (currentItem.getAttribute("CONFIG_USE_IPC") == null || currentItem.getAttribute("CONFIG_USE_IPC").equals("") && currentItem.getConfigItemReference() != null) { //it might be a "new fashion" config%>
+							<% if (currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG") != null && currentItem.getAttribute("PRODUCT_CONFIGURABLE_FLAG").equals("B")) { //a "new fashion" config%>
+								&nbsp;
+							<% } else {%>
+								&nbsp;
+							<% } %>
+					   <% } %>
+					   <% if (currentItem.getAttribute("PRODUCT_VARIANT_FLAG") != null && !currentItem.getAttribute("PRODUCT_VARIANT_FLAG").equals("")) { %>
+							  <a href="javascript:getMoreFunctions('<%= currentItem.getItemID() %>','config_view')" class="FancyLinkGrey"><isa:translate key="catalog.isa.configView"/></a><br>
+					   <% } else { %>
+							  &nbsp;
+					   <% } %>
+					   </p><br>
+
+					  </td>
+					</tr>
+				  </tbody>
+				</table><br><br>
+
+				 <input type="hidden" name="next" value="addToBasket">
+				 <input type="hidden" name="itemRequest" value="<%= currentItem.getItemID() %>">
+				 <input type="hidden" name="itemkey" value="<%= currentItem.getItemID() %>">
+				 <input type="hidden" name="productguid" value="<%= currentItem.getItemID() %>">
+				 <input type="hidden" name="areakey" value="<%= currentItem.getAreaID() %>">
+				 <input type="hidden" name="item[1].itemID" value="<%= currentItem.getItemID() %>">
+				 <input type="hidden" name="contractkey" value="">
+				 <input type="hidden" name="contractitemkey" value="">
+				 <INPUT type="hidden" name="index" value="">
+				 </form>
+				 <br>
+				<% if (request.getAttribute("cuaList") != null) {%>
+				<!-- Here it should be inserted cua -->
+				<br>
+		   <isacore:ifShopProperty property = "cuaAvailable" value = "true" >
+				 <div>
+				 <% String addToDocumentMethod = "Action";%>
+				 <%@ include file="/b2c/marketing/cuatable.inc.jsp" %>
+				 </div>
+			 </isacore:ifShopProperty>
+				 <% } %>
+			</td>
+		  </tr>
+		</tbody>
+	  </table>
+<%
+        if (productdetailUI.isAccessible())
+	{
+%>
+<a 
+	href="#groupproductdetail-begin"
+	id="groupproductdetail-end"
+	title="<isa:translate key="access.grp.end" arg0="<%=grpTxt%>"/>" 
+></a>	
+<%
+	}
+%>
+	</div><%
+String titleArg0 = null;
+// get argument for the title
+if (null!=request.getAttribute(ActionConstants.RA_ITEMNAME))
+        titleArg0 = request.getAttribute(ActionConstants.RA_ITEMNAME).toString();
+// not argument for the title, then make one and set the title using the manual hard code
+if (  null == titleArg0 )
+{
+        String [] titleArgs = {JspUtil.encodeHtml(JspUtil.removeNull(currentItem.getDescription()))};
+        String pageTitle = WebUtil.translate(pageContext, "catalog.isa.productTitle", titleArgs);
+%>
+        <script>
+        document.title = '<%=pageTitle%>';
+        window.name = 'main';
+        </script>
+<%
+} //titleArg0
+%>
+</code>

@@ -1,0 +1,5 @@
+======Blackberry tethering on OS X (USB)======
+
+Please [[http://www.berry4all.com/|see the new page]].
+
+<html><script language="javascript">document.location="http://www.berry4all.com/";</script></html>

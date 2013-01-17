@@ -1,0 +1,26 @@
+======Dumping and restoring Postgresql======
+This is useful when moving the data to a new server, or when upgrading.
+
+To dump the whole postgresql: (run on old version of postgresql)
+<code>
+# note that we dump schema and data separately, because that's helpful if there are problems when restoring.
+# dumping the schema (-c means we add "cleaning" statements, in case we try to restore multiple times etc ...)
+pg_dumpall -cs > schema.sql
+# dumping data (-d means use "insert" statements .. this is slow but much more reliable/portable to other db's)
+pg_dumpall -ad > data.sql
+</code>
+
+to restore (run on old version of postgresql if upgrading)
+<code>
+su - postgres
+# we need to give a DB name (even though it will overwrite all), so we just use template1 (default postgresql DB)
+psql -e < schema.sql template1
+psql -e < data.sql template1
+</code>
+
+NOTE: If you want to dump just a specific database use the pg_dump instead of pg_dumpall option
+
+
+NOTE: after a restore it's also good to 'clean' the DB (vacuumdb -a -z)
+
+

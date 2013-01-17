@@ -1,0 +1,99 @@
+======Profiling SAP ISA J2EE WEBAS with Netbeans / VisualVM======
+
+Warning: While this method of profiling is very nice, **it requires running the Sap J2EE engine on java 6.0** which is not supported by SAP and causes some issues (ex: Visual admin issues).
+**If you are not comfortable with this, please see this alternate method** (less convenient but works with Java 1.4):
+[[profiling_sap_isa_j2ee_webas_using_eclipse_memory_analyzer_mat_|Profiling SAP J2EE using Eclipse Memory Aanalizer]]
+
+
+VisualVm is a nice profiler/grapher for Java virtual machines.
+Here i explain how to use with SAP ISA to do some performance tuning / profiling / monitoring.
+
+**You can also just get [[http://visualvm.dev.java.net | VisualVM]] standalone, or use the built-in Netbeans profiler**
+
+One drawback is that like most of the new fancy tools, it requires the application to run on java 6, and SAP wants us to run on 1.4.
+
+Anyhow to be able to profile the App I am running the whole SAP j2ee server under java 6 during the profiling session.
+
+This doesn't seem to have any drawback(all works), except the visual administrator as an issue, though i found a fix for that too, see: [[other_generic_sap_tips]]
+
+=====Telling SAP J2EE engine to run on java 6 and start the profiler agent=====
+====Using java 6====
+You will want to run the configtool and set the JAVA_HOME to use java 6 in the instance/dispatcher and server screens.
+<code>
+xhost +
+su - ztbadm
+export DISPLAY=:0.0
+cd /usr/sap/ZTB/JC00/j2ee/configtool/
+./configtool.sh
+</code>
+
+WARNING: make sure you set all the JAVA_HOME fields to use a java 6 VM,
+**Be careful to check under each screen TABS (bootstrap)**
+**Hopwever it seems J2EE will NOT start if I change the "global" or "dispatcher" jvm's to 1.6, so leave them those 1.4**
+
+Note that i also had to increase PermSize memory for the j2ee to run under java 6,
+Add this parameter in the configtool (VM args).
+<code>
+-XX:PermSize=200m
+</code>
+This goes in the **configtool**, as a jvm arg, do this as you set the JAVA_HOME dir when you follow this doc. 
+
+{{ conftool.png }} 
+
+Note, that **you might also need to edit your PROFILE** to make it use java 6, example:
+<code | /usr/sap/ZTB/SYS/profile/XYZ_JC00_myhost>
+SAPSYSTEMNAME = XYZ
+SAPSYSTEM = 00
+INSTANCE_NAME = JC00
+DIR_CT_RUN = $(DIR_EXE_ROOT)/run
+DIR_EXECUTABLE = $(DIR_INSTANCE)/exe
+jstartup/trimming_properties = off
+jstartup/protocol = on
+#jstartup/vm/home = /usr/lib/j2sdk1.4-sun
+############################ HERE - use java 6 ######################
+jstartup/vm/home = /usr/lib/jvm/java-6-sun
+jstartup/max_caches = 500
+jstartup/release = 700
+jstartup/instance_properties = $(jstartup/j2ee_properties):$(jstartup/sdm_properties)
+j2ee/dbdriver = /sapdb/programs/runtime/jar/sapdbc.jar
+igs/listener/rfc/disable = 1
+PHYS_MEMSIZE = 512
+exe/saposcol = $(DIR_CT_RUN)/saposcol
+rsdb/dbid = XYZ
+dbs/ada/schema = SAPXYZ
+
+
+#------------------------------------------------------------
+# Jcontrol: Migrated Profile Parameter
+#            create at Thu Sep 13 16:14:22 2007
+#------------------------------------------------------------
+j2ee/instance_id = ID0039456
+#------------------------------------------------------------
+</code>
+
+**The sap engine has to run under java 6+ for this to work**.
+
+Warning: After you are done, make sure to click the save icon and then quit configtool, then **restart the engine** (stopsap / startsap).
+
+=====Using VisualVM=====
+**It's way easier to profile if the sap j2ee user is the same user that runs visualvm.**
+
+So we will run VisualVM as the sap user:
+<code>
+tcolar# xhost +
+tcolar# sudo su - ztbadm
+# now we are ztbadm
+ztbadm# export DISPLAY=:0.0
+# we need to use a java 6+ vm
+ztbadm# /home/thibautc/apps/visualvm/bin/visualvm --jdkhome /usr/lib/jvm/java-6-sun
+</code>
+
+Now you should see the the sap server under visual vm (called "unknown application") and can do profiling etc...
+
+Warning: Before you start profiling, make sure you set some filters (see screenshot) to only profile certain classes, profiling ALL the SAP classes is guaranteed to be a disaster.
+
+
+=====Screenshots=====
+{{ vvm_monitor.png }}
+
+{{ vvm_profile.png }} 

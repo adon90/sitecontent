@@ -1,0 +1,8 @@
+{"author":"admin",
+"title":"About using the profiler",
+"text":"While I've used a profiler on an SAP stack before (http://wiki.colar.net/profiling_sap_isa_j2ee_webas_with_netbeans) it wasn't a good option here for a couple of reasons.\n#1: It runs on Java 1.4, so that severely limit what profiler are available (not many)\n#2: The profilers for 1.4 are few and have lots of overhead and are very slow.\n#3: SAP code base is so large that the profilers tends to choke because there are over 65k classes getting loaded.\n#4: For a \"slow\" memory leak, a profiler is not necessarily the best option (best for deadlocks /CPU stuff)\n#5: It was occurring on a production server, and we really don't want to have a profiler running in there, we had memory dumps to work with, so we used that.\n\nDon't get me wrong, a profiler is great it gives you the most infos, on the fly, but the fact it was on a production server and running on Java 1.4 seriously limited it's use.",
+"ts":"2009-11-09T12:05:00-08:00 Los_Angeles"}
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"how come you didn't use a java profiler like yourkit or something like that?\n",
+"ts":"2009-11-09T10:31:00-08:00 Los_Angeles"}

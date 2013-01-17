@@ -1,0 +1,66 @@
+====== Log Levels ======
+
+The logging use a set of log levels.
+
+The log levels 0-50 are reserved for your own application, whereas  50-90 are JOT internal log levels.
+
+Every time you log some information using the JOTLogger, you specify a logLevel.
+
+In jot.properties you can then define which logs you want to be logged to the log file.
+
+You define a comma separated list of log levels ie: "5,15", you can also use "ranges" (ie: "0-10") meaning "0 to 10".
+
+For example:
+  * All jot logs
+jot.logger.levels=80-99
+
+  * Only critical jot logs
+jot.logger.levels=85,95
+
+  * All jot logs and user logs (example)
+jot.logger.levels=0-9,80-99
+
+  * Only critical jot logs and user logs 
+jot.logger.levels=5,85,95
+
+===== User application log levels =====
+The levels bellow 50 are reserved to the end-user, you can use them for your own application logging.
+
+For example you could have:
+
+  * MYAPP_LOG_LEVEL_DEBUG=0;
+  * MYAPP_LOG_LEVEL_WARNNG=1;
+  * MYAPP_LOG_LEVEL_ERROR=2;
+  * MYAPP_LOG_LEVEL_CRITICAL=3;
+  * MYAPP_LOG_LEVEL_MYPARSER_DEBUG=10;
+  * MYAPP_LOG_LEVEL_MYPARSER_WARNNG=11;
+  * MYAPP_LOG_LEVEL_MYPARSER_ERROR=12;
+  * MYAPP_LOG_LEVEL_MYPARSER_CRITICAL=13;
+
+===== JOT internal log levels =====
+
+==== General log levels ====
+
+All the standard Log messages from JOT.
+
+  * LOG_LVL_DEBUG=80;
+  * LOG_LVL_VERBOSE=81;
+  * LOG_LVL_INFO=82;
+  * LOG_LVL_WARNNG=83;
+  * LOG_LVL_ERROR=84;
+  * LOG_LVL_CRITICAL=85;
+
+==== JDBC Log levels ====
+
+JDBC/SQL activity logging.
+
+  * LOG_LVL_JDBC_TRACE=90;
+Note that the "TRACE" level will printout all SQL requests including values (potentially sensitive informations)
+
+  * LOG_LVL_JDBC_DEBUG=91;
+DEBUG will also print the SQL requests but without the values (shoudl not display sensitive data)
+
+  * LOG_LVL_JDBC_INFO=92;
+  * LOG_LVL_JDBC_WARNNG=93;
+  * LOG_LVL_JDBC_ERROR=94;
+  * LOG_LVL_JDBC_CRITICAL=95;

@@ -1,0 +1,42 @@
+====== Wicket Code ======
+
+Databinder examples:\\
+http://databinder.net/examples.html
+
+Also see wicket auth-roles examples:\\
+http://sourceforge.net/project/showfiles.php?group_id=119783&package_id=138752
+
+Most other examples are in cvs\\
+http://cvs.sourceforge.net/viewcvs.py/wicket-stuff/ \\
+http://cvs.sourceforge.net/viewcvs.py/wicket/
+<code>
+cvs -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/wicket login
+cvs -z3 -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/wicket co wicket
+cvs -z3 -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/wicket-stuff co wicket-stuff
+</code>
+
+===== Authentication with Wicket =====
+
+**See on from Jonatan Locke's blog**\\
+http://jroller.com/page/JonathanLocke/Weblog
+
+
+===== Model not mapped error =====
+
+I was having this weird problem where my dataBinder code would not work.\\
+Everytime i got a "Model not mapped" error.\\
+See the code here\\
+[[DataBinder Issue]]
+
+Anyway turn out that the reason was that i (or rather eclipse) had imported:\\
+<code java>
+org.hibernate.annotations.Entity
+</code>
+instead of:
+<code java>
+javax.persistence.entity
+</code>
+That is why it was failing ! \\
+Thanks to Nathan Hamblen, the Databinder author for helping with this.
+
+~~DISCUSSION~~

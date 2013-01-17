@@ -1,0 +1,4 @@
+======Development informations======
+Informations about current development tasks, and planned features
+
+[[Jotwiki future features|Features under development]]

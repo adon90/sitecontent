@@ -1,0 +1,4 @@
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"I have also tried bbtether (latest) and opensuse 11.1 with verizon and all works great!\n\nUnfortunately, the same cannot be said no matter what I do for the same except opensuse 11.2... :(\n\nConnection timed out errors!  It is as if the usb-mass storage or something else has a hold on it and I have tried everything I can think of including modprobe -r usb-storage blah blah blah...\n\nHelp on this would be so appreciated!",
+"ts":"2009-11-30T16:14:00-08:00 Los_Angeles"}

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en" dir="ltr">
+    <head>
+      <title>{{title}}</title>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="robots" content="index,follow" />
+      <meta name="date" content='{{generatedDate}}' />
+      <meta name="keywords" content='{{title}} {{keywords}}' />
+      <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
+      <link rel="stylesheet" type="text/css" href='tpl/jotwiki.css'/>
+      <link rel="stylesheet" type="text/css" href='tpl/template.css'/>
+      <script type="text/javascript" src="tpl/template.js"></script>
+    </head>
+
+    <body>
+  <div class="ruler">
+      <div id="header_title">
+    <a class="title" href='/'>{{siteTitle}}</a>
+      </div>
+      <div class="pagename">
+        {{siteMoto}}
+      </div>
+  </div>
+  <div class="top_left">
+      <center>
+      <table>
+      <tr><td>
+      <a href="http://wiki.colar.net"><img src="files/id4.png" border="0"></a>
+      </td>
+      <td>
+<div class="addthis_toolbox addthis_vertical_style">
+<a class="addthis_button_twitter_follow" addthis:userid="tcolar" style="color:#ffffff; border-bottom:0px"></a>
+<a class="addthis_button_linkedin_follow" addthis:userid="tcolar" style="color:#ffffff; border-bottom:0px"></a>
+<a class="addthis_button_facebook_follow" addthis:userid="thibaut.colar" style="color:#ffffff; border-bottom:0px"></a>
+</div>
+      </td>
+      </tr>
+      </table>
+      </center>
+  </div>
+  <div><span style="background-color:#cc99ff"><b>I provide <font color="#993333">consulting and development services</font>. See <a href='http://www.status302.com/'>Status302.com</a> for more info.</b></span></div>
+
+  <div class="content">
+      <div id="menuButton">
+    <jot:var value="getPageContent('menu')"/>
+      </div>
+      <div class="nb_coil">
+    <div style="float:left;margin-left:80px;margin-top:10px;">
+{{#addThisEnabled}}
+<!-- Begin addThis -->
+<div class="addthis_toolbox addthis_pill_combo">
+  <a class="addthis_button_tweet" tw:count="horizontal"></a>
+  <a class="addthis_button_facebook_like"></a>
+  <a class="addthis_button_compact">Share</a>
+</div>
+<!-- End addThis -->
+{{/addThisEnabled}}
+    </div>
+    <!--<div style="float:right;width:200px;text-align: right">
+        <jot:if eval=" ! loggedUser">
+      <a href="${loginLink}" class="iconLink" onMouseOver="buttonHelp('Login');" onMouseOut="buttonHelp('');"><img src="images/buttons/login.png" width="24" height="24" border="0"/></a>
+        </jot:if>
+        <jot:if eval="canSetup">
+      <a href="setup.do" class="iconLink" onMouseOver="buttonHelp('Global settings');" onMouseOut="buttonHelp('');"><img src="images/buttons/setup.png" width="24" height="24" border="0"/></a>
+        </jot:if>
+        <jot:if eval="loggedUser">
+      <a href="${logoutLink}" class="iconLink" onMouseOver="buttonHelp('Logout');" onMouseOut="buttonHelp('');"><img src="images/buttons/logout.png" width="24" height="24" border="0"/></a>
+        </jot:if>
+        <jot:if eval="canEdit">
+      <a href="${editPageLink}" class="iconLink" onMouseOver="buttonHelp('Edit This Page');" onMouseOut="buttonHelp('');"><img src="images/buttons/edit.png" width="24" height="24" border="0"/></a>
+      <a href="${optionsLink}" class="iconLink" onMouseOver="buttonHelp('Page Options');" onMouseOut="buttonHelp('');"><img src="images/buttons/options.png" width="24" height="24" border="0"/></a>
+        </jot:if>
+        <a href="<jot:var value="printLink"/>" target="_blank" class="iconLink" onMouseOver="buttonHelp('Print This Page');" onMouseOut="buttonHelp('');"><img src="images/buttons/printer.png" width="24" height="24" border="0"/></a>
+        <br/>
+        <span id="buttonHelpSpan" class="buttonHelpSpan">&nbsp;</span>
+        &nbsp;
+    </div>-->
+    <div class="page">
+        <div class="page_text">
+        {{ & content}}
+      <br/><br/>
+      <hr/>
+      <div class="toplink">
+          <a href="#top" class="action top"><img border="0" src='tpl/images/up.gif' alt="toTop"/>&nbsp;Back to top</a>
+      </div>
+
+      <hr />
+
+      <div class="meta">
+              Last modified: by {{author}}
+      </div>
+        </div>
+
+
+{{#hasComments}}
+        <!-- comments -->
+        <div class="comments">
+          <div class="commentsTitle">Comments:
+<!--        <jot:if eval="canPostComments()">
+            <a class="button" href='addComment.do'>Add a new Comment</a>
+        </jot:if>-->
+          </div>
+          <hr/>
+{{#comments}}
+        <div class="comment">
+            <b>Post time:</b>{{date}} <b>By:</b>{{author}}<br/>
+            <b>Title: {{title}}</b><br/>
+            {{text}}<br/>
+        </div>
+        <hr/>
+{{/comments}}
+{{#moreComments}}
+                <div class="commentsTitle"><a href="?allComments=1">View {{commentsLeft}} older comments</a></div>
+                <hr/>
+{{/moreComments}}
+        <hr/>
+        </div>
+        <!-- end comments -->
+{{/hasComments}}
+    </div>
+      </div>
+  </div>
+  <!-- end content block -->
+
+  <!-- start sidebar -->
+
+  <!--<div class="sidebar">
+      <div class="sitenav_item">
+    <div class="pager">
+        <jot:if eval="searchEnabled">
+      <form target="_blank" id="searchForm" action="search.do" accept-charset="utf-8" class="search" >
+          <input type="text" name="text" class="searchBox" value="Search form"/>
+      </form>
+      <a href="javascript:document.getElementById('searchForm').submit();" style="text-decoration:none;border:0px">
+          <img src="images/blank.png" width="170px" height="70px" border="0" alt=""/>
+      </a>
+        </jot:if>
+    </div>
+      </div>
+
+      <div class="sitenav_item">
+    <div class="toc">
+        <div class="toc_title">
+            Table Of Contents
+        </div>
+
+        <div class="toc_content">
+      <jot:loop over="pageInfos.toc" as="tocEntry">
+          <jot:loop from="0" to="tocEntry.level">
+        &nbsp;
+          </jot:loop>
+              - <a href='#<jot:var value="tocEntry.link"/>'><jot:var value="tocEntry.text"/></a><br/>
+      </jot:loop>
+        </div>
+    </div>
+      </div>
+
+  </div>-->
+
+  <!-- end sidebar -->
+
+{{ & googleAnalytics}}
+
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=YOUR-ACCOUNT-ID"></script>
+    </body>
+</html>

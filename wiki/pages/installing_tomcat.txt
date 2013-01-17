@@ -1,0 +1,15 @@
+======Installing tomcat======
+=====Windows=====
+Got to the tomcat site: [[http://tomcat.apache.org/]]
+In the download section (pick latest stable release), download the core binary distribution "windows service installer"
+Ex: [[http://www.alliedquotes.com/mirrors/apache/tomcat/tomcat-6/v6.0.16/bin/apache-tomcat-6.0.16.exe]]
+and run it to install tomcat.
+
+=====Linux / Unix=====
+**Many Linux/Unix  distributions have a tomcat package, so try that fisrt.**
+
+Ex: ''sudo apt-get install tomcat5.5 libtomcat5.5-java''
+
+**Otherwise you can manually install tomcat:**
+  *Download the latest stable Tomcat(binary distribution): [[http://tomcat.apache.org/]]
+  *Follow the setup instructions. Ex:[[http://tomcat.apache.org/tomcat-6.0-doc/setup.html]]

@@ -1,0 +1,35 @@
+======JotWiki Installation======
+=====Generic concept (all platforms)=====
+Jotwiki is a simple java web-application that needs to be deployed to a java application server.
+**Download:** jotwiki.zip is avaliable at [[http://bitbucket.org/tcolar/jotwiki/downloads]]
+==== Requirements ====
+**Here is what you need:**
+  - **A java Dev environment (JDK from Sun)** 1.5+
+If you don't have java installed yet, or are unsure, see here: [[Installing java]]
+  - **A Java Application server**, ie: jetty, tomcat, jboss etc...
+If you don't have one yet, see here: [[Installing Jetty]] or [[Installing Tomcat]]
+**Make sure your app server is compatible with your JDK version**
+  - **A data folder with available disk space** (/opt/jotwiki/ or c:\jotwiki).
+The default installation folder is c:\jotwiki(windows) or /opt/jotwiki(other platforms).
+
+NOTE: If you don't want or can't use those standard installation locations, you will need to go through a few extra steps first. See: [[Alternate installation Location]]
+
+==== Installation steps ====
+  - **Download jotwiki.zip** from [[http://bitbucket.org/tcolar/jotwiki/downloads]]
+  - **Unzip it into a temporary folder** (it will create the jotwiki_installer folder)
+  - Go in "jotiwiki_installer" and **Run the installer** (''sudo sh install.sh'' or ''install.bat'')
+
+NOTE: If you want to install jotwiki to a custom folder(not /opt/jotwiki or c:\jotwiki) you will need to start the installer manually, see: [[Alternate installation Location]]
+
+
+**The installer will ask you a few questions and copy some files to the installation folder.
+It will ask you the following:**
+  - If you are on a unix platform, it will ask, what is the java app server user(user it runs as), this is so that it can set the jotwiki folder with the proper user/permissions so that jotwiki can read/write to it.
+Depending on which app server you are using, this user might be something like: tomcat, tomcat55, jetty, web-data or root(preferably not).
+  - It will also ask where your app server "webapps" folder is, this is where web-applications(.war) go, for example for jetty browse to: [JETTY_HOME]/webapps/ , for tomcat someting like /var/lib/tomcat55-webapps/ or /opt/tomcat/webapps/ .
+ 
+After this is done, installation is complete, go to [[http://yourappserver:8080/jotwiki/home]] 
+(:8180 on Debian) to get the configuration screens.
+
+**see [[Configuration]]**
+

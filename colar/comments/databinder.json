@@ -1,0 +1,4 @@
+{"author":"Guest (Guest)",
+"title":"My 2 cents.",
+"text":"I am getting a BUILD ERROR when I run:\nmvn archetype:create -DarchetypeGroupId=net.databinder -DarchetypeArtifactId=data-app -DarchetypeVersion=0.3 -DgroupId=example -DartifactId=myExample\n\nThe error says: \"Embedded error: Unable to add module to the current project as it is not of packaging type 'pom'\"\n\nI tried changing the archetypeVersion to 0.9 but it doesn't seem to work. Any ideas?\n\nThanks!\n",
+"ts":"2009-03-08T11:26:00-07:00 Los_Angeles"}

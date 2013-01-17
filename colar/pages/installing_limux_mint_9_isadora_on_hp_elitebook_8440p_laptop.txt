@@ -1,0 +1,78 @@
+======Installing Linux Mint 9 (Isadora) on HP EliteBook 8440P laptop======
+
+[[http://www.linuxmint.com/|Linux Mint]] is a nice distro based on Ubuntu, it's very polished and has some nice easy to use features, and comes with all the codecs/plugins you need out of the box.
+I've used it since version 5 on my laptop.
+
+Version 9 (Isadora) is based on Ubuntu Lucid.
+
+I work I got a new HP EliteBook 8440P and there where a few gotchas to get Mint(or any Linux) on it, mostly issues with the newer NVidia graphic card support.
+
+===Booting the LiveCD/Installer===
+Right off the bat, problem.
+**With the graphic card issue it would just display fuzzy pixels and be unusable (can't install)**
+
+So step 1:
+**When Booting the CD**, in the boot menu:
+  - **highlight** "start linux mint"
+  - press **tab** to edit the boot line
+  - **replace** ''quiet splash --'' with ''nosplash nomodeset'' and press enter
+
+This will allow to boot in a graphic mode that works (although less cute)
+
+===Installing mint===
+Once you have the Mint LiveCD booted up, click the **"install mint"** desktop shortcut and install 
+... Nothing special here ...
+end of install, **shutdown**, **remove disk** and press enter to **reboot**
+
+===First boot from Hard drive===
+More shenanigans for the video issue(now grub):
+  - **highlight** "linux mint 9"
+  - **press "e"** to edit boot command
+  - on the line that starts  with "linux ..." go to the end and **replace** "quiet splash" with "nosplash nomodeset"
+Then **press CONTROL and X** to boot mint
+
+===Fixing the Video problem forever in grub===
+We don't want to edit the boot command at each start :)
+  - **Start a terminal** : Click Menu/terminal
+
+  - **execute**: ''sudo gedit /etc/default/grub''
+
+  - **change** ''GRUB_CMDLINE_LINUX_DEFAULT per-- GRUB_CMDLINE_LINUX_DEFAULT="quet splash"''
+to:
+  - ''GRUB_CMDLINE_LINUX_DEFAULT per-- GRUB_CMDLINE_LINUX_DEFAULT="nosplash nomodeset"''
+  - then **save and close** gedit
+
+===NVidia Video driver===
+**Configure your network/wifi** (click the "network" icon in task bar) as it will be needed
+
+**Click the "hardware drivers" icon** (looks like a PCI card, next to volume control in right of task bar) and select **"install drivers"**
+**Activate the nvidia driver**.
+It will download & install the nvidia graphic card driver
+
+===Making the brightness controls work===
+Still in terminal 
+**execute** ''sudo gedit /etc/X11/xorg.conf''
+
+In "Device" section **add this line**: (before EndSection)
+
+''Option "RegistryDwords" "EnableBrightnessControl=1"''
+
+**Save and close** gedit
+
+**Execute**: ''sudo gedit /usr/share/hal/fdi/information/10freedesktop/10-laptop-panel-hardware.fdi''
+
+**Add '84440p'** to line 27, like this:
+
+''<match key="/org/freedesktop/Hal/devices/computer:system.hardware.product" contains_outof="4410s;4415s;4416s;Compaq 5X5;8440p">''
+
+===Software Updates===
+It's a good time to install the software updates as well 
+**Run "mint updates"** - shield icon in tak bar and install all available updates
+
+===REBOOT===
+**REBOOT & Enjoy !**
+
+===Resources===
+Most of those instructions inspired and lightly modified for Mint, from:
+[[http://blog.triumphovermadness.com/2010/05/ubuntu-1004-lts-on-hp-elitebook-8440p.html]]
+

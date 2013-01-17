@@ -1,0 +1,44 @@
+======Resizing a Vmware image======
+
+Note: I think it only works with an image of type "virtual disk size".
+
+First make a clone of the VM because a) as a backup b) you HAVE TO if you have any snapshots
+- in vmware go to the menus: vm/snapshots/snapshot manager
+- in the snapshot manager: clone/from current state/create full clone (choose a name ie: clone)
+
+Run the command line tool to resize the cloned image (in this case 15GB)
+<code bash>
+cd c:\program files\vmware\vmware workstation
+vmware-vdiskmanager -x 15GB "d:\vmware\images\my clone\clone.vmdk"
+</code>
+
+Resize will run
+
+At this point the disk is  15GB but the formated partitition is still the original size so you need to resize it.
+Either usign a tool like partition magic from within vmware, or if you don't have it then can be done with a linux cd:
+
+- Download the system rescue CD iso: http://systemresccd.org 
+- Burn the iso image on a CD
+- Boot the vmware image with this CD in the drive, so that it will boot of the CD (might have to go to bios setup to have cd boot before HD)
+- once the rescue cd is booted, launch qparted 
+<code bash>
+run_qparted
+</code>
+
+- in qparted select the first drive (sda) and resize the existing windows partition to fill the disk (15 GB in this example)
+- commit/save the changes: qparted will resize the partiion.
+- exit qparted.
+- quit the rescue cd 
+<code bash>
+reboot
+</code>
+
+- remove the resuecd from the cd drive, and let vmware reboot into windows.
+
+Window will want to do a "scandisk" on the first boot, just accept, this is not a problem.
+You now have your big drive available in windows
+
+
+-Test the new large image.
+- If the new large image is good, delete the original small image to save space.
+

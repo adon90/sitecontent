@@ -1,0 +1,34 @@
+======Installing sun Java on Debian or Ubuntu======
+=====Newer Debian's=====
+Because sun now is moving java toward a GPL license, latest Debian version, finally provide packages for java, though they are still classified as 'non-free'.
+
+You should try this first as this is simpler / more maintainable.
+
+Add support for 'non-free' packages
+<code | sudo vi /etc/apt/sources>
+.....
+deb http://ftp.us.debian.org/debain etch main non-free
+.....
+</code>
+then run ''sudo apt-get update'' to update the package list.
+
+Now you can install dun jdk 1.5: ''sudo apt-get install sun-java5-jre''
+
+Done !
+
+=====Old school way=====
+If you have an older Debian version, or do not want to use a package classified as 'non-free' you can go the old way:
+
+<code bash>
+sudo apt-get update
+sudo apt-get install java-package java-common fakeroot
+</code>
+
+Download the sun jdk from java.sun.com
+Edit /usr/share/java-package/sun-j2sdk.sh to reflect the actual JDK 1.5 release version.
+<code>
+fakeroot make-jpkg jdk-1_5_0-linux-i586.bin
+sudo dpkg -i sun-j2sdk1.5_1.5.0_i386.deb
+#Note: if you have already another version fo java you might want to specify which one to use:
+sudo update-alternatives --config java
+</code>

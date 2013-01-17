@@ -1,0 +1,31 @@
+======Fantom======
+**[[http://fantom.org | Fantom]] is an exciting new language that targets the Java VM and the CLR**.
+It borrows it's Syntax from Java but also adds many features and syntactic sugar created or borrowed from .NET, Groovy, Python, Erlang etc...
+
+It's immediately familiar to a Java / .Net programmer but is much less painful to use (**no boilerplate**).
+====Official Fan  site /docs====
+See [[http://fantom.org/]]
+====Camembert Fantom / Axon IDE====
+A standalone pure-Fantom IDE for Fantom and Axon / Skyspark.
+  - [[status302:camembert | Camembert IDE]]
+====Netbeans Fantom IDE====
+I've been working on a Netbeans IDE based on Netbeans for Fantom:
+  - [[fanide:home | Fantom IDE]]
+====Fantom presentation to SEAJUG====
+See the **Video** here: [[http://www.vimeo.com/20257517]]
+====Fantom Cheat Sheet====
+[[fan_cheat_sheet|Fantom Cheat Sheet]]
+====Other Fan tools I've made====
+  - [[Fantom to standalone Jar tool]]: Create standalone Java jar (containing Fantom runtime) from some Fantom pods.
+  - [[http://bitbucket.org/tcolar/fantomsap/src | Fantom code to interact with SAP - CRM / JCO]]
+  - [[http://bitbucket.org/tcolar/fantomutils/src | Some other Fantom utilities I wrote]]
+  - [[Generic init script for Fantom based server processes]]
+====My own Docs==== 
+  - [[Fantom - Quick Install]]
+  - [[Fan Getting started]] - A guide on installing Fantom and trying it out.
+  - [[Fan Cheat Sheet]] - A all-in-one fan language reference, with links to official site.
+====My own examples====
+  - [[Fan Java FFI example- Implement Java Interface from Fan]]
+
+====Pod repo====
+My public / private fantom pod repository : [[http://repo.status302.com/]]

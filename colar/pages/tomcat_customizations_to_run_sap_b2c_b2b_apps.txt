@@ -1,0 +1,181 @@
+======Customizations to run SAP B2c/B2B apps in Tomcat======
+
+WARNING: **Under Construction - Incomplete**
+
+
+WARNING: **This is ONLY A PART of the [[SAP ISA on Tomcat]] doc.**
+
+
+=====Tomcat customizations=====
+**Starting with a "stock" Tomcat 6 (6.0.20) distribution folder, the following changes where made:**
+
+  - **Add my classloader**(J2eeSapUtils.jar) to tomcats's ''lib'' folder (lib/J2eeSapUtils.jar)
+It's just a custom classloader I made for Tomcat which will look for patches(jar/classes) in the sap_libs_local folder BEFORE delegating to the normal classloader (webapp, system etc...)
+
+It also contains a customized version of the JSP compiler(Jasper) to replicate SAP's engine automatic inclusion of some packages in JSP's ("java.io.*", "java.util.*", "java.beans.*")
+
+I have the jar and sources here: 
+[[https://bitbucket.org/tcolar/saptomcat/src/tip/projects/J2eeSapUtils/]]
+
+  - **Create ''sap_libs folder''** for sap runtime libraries
+create a subfolder in tomcat folder called "sap_libs", this will contains sap J2EE libraries.
+FIXME: explain contents
+
+
+  - **Create ''sap_libs_local'' folder** for patched sap code
+create a subfolder in tomcat folder called "sap_libs_local", this will contain a few patched SAP classes needed to make it work on Tomcat. 
+FIXME: explain contents
+
+
+  - **Add ''$catalina.home/sap_libs/*.jar'' to common loader** in conf/catalina.properties, so tomcat will be able to find the SAP libraries.
+
+<code>
+# Replace from: 
+# common.loader=$catalina.base/lib,$catalina.base/lib/*.jar,$catalina.home/lib,$catalina.home/lib/*.jar
+# to: 
+common.loader=$catalina.base/lib,$catalina.base/lib/*.jar,$catalina.home/lib,$catalina.home/lib/*.jar,$catalina.home/sap_libs/*.jar
+</code>
+
+  - **Edit conf/context.xml** to use my custom classloader (in J2eeSapUtils):
+Before the closing ''</context>'' add:
+
+<code>
+	<Loader className="org.apache.catalina.loader.WebappLoader" loaderClass="net.colar.j2eeSapUtils.TomcatClassLoader"/>
+</code>
+
+  - **Create a file ''sap_libs/trexjavaclient.properties'' with TREX(catalog) server connection data**, such as:
+
+<code>
+nameserver.backupserverlist = tcpip://trexserverhostname:30301
+nameserver.address = tcpip://trexserverhostname:30301
+</code>
+
+  - **Edit ''conf/tomcat-users.xml''**(optional)
+Create entry like this: (will be used by IDE to deploy)
+
+<code>
+	<user password="admin" roles="manager,admin" username="admin"/>
+</code>
+
+===Optional configuration===
+  - **Edit (optional) ''conf/logging.properties''**, added:
+
+<code>
+# log4j config to reduce noise
+log4j.logger.com.sap.isa.core.util.MiscUtil=INFO
+log4j.logger.com.sap.isa.core.xcm=INFO
+log4j.logger.com.sap.isa.catalog.actions=INFO
+log4j.logger.com.sap.isa.isacore.action=INFO
+log4j.logger.com.sap.isa.user.action=INFO
+log4j.logger.org.apache.commons=INFO
+log4j.logger.org.apache.jasper=INFO
+log4j.logger.org.apache.struts=INFO
+</code>
+
+  - If you need to use the  Java basket(instead of CRM basket) you will need a database, create a ''db'' folder in the tomcat directory
+This will be used to store database files in case you want to use the java basket.
+
+====Custom PCF fixes====
+Probably not needed for other companies.
+
+  - ''Edit conf/server.xml''
+Find the connector tag (the one on port 8080) and add this attribute to it ''emptySessionPath="true"''
+Because we use a complicated proxy / vanity URL setup we want cookies to be created without a path.
+
+Otherwise multiple session cookies get created for different part of the applications causing many issues with B2c/B2B.
+
+=====References=====
+  - Contents of sap_libs folder
+Fixme: Explained how found that out and where to get libs
+
+<code>
+activation.jar
+adminadapter.jar
+antlr.jar
+applocking.jar
+apptracing.jar
+clientinfo.jar
+com_sap_pj_jmx.jar
+com.sap.security.api.jar
+com.sap.security.api.perm.jar
+com.sap.security.core.jar
+connector.jar
+ejb20.jar
+grmg.jar
+h2-1.3.148.jar
+htmlb.jar
+J2eeSapUtils.jar
+jARM_API.jar
+jARMSat_API.jar
+javamail.jar
+javamail_library.jar
+jddi.jar
+jdo.jar
+jms.jar
+jrfc.jar
+local-jco-logging.jar
+local-sap-patches.jar
+log4j-1.2.16.jar
+logging.jar
+loggingStandard.jar
+mail.jar
+mysql-connector-java-5.1.10.jar
+opensql.jar
+opensqlsta.jar
+sap.com~crm~ipc~ipc~assembly.jar
+sap.com~crm~ipc~ipcbo~assembly.jar
+sap.com~crm~ipc~ipccore~assembly.jar
+sap.com~crm~ipc~ipcpricing~assembly.jar
+sap.com~crm~ipc~srv~msa~commands~assembly.jar
+sap.com~crm~ipc~srv~msa~server~assembly.jar
+sap.com~crm~ipc~tteanalysis~assembly.jar
+sap.com~crm~isa~auctionb2x~assembly.jar
+sap.com~crm~isa~auctionbase~assembly.jar
+sap.com~crm~isa~basketdb~assembly.jar
+sap.com~crm~isa~isacat~assembly.jar
+sap.com~crm~isa~isacore~assembly.jar
+sap.com~crm~isa~isacorer3~assembly.jar
+sap.com~crm~isa~lwc~assembly.jar
+sap.com~crm~isa~shopadmin~assembly.jar
+sap.com~crm~isa~smartstream~assembly.jar
+sap.com~crm~isa~userr3~assembly.jar
+sap.com~crm~tc~appbase~assembly.jar
+sap.com~crm~tc~campaign~assembly.jar
+sap.com~crm~tc~catalog~assembly.jar
+sap.com~crm~tc~contract~assembly.jar
+sap.com~crm~tc~core~assembly.jar
+sap.com~crm~tc~corelib~assembly.jar
+sap.com~crm~tc~ecommercebase~assembly.jar
+sap.com~crm~tc~pcatapi~assembly.jar
+sap.com~crm~tc~scheduler~assembly.jar
+sap.com~crm~tc~user~assembly.jar
+sap.com~crm~tc~xcmadmin~assembly.jar
+sapjco.jar
+sapjdoapi.jar
+sapjms.jar
+sapxmltoolkit.jar
+sqljapi.jar
+tc_sec_compat.jar
+tc_sec_csi.jar
+tc_sec_destinations_interface.jar
+tc_sec_destinations_service.jar
+tc_sec_https.jar
+tc_sec_jaas.jar
+tc_sec_saml_util.jar
+tc_sec_securestorage_service.jar
+tc_sec_ssf.jar
+tc_sec_userstore_lib.jar
+TLFilter.jar
+trexjavaclient.properties
+trex.jc_api.jar
+trex.jc_core.jar
+
+</code>
+
+  - Contents of sap_local_libs folder
+Fixme: Explain patches and provide sources
+
+<code>
+local-sap-patches.jar
+log4j-1.2.16.jar
+</code>

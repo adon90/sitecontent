@@ -1,0 +1,344 @@
+======NW 7.0 server under SUSE SLES11 under VMWare with CRM 6.0 Java apps (B2B/B2C)======
+
+Because it's so time consuming to install an SAP system, this was done in a vmware environment for easy duplication / disaster recovery.
+
+====Vmware Image====
+The image was done with the following settings:
+  - 50GB hard drive (minimum for an ISA install)
+  - 4GB memory (minimum for IA setup)
+  - NAT network (192.168.x.x)
+
+We want the vmware host to be only seen by the local machine, so we can have it on multiple workstations without risking System ID clashes and the like.
+
+====OS Install====
+**We Installed Suse SLES-11 - Vmware edition (DVD)** with normal settings(full disk erase)
+
+Post install we need to do a software upgrade and registration
+
+Click **"Software update"** in the start menu.
+Do a **software update/register** (Need to enter Suse regisration email and activation code)
+
+**Update all available packages**
+
+====Post Install settings fro SAP====
+
+See SAP Note 1310037 (Suse 11)
+
+  - Go to "Install Software" and install those packages:
+* **sapconf**
+* **sap-locales**
+
+  - **Install the IBM 1.4.2 JVM** (from SAP) in /opt (**apply crypto packages as needed**)
+
+  - As root Change/**set the value of SHMMAX** to 4294967295 by including the following line in /etc/sysctl.conf 
+	''kernel.shmmax = 4294967295''
+
+  - **Activate the new SHMMAX setting** by running the command
+	''sudo /sbin/sysctl -p''
+
+  - **Set hostname correctly** (including resolving 127.0.0.1 in /etc/hosts), **SAP is picky about this**,  - we use "suse-isa" in this install
+<code | example /etc/hosts>
+::1             suse-isa suse-isa suse-isa.comp.com ipv6-localhost ipv6-loopback localhost
+127.0.0.1       localhost suse-isa suse-isa suse-isa.comp.com
+192.168.21.132  suse-isa.comp.com suse-isa
+</code>
+Make sure you have **both 127.0.0.1 and your ip address**(ex: 192.168.1.212) resolving to your hostname.
+Otherwise Install/Upgrade will fail miserably (login errors) and it's VERY hard to track down !!
+
+  - **REBOOT**
+ 
+  - make sure ''hostname'' resolves to correct host name, NOT localhost ("hostname" command)
+
+====SAP Installer====
+First s**etting X windows env, and logging as root**:
+<code>
+xhost +
+su -
+export DISPLAY=:0.0
+</code>
+
+We mounted our Sap dvds share locally: 
+<code | Example>
+mkdir /mnt/sap
+''mount -t cifs  -o username=me,domain=corp.com //server.corp.com/sap_storage /mnt/sap/''
+</code>
+
+Then we **run the CRM 2007 master installer:**
+<code>
+cd 
+/mnt/sap/SAP_DVDS/2007_SR1/51033089_8SAP_CRM_2007_Installation_Masterin64/IM_LINUX_X86_64
+./sapinst
+</code>
+
+If you get an error like ''GUI says it can't connect to 21212 '' your /etc/hosts file probably needs fixing.
+
+  - Chose CRM2007/sap/systems/**oracle/central system**, next
+  - Choose "**Typical**" setup, next
+  - **Only select "AS Java"** (**JCRM causes problems sometimes**, we don't need BAP stack)
+Tip: Selecting JCRM here can cause the installer to hang at the "Deploying Application" step after deploying the CRM packages and fail the whole installation. (i think maybe it runs out of memory - unsure)
+So: Do not select JCRM, instead after the installation we will just run JSPM and do "new packages" and deploy the CRM packages then, this is quicker anyway.
+
+  - When it asks for **Java components DVD**: /mnt/sap/SAP_DVDS/2007_SR1/51033265_2007_java_components
+  - When it asks for **Java path**: /opt/IBMJava2-amd64-142
+  - **SystemID**: we choose ZSI (Custom Suse Isa)
+  - **DB ID**: ZSI  as well
+  - You will get an **OS version warning**, because Suse 11 is too new, **just ignore it** ("cancel")
+  - Provide the Oracle DVD: /mnt/sap/SAP_DVDS/oracle/oracle10.2/d51031676_Oracle_10_2_Linux_x86_64
+  - Provide the Oracle client DVD: /mnt/sap/SAP_DVDS/oracle/oracle10.2/d51037577_Oracle_10_2_client
+  - Provide the UC kernel DVD: /mnt/sap/SAP_DVDS/2007_SR1/51033262_9NW_2004s_SR2_Kernel_LNX_X86
+  - Choose **"No SLD"**, this coud cause issue if we use this vmware image(same SID) on several hosts
+  - Press **"start"** to install
+  - **Provide the solution manager key** when requsted, see: [[creating_a_sap_solution_manager_key]]
+  - **Continue installation**
+
+It will stop and ask to **install Oracle**
+
+===Installing Oracle 10.2===
+
+There are quite a lot of tings that need to be done before installing Oracle on Suse 11 ....
+Needs to do BEFORE starting installer
+
+  - **Dependencies**
+I found the hard way that some Oracle **dependencies are missing**, it's hard to figurer which ones.
+
+**Installed a great tool called OraToolkit** that finds the missing packages:
+Downloaded from [[http://sourceforge.net/projects/oratoolkit/files/]]
+
+Then install it and run it to find missing packages:
+<code> 
+rpm -iv oratoolkit-1.0.2.1.4-1.noarch.rpm
+/opt/oracle/otk/current/bin/installManager swReqCheck osSetup11gR2.cfg
+</code>
+
+In my case  had to install those packages:
+<code>
+glibc-devel-32bit
+gcc-32bit
+libstdc++33-32bit
+libstdc++43-devel-32bit
+unixODBC-32bit
+unixODBC-devel-32bit
+unixODBC 
+unixODBC-devel
+libaio-32bit
+libaio-devel-32bit
+</code>
+
+  - **Tricking the Oracle installer into installing on Suse 11** (it only likes Suse 9)
+ 
+''find /oracle/stage -name oraparam*.ini''
+
+**For EACH File found, edit and comment out those lines**:
+<code>
+#[Certified Versions]
+#Linux=redhat-3,SuSE-9,redhat-4,UnitedLinux-1.0,asianux-1,asianux-2
+</code>
+
+**Also edited** /oracle/stage/102_64/database/stage/prereq/db/refhost.xml and **changed Suse version from 9 to  11
+**
+<code | Extract of /oracle/stage/102_64/database/stage/prereq/db/refhost.xml>
+........
+<OPERATING_SYSTEM>
+      <VERSION VALUE="11"/>   <!-- Was 9 -->
+      <ARCHITECTURE VALUE="x86"/>
+      <NAME VALUE="Linux"/>
+      <VENDOR VALUE="SuSE"/>
+      <GLIBC ATLEAST="2.3.3-98.28">
+</code>
+
+  - **Sap Note 980426 (Updated OraInstaller)**
+Replaced RUNINSTALLER in /oracle/stage/102_64/database/SAP/ by the one attached to sap note: 980426 (it adds -ignoreSysPrereqs to the orainst run command)
+Otherwise it might still fail OS checks
+
+  - ** Install Oracle:**
+Start the installer as the oracle user:
+<code>
+sudo su - orazsi
+setenv DISPLAY :0.0
+./RUNINSTALLER 
+</code>
+
+**Leave everything to default**, it might complain about the OS version, just ignore and continue install
+
+  - **SAP Note 1395928 - Linking error**: 
+You will get an error:
+<code>
+Exception String: Error in invoking target 'collector' of
+makefile '/oracle/QO2/102_64/sysman/lib/ins_emdb.mk'
+</code>
+
+Solution: **Ignore the error (continue)**, will be fixed by patch set 10.2.0.4
+
+  - **When asked, run as root:**
+<code>
+/oracle/oraInventory/orainstRoot.sh
+/oracle/ZSI/102_64/root.sh
+</code>
+
+  - **Install the patchset (10.2.0.4)**
+Still as oraxxx user:
+<code>
+cd /oracle/stage sudo mkdir 10204
+sudo chown orazsi:dba 10204/
+cd 10204
+unzip /mnt/sap/SAP_DVDS/oracle/oracle10.2/d51036968_Oracle_10_2_04_Patches/ORACLE_Patch_10.2.0.4_LINUX/LINUX_X86_64/p6810189_10204_Linux-x86-64.zip
+cd Disk1
+./runInstaller
+</code>
+
+  - **Click Next a bunch of times** :)
+
+  - **Had to kill the process running "/oracle/ZSI/102_64/jdk/bin/java"** so it could be patched (then hit **retry**)
+
+  - IF asked, Run as root /oracle/ZSI/102_64/root.sh  (say yes to overwriting)
+
+====Continuing SAP Installer====
+Back in the sap Installer:
+
+  - **Click "OK" to continue install**
+
+===error (ORA 955 error) in step "create database"===
+If you get hat error, here is a fix:
+See: [[http://forums.sdn.sap.com/message.jspa?messageID=8973918]]
+  - Stop the sapinst install (stop button)
+  - edit control.xml
+ ''vi /tmp/sapinst_instdir/CRM2007/SYSTEM/ORA/CENTRAL/AS/control.xml''
+
+  - Locate the function this.runCatproc
+  - Last line of function you find the statement
+	''script.execute_AbortOnFailure();''
+  - Replace this with
+	''script.execute();''
+
+Restart SAPINST(./sapinst). Select the same install type and choose "Continue old installation"
+The error should no longer occur
+
+====Patching to SP15====
+See [[http://wiki.colar.net/upgrading_isa_to_2007_sp3]] for details
+<code>
+sudo su - zsiadm
+bash
+cd /usr/sap/trans/EPS/in
+cp /mnt/sap/PATCHES_SP\'s/2007/SP03/* .
+#Kernel specific packages:
+cp /mnt/sap/PATCHES_SP\'s/2007/SP03/Linux_64_oracle/* .
+
+export DISPLAY=:0.0
+/usr/sap/ZSI/JC00/j2ee/JSPM/go
+</code>
+
+Choose **"single support packages"**
+Leave all selected  and click next and complete installation to SP15.
+
+Note: JSPM might need to be restarted after it patches itself to continue patches install.
+
+====Deploying CRM apps (B2B/B2C)====
+Still in JSPM, do:
+new deployment -> business packages -> select and install packages:
+<code>
+crmapp
+crmdic
+shrapp
+</code>
+
+====Post Install====
+
+===Shutdown button===
+For some stupid reason the shutdown button doesn't work in Suse (gnome) ... i try giving the shutdown permissions to "all" but still didn't work (Suse is just annoying to me)
+
+Anyway, not worth wasting my time, so added a new button to gnome panel with this command:
+''gnomesu -c "/sbin/shutdown -h now"''
+
+===Startup script===
+I made a custom script that will start SAP automatically 
+It also clears some log files that tend to grow huge
+
+<code | /etc/init.d/sap_j2ee>
+#!/bin/sh
+# SAP j2ee stop/start script
+### BEGIN INIT INFO
+# Provides:          sap_j2ee
+# Required-Start:    $sapinit $network
+# Should-Start:      
+# Required-Stop:     
+# Should-Stop:       
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: start sap instance
+# Description:       Start sap instance
+### END INIT INFO
+
+. /etc/rc.status
+rc_rest
+
+case "$1" in
+    start)
+ 	echo "Deleting old log files"
+	rm -rf usr/sap/ZSI/JC00/j2ee/cluster/server0/log/archive/*
+        echo -n "Starting Oracle listener "
+        su - orazsi -c "lsnrctl start" 
+        echo -n "Starting J2EE - StartSap "
+        su - zsiadm -c "startsap" &
+        ;;
+    stop)
+        echo -n "Stopping J2EE - StopSap "
+        su - zsiadm -c "stopsap"
+        echo -n "Stopping Oracle listener "
+        su - orazsi -c "lsnrctl stop"
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        rc_status
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+rc_exit
+</code>
+
+Then make the script executable and make it run at boot:
+<code> 
+sudo chmod +x /etc/init.d/sap_j2ee
+sudo /sbin/chkconfig --set sap_j2ee on
+</code>
+
+===License===
+Get a license from [[http://service.sap.com/licensekey]]
+
+You have to provide the SystemID and hardware key (see in visual administrator under licensing adapter)
+Then install it in visual administrator under licensing adapter
+
+===Password expiration setup:===
+Itmightbe worthwile to chnage password settings, see:
+[[fresh_install_of_2007s_isa_on_ubuntu_hedgy_64_bits#isa_password_expiration_and_number_of_tries]]
+
+===Setup trex (visual admin)===
+See: [[fresh_install_of_2007s_isa_on_ubuntu_hedgy_64_bits#connection_to_trex_server]]
+
+===XCM config:===
+Have to setup the XCM
+See: http://wiki.colar.net/saving_loading_isa_b2b_b2c_xcm_config
+**Retype all JCO passwords** after loading XCM configs from another machine. (changed encryption keys)
+
+===Enabling debug port===
+Add debug jvm args (to allow debugger connection on port 8000):
+Run the config tool (configtool.sh):
+Add to instance/server:
+
+<code>
+-Djava.compiler=NONE
+-Xdebug
+-Xnoagent
+-Xrunjdwp:transport=dt_socket,suspend=n,server=y,address=8000
+</code>
+
+===SSL: Specific to PCF setup===
+Install the PCF certificate to not have to deal with content server certificate errors when using the site
+This avoids SSL warnings with Dev servers self-signed SSL certificates.
+
+<code>
+sudo /opt/IBM-JDK-1.4.2/jre/bin/keytool -import -trustcacerts -alias PCFCA -file /etc/ssl/certs/PCFAuth.crt -keystore /opt/IBM-JDK-1.4.2/jre/lib/security/cacerts
+</code>

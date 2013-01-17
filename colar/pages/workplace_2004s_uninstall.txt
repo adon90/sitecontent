@@ -1,0 +1,49 @@
+====== Worplace 2004s uninstall ======
+
+===== Normal uninstall =====
+cd E:\sapcd\51031374_dev_ws_04s\IM_WINDOWS_I386 run sapinst.exe
+
+Select "Uninstall dev. worplace"
+
+Give the profile folder when requested: C:\usr\sap\ZTB\SYS\profile and click "Next"
+
+Check "remove all instances" **and** "remove all sap users" and press "Next"
+
+Choose "Uninstall database" type "Maxdb", Next
+
+Provide the passwords when requested, Next
+
+Select "Drop the whole DB", Next
+
+Select "remove database software", Next
+
+Press "Start"
+
+===== Forced uninstall =====
+
+This is just a way to force remove manually if the uninstaller does not want to do it's job right, because the installation is too broken.\\
+Note: **This is mostly a trial and error thing and not an "SAP" procedure.**
+
+<code>
+Use SAP MMC / visual admin, to shut down the system (if still working/running)
+Can also use: c:\usr\sap\ZTB\JC01\exe\  sapsrvkill FRENCHIE_ZTB_00    (and _01)
+remove (or backup) old c:/usr/sap
+Also if want to keep old j2ee, rename c:\jdt into c:\jdt_old
+# to remove the old MaxDB (Note: 599129)
+(Have to stop the db first : dbmstop.exe -d ztb)
+C:\sapdb\programs\pgm
+run "dbmcli db_enum" to find runnign db instances (found ZTB)
+then "dbmcli -d ZTB -u control,control db_offline"
+then "dbmcli -d ZTB -u control,control db_drop"
+cd C:\sapdb\programs\bin
+sdbuninst.exe -all
+remove or backup old c:/sapdb
+If sapdb does not want to go away (kill kernel.exe serv.exe and wahhtp processes).
+Remove the old JDT folder c:/JDT
+Remove /usr/sap (might need to stop SAP j2ee server first)
+Remove The windows SAP users (2 of them)
+Remove The windows SAP groups (3 of them)
+Remove c:\program_files\sap_instdir\workplace
+Run regedit and delete hkeylocal_machine\software\sap\sapdb_tech (also ZTB etc ..)
+Also to force a full reinstall of worplace instead of an upgrade remove c:\windows\sapwksta
+</code>

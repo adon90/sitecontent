@@ -1,0 +1,37 @@
+======SVN merge does nothing / broken======
+
+So i was trying to make that a big svn merge, just like have done in the past [[http://wiki.colar.net/sp7_to_sp13_subversion_branching_merging]].
+
+Well i expected the new syntax (merge traking of svn 1.5) to make it even easier, like this:
+<code>
+cd working_copy
+svn merge --dry-run http://server/svn/branches/pcf_java
+</code>
+
+But all i would get is this (as if it found nothing to merge):
+<code>
+svn: REPORT of '/svn/!svn/bc/2213/pcf_java': 200 OK (http://svn1.pcf.com)
+</code>
+Not really an error, but nothing returned either ... hum.
+''svn diff'' and manual evaluation did report the difference, yet ''svn merge'' would do nothing ... strange.
+
+Searched for a while online but found nothing clear.
+
+Finally looked at the server side logs :
+<code |  tail /var/log/apache2/error.log>
+[Tue Apr 28 15:13:53 2009] [error] [client 10.10.1.195] Provider encountered an error while streaming a REPORT response.  [501, #0]
+[Tue Apr 28 15:13:53 2009] [error] [client 10.10.1.195] Error writing REPORT response.  [501, #200007]
+[Tue Apr 28 15:13:53 2009] [error] [client 10.10.1.195] The 'node-origins' feature requires version 3 of the filesystem schema; filesystem '/var/lib/svn/db' uses only version 2  [501, #200007]
+</code>
+
+That error got me somewhere, and apparently after you upgrade svn you need to run ''svnadmin upgrade''.
+
+I had upgraded from svn 1.4 to 1.5 few month ago, through apt-get and of course not read the UPGRADE doc (who does :-) ) .... and didn't know about that.
+
+Anyhow, now you and I know:
+
+WARNING: **After upgrading the svn server, run manually ''svnadmin upgrade'' and maybe ''svnadmin recover file:///var/lib/svn/project'' as well, or better read the UPGRADE doc :-)**
+
+
+
+

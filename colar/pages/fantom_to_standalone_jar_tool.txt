@@ -1,0 +1,72 @@
+======Fantom to Standalone Jar tool======
+
+**I wrote a small tool (in Fantom) that will take some Fan code(pods) and build a standalone jar from it that can be run in a regular JVM.**
+
+The jar is ~1MB for an app that does not use FWT(SWT) or other external libraries.
+
+Warning: It's pretty raw at the moment but I've  tried it and it works well.
+
+
+===What's the use ?===
+This allows to run a Fantom app without having the user have to manually install/setup a Fantom environment.
+Sometimes people are unwilling/unable to install runtime environment, this use to be an issue with Java itself ten years ago when people did not want to install a JRE.
+
+Also it allows to quickly deploy your Fantom app to any machine that has a JVM which can be useful for various reasons.
+
+===How to use it===
+You can fetch the code from: [[http://bitbucket.org/tcolar/fantomutils/src/tip/fanjar/]]
+
+''hg clone http://bitbucket.org/tcolar/fantomutils/src/tip/fanjar/''
+
+  - **Step1**: Build the javaBuilder pod so it's avalaible in your Fantom install:
+<code | Juts needed once>
+cd fanjar/javaBuilder/
+fan build.fan
+</code>
+
+  - **Step2**: Copy / Edit buildHelloApp.fan to build Your own app
+
+Make a copy of buildHelloApp.fan(example) for your app (say buildMyApp.fan), and edit it
+
+<code | buildMyApp.fan>
+using javaBuilder
+class BuildMyApp : BuildJar
+{
+  override Void setup()
+  {
+    podName  := "helloWorld"
+    destFile = scriptDir+`helloWorld.jar`
+    pods = [podName]
+
+    appMain = podName
+ }
+}
+</code>
+Refer to the [[http://bitbucket.org/tcolar/fantomutils/src/tip/fanjar/javaBuilder/fan/BuildJar.fan|BuildJar]] script for explanation of the fields.
+
+Note: **By default no external libraries (SWT) are added to keep it light**, if you want to add some, adc them to the libExt list, see the [[http://bitbucket.org/tcolar/fantomutils/src/tip/fanjar/buildHelloApp.fan|Example]].
+
+
+  - **Step 3**: Run the script. ''fan buildMyApp.fan''
+
+This will create the jar (ex: helloWorld.jar)
+
+**You can now simply run it as any other Java jar, ex: ''java -jar helloWorld.jar''**
+
+===How it works===
+
+**Jar creation**:
+The jar is created this way:
+  - We add the Fantom 'runtime'  (lib bin)
+  - We add the user specified pods (pods) and all the dependent pod (we figure those out)
+  - We add any other external libs requested by the user (extLibs)
+  - We add a Java launcher (java/fanjarlauncher/)
+  - We add the jar manifest, with the java launcher being the 'main' class, and we add a property for the user defined 'appMain' to know what is the main of your Fantom app.
+
+**Runtine:**
+  - The java launcher extracts the Fantom 'runtime' into the user directory. (ex: ~/.fantom-rt)
+  - Then it Starts Fantom 'fan' using the 'appMain'
+  - The Fantom process out/err streams are passed through "real-time" to the Java laucher and redirected to the java System.out and System.err until the Fantom process completes.
+
+Note: Right now the runtime is extracted every time which is not very efficient.
+

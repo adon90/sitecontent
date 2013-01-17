@@ -1,0 +1,45 @@
+====== Upgrading ISA to 2007 SP3 ======
+
+=====Documentation=====
+
+#Got the stack here: https://service.sap.com/sp-stacks (need to allow popups)\\
+#got the 2007 SP3 stack and add the files to the basket and use the download manager to save 
+
+them and use download manager to get them\\
+
+Use JSPM as explained here (or see section 2.2 of the PDF). \\
+
+List of files i have:
+<code | SP3 files>
+</code>
+
+=====Patching=====
+
+Do all JSPM stuffs as sidadm. \\
+
+copy all the patch files (SAR,JAR etc ...)\\
+
+Note: I had to create those folders manually as root and then chown them to sidadm
+
+
+<code>
+mkdirhier /usr/sap/trans/EPS/in
+cp  /sapcd/PATCHES_SP\'s/2007/SP03/* /usr/sap/trans/EPS/in
+
+#also we need to copy the linux specific stuffs (kernel)
+cp /sapcd/PATCHES_SP\'s/2007/SP03/Linux_64/*  /usr/sap/trans/EPS/in
+
+chown -R sidadm /usr/sap/trans/
+</code>
+
+start (as sidadm)''go'' in /usr/sap/SID/JC01/j2ee/JSPM/ (takes a while for the gui to comeup)\\
+
+Enter the password to login the JSPM\\
+do "single packages" and choose all the packages, click next\\
+
+"go" in /usr/sap/SID/JC00/j2ee/JSPM/ \\
+
+Enter the password to login the SDM\\
+
+Ans it will continue the upgrade with all the other packages ~1 hour.
+

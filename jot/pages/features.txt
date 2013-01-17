@@ -1,0 +1,37 @@
+======JavaOnTracks Features======
+JavaDoc: [[http://www.colar.net/jotdoc/javaontracks/]]
+=====Server Side=====
+==== Framework / Flow / MVC [DOC TBD]====
+Controller, view, builtin views, forms, generated forms etc...
+widgets / ajax / map widget etc...
+Filter ... error infos ?
+
+==== Other Server side features ====
+  * A [[File Uploading / MultiPart Form API]], custom made, open source Java code, to support file uploading from a browser.
+  * A [[Server-side File browsing/uploading API]], to allow browsing/uploading/downloading on the J2EE server.
+  * A [[Request Counter]], to be used to detect overuse/attacks of your application.
+  * A [[Basic Http server]] [DOC TBD] which can serve static content and is very lightweight and extensible.
+  * A [[JOT web applications server]] [DOC TBD] which can server JavaOnTrack web-apps without the need for a full fledge J2EE engine.
+===== DB / Persistance features =====
+JavaOnTracks has a whole simple database abstraction layer, well actually it has more than 1 layer, here are what each layer does / provides
+  * [[DB SQL layer]]
+This is the "lower level" layer, it uses JDBC as it's based and handles the SQL database connections and provides a pooling mechanism, as well as the the low level "raw" SQL queries, usually you should use the "persistance" layer rather than this directly.
+  * [[DB "Persistance" Layer]] [DOC TBD]
+This is the abstraction layer, that decouples from the SQL language, it provides a generic API to handle simple common database transaction and buliding generic queries. 
+It manages Database objects in a generic form/model (JOTModel). 
+It allows transparent use of an SQL database as well as the JavaOntrack simple Built-in database.
+  * [[DB CRUD / DB driven forms]] [DOC TBD]
+You can provide simple CRUD functionality from a web page using a JOTDBForm with minimal effort.
+We also provide some "base" classes to use the DB for user authentication, since most webapp needs this.
+===== Other Features =====
+  * A [[doclet | Javadoc Doclet]] to generate nicer HTML output than the standard Javadoc tool.
+  * A [[CAPTCHA Generator]] that does not require a graphic environment/AWT.
+  * A [[Scheduler]] which allows you to schedule jobs to run at interval or particular times(cron like).
+  * A [[Basic Testing API]] to add lightweight test cases to your code (like a lightweight JUnit).
+  * A [[Simple Search Engine / Indexer]] for indexing/searching text documents.
+  * Some other [[Utilities]] such as a basic email sending program and copying folders, zipping etc...
+  * A basic [[Preference/Properties manager]], to simply load data from property files.
+  * A [[Simple Logging API]] that requires very little configuration.
+  * Some [[Anti-Spam functions]], for example to encode an email address into hexadecimal/Javascript code.
+  * A [[Generic template parser]] [DOC TBD], which allow you to easily templatize your content and parse it on the fly.
+

@@ -1,0 +1,450 @@
+This is a plain copy of this article:\\
+http://www.fatofthelan.com/articles/articles.php?pid=22
+
+Just in case this great article goes down ....
+
+
+<html>
+  <p><strong>How To Install Postfix, Amavis, ClamAV, and Spamassassin on Debian 
+    Linux</strong><br />
+    by Tobias Rice<br />
+    Version 1.4  <a href="http://www.fatofthelan.com/forums/viewtopic.php?p=341#341">Change log</a>
+
+<br />
+    Note: This how-to works as is under the LDAP how-to here:<br />
+    <a href="http://www.fatofthelan.com/articles/articles.php?pid=24">
+    http://www.fatofthelan.com/articles/articles.php?pid=24</a></p>
+  <p>Note: This article covers some basic Spam filtering. It is not the place for detailed UBE handling. I will soon be outlining a detailed How-To just for spam. I am also now focusing on Debian Sarge, so some of the latest additions to this How-To will not be tested for Woody.</p>
+  
+  <p><strong>INTRODUCTION</strong></p>
+  <p>For the sake of clarity, I’ll be using<span class="blurb"> "tobias.local"</span> 
+    for my domain, and 123.123.123.123 for my IP address. These values should 
+    obviously be changed to your settings. Although this describes the install 
+    process on Debian Linux, it should be the same on any flavor of Linux minus 
+    the Debian-centric commands like <span class="blurb">“apt-get”</span>. 
+    This may be a rather terse guide, like a step by step to email, so if you’re 
+    wanting more theory or explanation, read your man pages or see a more verbose 
+    guide like one of these:<br>
+
+    http://www.firstpr.com.au/web-mail/RH90-Postfix-Courier-Maildrop-IMAP/<br>
+	http://www.workaround.org/articles/ispmail-sarge/<br>
+	http://postfix.state-of-mind.de/patrick.koetter/smtpauth/<br>
+    …which are excellent, but a little different from what I’ll be 
+    doing here. Also, a big thanks goes out to Scott Kveton for his help.<br>
+    In the end, I want a system that allows my users to have several predefined 
+    mail folders, i.e. Sent, Drafts, Trash, Templates, and one of them being a 
+    Junkmail folder where spam will automatically be delivered. </p>
+  <p><strong>INSTALLATION</strong></p>
+
+  <p>I’m running on Sarge (Testing), so if you’re running Stable you’ll 
+    need to change some of your apt settings. You’ll have to grab a few 
+    packages out of testing to for this install. If you’re running testing 
+    you can skip this section.<br>
+    Add the following to your <strong>/etc/apt/sources.list:</strong></p>
+  <p>deb-src http://debian.oregonstate.edu/debian testing main non-free contrib<br>
+    deb http://non-us.debian.org/debian-non-US testing/non-US main contrib non-free<br>
+    deb-src http://non-us.debian.org/debian-non-US testing/non-US main contrib 
+    non-free</p>
+  <p>and to <strong>/etc/apt/apt.conf:</strong></p>
+
+  <p class="blurb">APT::Default-Release "stable";<br>
+    APT::Cache-Limit 12582912;</p>
+  <p>What this does is say "pin all packages at stable"</p>
+  <p>Now run:<br>
+    <span class="blurb">apt-get -t "testing" install postfix spamassassin 
+    amavisd-new clamav clamav-daemon libmailtools-perl fam libnet-dns-perl</span></p>
+  <p>Or if you’re already running on Testing run:<br>
+
+    <span class="blurb">apt-get install postfix spamassassin amavisd-new clamav 
+    clamav-daemon libmailtools-perl fam libnet-dns-perl</span></p>
+  <p>Say yes if it asks you to remove exim or whatever MTA you may have installed.<br>
+    Postfix can deliver mail to mbox or Maildir formatted mailboxes by itself, 
+    but since I want to do a little more mail processing, I am going to install 
+    an additional delivery agent (think Maildrop or Procmail). Since I’m 
+    going to be using the Maildir format instead of mbox, I’ll be installing 
+    Courier Maildrop as the delivery agent.<br>
+    <span class="blurb">apt-get install courier-maildrop</span><br><br>
+    If you want to stick to mbox, you can install Procmail for you delivery agent. 
+    I’ll only be using IMAP/IMAPS for MUA connections, I don’t POP. 
+    To install Courier's IMAP and IMAPS servers, issue the following command:<br>
+    <span class="blurb">apt-get install courier-imap courier-imap-ssl</span></p>
+
+  <p><strong>CONFIGURATION</strong></p>
+  <p>Before we get too far along, we need to make sure Postfix is running properly, 
+    then we’ll add more functionality later. All of Postfix’s configuration 
+    files are located in <strong>/etc/postfix</strong>. If you open <strong>/etc/postfix/main.cf</strong> 
+    (Appendix A) in your favorite text editor, you should see your domain information 
+    in here from the Postfix install scripts you answered during the setup. We 
+    also need to setup our <strong>Maildir</strong> mail boxes with the <strong>“maildirmake”</strong> 
+    command. We’ll do this for existing users and also in <strong>/etc/skel</strong> 
+    so new users automatically get the same setup. To setup our <strong>Maildir</strong>, 
+    change directories to your home and run:<br>
+
+    <span class="blurb">maildirmake Maildir</span><br>
+    To make our sub folders run:<br>
+    <span class="blurb">maildirmake -f Sent Maildir<br>
+    maildirmake -f Drafts Maildir<br>
+    maildirmake -f Templates Maildir<br>
+    maildirmake -f Junkmail Maildir</span></p>
+
+  <p>Now repeat for <strong>/etc/skel</strong>. If your existing users are in 
+    the mbox format, you can convert them to <strong>Maildir</strong> with the 
+    <strong>mb2md</strong> command. <br>
+    <span class="blurb">apt-get install mb2md</span></p>
+  <p>To have Postfix deliver to <strong>Maildir</strong>, add the following line 
+    to your <strong>main.cf</strong>:<br>
+
+    <strong>home_mailbox = Maildir/</strong><br><br>
+    Don’t forget the trailing slash, ("/"). Note to Debian users: 
+    the install script for some reason adds an extra comma before localhost on 
+    the <strong>mydestination</strong> line. Typo?</p>
+  <p>Test out your email and make sure everything works thus far. If all is working 
+    properly, bring <strong>Maildrop</strong> online by finding (or adding) the 
+    line to your <strong>main.cf</strong> file:<br>
+
+    <strong>“mailbox_command = “</strong><br>
+    and changing it to<br>
+    <strong>“mailbox_command = /usr/bin/maildrop</strong><br>
+    or if you are planning on using Procmail, enter:<br>
+    <strong>“mailbox_command = /usr/bin/procmail -a "$EXTENSION"”</strong><br>
+    and issue the <span class="blurb">“postfix reload”</span> command. 
+    Send a test mail and <span class="blurb">“tail”</span> your <strong>/var/log/syslog</strong>. 
+    You should see something like this:<br>
+
+    postfix/local[3067]: 52239CF00: to=, orig_to=, relay=local, delay=0, status=sent 
+    ("|/usr/bin/maildrop")<br><br>
+    You should also have an email in the user’s <strong>/home/Maildir/new/</strong> 
+    directory.<br>
+    Now create the file <strong>/etc/courier/maildroprc</strong> (Appendix B). 
+    This will give us global filtering options. Users can customize their own 
+    by adding a <strong>.mailfilter</strong> file in their home directories. To 
+    add logging for <strong>Maildrop,</strong> create the log file and add the 
+    directive in <strong>maildroprc</strong>.<br>
+
+    <span class="blurb">touch /var/log/maildrop<br>
+	chown root.adm /var/log/maildrop<br>
+    chmod 642 /var/log/maildrop<br>
+    echo logfile "/var/log/maildrop" > maildroprc<br>
+    echo VERBOSE="5" >> maildroprc<br>
+    echo log "========" >> maildroprc</span></p>
+
+  <p>Now send an email and you should see the details in the <strong>/var/log/maildrop</strong> 
+    file.<br>
+    You’ll also want to add Maildrop’s log file to <strong>logrotate</strong>. 
+    Create a new file in the <strong>/etc/logrotate.d</strong> directory called 
+    <strong>maildrop</strong>, and add the following:<br>
+    <span class="blurb">/var/log/maildrop {<br>
+
+    weekly<br>
+    missingok<br>
+    }</span></p>
+  <p>Since I want to use IMAPS and have installed courier-imap-ssl, I need to 
+    set up a proper certificate. IMAP over SSL requires a valid, signed, X.509 
+    certificate and one was generated during the install, but it’s bogus. 
+    The command <span class="blurb">“mkimapdcert”</span> generates 
+    a self-signed X.509 certificate. To prevent an unfortunate accident, <strong>mkimapdcert</strong> 
+    will not work if <strong>imapd.pem</strong> already exists, so we’ll 
+    make a backup of it and make a new one. In <strong>/etc/courier</strong> copy 
+    <strong>imapd.cnf</strong> to <strong>imapd.cnf.bak</strong>, and move <strong>imapd.pem</strong> 
+    to <strong>imapd.pem.bak</strong>. Edit <strong>imapd.cnf</strong> to suit 
+    you needs. Then to generate the new IMAPS certificate run:<br>
+
+    <span class="blurb">mkimapdcert</span><br>
+    Your new <strong>imapd.pem</strong> must be owned by the daemon user and have 
+    no group or world permissions. The <strong>mkimapdcert</strong> command will 
+    enforce this. <br>
+    You should now have a new <strong>imapd.pem</strong> file. Restart courier 
+    to see the changes.</p>
+
+  <p>To run <strong>Amavis</strong>, you’ll have to setup your <strong>amavis.conf</strong> 
+    file. I suggest reading the Postfix install doc for Amavis, <strong>/usr/share/doc/amavisd-new/README.postfix.gz</strong>
+	<br>
+	Amavis is extremely configurable and robust and you should take the time to read the comments to see what fits your needs best. Basically, Amavis is a wrapper that will send each mail through ClamAV and Spamassassin. What I'm going to be doing here is have it check for viruses and spam. If the message is determined to be a virus, it will be deleted, and if it is found to be spam, it will have a flag added to its headers saying that is indeed spam (tag and PASS). The reason for this because spam filtering is far from perfect. I want to tag the suspected spam as such and let the end user make the final call. Maildrop will look for the spam flag in the headers of the message and if present, will move the message to the Junkmail folder automatically. </p>
+  <p>Open <strong>/etc/amavis/amavisd.conf</strong>, locate and change the<strong> 
+    “$mydomain”</strong> section to your domain.<br>
+
+    Locate and uncomment these lines to have Amavis work with Postfix:<br>
+    <strong>$forward_method = 'smtp:127.0.0.1:10025'; # where to forward checked 
+    mail<br>
+    $notify_method = $forward_method; # where to submit notifications</strong></p>
+  <p>Locate and comment out this line:<br>
+    <strong>#@bypass_spam_checks_acl</strong></p>
+  <p>To have Spamassassin add it’s header tags to mail, find the <strong>@local_domains_acl 
+    =</strong> lines and change them to the following (don’t forget the 
+    period in the parenthisis!):<br>
+
+    <strong>@local_domains_acl = qw( ".$mydomain" ); # you may want to use qw() to check all in and out <br>
+    $sa_tag_level_deflt = -999; # add spam info headers if at, or above that level<br>
+    $sa_tag2_level_deflt = 5.0; # add 'spam detected' headers at that level<br>
+    $sa_kill_level_deflt = 999; # triggers spam evasive actions</strong></p>
+  <p>Tell Amavis how to handle spam and viruses. Although the RFC says you should let the sender know you're killing thier mail, it is a waste of bandwidth, as most virus/spam mail is spoofed, so locate and edit these lines:<br>
+    <strong>$final_virus_destiny      = D_DISCARD; # (defaults to D_BOUNCE)<br>
+
+    $final_banned_destiny     = D_REJECT;  # (defaults to D_BOUNCE)<br>
+	$final_spam_destiny       = D_PASS;  # (defaults to D_REJECT but we're tagging and passing)</strong></p>
+  <p>I have all mail related messages go to an account called <strong>“postmaster”</strong>. 
+    I want all messages coming to the postmaster account regardless of spam or 
+    virus content, so find and change the following lines:<br>
+    <strong>$spam_admin = "postmaster\@$mydomain";<br>
+    $spam_lovers{lc("postmaster\@$mydomain")} = 1;<br>
+
+    $virus_admin = "postmaster\@$mydomain";</strong></p>
+  <p>I don’t want to quarantine virused email, and spam will be delivered 
+    to the users <strong>Junkmail</strong> folder, so I locate and changed the 
+    following:<br>
+    <strong>$QUARANTINEDIR = undef;<br>
+    $virus_quarantine_to = undef;<br>
+    #$spam_quarantine_to = 'spam-quarantine';</strong></p>
+
+  <p>Other related changes:<br>
+    <strong>$remove_existing_spam_headers = 0;<br>
+    $sa_local_tests_only = 0;   # (default: false)<br>
+    $SYSLOG_LEVEL = 'mail.info';<br>
+    $log_level = 2;</strong></p>
+  <p>Be sure to create the <strong>/var/log/amavis.log</strong> file and chown 
+    it to amavis.</p>
+
+  <p>If you want Amavis to knock out emails with certain extensions tailor the 
+    <strong>$banned_filename_re</strong> to meet your needs.<br>
+    Uncomment this:<br>
+    <strong>$spam_lovers{lc("postmaster\@$mydomain")} = 1;</strong></p>
+  <p>To have Amavis pass email to <strong>Clam antivirus</strong>, comment out 
+    all of the antivirus stanzas except for the two clamav stanzas. Also the ClamAV user needs access to the messages to be able to check them so add it to the Amavis group:<br>
+
+    <strong># adduser clamav amavis</strong></p>
+  <p>Start amavis and check for typos. To see any error messages and debugging 
+    info, I suggest running Amavis for the first time interactively and keep it 
+    attached to the terminal by issuing the following comands:<br>
+    <span class="blurb"># su - amavis #(or whatever username you decided to use)<br>
+    $ /usr/local/sbin/amavisd debug </span></p>
+  <p><br>
+    From another window check that it is listening on a local SMTP port 10024 
+    (default):</p>
+
+  <p class="blurb">--> $ telnet 127.0.0.1 10024<br>
+    Trying 127.0.0.1...<br>
+    Connected to 127.0.0.1.<br>
+    Escape character is '^]'.</p>
+  <p class="blurb"> 220 [127.0.0.1] ESMTP amavisd-new service ready</p>
+  <p class="blurb">--> quit</p>
+
+  <p class="blurb"> 221 Bye<br>
+    Connection closed by foreign host.</p>
+  <p>Now add the following to the end of your <strong>/etc/postfix/master.cf</strong> 
+    file:</p>
+  <p><strong>smtp-amavis unix - - n - 2 smtp<br>
+    -o smtp_data_done_timeout=1200<br>
+
+    -o disable_dns_lookups=yes</strong></p>
+  <p><strong>127.0.0.1:10025 inet n - n - - smtpd<br>
+    -o content_filter=<br>
+    -o local_recipient_maps=<br>
+    -o relay_recipient_maps=<br>
+    -o smtpd_restriction_classes=<br>
+
+    -o smtpd_client_restrictions=<br>
+    -o smtpd_helo_restrictions=<br>
+    -o smtpd_sender_restrictions=<br>
+    -o smtpd_recipient_restrictions=permit_mynetworks,reject<br>
+    -o mynetworks=127.0.0.0/8<br>
+    -o strict_rfc821_envelopes=yes<br>
+
+    -o smtpd_error_sleep_time=0<br>
+    -o smtpd_soft_error_limit=1001<br>
+    -o smtpd_hard_error_limit=1000</strong></p>
+  <p>Now add this to your <strong>/etc/postfix/main.cf:</strong><br>
+    <strong>content_filter = smtp-amavis:[127.0.0.1]:10024</strong></p>
+  <p>What all of this does is add a SMTP proxy. Mail comes into Postfix and is 
+    handed off to Amavis on port 10024. Amvais will then process the mail and 
+    hand it back to Postfix on port 10025.</p>
+
+  <p>Now open <strong>/etc/courier/maildroprc</strong> and add:<br>
+    <strong>if ( /^X-Spam-Flag: YES/ )<br>
+    {<br>
+    log "------------------------------------------------------------- Spam 
+    general. "<br>
+    to "Maildir/.Junkmail"<br>
+
+    }</strong></p>
+  <p>This should grab mail tagged by Spamassassin and put it in the user’s 
+    Junkmail folder.</p>
+  <p>Reload Postfix. At this point, you should have a working installation that 
+    filters mail for viruses and spam. The only step left is to setup SMTP authentication 
+    so users can relay mail through the server without fear of spammers using 
+    it as an open relay.</p>
+  <p><strong>SMTP AUTH</strong></p>
+  <p>To enable users to relay messages through the server, they must authenticate 
+    with the server. Although there a several ways to do this, I like using <strong>PLAIN</strong> 
+    or <strong>LOGIN</strong> for compatibility reasons. Since we’ll be 
+    using the PLAIN or LOGIN mechanisms for SMTP AUTH, usernames and passwords 
+    are sent over the internet in plaintext. To keep anyone sniffing our traffic 
+    from seeing our credentials, we need to encrypt our traffic with Transport 
+    Layer Security, or <strong>TLS</strong>. We’ll setup all of this up 
+    in two steps. The first is configuring Postfix for SMTP authentication. The 
+    second step is setting up TLS for encrypting the users credentials.</p>
+
+  <p>First we’ll have to install the Postfix ssl patch.<br>
+    <span class="blurb">apt-get install postfix-tls</span></p>
+  <p>To have Postfix authenticate users, we’ll pass the authentication to 
+    <strong>SASL</strong> and let it do the actual query against the shadow file 
+    via <strong>PAM</strong>. Create the <strong>/etc/postfix/sasl/smtpd.conf</strong> 
+    file and enter the following:<br>
+
+    <strong>pwcheck_method: saslauthd<br>
+    mech_list: PLAIN LOGIN</strong></p>
+  <p>Now install the sasl apps:<br>
+    <span class="blurb">apt-get install libsasl2-modules<br>
+    apt-get install sasl2-bin</span></p>
+  <p>To have the the sasl authentication daemon listening where Postfix will be 
+    looking for it, we’ll need to edit the init script for <strong>saslauthd</strong>. 
+    Open the <strong>/etc/init.d/saslauthd</strong> file in your favorite editor 
+    and enter the following line in the header (under PWDIR):<br>
+
+    <strong>PARAMS="-m /var/spool/postfix/var/run/saslauthd"</strong></p>
+  <p>Now we’ll have to make the directory we just added in the previous 
+    step, chown it so Postfix can use it, and add the Postfix user to the sasl 
+    group.<br>
+    <span class="blurb">tsunami:/etc/init.d# mkdir /var/spool/postfix/var/ <br>
+    tsunami:/etc/init.d# mkdir /var/spool/postfix/var/run/ <br>
+    tsunami:/etc/init.d# mkdir /var/spool/postfix/var/run/saslauthd<br>
+    tsunami:/etc/init.d# chown -R root:sasl /var/spool/postfix/var/<br>
+
+    tsunami:/etc/init.d# adduser postfix sasl</span></p>
+  <p>To enable saslauthd to start, edit the <strong>/etc/default/saslauthd</strong> 
+    file and add this:<br>
+    <strong>START=yes<br>
+    MECHANISMS="pam"</strong></p>
+  <p>Start saslauthd and check that is running. Issue the following command:<br>
+
+    <span class="blurb">ps waux | grep saslauthd</span></p>
+  <p>You should see:<br>
+    <span class="blurb">root 6143 0.0 0.2 5916 1432 ? S 08:53 0:00 /usr/sbin/saslauthd 
+    -m /var/spool/postfix/var/run/saslauthd -a pam</span></p>
+  <p><strong>NOTE!</strong> Many people have had problems with sasl not working correctly.
+   This is almost always due to sasl not shuting down or acceptting the new settings. If you have problems with sasl, kill -9 all of its PID's or simply reboot.
+   <br>See this: <a href="http://www.fatofthelan.com/forums/viewtopic.php?t=86">http://www.fatofthelan.com/forums/viewtopic.php?t=86</a> </strong> </p>
+
+  <p>To check that sasl is indeed working, use the <strong>testsaslauthd</strong> 
+    command with your username and password:<br>
+    <span class="blurb">testsaslauthd -u username -p password -f /var/spool/postfix/var/run/saslauthd/mux</span></p>
+  <p>If everything is setup correctly, you should see:<br>
+    <span class="blurb">0: OK "Success."</span></p>
+  <p>To have Postfix use sasl, you need to add this (preserving the spaces and commas!) to your <strong>main.cf</strong>:<br>
+
+  <strong><pre>
+smtpd_recipient_restrictions =
+    permit_sasl_authenticated,
+    permit_mynetworks,
+    reject_unauth_destination
+
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain =
+broken_sasl_auth_clients = yes
+</pre></strong></p>
+  <p>Restart Postfix, I think you have to actually restart postfix for this? Reload 
+    didn't seem to work for me. To test, you’ll need to telnet to Postfix 
+    and issue some commands, but since some of these are in base 64, you’ll 
+    need to generate the command and copy the resultes. Enter this exactly like 
+    it is below, but with your username and password! Don’t leave out the 
+    0’s!!<br>
+    <span class="blurb">perl -MMIME::Base64 -e 'print encode_base64("username\0username\0password");'</span></p>
+  <p>It should return a string like this:<br>
+    <strong>dXNlcm5hbWUAdXNlcm5hbWUAcGFzc3dvcmQ=</strong></p>
+  <p>Now telnet to Postfix and enter the following case sensitive commands :<br>
+
+    <span class="blurb">telnet tobias.local 25<br>
+    EHLO tobias.local</span></p>
+  <p>Now add your base64 encoded string after AUTH PLAIN:<br>
+    <span class="blurb">AUTH PLAIN dXNlcm5hbWUAdXNlcm5hbWUAcGFzc3dvcmQ=</span></p>
+  <p>You SHOULD see 235 Authentication successful.<br>
+    Enter “quit” to exit the telnet session.</p>
+
+  <p>Your test should look something like this:<br>
+    <strong>telnet localhost 25<br>
+    Trying 123.123.123.123...<br>
+    Connected to somedomai.net.<br>
+    Escape character is '^]'.<br>
+    220 somedomain.net ESMTP Postfix<br>
+
+    EHLO fatofthelan.com<br>
+    250-somedomain.net<br>
+    250-PIPELINING<br>
+    250-SIZE<br>
+    250-VRFY<br>
+    250-ETRN<br>
+
+    250-AUTH LOGIN PLAIN<br>
+    250-AUTH=LOGIN PLAIN<br>
+    250 8BITMIME<br>
+    AUTH PLAIN dXNlcm5hbWUAdXNlcm5hbWUAcGFzc3dvcmQ=<br>
+    235 Authentication successful<br>
+    quit<br>
+
+    221 Bye<br>
+    Connection closed by foreign host.</strong></p>
+  <p>If this isn’t working go back and double check your settings.</p>
+  <p>Next we’ll be installing certificates and tls support to encrypt user 
+    information.</p>
+  <p><strong>SETTING UP TLS</strong></p>
+  <p>As stated previously, we’ll be using the <strong>PLAIN</strong> or 
+    <strong>LOGIN</strong> mechanisms for SMTP AUTH, so usernames and passwords 
+    are sent over the internet in plaintext. To keep anyone sniffing our traffic 
+    from seeing our credentials, we need to encrypt our traffic with TLS. So if 
+    you haven’t already, <span class="blurb">apt-get install postfix-tls</span>.<br>
+
+    To build our certificates we will be using the script <strong>/usr/lib/ssl/misc/CA.pl</strong>. 
+    First we’ll need to create our certificate authority, or CA, so change 
+    to the <strong>/usr/lib/ssl/misc/</strong> directory and issue the command:<br>
+    <span class="blurb">./CA.pl –newca</span><br>
+    You’ll be asked some questions about your organization, be sure to answer 
+    the line, “<strong>Common Name</strong> (eg, your name or your server's 
+    hostname):” with the <strong>FQDN</strong> of your mail server, i.e. 
+    <strong>mail.yourdomain.com</strong>.<br>
+
+    Next we’ll create the server cert request that we’ll sign with 
+    our new CA. Issue the following command and answer the questions presented: 
+    <br>
+    <span class="blurb">./CA.pl –newreq-nodes</span><br>
+    All that is left is to sign the server certificate request with our new CA 
+    with the following command (Answer yes to both questions):<br>
+    <span class="blurb">./CA.pl –sign</span><br>
+    Make a new directory to hold your new certificates in <strong>/etc/postfix</strong> 
+    called <strong>ssl</strong>, and copy you new certificates into it:<br>
+
+    <span class="blurb">mkdir /etc/postfix/ssl:<br>
+    tsunami:/usr/lib/ssl/misc# mkdir /etc/postfix/ssl<br>
+    tsunami:/usr/lib/ssl/misc# cp newcert.pem /etc/postfix/ssl/<br>
+    tsunami:/usr/lib/ssl/misc# cp newreq.pem /etc/postfix/ssl/<br>
+    tsunami:/usr/lib/ssl/misc# cp demoCA/cacert.pem /etc/postfix/ssl/</span><br>
+	<br>
+
+	Be sure to chmod all of your certs to read only and chown them all to root!</p>
+  <p>Now all that is left is to tell Postfix to use TLS. Add the following stanza 
+    to your <strong>/etc/postfix/main.cf</strong> file:</p>
+  <p><strong>smtpd_use_tls = yes<br>
+    #smtpd_tls_auth_only = yes # You should uncomment to prevent people from passing their passwords in the clear! <br>
+    smtpd_tls_key_file = /etc/postfix/ssl/newreq.pem<br>
+
+    smtpd_tls_cert_file = /etc/postfix/ssl/newcert.pem<br>
+    smtpd_tls_CAfile = /etc/postfix/ssl/cacert.pem<br>
+    smtpd_tls_loglevel = 3<br>
+    smtpd_tls_received_header = yes<br>
+    smtpd_tls_session_cache_timeout = 3600s<br>
+    tls_random_source = dev:/dev/urandom</strong></p>
+
+  <p>And in your <strong>/etc/postfix/master.cf</strong> file, find and uncomment 
+    the following stanza:</p>
+  <p><strong># only used by postfix-tls<br>
+    tlsmgr fifo - - n 300 1 tlsmgr<br>
+    smtps inet n - n - - smtpd -o smtpd_tls_wrappermode=yes -o smtpd_sasl_auth_enable=yes<br>
+    587 inet n - n - - smtpd -o smtpd_enforce_tls=yes -o smtpd_sasl_auth_enable=yes</strong></p>
+
+  <p>Reload Postfix. If you telnet to Postfix and issue the <span class="blurb">EHLO 
+    domain.tld</span> command, you should now also see the <strong>“250-STARTTLS”</strong> 
+    line, meaning that Postfix is now taking requests via TLS.</p>
+  <p><br />
+  </p>
+</div>
+</html>
+

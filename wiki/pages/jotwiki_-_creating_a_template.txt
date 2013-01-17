@@ -1,0 +1,54 @@
+======JOTWIKI - Creating a template======
+
+It is fairly easy to make your own template, basically all you have to do is to "extend" the default template.
+If a file/image is found in your template it will be used, otherwise it will use the one from the default template.
+
+You can make one to have your own "style" for jotwiki.
+
+If you make a cool one, it would be nice to share it (see bellow)
+
+=====Getting started=====
+The first thing you want to do is to create a new folder in /opt/jotwiki/templates/ for your template.
+
+''mkdir /opt/jotwiki/templates/mytpl/''
+
+You can then set a namespace to use it, so you can test it out.
+
+Also you can download and look at some of the other [[templates]] available as an example.
+
+=====Making a custom Stylesheet=====
+The easiest and preferred thing to do to create your own style is to add a custom stylesheet (template.css)
+
+**You should not copy and edit jotwiki.css because that is not very maintanable, instead you will want to create /opt/jotwiki/tempaltes/mytpl/template.css **
+
+In "template.css" you can copy any line you want to modify from jotwiki.css and modify it in here.
+Only copy the minimum(what you want to change), so it's more maintainable later.
+
+For example:
+<code vi /opt/jotwiki/templates/mytpl/template.css>
+# i want the tables to have a red background, instead of #222211 in jotwiki.css
+.table{background-color:#ff0000;}
+</code>
+
+=====Custom images/Icons=====
+The other easy thing you might want to do is use your own images/icons/buttons.
+
+The basic procedure is the same, just put your own image in your template folder.
+Say you want your smiling smiley :-) icon (default is /opt/jotwiki/templates/default/images/smileys/smile.gif)
+Then just create a new smile.gif image and put it in your template folder (EX: /opt/jotwiki/templates/mytpl/images/smileys/smile.gif)
+
+
+=====Custom template pages=====
+Now if you want to radically change the look, you might have no choice but to change the template pages(HTML) themselves, this is not highly recommended because as jotwiki evolves i will change the pages, it might break your template, so it will be more work to maintain it overtime.
+
+Nevertheless, you can do it, it works the same way as with the other files.
+
+Say you want your own "view.html" (the main template use to render wiki pages), you will want to copy it from the default template (/opt/jotwiki/templates/default/view.html) to your own template /opt/jotwiki/templates/mytpl/view.html and edit here
+
+NOTE: The templates pages are fairly clean HTML, with a few [[jot:home | JavaOnTracks tags]] logic tags (<jot:xx></jot:xx>), you want to be careful not to affect those or you might break the logic/page (that should give you an explicit error about what happened, which should help).
+
+=====Sharing the template=====
+
+You can email me [[mailto:tcolar-wiki@colar.net]] your zipped template folder (the whole folder) and a screenshot (800x600 max) and which jotwiki version it was made for, so i can add it to the [[templates]] page.
+
+

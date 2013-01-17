@@ -1,0 +1,22 @@
+======Beautiful fonts in Java======
+
+When working in an IDE, we are starring all day at pretty small fonts and nowadays with LCD's extra sharpness sometimes you start seeing the jaggies(pixel edges) too much.
+
+Nowadays java support not only font anti-aliasing but also sub pixel rendering. That's a fancy anti-aliasing where the subpixels(red, green, blue) are set separately for an even smoother looking font.
+
+You can enable this by setting this variable:
+
+''_JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on"''
+
+You could export that manually or maybe set it in /etc/environment (global vars)
+
+Or say you want that just in Netbeans, you would edit netbeans/etc/netbeans.conf:
+and add that too the java options, for example:
+
+
+<code | netbeans/etc/netbeans.conf>
+netbeans_default_options="-J-Dawt.useSystemAAFontSettings=lcd -J-client -J-Xss2m -J-Xms32m -J-XX:PermSize=32m -J-Dapple.laf.useScreenMenuBar=true -J-Dapple.awt.graphics.UseQuartz=true -J-Dsun.java2d.noddraw=true -J-Dsun.zip.disableMemoryMapping=true"
+</code>
+
+TIP: While you are at it you might want to set a better font than the standard one, for example I like ''DejaVu Sans Mono'' but there are other good ones.
+

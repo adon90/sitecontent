@@ -1,0 +1,9 @@
+======Fan IDE Demo (screencast)======
+
+Please see the screencast / demo here: **Updated 8/16/09 !**
+
+[[http://www.colar.net/fanide/fansuite2.htm]]
+
+See also [[Fantom IDE completion screencast]] 
+
+

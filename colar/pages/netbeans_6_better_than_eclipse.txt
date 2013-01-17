@@ -1,0 +1,67 @@
+======Netbeans 6 better than Eclipse======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+=====Introduction=====
+I have been using Eclipse for about 3 years, before that i used Jedit, IntelliJ and Xemacs, while Eclipse is pretty nice it has become slower and slower as it is a huge platform, as such it is loosely integrated and not targeted to any specific task, which means it's VERY flexible but also that it probably doesn't do what you need out of the box, rather you will have to customize options and install plugins for it to do what you want.
+So oftentimes you have to install a bunch of plugins that are not integrated (idependant) and possibly conflicting, as a result it feels you have a bunch of little helper tools rather than a all-in-one solution.
+
+At my company we work with an SAP platform which is a HUGE java base using JSP's, struts, JSF etc..., Eclipse does not provide much support for those technologies without plugins (not even JSP syntax support !), so we added a nice affordable plugin set called 'MyEclipse', while it is a powerful plugin set it also include a lot of heavy "composer" style things, which we don't care for, that make Eclipse even slower.
+
+Until now i had not found a better solution however, well IntelliJ was great but too spendy.
+
+Enters the latest offering from Netbeans, that is a surprise, i use to think of netbeans (a few years back), as huge and slow and full of "composer" tools, also it just wasn't very flexible.
+
+However the latest version of Netbeans (6 beta), is just great and i switched to it from Eclipse.
+The main reason why it's great is that out of the box it does everything i need without any plugins AND it's all integrated tightly. It also comes with Tomcat bundle making for one click run/deploy/debug/profile of java web applications, no settings needed ! (With Ecliupse you need a few plugins to do all that.).
+It's also a lot more responsive(UI) and needs less memory. It has all the feature you need to develop a java/webapp application builtin, yet support extra plugins should you need them.
+
+=====Pro and Cons=====
+====Eclipse====
+===Pros===
+  * Largest community / plugins for almost anything.
+  * Better editor/code generator.
+  * Better debugger.
+===Cons===
+  * Independant plugins means more settings, and more conflicts.
+  * UI is not as focused as netbeans.
+  * Does not support much out of the box besides plain Java app.
+
+====Netbeans====
+===Pros===
+  * All in one solution, install it and you are done.
+  * Nice JSP Editor builtin.
+  * customized installers for java/ruby/C++ etc.. development, resulting in smaller footprint (Eclipse 3.3 seems to do this as well now).
+  * Builtin tomcat for one click deployment.
+  * One click debugging/profiling.
+  * Faster than Eclipse with needed plugins. 
+  * Can import Eclipse projects.
+  * Can use Eclipse keyboard map (or netbeans, or emacs etc...).
+===Cons===
+  * Less plugins available than eclipse.
+  * Editor slightly less powerful (ex: insert getter/setters not as nice as eclipse)
+  * Debugger not as intuitive as Eclipse's.
+
+=====Conclusion=====
+I really like the focused lightweight approach of Netbeans, i believe that for the user a small application that does what he wants is better than a huge platform that COULD do anything .
+I also wanted to note that i develop on all 3 platforms, Mac, Linux and Windows, and that's easier with Netbeans because it looks more like a "native" application and since there is virtually nothing to configure, it's just a matter of installing and checking out the project and you are done. 
+So i have now switched to Netbeans and am happy to see a very good alternative to Eclipse, if anything that will make both app compete and get better.
+
+=====Links=====
+[[http://www.netbeans.org/community/releases/60/|Netbeans 6]]
+[[http://www.eclipse.org/downloads/|Eclipse 3.x]]
+
+=====Netbeans 6 screenshot=====
+Note the tightly integrated Tomcat runtime pane at the bottom.
+
+{{ netbeans.png }}

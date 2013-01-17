@@ -1,0 +1,4 @@
+{"author":"Er1K (Guest)",
+"title":"berry_charge",
+"text":"berry_charge is staying loaded after loading that first time.  Since you blacklisted it, it shouldn't load it again, but you need to nuke it.  Either reboot (the Linux PC, not the phone), or do your favorite variation of \"sudo rmmod berry_charge\", which you may need to do while the device is *not* connected.\n",
+"ts":"2009-08-06T21:51:00-07:00 Los_Angeles"}

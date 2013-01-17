@@ -1,0 +1,104 @@
+====== Freevo PVR box ======
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>
+===== Software =====
+
+Freevo is not a full distribution, just a suite of software to add on top of linux.
+
+So i had to choose a base linux distro to install on.
+
+I want with Debian because it's fast, simple and lightweight.
+
+I actually used the XFCE CD ISO version of debian, so XFCW would be preinstalled. XFCE is not required but it's nice to have an X-windows environment and windows manager on hand when you want to run other tools for things not covered by Freevo (say a browser or a dvd encoding tool etc ...)
+
+Note: i got the "testing" version (etch) because it's pretty much needed to get the freevo stuffs to work.
+
+So got the debian image here:\\
+http://cdimage.debian.org/cdimage/weekly-builds/i386/iso-cd/  (debian-testing-i386-xfce-CD-1.iso)
+
+Burned it on a CD using cdrecord (or whatever CD burning tool you have).
+
+Then boot the CD and install debian.
+
+Configure the network during instalation etc ...
+
+After installing and booting debian, you will probably want to upgrade/update it.
+
+FIXME: show /etc/apt/sources.list
+
+<code>
+apt-get update
+apt-get upgrade
+</code>
+
+add the freevo repositories to /etc/apt/sources.list
+
+<code>
+....
+deb http://debian.geole.info/ etch main contrib non-free
+deb http://debian-multimedia.org etch main
+</code>
+
+Then install freevo
+
+<code>
+apt-get update
+apt-get install freevo
+</code>
+
+Working on the box itself is usually not practical, because it's next to the TV, and probably not plugged to a computer monitor, doesn't have a chair in front etc..., so best is to install tools so we can work on the box remotely.
+
+I use SSH and VNC
+<code>
+apt-get install openssh-server
+apt-get install vncserver
+</code>
+
+Then you can start the vncserver and log to it from another machine\\
+Starting VNC:
+<code>
+# note, without the depth parameter it won't work right.
+vncserver -depth 16 -resolution 800x600
+</code>
+
+FIXME: run on :0 ?
+FIXME: start vncserver at boot ?
+
+From the remote machine, you can log using:
+<code>
+vncviewer 192.168.0.105:1
+</code>
+
+That will give you a nice xfce desktop, from there start an Xterm and run "freevo" and see if freevo starts.
+
+** Configuring freevo**\\
+FIXME: Explain config of the tv grabber, retrieving listings, zap2it labs etc ...
+
+FIXME: nvidia tvout \\
+http://home.comcast.net/~andrex/Debian-nVidia/index.html
+
+FIXME: freevo plugins
+<html>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4391290539711272";
+/* 468x60, created 3/20/08 */
+google_ad_slot = "6971565209";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</html>

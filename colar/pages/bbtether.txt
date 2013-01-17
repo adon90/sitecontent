@@ -1,0 +1,9 @@
+======BBTether - Easy Tethering for Blackberry on Linux and other Unix'es======
+
+BBtether has been repackages as "berry4all", [[http://www.berry4all.com/ | see the new page here]].
+
+<html>
+<script language="javascript">
+document.location="http://www.berry4all.com/";
+</script>
+</html>

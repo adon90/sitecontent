@@ -1,0 +1,311 @@
+======Ubuntu 12.04 on Samsung series 7 Chronos laptop - NP70035B-S01UB======
+For the last year  had been using a Mac book pro but now that I have to return it I decided to go back to Linux.
+While OSX is very good, I've never felt it was quite up to par with Linux as a **developer** env.
+
+I ended up Buying a Samsung series 7 -Chronos- laptop (NP70035B-S01UB)
+[[http://www.samsung.com/us/computer/laptops/NP700Z5B-S01UB]]
+
+It's very slick laptop and has almost exactly the same hardware as a MBP. It's not cheap at 999$ but still half the price of a comparable MBP. Also it comes with a "Mate"(non-gloss) screen, which IMO is best for programming(less glare).
+
+I'm keeping windows 7 for the few occasions I will need it but my Main OS will be Linux.
+I ended up using Ubuntu 12.04 although i contemplated using Mint for a while as I can't stand Unity.
+
+**Anyway, this page documents getting Ubuntu 12.04 working properly on this laptop**  
+
+Most of the info here was gleaned form all over the web plus a few things I figured out on my own.
+
+=====Linux tweaks(Ubuntu 12.04)=====
+
+===Installation===
+Windows had made two partitions, one about 300GB for the system and one ~600GB for data.
+
+During the standard Ubuntu installation process I decided to keep the windows system partition(300GB), but removed the (empty) data one and used that free space to create my Linux partitions.
+
+I also **decided to use the SSD drive(8GB) as the swap partition**(optional) ... there is a chance windows might deleted it at some point, so using it for swap is safer plus fast swap is good !
+
+TIP: In windows, if it asks whether you want to "optimize startup time", or something like that, say no, otherwise it will reformat the SSD drive and use it for fast windows boot.
+
+
+Other than that I did nothing special during installation and that lives you with a usable laptop but with several issues we are going to cover now.
+
+===Open source ATI Radeon driver and fan always on / quick battery drain===
+The standard driver for the video card is using a lot of CPU and causing the fan to be always on, quickly draining the battery (~2 hours)
+
+The simplest solution to that is to install the proprietary driver from ATI.
+**Go In settings / Additional drivers and select the ATI FGLRX driver and activate/install it.**
+
+With this you should get closer to 4 hours of battery life or more.
+
+===Full ATI drivers (Optional)===
+The system has 2 graphic cards, an intel GPU(i guess not really a graphic card) that does fine 2D and is energy efficient, and an ATI Radeon (6400M) whihc is high performance, 3D but use much more energy.
+
+You can use the following instructions to install the most updated ATI driver that will allow you to pick which you want to use and configure it (switchable graphics):
+<code>
+sudo sh /usr/share/ati/fglrx-uninstall.sh
+sudo apt-get remove --purge fglrx fglrx_* fglrx-amdcccle* fglrx-dev* xorg-driver-fglrx
+
+cd /tmp && wget -O amd-driver-12-6-x86_64.run http://goo.gl/XBFyI
+chmod +x amd-driver-12-6-x86_64.run
+sudo sh amd-driver-12-6-x86_64.run
+
+sudo aticonfig --initial -f
+</code>
+
+**REBOOT** (required)
+
+Now you should see the ATI card using fglrxinfo
+<code | fglrxinfo>
+display: :0  screen: 0
+OpenGL vendor string: Advanced Micro Devices, Inc.
+OpenGL renderer string: AMD Radeon HD 6400M Series
+OpenGL version string: 4.2.11733 Compatibility Profile Context
+</code>
+
+And you can use ''sudo amdcccle'' to configure it (Graphical UI)
+
+===Sleep/suspend doesn't work right - get a blank screen and have to reboot===
+**Well this is another big one**, without fixing this you can't use suspend, and if you do by accident (closing the lid), you will have to reboot, and possibly lose unsaved items.
+
+Here is what worked for me:
+(from [[http://ubuntuforums.org/showthread.php?p=11926504]])
+
+Create (gedit) /etc/pm/sleep.d/20_custom-ehci_hcd with this content and save it:
+<code | sudo gedit /etc/pm/sleep.d/20_custom-ehci_hcd>
+#!/bin/sh
+#inspired by http://art.ubuntuforums.org/showpost...0&postcount=19
+#...and http://thecodecentral.com/2011/01/18...ot-working-bug
+# tidied by tqzzaa :)
+VERSION=1.1
+DEV_LIST=/tmp/usb-dev-list
+DRIVERS_DIR=/sys/bus/pci/drivers
+DRIVERS="ehci xhci" # ehci_hcd, xhci_hcd
+HEX="[[:xdigit:]]"
+MAX_BIND_ATTEMPTS=2
+BIND_WAIT=0.1
+
+unbindDev() {
+    echo -n > $DEV_LIST 2>/dev/null
+    for driver in $DRIVERS; do
+        DDIR=$DRIVERS_DIR/${driver}_hcd
+            for dev in `ls $DDIR 2>/dev/null | egrep "^$HEX+:$HEX+:$HEX"`; do
+            echo -n "$dev" > $DDIR/unbind
+            echo "$driver $dev" >> $DEV_LIST
+        done
+    #for bus in $EHCI_BUSES; do
+    echo -n $bus > /sys/bus/pci/drivers/ehci_hcd/unbind
+    # done
+    done
+}
+bindDev() {
+    if [ -s $DEV_LIST ]; then
+    while read driver dev; do
+        DDIR=$DRIVERS_DIR/${driver}_hcd
+        #for bus in $EHCI_BUSES; do
+        echo -n $bus > /sys/bus/pci/drivers/ehci_hcd/bind
+        #done
+            while [ $((MAX_BIND_ATTEMPTS)) -gt 0 ]; do
+                echo -n "$dev" > $DDIR/bind
+                if [ ! -L "$DDIR/$dev" ]; then
+                    sleep $BIND_WAIT
+                else
+                    break
+                fi
+                MAX_BIND_ATTEMPTS=$((MAX_BIND_ATTEMPTS-1))
+            done
+        done < $DEV_LIST
+    fi
+    rm $DEV_LIST 2>/dev/null
+    chvt 1
+    chvt 7
+}
+EHCI_BUSES="0000:00:1a.0 0000:00:1d.0"
+case "$1" in
+    hibernate|suspend)
+    unbindDev;;
+    resume|thaw)
+    bindDev;;
+esac
+</code>
+
+Then make it executable:
+<code>
+sudo chmod 755 /etc/pm/sleep.d/20_custom-ehci_hcd
+</code>
+
+===Getting function keys to work / Samsung system tools===
+There is a project called samsung-tools that makes all this work properly
+This also fixes a few other things, so it's more than just the function keys.
+
+**So it's almost a must have.**
+
+<code>
+sudo add-apt-repository ppa:voria/ppa
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install samsung-tools samsung-laptop
+</code>
+
+===Getting the trackpad to work properly===
+
+**Out of the box the trackpad is .... pretty horrendous**, especially coming from the great one on the MBP.
+
+Some of the things that are not working well:
+  - It's almost impossible to do a right click. In theory you do it by "tapping"(not clicking) with 2 fingers, try it, good luck !
+  - Default sensitivity/speed are not great (for me anyway)
+  - You can't drag/select using 2 fingers. Meaning you can't "pin" down with one finger and use the other to select/drag. So you can only do that with one finger, so you need to click then scroll with the same finger and that's very limiting ... kinda hard to explain but makes selecting/dragging/re-sizing a pain !
+
+**Ok, first we will install gpointing-device-settings** which gives a nice UI to configure many things.
+
+<code>
+sudo apt-get install gpointing-device-settings
+gpointing-device-settings
+</code>
+
+You might want to enable "palm detection" and "locked drag" and then adujst to your liking the speed settings (I liked a bit more sensitive than the defaults).
+I also disabled "tapping", I'm not gentle enough for that ;)
+
+OK, with that done it's a bit better, but we still have the other issues.
+This helps with the 2 other issues: [[http://www.theorangenotebook.com/2012/02/call-for-testing-clickpad.html]]
+
+**Fixing the other issues:**
+<code>
+sudo add-apt-repository ppa:chasedouglas/clickpad
+sudo apt-get update && sudo apt-get dist-upgrade
+</code>
+
+Then run the xinput command and find the ID of of the touchpad (here 15)
+<code>
+xinput
+</code>
+Interesting line will be something like this (**note id=12**)
+<code>
+               ->  ETPS/2 Elantech Touchpad id=12	[slave  pointer  (2)]"
+</code>
+
+Now we will download and try the couple scripts (originally at [[http://people.canonical.com/~cndougla/]]):
+<code> 
+cd ~
+wget "http://www.colar.net/enable-clickpad.sh"
+chmod +x enable-clickpad.sh
+wget "http://www.colar.net/enable-rightbutton.sh"
+chmod +x enable-rightbutton.sh
+</code>
+
+
+Now try the first script, this should **make the 2 finger behavior work correctly (pin and drag to select)** and so on.
+
+TIP: **Make sure you replace 12 by your actual device ID as found with xinput !**
+
+
+<code>
+~/enable-clickpad.sh 12 
+</code>
+Try It !
+
+The second script makes **clicking/tapping anywhere in the low/right corner a right click** (instead of having to do the two finger tap thing)
+<code>
+~/enable-rightbutton.sh 12
+</code>
+
+OK, **those setting will be gone after reboot**, so let's make them permanent !
+
+Put the 2 commands in ~/.gnomerc (if you use something else that gnome the idea is to add those command to session startup)
+<code | gedit ~/.gnomerc>
+~/enable-clickpad.sh 12 
+~/enable-rightbutton.sh 12
+</code>
+
+With all that done the trackpad is pretty good,not quite as good as on the Mac, but close. 
+
+===Webcam===
+For some reason the webcam was not working (just black image in skype)
+
+Installing and running guvcview fixes it ... I don't know why :-)
+<code>
+sudo apt-get install guvcview
+guvcview
+</code>
+
+===Issues with dual monitors===
+As soon as I would plug in man external monitor the mouse movement would become extremely slow / sluggish / jerky / unresponsive.
+
+Even with the external monitor turned off.
+That was extremely annoying, to the point that I would not use it the external anymore.
+
+It took me forever to find the solution to this issue, here is what worked:
+
+First you can test the solution like this:
+<code>
+sudo sh -c 'echo N > /sys/module/drm_kms_helper/parameters/poll'
+</code>
+
+That should fix it right away, no X restart needed, if that worked, congrats.
+
+Now let's make that fix permanent:
+<code>
+sudo sh -c 'echo "options drm_kms_helper poll=0" >> /etc/modprobe.d/local.conf'
+sudo update-initramfs -u
+</code>
+
+===Alternative to Unity : Cinnamon===
+
+Note: I actually since switched to use the awesome window manger, it's very barebone but very productive.
+See my config here: [[https://bitbucket.org/tcolar/configs/src]]
+
+
+I still can't stand Unity, I'm sure it's fine for a end user but as a developer it juts seem like a productivity killer.
+
+It's slow, not configurable at all and very inefficient,it's so bad that I think even windows 7 might be better than that.
+
+Well anyway a few alternatives are there such has using KDE(which I never liked) or XFCE or LXDE, which are good but don't integrate as well with things like gnome notifications and the like.
+
+But to me the best option is to use Cinnamon, which is developed by the Linux Mint guys. It basically behaves like gnome 2 but is built on gnome 3.
+
+<code>
+sudo add-apt-repository ppa:gwendal-lebihan-dev/cinnamon-stable
+sudo apt-get update
+sudo apt-get install cinnamon
+</code>
+
+===Installing Oracle jdk===
+Thanks to Oracle, 10 years later it's still a pain to install the JDK on linux ....
+Anyway the simplest way is this:
+
+<code>
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
+</code>
+
+===Updating skype===
+Ubuntu 12.04 comes with an outdated Skype (2.x), so we need to remove it and install 4.x manually:
+
+<code>
+sudo apt-get remove skype skype-bin
+</code>
+
+then download Skype version 4 from (it says Ubuntu 10.04 32 bits but that's fine):
+
+[[http://blogs.skype.com/linux/2012/06/skype_40_for_linux.html]]
+
+and then open it, it will open in the package installer ... install it.
+
+===Amazon video===
+Needed to install that for Amazon video to work right
+<code>
+sudo apt-get install libhal1 hal
+</code>
+
+===Things that where better on the Mac book pro===
+  - Trackpad : It juts works way better on the mac.
+  - Audio jack : The samsung one is too snug, makes me worry it might break.
+  - Power source inlet: Can't beat that mac magnetic thingy ! 
+  - Sourcetree : A fantastic application to manage git/mercurial repos, Linux has nothing that comes even close.
+  - Netflix playback:  ... argh! ... come on Netflix! It works on the Roku so why not make it work on Linux officially already !
+  - Installing Java JDK
+
+===Things that are better on the Samsung===
+  - USB (and other) Ports. Better located, more standard, more of them.
+  - Design: I actually like the look and feel of the Samsung better. Polished metal, darker, doesn't get dirty as easy.
+  - "Plastic" bottom: Might sounds lame but it doesn't get crazy hot and burn your O|O like on the MBP.
+  - Screen: The mac might have better colors, but this non glossy screen is so much easier on the eyes. MBP was too much of a mirror with shinny fingerprints everywhere.  
+  - Installing Mysql and just about every other OSS app. No messing with brew and fink and what not.

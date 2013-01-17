@@ -1,0 +1,95 @@
+My Blogs:
+|[[Geek Blog]]|[[SAP tips|SAP Blog]]|[[Ice Hockey Blog]]|[[Martial arts blog]]|[[General blog]]|
+
+
+WARNING: **As of April 2011, I took a new job and no longer using SAP.**
+
+====== SAP Tips ======
+At work I'm the senior E-Commerce architect (a.k.a The Java guy).
+We use an SAP platform, when I started here that was new to me so I had a lot to learn, quite a stretch from the open source world.
+
+I mostly work on our custom B2C/B2B implementations on top of SAP Netweaver(SAP Internet Sales) with a CRM backend.
+That is mostly Java, although we also incorporated OSS technologies in our implementations, such as using Sitemesh, Subversion and Hudson.
+
+Here are some of our implementations (Heavenly customized):
+[[http://www.pacificcoast.com/]] (B2C)
+[[http://www.sealybedding.com/]] (B2C)
+[[http://www.pcf.com/]] (B2B)
+[[https://b2b.pcint.com/]] (B2B international / China - older impl.)
+
+It seems there are not a lot of documentation/blogging going on about this .. I guess because it's secretly guarded by highly paid consultants, anyway that is not how I roll, I find documenting what I find being help to myself later, once I've forgotten, and why not help others while at it ?
+
+=====Generic Tips=====
+[[Our new SAP ISA Developer Environment setup]]
+
+[[SAP ISA on Tomcat]]
+
+[[Researching a Memory Leak in Java on SAP ISA]]
+
+[[b2c_customization | Debugging / Tracing / Profiling Java (&ABAP) with CRM ISA 5.0 & 2007]]
+
+[[Profiling SAP ISA J2EE WEBAS using Eclipse Memory Analyzer MAT_]]
+
+[[Fixing ISA password problems]]
+
+[[how_to_approve_packages_for_download_in_solution_manager|How to approve packages for download in solution manager]]
+
+[[Other generic SAP tips]]
+
+===== 2007 / 7.0 =====
+  * [[NW 7.0 server under SUSE SLES11 under VMWare with CRM 6.0 Java apps]]
+
+  * [[Upgrading ISA box from 2004S SP2 to 2007 / 7.0]]
+Upgrading an ISA server from 2004s SR2 to 2007.
+
+  * [[fresh_install_of_2007s_isa_on_ubuntu_hedgy_64_bits | Install of 2007s ISA on Linux 64 bits]]
+Also includes patching to SPxx.
+
+  * Upgrade of code base to 2007 from 2004s.
+Basically it's the same process has here : [[isa_no_nwdi_upgrading_code_base_to_sr2]] except we used the 2007 SP3 packages.
+
+===== 2004S =====
+  * Post-Install setting & performance enhancements needed for a live production site (CRM / B2B / B2C / TREX)
+[[SAP CRM5.0 / ISA / TREX Performance settings]]
+
+  * Upgrading our CRM5.0(2004s) without NWDI to 2004s SR2
+[[ISA no NWDI upgrading code base to SR2]]
+[[ISA 2004s server - upgrading to SR2(sp13)]]
+
+  * ISA Developer setup on Ubuntu (7.0/2004s SR2)
+[[ISA 7.0/2004s on Ubuntu]]
+
+  * Updating / creating J2EE engine SSL keys
+[[SAP J2EE SSL Keys]]
+
+  * Image Server Setup
+[[Image Server Setup]]
+
+  * CRM05 B2C (2004s) without NWDI
+[[B2C no nwdi]]
+
+  * CRM05 B2C customization
+[[B2C Customization | B2C Customization and debugging]]
+
+  * Installation of Netweaver Developer Workplace on windows XP (2004s) 
+[[Workspace 2004s]] (AKA workplace :-) )
+
+  * Installation of JDI/NWDI 2004s (7.0) with SLD on suse 9.
+ [[JDI 2004S]]
+
+  * Installation of a B2C server (ISA) 2004s on Suse linux 64.
+ [[ISA 2004s]]
+
+===== Older =====
+  * Instalation of a B2B site using WAS6.40, IPC3 and isales 3.1
+ [[B2B 6.40]]
+
+===== Other =====
+  * Remote X from windows (for installing SAP on remote linux)
+ [[RemoteX]]
+
+  * Opening A connection to the remote access machine for SAP 
+[[Sap Remote Access]]
+
+  * Useful transactions (to me anyway)
+[[Sap transactions ]]

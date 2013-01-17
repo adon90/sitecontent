@@ -1,0 +1,180 @@
+
+TIP: **See my other SAP tips / blogs: [[sap_tips]]**
+
+====== SAP ISA 7.0 / 2004s on ubuntu  ======
+
+=====Introduction=====
+Why ? The support ed development environment from SAP is SAP developer workplace, it sucks for many reasons, but basically because we are not using the JDI, visual composer or any of that other stuffs, for reasons i explained before on this site, we have no reason to bother with the slow/bloated Workplace, instead we use a plain central instance (like any ISA server), together with open source tools such as Eclipse, ant and Subversion.
+see [[http://wiki.colar.net/b2c_no_nwdi | here for more infos on how we did that]].
+
+I have been running that kind of a setup on windows for 1-2 years but it has been painfully slow and unreliable, whereas our actual ISA servers running on Suse 64 bits have been much faster and reliable.
+
+So after another week of very low productivity trying to debug ISA on windows i decided it was time to move on.
+
+So i decided to go ahead and try to  get all this running on Linux.
+I did not want to use Suse/openSuse mainly because i RALLY dislike the RPM package mangaement, in my experience it is a pain to deal with especially as you try to maintain your system over time (dependencies hell). I have stopped bothering with RPM 3+ years ago and not looking forward to go back to it.
+So i decided to go the unsupported way and go for a preferred Debian based Distro.
+
+Since my development machine also has to be my desktop i opted for my favorite desktop distro: Ubuntu (Debian based). 
+In particular Ubuntu 7.04 (Feisty Fawn).
+I used the 32 bits version, because:
+  * this system is my desktop and it's hard to find 64 bits drivers/flash player/java plugins etc... not worth the pain.
+  * the performance gain is minimal for most application, the only big plus is the possibility to allocate more memory (useful if you have over 4GB of memory)
+
+TIP: for sap 2007 it **requires a 64 bit OS**.
+
+=====Installing Ubuntu=====
+
+I simply burned an Ubuntu CD (x86 32 bits) and install it to my drive (regular Desktop installation)
+
+=====Fixing Ubuntu so that the SAP installer will work=====
+
+
+SAP only supports Redhat / Suse out of the box, so a few fixes where required to get Ubuntu ready for SAP.
+
+
+Note: make sure your /etc/hosts contains lines like those, otherwise visual admin won't work right (and maybe other things)
+<code>
+127.0.0.1       localhost localhost.localdomain
+127.0.0.1       desktop desktop.mycomp.com
+192.168.1.212     desktop desktop.mycomp.com
+</code>
+
+====Dash / Bash====
+This drove me insane for a while, but the SAP installer was failing and i could not figre out why.
+Turn out that Ubuntu uses Dash as the standard shell, rather that Bash !! and because of that sapinst would fail. (said somethign stupid like 'dirname --p nos such option' )
+
+So anyhow, we fix that by setting bash as the default shell (better anyway in my opinion)
+<code>
+sudo ln -s -f /bin/bash /bin/sh
+</code>
+
+====Dependencies====
+SAP relies on older libraries and other packages.
+Here are the main things i had to install:
+<code>
+sudo apt-get install libstdc++2.10-glibc2.2 libstdc++2.10-dev pdksh unzip original-awk csh zsh libstdc++5
+</code>
+
+====SAP system settings====
+As explained in SAP notes, you should adjust some settings.
+
+<code | vi /etc/sysctl.conf>
+kernel.shmmax = 1879048192
+kernel.msgmni = 128
+fs.file-max = 8192
+</code>
+
+then run ''sysctl -p''
+
+<code | vi /etc/security/limits.conf>
+* hard nofile 4096
+* soft nofile 4096
+</code>
+
+
+====Chkconfig isssue====
+During the installation SAP tries to use the Redhat specific "chkconfig" script to setup some services.
+This does not exist on debian and would prevent the installation from completing, the only way to fix that was to manually install a chkconfig "wrapper", which basically add a chekconfig as a wrapper to rc-upddate.
+
+<codewget ftp://ftp.skolelinux.no/skolelinux/dists/woody/local/binary-i386/non-official/chkconfig_1.2.24d-1_i386.deb
+sudo apt-get install libnewt0.52
+sudo ln -s /usr/lib/libnewt.so.0.52 /usr/lib/libnewt.so.0.50
+sudo dpkg -i --force-depends chkconfig_1.2.24d-1_i386.deb>
+</code>
+
+NOTE: After installing your SAP software, you should fix your dependencies using ''sudo apt-get -f install''.
+
+=====Installing java=====
+ISA will only run correctly on java 1.4.x (not 1.3, 1.5 or 1.6), while ubuntu has java packages nowadays, they only have some for >1.5 now.
+So we install sun j2sdk1.4 the old fashion way, after downloading j2sdk1.4.x...bin from Sun:
+<code>
+sudo apt-get update
+sudo apt-get install java-package java-common fakeroot
+fakeroot make-jpkg jdk-1_4_2-linux-i586.bin
+sudo dpkg -i sun-j2sdk1.4.2.15_i386.deb 
+sudo update-alternatives --config java        (set the new java as the default)
+</code>
+
+=====Installing SAP=====
+
+====Media====
+Here are the SAP DVD's i used (from sap marketplace)
+
+Note that is used SR2, because it is the first version that supports Linux 32 bits (i386).
+Note also that i used a maxdb installation, it's free and more lightweight than oracle, thus better for a developer workstation.
+
+51032260_4 : BS_2005_SR2_SAP_Installation_Master
+51032892_9 : 2004s_SR2_Kernel_LINUX32_U
+51032257 : 2004s_SR2_java_components
+51031711_4 : maxdb7.6_linux_32
+
+TIP: I downloaded those from SAP, and thoise geniuses, distributed those packages as a winrar windows executable (even the ones for the linux kernel!!).
+So i had to use wine ''apt-get wine'' to install them. (Note: wine will ask if you want to install gecko, **say NO** or winrar will fail to work).
+
+====Running sapinst====
+<code>
+xhost +
+su -
+export DISPLAY=:0.0
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+cd 51032260_4/IM_LINUX_I386/
+./sapinst
+</code>
+
+Choose a system of type:
+/Netweaver2004s/SAP systems/maxDB/central instance
+
+When asked for the type of install, choose "AS-java" **ONLY**
+Give it the CD's it's asking for when asked.
+
+Give a system ID(ex: ZTB) and password.
+
+Register into the SLD if you wish.
+
+It will aslo ask you for a SAP solution manager key (meh !), you will have to add your new system into SAP sol. manager and generate that key.
+
+Maxdb settings: use filesystem rather than raw data, if asked specify where to store the logs/data (ex: /opt/maxdb/log1, /opt/maxdb/data1)
+
+===== Post Install =====
+
+This is important !
+
+Follow here:
+[[http://wiki.colar.net/isa_2004s#post_intsall]]
+
+Visual admin and configtool shortcuts:
+<code | vi /usr/local/adm/visualadmin.sh>
+xhost +
+cd /usr/sap/ZTB/JC00/j2ee/configtool/
+gksu -u ztbadm /usr/sap/ZTB/JC00/j2ee/configtool/configtool.sh
+xhost -
+</code>
+
+<code | vi /usr/local/adm/configtool.sh>
+xhost +
+cd /usr/sap/ZTB/JC00/j2ee/admin/
+gksu -u ztbadm /usr/sap/ZTB/JC00/j2ee/admin/go
+xhost -
+</code>
+
+===== System upgrade issues =====
+WARNING: After a full system upgrade the /etc/sysctl.conf, /etc/services files get overwriitem loosing needed SAP changes.
+You will want to fix them (ie: shmax etc.. in sysctl.conf, and all sap* entries in services).
+
+===== Other infos =====
+
+Eclipse: after installing eclipse adjust /usr/bin/eclipse with the following settings(at the top):
+<code | vi /usr/bin/eclipse>
+# Give better memory settings to Eclipse so it will run better.
+VMARGS="-Xmx512m -Xms256m -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8"
+# set java home
+JAVA_HOME="/usr/lib/j2sdk1.4/"
+</code>
+
+More infos on using CRM B2C/B2B without NWDI:
+[[http://wiki.colar.net/b2c_no_nwdi]]
+
+=====Installing 2007 / 7.0=====
+This is basically the same thing **EXCEPT 2007 requires a 64bits OS**, so we used Ubuntu 64 bits.
+

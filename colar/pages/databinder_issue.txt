@@ -1,0 +1,370 @@
+
+
+**The Application Class**
+<code java>
+package hockeypond;
+
+import hockeypond.models.Owner;
+import net.databinder.DataApplication;
+import org.hibernate.cfg.AnnotationConfiguration;
+
+public class HockeyPondApplication extends DataApplication
+{
+
+	@Override
+	protected Class getHomePage()
+	{
+		return MyDataPage.class;
+	}
+
+	@Override
+	protected void configureHibernate(AnnotationConfiguration config)
+	{
+		super.configureHibernate(config);
+
+                // Loading the annotated Owner model 
+		config.addAnnotatedClass(Owner.class);
+	}
+
+}
+</code>
+
+**The Owner DB Model**
+<code java>
+package hockeypond.models;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+/* THIS WAS THE PROBLEM !!
+import org.hibernate.annotations.Entity;
+USING FOLLOWING import instead:
+*/
+javax.persistence.entity
+
+
+/**
+ * An Owner (ie: team/league registered user) object model
+ * 
+ * @author thibautc
+ *
+ */
+
+@Entity
+public class Owner
+{
+	private Long id;
+
+	private String first;
+	private String last;
+	private String email;
+	private String city;
+	private String state;
+	private String country;
+	private String password;
+		
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId()
+	{
+		return id;
+	}
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
+	public String getCity()
+	{
+		return city;
+	}
+	public void setCity(String city)
+	{
+		this.city = city;
+	}
+	public String getCountry()
+	{
+		return country;
+	}
+	public void setCountry(String country)
+	{
+		this.country = country;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+	public String getFirst()
+	{
+		return first;
+	}
+	public void setFirst(String first)
+	{
+		this.first = first;
+	}
+	public String getLast()
+	{
+		return last;
+	}
+	public void setLast(String last)
+	{
+		this.last = last;
+	}
+	public String getPassword()
+	{
+		return password;
+	}
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+	public String getState()
+	{
+		return state;
+	}
+	public void setState(String state)
+	{
+		this.state = state;
+	}
+		
+}
+</code>
+
+**The Application Java Home Page**
+<code java>
+package hockeypond;
+
+import net.databinder.components.DataPage;
+import net.databinder.components.PropertyListView;
+import net.databinder.models.HibernateListModel;
+import wicket.Component;
+import wicket.markup.html.basic.Label;
+import wicket.markup.html.list.ListItem;
+import wicket.model.IModel;
+import wicket.model.Model;
+
+public class MyDataPage extends DataPage
+{
+
+	@Override
+	protected String getName()
+	{
+		return "hockeypond";
+	}
+
+	public MyDataPage()
+	{
+		super();
+
+		add(new Label("pageTitleHeader", new Model()
+		{
+			@Override
+			public Object getObject(Component component)
+			{
+				return getName();
+			}
+		}));
+		
+		
+		// adding a list of Owners using the annotated "Owner" class model
+		final IModel listModel = new HibernateListModel("from Owner order by first");
+		
+		final PropertyListView listView=new OwnerListView(listModel);
+		add(listView);
+						
+	}
+
+	public class OwnerListView extends PropertyListView
+	{
+		
+		public OwnerListView(IModel model)
+		{
+			super("owners", model);
+		}
+
+		protected void populateItem(final ListItem item)
+		{
+			item.add(new Label("first")); // one of the "Owner" fields 
+		} 
+	}
+
+}
+</code>
+
+**The html home page**
+<code html>
+<html>
+<head>
+<!-- apply css in a WYSIWYG editor, if server is running -->
+<link href="http://localhost:8080/hockeypond/app/resources/net.databinder.components.DataPage/DataPage.css" type="text/css" rel="stylesheet" />
+<title>hockeypond</title>
+</head>
+<body>
+<!-- nothing outside of this extend renders in Wicket -->
+<wicket:extend>
+
+<h1 wicket:id="pageTitleHeader">hockeypond</h1>
+
+</wicket:extend>
+
+</body>
+</html>
+</code>
+
+**Hibernate properties**
+<code>
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+hibernate.connection.driver_class=com.mysql.jdbc.Driver
+hibernate.connection.url=jdbc:mysql://localhost/hockey
+hibernate.connection.username=root
+</code>
+
+
+** The Stack Trace**
+<code>
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'jetty6'.
+[INFO] ----------------------------------------------------------------------------
+[INFO] Building Databinder Application
+[INFO]    task-segment: [compile, jetty6:run]
+[INFO] ----------------------------------------------------------------------------
+[INFO] [resources:resources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:compile]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] Preparing jetty6:run
+[INFO] [resources:resources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:compile]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [jetty6:run]
+[INFO] Configuring Jetty for project: Databinder Application
+[INFO] Webapp source directory is: /home/thibautc/hockeypond/src/main/webapp
+[INFO] web.xml file located at: /home/thibautc/hockeypond/src/main/webapp/WEB-INF/web.xml
+[INFO] Classes located at: /home/thibautc/hockeypond/target/classes
+[INFO] tmp dir for webapp will be /home/thibautc/hockeypond/target/jetty-tmp
+[INFO] Property org.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog was set
+[INFO] Starting Jetty Server ...
+[INFO] No connectors configured, using defaults: org.mortbay.jetty.nio.SelectChannelConnector listening on 8080 with maxIdleTime 30000
+2 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger@173ec72 via org.mortbay.log.Slf4jLog
+[INFO] Context path = /hockeypond
+[INFO] Webapp directory = /home/thibautc/hockeypond/src/main/webapp
+[INFO] Setting up classpath ...
+[INFO] Finished setting up classpath
+[INFO] Started configuring web.xml, resource base=/home/thibautc/hockeypond/src/main/webapp
+[INFO] Finished configuring web.xml
+1399 [main] INFO wicket.protocol.http.WicketServlet - WicketServlet loaded application MyApplication via wicket.protocol.http.ContextParamWebApplicationFactory factory
+1596 [main] INFO org.mortbay.log - Started SelectChannelConnector @ 0.0.0.0:8080
+[INFO] Starting scanner at interval of 10 seconds.
+11619 [BoundedThreadPool0-1] INFO org.hibernate.cfg.Environment - Hibernate 3.1.1
+11633 [BoundedThreadPool0-1] INFO org.hibernate.cfg.Environment - loaded properties from resource hibernate.properties: {hibernate.connection.username=root, hibernate.cglib.use_reflection_optimizer=true, hibernate.dialect=org.hibernate.dialect.MySQLDialect, hibernate.connection.url=jdbc:mysql://localhost/hockey, hibernate.connection.driver_class=com.mysql.jdbc.Driver}
+11634 [BoundedThreadPool0-1] INFO org.hibernate.cfg.Environment - using CGLIB reflection optimizer
+11637 [BoundedThreadPool0-1] INFO org.hibernate.cfg.Environment - using JDK 1.4 java.sql.Timestamp handling
+12025 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - Using Hibernate built-in connection pool (not for production use!)
+12025 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - Hibernate connection pool size: 20
+12026 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - autocommit mode: false
+12034 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - using driver: com.mysql.jdbc.Driver at URL: jdbc:mysql://localhost/hockey
+12035 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - connection properties: {user=root}
+12468 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - RDBMS: MySQL, version: 4.1.15-Debian_1-log
+12468 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - JDBC driver: MySQL-AB JDBC Driver, version: mysql-connector-java-3.1.11 ( $Date: 2005-09-21 18:20:03 +0000 (Wed, 21 Sep 2005) $, $Revision: 4287 $ )
+12542 [BoundedThreadPool0-1] INFO org.hibernate.dialect.Dialect - Using dialect: org.hibernate.dialect.MySQLDialect
+12683 [BoundedThreadPool0-1] INFO org.hibernate.transaction.TransactionFactoryFactory - Using default transaction strategy (direct JDBC transactions)
+12690 [BoundedThreadPool0-1] INFO org.hibernate.transaction.TransactionManagerLookupFactory - No TransactionManagerLookup configured (in JTA environment, use of read-write or transactional second-level cache is not recommended)
+12690 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Automatic flush during beforeCompletion(): disabled
+12690 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Automatic session close at end of transaction: disabled
+12690 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - JDBC batch size: 15
+12690 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - JDBC batch updates for versioned data: disabled
+12693 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Scrollable result sets: enabled
+12693 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - JDBC3 getGeneratedKeys(): enabled
+12693 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Connection release mode: auto
+12696 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Maximum outer join fetch depth: 2
+12696 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Default batch fetch size: 1
+12696 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Generate SQL with comments: disabled
+12696 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Order SQL updates by primary key: disabled
+12696 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Query translator: org.hibernate.hql.ast.ASTQueryTranslatorFactory
+12704 [BoundedThreadPool0-1] INFO org.hibernate.hql.ast.ASTQueryTranslatorFactory - Using ASTQueryTranslatorFactory
+12704 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Query language substitutions: {}
+12706 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Second-level cache: enabled
+12706 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Query cache: disabled
+12706 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Cache provider: org.hibernate.cache.EhCacheProvider
+12715 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Optimize cache for minimal puts: disabled
+12715 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Structured second-level cache entries: disabled
+12736 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Statistics: disabled
+12736 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Deleted entity synthetic identifier rollback: disabled
+12738 [BoundedThreadPool0-1] INFO org.hibernate.cfg.SettingsFactory - Default entity-mode: pojo
+12841 [BoundedThreadPool0-1] INFO org.hibernate.impl.SessionFactoryImpl - building session factory
+12865 [BoundedThreadPool0-1] WARN net.sf.ehcache.config.Configurator - No configuration found. Configuring ehcache from ehcache-failsafe.xml found in the classpath: jar:file:/home/thibautc/.m2/repository/ehcache/ehcache/1.1/ehcache-1.1.jar!/ehcache-failsafe.xml
+12904 [BoundedThreadPool0-1] INFO org.hibernate.impl.SessionFactoryObjectFactory - Not binding factory to JNDI, no JNDI name configured
+12911 [BoundedThreadPool0-1] INFO org.hibernate.tool.hbm2ddl.SchemaUpdate - Running hbm2ddl schema update
+12911 [BoundedThreadPool0-1] INFO org.hibernate.tool.hbm2ddl.SchemaUpdate - fetching database metadata
+12915 [BoundedThreadPool0-1] INFO org.hibernate.tool.hbm2ddl.SchemaUpdate - updating schema
+12920 [BoundedThreadPool0-1] INFO org.hibernate.tool.hbm2ddl.SchemaUpdate - schema update complete
+12921 [BoundedThreadPool0-1] INFO org.hibernate.connection.DriverManagerConnectionProvider - cleaning up connection pool: jdbc:mysql://localhost/hockey
+13598 [BoundedThreadPool0-1] ERROR wicket.RequestCycle - Unexpected runtime exception [page = [Page class = hockeypond.MyDataPage, id = 0]]
+org.hibernate.hql.ast.QuerySyntaxException: Owner is not mapped. [from Owner order by first]
+	at org.hibernate.hql.ast.util.SessionFactoryHelper.requireClassPersister(SessionFactoryHelper.java:157)
+	at org.hibernate.hql.ast.tree.FromElementFactory.addFromElement(FromElementFactory.java:86)
+	at org.hibernate.hql.ast.tree.FromClause.addFromElement(FromClause.java:70)
+	at org.hibernate.hql.ast.HqlSqlWalker.createFromElement(HqlSqlWalker.java:263)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.fromElement(HqlSqlBaseWalker.java:3049)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.fromElementList(HqlSqlBaseWalker.java:2938)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.fromClause(HqlSqlBaseWalker.java:688)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.query(HqlSqlBaseWalker.java:544)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.selectStatement(HqlSqlBaseWalker.java:281)
+	at org.hibernate.hql.antlr.HqlSqlBaseWalker.statement(HqlSqlBaseWalker.java:229)
+	at org.hibernate.hql.ast.QueryTranslatorImpl.analyze(QueryTranslatorImpl.java:218)
+	at org.hibernate.hql.ast.QueryTranslatorImpl.doCompile(QueryTranslatorImpl.java:158)
+	at org.hibernate.hql.ast.QueryTranslatorImpl.compile(QueryTranslatorImpl.java:105)
+	at org.hibernate.engine.query.HQLQueryPlan.<init>(HQLQueryPlan.java:75)
+	at org.hibernate.engine.query.HQLQueryPlan.<init>(HQLQueryPlan.java:54)
+	at org.hibernate.engine.query.QueryPlanCache.getHQLQueryPlan(QueryPlanCache.java:71)
+	at org.hibernate.impl.AbstractSessionImpl.getHQLQueryPlan(AbstractSessionImpl.java:134)
+	at org.hibernate.impl.AbstractSessionImpl.createQuery(AbstractSessionImpl.java:113)
+	at org.hibernate.impl.SessionImpl.createQuery(SessionImpl.java:1600)
+	at net.databinder.models.HibernateListModel.load(HibernateListModel.java:59)
+	at wicket.model.LoadableDetachableModel.onAttach(LoadableDetachableModel.java:67)
+	at wicket.model.AbstractDetachableModel.attach(AbstractDetachableModel.java:61)
+	at wicket.model.AbstractDetachableModel.getObject(AbstractDetachableModel.java:99)
+	at wicket.Component.getModelObject(Component.java:703)
+	at wicket.markup.html.list.ListView.getViewSize(ListView.java:193)
+	at wicket.markup.html.list.ListView.internalOnBeginRequest(ListView.java:429)
+	at wicket.Component.internalBeginRequest(Component.java:1711)
+	at wicket.MarkupContainer.internalBeginRequest(MarkupContainer.java:293)
+	at wicket.MarkupContainer.internalBeginRequest(MarkupContainer.java:306)
+	at wicket.Page.doRender(Page.java:248)
+	at wicket.RequestCycle.respond(RequestCycle.java:948)
+	at wicket.RequestCycle.request(RequestCycle.java:411)
+	at wicket.protocol.http.WicketServlet.doGet(WicketServlet.java:208)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:747)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:860)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:408)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:350)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:195)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:164)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:536)
+	at org.mortbay.jetty.Server.handle(Server.java:309)
+	at org.mortbay.jetty.Server.handle(Server.java:285)
+	at org.mortbay.jetty.HttpConnection.doHandler(HttpConnection.java:363)
+	at org.mortbay.jetty.HttpConnection.access$19(HttpConnection.java:343)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:609)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:490)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:195)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:297)
+	at org.mortbay.jetty.nio.SelectChannelConnector$HttpEndPoint.run(SelectChannelConnector.java:680)
+	at org.mortbay.thread.BoundedThreadPool$PoolThread.run(BoundedThreadPool.java:412)
+Caused by:  Owner is not mapped.
+	... 50 more
+13742 [BoundedThreadPool0-1] WARN wicket.util.resource.UrlResourceStream - cannot convert url: jar:file:/home/thibautc/.m2/repository/wicket/wicket/1.1.1/wicket-1.1.1.jar!/wicket/markup/html/pages/ExceptionErrorPage.html to file (URI is not hierarchical), falling back to the inputstream for polling
+13777 [BoundedThreadPool0-1] INFO wicket.markup.MarkupCache - Loading markup from jar:file:/home/thibautc/.m2/repository/wicket/wicket/1.1.1/wicket-1.1.1.jar!/wicket/markup/html/pages/ExceptionErrorPage.html
+13880 [BoundedThreadPool0-1] WARN wicket.util.resource.UrlResourceStream - cannot convert url: jar:file:/home/thibautc/.m2/repository/wicket/wicket/1.1.1/wicket-1.1.1.jar!/wicket/markup/html/debug/WicketComponentTree.html to file (URI is not hierarchical), falling back to the inputstream for polling
+13882 [BoundedThreadPool0-1] INFO wicket.markup.MarkupCache - Loading markup from jar:file:/home/thibautc/.m2/repository/wicket/wicket/1.1.1/wicket-1.1.1.jar!/wicket/markup/html/debug/WicketComponentTree.html
+18574 [Shutdown] INFO org.mortbay.log - Shutdown hook executing
+18746 [Shutdown] INFO org.mortbay.log - Shutdown hook complete
+[INFO] Jetty server exiting.
+</code>
+
+~~DISCUSSION~~

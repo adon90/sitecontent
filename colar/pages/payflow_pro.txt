@@ -1,0 +1,99 @@
+======PflowPro + JCO on SAP======
+
+===== Installing JCO=====
+The PCF java code use JCO, which as natives libraries fro RFC's, so we need to install JCO.
+
+Go to service.sap.com ---> SAP Downloads ---> SAP Connectors
+---> SAP Java Connector ---> Tools and Services
+
+Download sap-jco-sun-xxxxx.tgz
+
+go into /usr/sap and\\
+extract pfpro_java.tar.gz (we extract it in /usr/sap so it's with the other important things)
+<code bash>
+cd /usr/sap
+gunzip pfpro_java.tar.gz
+tar xvf pfpro_java.tar
+</code>
+
+===== Installing the PCF java payflow interface =====
+Copy the PCF CCard app from C:\B2B_creditcard\creditcard\*
+into c:/usr/sap/verisign/
+
+This contains the env file i created(env.csh)\\
+Sadly it had to be in CSH (Crappy Shell :-) ) :
+
+<code bash>
+#!/bin/csh
+
+# This sets up the env for verisign payflowpro (c.card processing)
+set ROOT = /usr/sap/verisign
+
+#####################################################################################
+# DO NOT FORGET TO COPY THE LATEST sapjco.jar into the creditcard app LIB folder !!!
+# Otherwise it will have a conflict between the libraries and jar version
+#
+# Also need to copy the platform dependant Verisgn.jat from verisign into LIB as well
+#####################################################################################
+
+if ($?PATH) then
+        setenv PATH ${PATH}:${ROOT}/payflowpro/java/certs
+else
+        setenv PATH ${ROOT}/payflowpro/java/certs
+endif
+
+if ($?LD_LIBRARY_PATH) then
+	setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/sap/jco
+else
+	setenv LD_LIBRARY_PATH /usr/sap/jco:/usr/sap/jco
+endif
+
+#leave this at the end.
+</code>
+
+And also the start script (start.csh)
+<code>
+#!/bin/csh
+
+echo "Starting PCF payflowpro interface"
+
+# see env.csh to config the environment
+source env.csh
+
+# starting the PCF/versign server
+# we need the "-d64" to run this in 64 bits
+java -d64 -Djava.util.logging.config.file=${ROOT}/creditcard/cfg/ccardlogging.properties  -jar CreditCard.jar ${ROOT}/creditcard/cfg/server.xml
+
+echo "Stopping PCF payflowpro interface"
+#leave this at the end.
+</code>
+
+WARNING DO NOT FORGET TO COPY THE SAP sapjco.jar into the creditcard app LIB folder !!!
+<code>
+cp /usr/sap/jco/verisign/payflowpro/java/sapjco.jar into /usr/sap/verisign/creditcard/lib
+</code>
+
+WARNING DO NOT FORGET TO COPY THE verisign verisign.jar into the creditcard app LIB folder !!!
+<code>
+cp /usr/sap/jco/sapjco.jar into /usr/sap/verisign/creditcard/lib
+</code>
+
+WARNING make sure to edit env.csh and adjust the path correctly (expecially for "certs")
+
+===== Compiling verisign / Testing JCO =====
+Testing the vanilla setup of payflowpro\\
+<code bash>
+cd /usr/sap/verisign/payflowpro/java
+javac *.java
+# of course replace $user, $vendor and $password by actual values (not shown here obviously)
+source ../../env.csh
+java PFProJava test-payflow.verisign.com 443 "USER=$user&VENDOR=$vendor&PARTNER=Verisign&PWD=$password&TRXTYPE=S&TENDER=C&ACCT=4222222222222&EXPDATE=1209&AMT=14.42&COMMENT1[3]=123&COMMENT2=Good Customer&INVNUM=1234567890&STREET=5199JOHNSON&ZIP=94588"
+</code>
+This should return a success code.
+
+===== Running =====
+Start the start.csh script
+<code>
+cd /usr/sap/verisign/creditcard
+./start.csh
+</code>

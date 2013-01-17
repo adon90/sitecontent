@@ -1,0 +1,18 @@
+====== JOTWiki: License ======
+JOTWiki is Dual-Licensed, basically it's free only for non-commercial use.
+
+=====For Non-commercial use=====
+
+  If you do not match any of the criteria listed under "Commercial use", you can use this software under the conditions of the "[[http://www.gnu.org/licenses/gpl-3.0.txt | GPL 3.0]]".
+
+=====For Commercial Use=====
+Note: You can use the product internally in a for-profit Organization as long as you don't resell it and/or charge for it's use.
+
+===Criteria of "Commercial-use"===
+  * If you want to resell the product in it's original or modified form.
+  * If you want to charge a fee for using the product (web-service).
+  * If you make any other profit by the use of the product.
+
+  **Exception:** You are granted permission to make indirect profit by the use of traffic related royalty to the web service, such as use of adwords.
+
+**If you match any of those criteria, you will need to apply for a License from the Author.**

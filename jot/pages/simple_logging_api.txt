@@ -1,0 +1,77 @@
+======JavaOnTracks: Logging======
+  * Why not use log4j ?
+Well to be honest i don't have any good arguments besides that i didn't want to have any dependencies, and the fact that i never real liked log4j. Why don't i like it, not sure to be honest.
+
+Anyway you are free to use log4j together with JavaOnTracks of course, otherwise you can use JavaOnTracks built-in logger.
+
+
+=====JavaOnTracks logger=====
+This is a simple implementation of a logging system.
+It is thread safe, and logs all to a single file (rotated at each restart)
+
+What it has going for it, are a bunch of methods making it easy to log messages, which are nicely formatted in a single log file and the fact it's very lightweight.
+
+It support log Categories, so you can differentiate where the log come from, as well as log levels.
+Also it has methods which allow automatic logging of class/servlet name in the log file, as well as userName/ IP address etc...
+
+WARNING: It is recommended to only enable log levels 3 and up (INFO +) unless debugging an issue.
+Please note that when lat the trace and debug levels, a lot of potentially sensitive data might get logged such as when tracing DB queries, password might be logged etc...
+
+
+See [[http://www.colar.net/jotdoc/javaontracks/net/jot/logger/JOTLogger.html | JOTLogger javadoc]] for more infos.
+
+=====Example=====
+<code | logger init>
+// note "null" means to log all categories.
+JOTLogger.init("/tmp/log.txt", JOTLogger.ALL_LEVELS, null);
+</code>
+
+<code | example logging entries>
+// write a log message which will contain the current object class name and the message
+    JOTLogger.warning(this, "huho something ain't right");
+// same for a static class
+    JOTLogger.warning(JOTApplicationTest.class, "huho something ain't right");
+
+// now we also specify a category
+    JOTLogger.debug(cat, this, "huho something ain't right");
+
+// now we also specify a category and a user login name
+    JOTLogger.debug(cat, this, user.getLogin(), "huho something ain't right")
+
+// log an exception (with the trace) at the default "error" level
+    JOTLogger.logException(this, "it's broke!", yourException)
+// same but with a custom level
+    JOTLogger.logException(JOTLogger.TRACE_LEVEL,this, "it's broke!", yourThrowable)
+</code>
+
+See [[http://java-on-tracks.sourceforge.net/javadoc/javaontracks/latest/javadoc/net/jot/logger/JOTLogger.html|JOTLogger javadoc]], for the whole list of logging methods.
+
+<code | Example log file output>
+# See format: Category / log level / timestamp / location:class /(user)/ message
+....
+JOT.DB 0 5_6_2008_9_52_23-983 net.jot.persistance.JOTModelMapping  Retrieving impl : net.jot.persistance.query.JOTDBQueryImpl
+JOT.DB 1 5_6_2008_9_52_23-983 net.jot.db.JOTDBManager  Trying to connect to database: default
+JOT.DB 1 5_6_2008_9_52_23-983 net.jot.db.JOTDBPool  default: Retrieving a connection
+JOT.DB 1 5_6_2008_9_52_23-983 net.jot.db.JOTDBManager  Got Connection default/0
+JOT.DB 1 5_6_2008_9_52_23-984 net.jot.db.JOTDBManager  Executing query: SELECT * FROM "league" WHERE "dataid"  = ? LIMIT 1
+JOT.DB 0 5_6_2008_9_52_23-984 net.jot.db.JOTDBManager  With Parameters: 7,
+JOT.DB 1 5_6_2008_9_52_23-985 net.jot.db.JOTDBPool  default: Freing connection: 0
+JOT.DB 1 5_6_2008_9_52_23-985 net.jot.db.JOTDBManager  Released Connection default/0
+JOT.DB 1 5_6_2008_9_52_23-990 JOTDBModel  *** loadFromRS() ***
+JOT.DB 1 5_6_2008_9_52_23-990 JOTDBModel  Columns list from DB metadata: [dataid, dataname, dataowner, datacountry, datacity, datashortcut, datasearchname, datastate, datatimezone]
+JOT.FLOW 1 5_6_2008_9_52_23-990 net.jot.web.ctrl.JOTMasterController  End Processing View: net.colar.hockey.view.user.LeagueIndexView
+JOT.FLOW 1 5_6_2008_9_52_23-991 net.jot.web.view.JOTViewParser (bDoe) Caching template: /home/blah/build/web/teamtpl.html
+JOT.FLOW 0 5_6_2008_9_52_23-994 net.jot.web.view.JOTViewParser  (bDoe) Removing all <jot:remove> tags content.
+JOT.FLOW 0 5_6_2008_9_52_23-995 net.jot.web.view.JOTViewParser  (bDoe) Include:innerPage
+....
+## EXCEPTION abstract example
+
+APP 4 4_14_2008_14_19_20-575 java.lang.Class  Error parsing template !
+APP 4 4_14_2008_14_19_20-576 trace  java.lang.NullPointerException
+APP 4 4_14_2008_14_19_20-576 trace      at net.jot.web.widget.JOTWidgetBaseProperties.getPropertyDefaultValue(JOTWidgetBaseProperties.java:74)
+APP 4 4_14_2008_14_19_20-576 trace      at net.jot.web.widget.JOTWidgetBaseProperties.getRefreshEvery(JOTWidgetBaseProperties.java:100)
+APP 4 4_14_2008_14_19_20-576 trace      at net.jot.web.widget.JOTWidgetBase.render(JOTWidgetBase.java:64)
+APP 4 4_14_2008_14_19_20-576 trace      at net.jot.web.view.JOTViewParser.doWidgets(JOTViewParser.java:1175)
+.....
+</code>
+

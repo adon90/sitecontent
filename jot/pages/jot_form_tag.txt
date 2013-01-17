@@ -1,0 +1,78 @@
+======JOT Form Handling======
+Example of a form, Login/password form.
+
+=====Form class=====
+<code | MyForm.java>
+public class MyForm extends JOTForm
+{
+	public static final String LOGGED_USER="loggedUser";	
+	private static final String ERROR_CSS = "form_error";
+	
+	public final String LOGIN="login";
+	public final String PASSWORD="password";
+
+	
+	public void init() throws Exception
+	{   /* define the fields we are going to mess with */
+		defineField(LOGIN, JOTFormConst.INPUT_TEXT);
+		defineField(PASSWORD, JOTFormConst.INPUT_PASSWORD);
+	}
+
+	public Hashtable validate() throws Exception
+	{
+                /* Validate the form*/
+		Hashtable h=new Hashtable();
+		JOTFormElement login=get(LOGIN);
+		JOTFormElement password=get(PASSWORD);
+		login.unsetTagProperty("class");
+		password.unsetTagProperty("class");
+		String l=login.getValue();
+		String p=password.getValue();
+		if(l==null || p==null || ! WikiUser.isUserValid(WikiUser.class, l, p))
+		{
+/*We had the error to the error list*/
+			h.put("LOGIN_ERROR","Please enter your Login and Password.");
+/*We add/change the field css to be using "error"*/
+			login.setTagProperty("class",ERROR_CSS);
+			password.setTagProperty("class",ERROR_CSS);
+		}
+		return h;
+	}
+
+	public void save(JOTFlowRequest request) throws Exception
+	{  /* Example of processing the submitted form*/
+		JOTFormElement login=get(LOGIN);
+		WikiUser user=(WikiUser)WikiUser.getUserByLogin(WikiUser.class, login.getValue());
+/* save the login to the session */
+		request.getSession(true).setAttribute(LOGGED_USER, user);
+	}
+
+}
+</code>
+
+=====Java view=====
+<code | Java>
+	public void prepareViewData() throws Exception
+	{
+		MyForm form=(MyForm)getForm(MyForm.class);
+		addForm(form);
+	}
+</code>
+
+=====View (Html Template)=====
+<code | Template>
+<form jotclas s="com.comp.MyForm" action="submitlogin.do" method="post">
+  Login:<input name="login">
+  Password:<input name="password" type="password?>
+  <input type="submit">
+</form>
+</code>
+
+=====Generated Html=====
+<code | Html>
+<form jotclas s="com.comp.MyForm" action="submitlogin.do" method="post">
+  Login:<input name="login" value="blah" class="form_error">
+  Password:<input name="password" type="password" value="xxx" class="form_error">
+  <input type="submit">
+</form>
+</code>

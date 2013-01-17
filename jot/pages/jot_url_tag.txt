@@ -1,0 +1,10 @@
+======JOT Url Tag======
+=====View (Html Template)=====
+<code | Template>
+<a href='<jot:url path="file1.pdf"/>'>file1.pdf</a>
+</code>
+
+=====Generated Html=====
+<code | Html>
+<a href='http://www.mysite.com/wiki/file1.pdf'>file1.pdf</a>
+</code>

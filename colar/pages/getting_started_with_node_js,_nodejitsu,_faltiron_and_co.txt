@@ -1,0 +1,276 @@
+======Getting started with Node.js, NodeJitsu, Flatiron, Winston, Plates and Co======
+
+While I haven't been a fan of dynamic languages in the past, there is something to be said for [[http://nodejs.org/|Node.js]].
+It's lean, fast, lightweight, allows to use only one language for client and server side.
+Also it's easy to make it scale and host it in the cloud.
+
+There are many cloud services that allow deployment of Node.js apps, notably Heroku and NodeJitsu. I picked [[http://nodejitsu.com/|NodeJitsu]] because they specialize on Node.js so it's there central interest. Also they provide many other OSS tools for the Node.js stack, which is a huge plus (read nice integration) 
+
+Since I use NodeJitsu as the cloud platform I decided to also use their "framework" as well, called [[http://flatironjs.org/ | Flatiron]].
+It's a nice framework, that is loosely coupled. In fact it feels more like a collection of tools than a monolithic framework, which is a huge plus. You may use only what what you want and keep it lean.
+I also like their templating system (plates) which keeps completely pure HTML, no weird tags or logic in the page at all.
+
+====Installing Node.js and Npm====
+
+WARNING: node.js/npm from the standard ubuntu repos (as of 12.04) did **NOT** work with nodejitsu because it requires 0.6.20+ and ubuntu has 0.6.12 .. **or you can/should install it [[https://github.com/joyent/node/wiki/Installation|from sources]]**
+
+
+Building node.js from sources:
+
+<code>
+  git clone https://github.com/joyent/node.git
+  cd node
+  // Note: You could use 0.8.x but some projects/modules don't support that yet, so up to you
+  git checkout v0.6.20
+  ./configure
+  make
+  sudo make install
+</code>
+
+====Installing Jitsu====
+We install the jitsu toolbelt globally
+And then go through the signup process for NodeJitsu
+
+Then we login
+
+<code>
+  sudo npm install jitsu -g
+  jitsu signup
+  jitsu login
+</code>
+
+====Installing the flatiron "framework"====
+Installing flatiron globally:
+
+<code>
+sudo npm install flatiron -g
+</code>
+
+Installing union (flatiron dependency)
+
+<code>
+npm install union
+</code>
+
+====Creating a Flatiron project====
+First I created a "workspace" for all my node project
+
+<code>
+  mkdir ~/DEV/node/
+  cd ~/DEV/node/
+</code>
+
+Note: The flatiron create command is formatted **flatiron create <project_name> <type>** where type can be either "http" or "cli", that is  not documented well.
+
+
+<code>
+  flatiron create myapp http
+</code>
+
+Then we need to run npm install to updatepull the project dependencies:
+
+<code>
+  cd myapp
+  npm install
+</code>
+
+====Hello world!====
+We can now start the app
+
+<code>
+  node app.js
+</code>
+
+Browse to [[http://localhost:3000/]] in the browser,
+You will get hello world , in Json format :)  ''{"hello":"world"}''
+
+Let's change it to a normal hello world (not Json)
+Open app.js in your favorite editor and change the code for the / route to this:
+
+<code>
+app.router.get('/', function () {
+  this.res.writeHead(200, { 'content-type': 'text/plain'});
+  this.res.end('hello!');
+});
+</code>
+
+Now stop and start node.js again ''node app.js'' and reload the page, you will see hello world.
+
+====Code hot swap / auto reload using supervisor====
+Ok, stopping and restarting node,js manually gets old fast, what's next compiling ? :)
+
+So we will install **supervisor** to help with that (it auto detects/reloads items that changed in your project)
+
+<code>
+sudo npm install supervisor -g
+</code>
+
+Now run the project with supervisor instead of node:
+
+<code>
+supervisor app.js
+</code>
+
+Load the hello world page in the browser, you see hello world
+Edit app.js and change "hello world" to "hello me" and save
+
+Reload the browser, supervisor will server you with the latest code (hello me) ... better !
+
+====Deploying to the NodeJitsu cloud====
+
+To deploy, we just do:
+<code>
+  jitsu deploy
+</code>
+
+The first time it will ask you to pick a subdomain, for example ''myapp'' so you will get your app at [[http://myapp.jit.su/]]
+
+It will also ask which Node.js version you want to use, ie: 0.6.x
+
+Ok, once deploy, we can try our live app at : [[http://myapp.jit.su/]] .... that was easy !
+
+You can Manage the app at [[https://develop.jit.su]]
+
+Here is a useful ''jitsu'' command cheat sheet:
+[[http://cheatsheet.nodejitsu.com/]]
+
+Note: Logging at NodeJitsu is currently not working right and they are working on it (8/10/12)
+
+
+====Adding a new route====
+
+In app.js, we can add a new route, for example:
+
+<code>
+Adding a route: (app.js)
+app.router.get('/version', function () {
+    this.res.writeHead(200, { 'Content-Type': 'text/plain' })
+    this.res.end('flatiron ' + flatiron.version);
+  });
+</code>
+
+Then we can pull [[http://localhost:3000/version]] in the browser.
+
+====Logging with Winston====
+Winston is part Flatiron and is a distributed logging API.
+
+Edit package.json file and in the dependencies section, add winston
+
+<code>"winston" : "*",</code>
+
+then run ''npm install'' to fetch it
+
+Now in app.js we can add a log variable to make use of it:
+<code>
+  log = require('winston');
+</code>
+
+Now we can use it to log stuff:
+<code>
+  log.info('Got a request for / ');
+</code>
+
+We can now see it in the console/shell when the page is pulled up
+
+Winston can also log to a file (or even a database), for example let's log to a file: 
+Add this after defining log, but before doing any logging:
+<code>
+  log.add(log.transports.File, { filename: 'logfile.log' });
+</code>
+
+Now after reloading the page, we will see a new file called logfile.log with cntent like this:
+<code>
+  {"level":"info","message":"Got a request for / ","timestamp":"2012-08-09T23:50:55.718Z"}
+</code>
+
+After we deploy the app (jitsu deploy), and load the page on the deployed server([[http://myapp.jit.su/]]), we can use jtsu to view the log:
+<code>
+  jitsu logs  # Note: This currently does not work, they are working on it
+</code>
+
+====Utile : Utility methods====
+Flatiron also has a module called utile: [[https://github.com/flatiron/utile]]
+
+Javascript does not come with muhc in term of utilities, so this provides a bunch, in the same vain as the JQuery $.whatever functions
+
+So in package.json let's add the dependency ''"utile" : "*"'' and run ''npm install'' as ususal.
+
+Now for example lets' use it in app.js, first we create the variable:
+
+<code>
+  u = require('utile')
+</code>
+
+Then we use it (here we demo the .each method)
+<code>
+  var obj = { 1 : "hello", 2: "world"};
+  u.each(obj, function(value, key) { log.info(key + ': ' + value);});
+</code>
+
+Of course it comes with many more useful methods.
+
+====Installing SublimeText IDE====
+Well you can use whatever editor/IDE you want, whether as ligtweight as VI or as full feature as Netbeans.
+
+Here I juts took note on installing SublimeText and using it with Node.js
+
+<code>
+sudo add-apt-repository ppa:webupd8team/sublime-text-2 
+sudo apt-get update
+sudo apt-get install sublime-text
+</code>
+
+Then run ''sublime-text-2''
+
+Paste this in the console to get the package installer:
+<code>
+import urllib2,os; pf='Package Control.sublime-package'; ipp=sublime.installed_packages_path(); os.makedirs(ipp) if not os.path.exists(ipp) else None; urllib2.install_opener(urllib2.build_opener(urllib2.ProxyHandler())); open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read()); print 'Please restart Sublime Text to finish installation'
+</code>
+
+Press enter to run it, then restart sublime
+
+Go to references/package control/install package
+then search and install the node.js package
+
+====Cloud9 IDE====
+Anther good IDE for Node.js is Cloud9, written in Node.js itself.
+It has very good feature and/but is browser based.
+
+We can still install it locally:
+<code>
+// needed that dependency to build on Ubuntu
+sudo apt-get install libxml2-dev
+sudo npm install -g sm
+git clone https://github.com/ajaxorg/cloud9.git cloud9
+cd cloud9
+sm install
+</code>
+
+Then we can run it ''./bin/cloud9.sh -w ../myapp/'' then pull up [[http://localhost:3131/]] in Google chrome.
+
+
+
+WARNING: **................ TO BE CONTINUED...................**
+
+log to mongo/resourcefull, test with wovs, util(.each), templating(plates)
+More modules i flatiron, see: https://github.com/flatiron
+
+wovs
+  sudo npm install vows -g
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

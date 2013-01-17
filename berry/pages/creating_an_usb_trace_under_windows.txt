@@ -1,0 +1,52 @@
+======Berry4all: Creating an USB trace under Windows======
+Sometimes there is no way to figure out what the Blackberry software is doing "special" for a particular device or setup.
+Since the Balckberry software is closed sources, the only way to figure out what's going on is to run an USB trace of the Blackberry software and then analyze it.
+
+To achieve this will we use a nice, though not very intuitive, free little USB sniffer called SnoopyPro(a.k.a UsbSnoop).
+
+Tip: if you are on linux and will run the windows emulator image from there, this might be easier:
+[[http://wiki.colar.net/run_usb_traces_on_linux_of_windows_software_with_virtualbox]]
+
+
+=====Preparing the box=====
+  * Get a hold of a Windows(2000 or XP easier) machine or emulator image (VirtualBox works well for this, as well as VMWare or Parallels on OSX - **make sure the emulator has USB support**).
+  * Start windows and make sure whatever we want to trace is working (for example if we are testing tethering, make sure tethering is working) using the relevant Blackberry tools (ex: RIM Desktop Manager).
+  * Once we have it working under windows, we are ready to install the sniffer.
+=====Installing SnoopyPro=====
+  * Download it at [[http://sourceforge.net/projects/usbsnoop/]] and install.
+  * Make sure your BB is plugged, then start USBSnoop
+  * Click **File/Unpack drivers** (see [[#screenshot1]])
+=====Running a trace=====
+  * Start SnoopyPro again, it should show the "devices" window
+  * Find the blackberry device (**Vendor ID=0xFCA**) - **there might be multiple 0xFCA entries**, **right click it and select "install service"**, then again **right click it and select "Install and restart".** (see [[#screenshot2]]
+  * Then **unplug/replug the Blackberry**, if it works you should see the Main SnoopyPro window starting a log and reporting on reading packets. (see [[#screenshot2]])
+
+  * It's now running the trace, you can close the "device" window.
+  * Now run whatever needs to be traced (Ex: tethering modem connect, then disconnect.) (see [[#screenshot3]])
+
+  * When done press the **Stop** Button in SnoopyPro, you should now see the logged data.
+  * **Click in the menu tools/analyze**, this will enhance the log data. (see [[#screenshot4]])
+
+  * Then press the **Save** Button and save the log(s) to a file. (see [[#screenshot5]])
+
+  * **You will also need to save each log(s) into a text document, because otherwise i can only look at them on windows which I don't usually have on hand, here is how to save the logs in text format:**
+  * In SnoopyPro, with the log open, click "**Edit -> Select all**", then click "**View -> Expand**", then "**Edit -> select all**" again, then "**Edit -> Copy**".
+  * Then open **Wordpad** (**NOT notepad**), and paste in there, save as a text file (ex: USBLog1.txt)
+
+
+  * Then **email all the logs(.usblog and .txt), preferably zipped, to me at mailto:tcolar@colar.net**
+
+====Screenshot1====
+{{ snoop1.png }}
+
+====Screenshot2====
+{{ snoop2.png }}
+
+====Screenshot3====
+{{ snoop3.png }}
+
+====Screenshot4====
+{{ snoop4.png }}
+
+====Screenshot5====
+{{ snoop5.png }}

@@ -1,0 +1,98 @@
+TIP: **See the [[Fan|index of all my fantom pages]]**
+
+======Implementing a Java interface in fantom======
+This is a dummy example on implementing a Java interface from Fantom
+What I'm gonna here is write a script in Fantom that list all the .fan files in a given folder.
+
+This will be done implementing a Java FileFilter to demonstrate Java FFI.
+There really isn't much reasons to do this through an FFI,but it's an example.
+
+Official Fantom Java FFI Page: [[http://fantom.org/doc/docLang/JavaFFI.html]]
+=====Code=====
+<code | FanFilesLister.fan>
+using [java] java.io::FileFilter
+using [java] java.io::File as jFile
+
+**
+** List all .fan files in the given folder.
+**
+class FanFilesLister
+{
+    static Void main()
+    {
+	folder := Sys.args().isEmpty ? "." : Sys.args()[0]
+        dir := jFile(folder)
+        jFile[] files := dir.listFiles(FilterImpl());
+        files.each { echo(it.getName()) }
+    }
+}
+
+**
+** Implementation of Java FileFilter interface
+**
+internal class FilterImpl : FileFilter
+{
+    override Bool accept(jFile? f)
+    {
+        f.getName.endsWith(".fan")
+    }
+}
+</code>
+=====Code - Commented=====
+Same thing but heavily commented to explain all the "tricks"
+
+<code | FanFilesLister.fan>
+  //This is used to import java File and FileFilter 
+  //Note that we import java File under the name 'jFile' because otherwise it 
+  // would be ambiguous with fantom's sys::File.
+using [java] java.io::FileFilter
+using [java] java.io::File as jFile
+
+**
+** List all .fan files in the given folder.
+**
+class FanFilesLister
+{
+    // main method
+    static Void main()
+    {
+          // Set folder to the passed argument. If no arg, then default to current folder(".")
+	folder := Sys.args().isEmpty ? "." : Sys.args()[0]
+        dir := jFile(folder)
+          // We need to specify jFile[], otherwise we would get Obj[]
+        jFile[] files := dir.listFiles(FilterImpl());
+          // Fantom doesn't do arrays(primitives), so JFile[] is really a Fantom List of jFile
+          // That means we can use List features, like here .each(itBlock).
+          // Print to console all the file names.
+        files.each { echo(it.getName()) }
+    }
+}
+
+**
+** Implementation of Java FileFilter interface
+**
+  // Notice that we implement Java's FileFilter
+internal class FilterImpl : FileFilter
+{
+      // Matching the Java method signature in fantom can be a bit tricky
+      // see: http://fantom.org/doc/docLang/JavaFFI.html#summary
+    override Bool accept(jFile? f)
+    {
+          //only one statement, we can skip the "return" keyword
+        f.getName.endsWith(".fan")
+    }
+}
+</code>
+
+=====Running the script=====
+''fan FanFilesLister.fan /home/me/fantom/src/inet/fan/''
+
+<code | Script output>
+UdpPacket.fan
+TcpListener.fan
+SocketOptions.fan
+UdpSocket.fan
+TcpSocket.fan
+IpAddress.fan
+UnknownHostErr.fan
+</code>
