@@ -1,0 +1,79 @@
+<h2 id="my-resume---thibaut-colar">My Resume - Thibaut Colar</h2>
+<p><br/> <strong>My consulting company</strong>: <a href="http://www.status302.com/">http://www.status302.com/</a></p>
+<p><strong>My Linked-in profile</strong>: <a href="http://www.linkedin.com/in/tcolar">http://www.linkedin.com/in/tcolar</a></p>
+<p><strong>Download</strong>: <a href="http://www.status302.com/files/resume.doc">http://www.status302.com/files/resume.doc</a> or <a href="http://www.status302.com/files/resume.pdf">PDF format</a></p>
+<p><strong>Last Updated</strong>: January 2013 <br/></p>
+<hr />
+<h4 id="summary-of-qualifications">SUMMARY OF QUALIFICATIONS</h4>
+<p><br/> Highly versatile and accomplished Senior Software Developer, Consultant, and Product Manager with over fourteen years of industry experience and proven leadership success in every aspect of the development life cycle.</p>
+<p>Exceptional technical knowledge and skills complement excellent interpersonal and organizational capabilities, adaptability, and drive towards continuous professional development. Fluent in English and French.</p>
+<hr />
+<h4 id="education">EDUCATION</h4>
+<br/>
+<ul>
+<li><p>Diplome Universitaire de Technologie (DUT) in Computer Science, 1998 Universitee des sciences et technologies de Lille 1, Villeneuve-d'Ascq, France</p></li>
+<li><p>Diplome Universitaire de Technologie (DUT) in Industrial Maintenance and Automation, 1997 Universitee de Valenciennes et du Hainaut-Cambresis (UVHC), Valenciennes, France</p></li>
+</ul>
+<hr />
+<h4 id="professional-experience">PROFESSIONAL EXPERIENCE</h4>
+<br/>
+<ul>
+<li><strong>Owner. Status302 LLC. Federal Way, WA. April 2012 – Present</strong></li>
+</ul>
+<p>Providing software development consulting (mostly remotely).</p>
+<p>Core competencies:</p>
+<ul>
+<li>Fantom and Axon sparks development.</li>
+<li>Skyfoundry / Skyspark add-ons.</li>
+<li>Netbeans RCP custom development.</li>
+<li>J2EE development.</li>
+<li>Linux / Apache / MySQL stack.</li>
+<li>Mobile &amp; Tablet applications with HTML5.</li>
+<li>SAP development in particular the Java stack: Netweaver, CRM, IPC, ISA.</li>
+</ul>
+<br/>
+<ul>
+<li><strong>Sr Developer. Teachscape. San Francisco, CA. April 2011 - June 2012</strong></li>
+</ul>
+<p>Worked mostly remotely but on site for a week bimonthly.</p>
+<p>Worked on a variety of software for the company core products (Education industry).</p>
+<p>Implemented and designed software using Java6, Maven, Guice, Neo4j, MongoDb, JQuery and more.</p>
+<p>Also worked on some Integration with Saba. <br/> <br/></p>
+<ul>
+<li><strong>Senior E-commerce Architect. Pacific Coast Feather Co., Seattle, WA. July 2005 - April 2011</strong></li>
+</ul>
+<p>Reported directly to VP of Information Systems.</p>
+<p>Successfully implemented Ramp-UP implementation of CRM5.0 based e-commerce sites and following upgrade to 2007(7.0) Heavily customized, enhanced and optimized SAP ISA B2B and B2C implementation: <a href="http://www.pcf.com">http://www.pcf.com</a> and <a href="http://www.sealybedding.com/">http://www.sealybedding.com/</a></p>
+<p>Migrated the main E-commerce site from third party platform to SAP in house: <a href="http://www.pacificcoast.com/">http://www.pacificcoast.com/</a></p>
+<p>Architect, specified and implemented new features with direct input from upper management and marketing team. Installed and maintain ISA infrastructure (ISA servers) on Linux / Solaris.</p>
+<p>Mentored other developers with Java development.</p>
+<p>Installed server side and developer tools to enhance development productivity: NWDI, ant scripts, build server(Hudson) and Subversion. Responsibilities are divided between designing new features, implementing them and managing/mentoring other Java developers. <br/> <br/></p>
+<ul>
+<li><strong>Product Manager &amp; Lead Software Engineer. Qarbon.com, San Jose, CA. August 1998 - July 2005</strong></li>
+</ul>
+<p>Joined the company founder after the lead developer and only employee left with the product, ViewletBuilder, in early alpha stage (Java 1.1)</p>
+<p>Sered as lead developer of the flagship product Leelou / ViewletBuilder <a href="http://www.viewletbuilder.com/">http://www.viewletbuilder.com/</a> from it's infancy to a larger team.</p>
+<p>Also served as the de-facto system, web, database and network administrator, ensuring 24x7 uptime.</p>
+<p>Evaluated hardware and purchases in support of the company's technology infrastructure.</p>
+<p>After many successful releases of ViewletBuilder, envisioned a new integrated server-side product <a href="[http://www.viewletCentral.com">http://www.viewletCentral.com</a> for hosting ViewletBuilder content, and started that project from scratch and over the next two year architect and implemented it. Managed that project and lead offside resources.</p>
+<p>Implemented custom in house basic &quot;CRM&quot; system, to track customers and orders and many other in-house productivity tools.</p>
+<p>Managed some remote developers and reported status to the CTO and CEO. Facilitated effective communication with project management and project teams.</p>
+<hr />
+<h4 id="open-source-software">OPEN SOURCE SOFTWARE</h4>
+<br/>
+<p>Author of multiple open-source projects implemented in various languages (Fantom, Java, Python ...).</p>
+<p>See <a href="portfolio">http://www.status302.com/portfolio</a> for more information.</p>
+<hr />
+<h4 id="skills">SKILLS</h4>
+<br/>
+<p><strong>Programming Languages:</strong></p>
+<p>Java client and server 14+ years, Fantom, Axon, Node.js, Python, Perl, SQL, XML, Shell scripting, Ruby/RoR, Assembler, Pascal.</p>
+<p><strong>Server software:</strong></p>
+<p>Wisp, Nginx, Apache, Jetty, Tomcat, SAP Netweaver / WebAS), MySQL, PostgresQL, Neo4J, MongoDB, Oracle.</p>
+<p><strong>Frameworks and libraries:</strong></p>
+<p>Tales, Guice, JQuery, Backbone.js, Netbeans RCP, Struts.</p>
+<p>Developer tools such as Mercurial, Git and the likes.</p>
+<p><strong>Operating Systems:</strong></p>
+<p>Linux(Ubuntu, Mint, Red Hat, Suse, Gentoo, Debian, Slackware), Mac OS X, Microsoft Windows, Solaris.</p>
+<p><strong>Networking:</strong></p>
+<p>REST, SOAP, LAN, WAN, SMTP, POP, IMAP, DHCP, DNS, UDP, SAMBA.</p>

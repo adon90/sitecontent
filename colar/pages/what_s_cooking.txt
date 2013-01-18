@@ -15,4 +15,4 @@ Continue development
   * Jotwiki: <del>allow "optional" areas in template -> content can be set in page option (text or file include)-> with widget ?? (db widget)</del>
   * jotwiki: 301 redirects
   * jotwiki: "forum" page type (or widget)
-  * Finish the [[jot:home | javaontracks]] webapp server
+  * Finish the [[http://www.javaontracks.net/home | javaontracks]] webapp server

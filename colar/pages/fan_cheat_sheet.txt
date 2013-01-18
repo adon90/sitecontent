@@ -2,7 +2,7 @@
 TIP: **See the [[Fan|index of all my fantom pages]]**
 
 ======Fantom Cheat Sheet======
-**See also [[Fan Getting started]] and [[fanide:home|fantomIDE]]**
+**See also [[Fan Getting started]] and [[http://fantomide.colar.net/home|fantomIDE]]**
 =====Intro=====
 **Fantom(Fan) is an exciting new language that targets the Java VM and the CLR**.
 It borrows it's Syntax from Java but also adds many features and syntactic sugar created or borrowed from .NET, Groovy, Python, Erlang etc...

@@ -15,7 +15,7 @@ While I can't show the work I did there, you can see the end results such as the
 [[http://www.pacificcoast.com/]] site, which runs on SAP ISA/CRM.
 
 You can also find a lot of notes and blog entries I posted during that time about Java SAP work:
-[[colar:sap_tips]]
+[[http://wiki.colar.net/sap_tips]]
 ----
 ===[[http://www.qarbon.com/presentation-software/viewletbuilder | Qarbon.com]] : (1998 - 2005):===
 I was lead developer on the Java based [[http://www.qarbon.com/presentation-software/viewletbuilder|Leelou / ViewletBilder]] product during that time period.
@@ -42,7 +42,7 @@ See the source code [[https://bitbucket.org/tcolar/camembert/src|here]]
 
 I also made a custom addon to work with Axon code and Skyspark instances: [[axon_plugin]]
 ----
-===[[fanide:home|FantomIDE]]===
+===[[http://fantomide.colar.net/home|FantomIDE]]===
 This is both a Netbeans plugin and a standalone application based on the Netbeans RCP platform, written in Java.
 It provides full support for the Fantom programming language including completion and many other features.
 This is a fairly large project.
@@ -52,13 +52,13 @@ You can see the Java sources [[https://bitbucket.org/tcolar/fantomidemodule/src/
 ===[[https://bitbucket.org/tcolar/fantomato/src|Fantomato]]===
 [[https://bitbucket.org/tcolar/fantomato/src|Fantomato]] is a wiki/site/blog engine written in Fantom.
 It has many features including rendering pages in Markdown, Dokuwiki or HTML syntax.
-It is a partial port/rewrite of my previous Java blog engine called [[wiki:home|jotwiki]] which was implemented in java.
+It is a partial port/rewrite of my previous Java blog engine called [[http://www.jotwiki.net/home|jotwiki]] which was implemented in java.
 
 [[https://bitbucket.org/tcolar/fantomato/src|Sources of the new implementation in Fantom]]
 [[https://bitbucket.org/tcolar/jotwiki/src|Sources of the older Java implementation]]
 ----
-===[[berry:home|Berry4All]]===
-[[berry:home|Berry4All]] is/was a tethering solutions for Blackberry phones.
+===[[http://www.berry4all.com/home|Berry4All]]===
+[[http://www.berry4all.com/home|Berry4All]] is/was a tethering solutions for Blackberry phones.
 It is written in Python. I chose python for this project because I needed a mix of low level access(USB) and multiplatform support.
 
 It is probably not the code I'm the most proud of because by it's nature it had to be a bit hacky(reverse engeneering of protocol).
@@ -67,8 +67,8 @@ On the other it had been quite popular with ten of thousands of downloads.
 
 The source code is available [[https://bitbucket.org/tcolar/berry4all | here]]
  ----
-===[[colar:mamechose|MameChose]]===
-[[colar:mamechose|MameChose]] is a Mame(Arcade game emulator) frontend.
+===[[http://wiki.colar.net/mamechose|MameChose]]===
+[[http://wiki.colar.net/mamechose|MameChose]] is a Mame(Arcade game emulator) frontend.
 It allows quick indexing / searching / launching of an arcade game collection(roms).
 
 It is dsigned to have a simple but effective interface that is used only with a joystick and a few buttons.

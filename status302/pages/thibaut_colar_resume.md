@@ -5,6 +5,7 @@
 **My Linked-in profile**: [http://www.linkedin.com/in/tcolar](http://www.linkedin.com/in/tcolar)
 
 **Download**: [http://www.status302.com/files/resume.doc](http://www.status302.com/files/resume.doc)
+or [PDF format](http://www.status302.com/files/resume.pdf)
 
 **Last Updated**: January 2013
 <br/>
@@ -37,15 +38,16 @@ Providing software development consulting (mostly remotely).
 
 Core competencies:
 
-- Fantom and Axon sparks development.
-- Skyfoundry / Skyspark add-ons.
-- Netbeans RCP custom development.
-- J2EE development.
-- Linux / Apache / MySQL stack.
-- Mobile & Tablet applications with HTML5.
-- SAP development in particular the Java stack: Netweaver, CRM, IPC, ISA.
+* Fantom and Axon sparks development.
+* Skyfoundry / Skyspark add-ons.
+* Netbeans RCP custom development.
+* J2EE development.
+* Linux / Apache / MySQL stack.
+* Mobile & Tablet applications with HTML5.
+* SAP development in particular the Java stack: Netweaver, CRM, IPC, ISA.
 
 <br/>
+
 -  **Sr Developer. Teachscape. San Francisco, CA. April 2011 - June 2012**
 
 Worked mostly remotely but on site for a week bimonthly.

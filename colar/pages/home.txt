@@ -1,13 +1,13 @@
 ====Home====
 ===[[My Software]]===
 [[My Software|Here]] you will find information and links to some software I wrote.
-  * [[Status302:home| Status302]] : My own company, provides software development and consulting.
-  * [[status302:camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
+  * [[http://www.status302.com/home| Status302]] : My own company, provides software development and consulting.
+  * [[http://www.status302/camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
   * [[MameChose|mameChose MAME frontend]] A multiplatform MAME frontend written in Fantom.
-  * [[fanide:home|FantomIDE]] IDE for the Fantom language based on Netbeans. 
-  * [[berry:home|Berry4all / BBTethter]] An easy to use Python program for tethering a Blackberry (UNIXes).
-  * [[wiki:home|JOTWiki]] which is a WIKI software i wrote based on JavaOnTracks.
-  * [[jot:home|JavaOnTracks]] which is my own SIMPLE Java framework
+  * [[http://fantomide.colar.net/home|FantomIDE]] IDE for the Fantom language based on Netbeans.
+  * [[http://www.berry4all.com/home|Berry4all / BBTethter]] An easy to use Python program for tethering a Blackberry (UNIXes).
+  * [[http://www.jotwiki.net/home|JOTWiki]] which is a WIKI software i wrote based on JavaOnTracks.
+  * [[http://www.javaontracks.net/home|JavaOnTracks]] which is my own SIMPLE Java framework
 
 ===[[My Projects]]===
 [[My Projects|Here]] you will find information about other projects i built/installed/played with, such as:
@@ -28,8 +28,8 @@
 ===[[About Me]]===
 [[About Me|Here]] you will find among other things, my personal and family news, such as:
   * [[http://www.colar.net/photos/|Our family photos]]
-  * [[My Resume]] (more or less up to date)
+  * [[http://www.status302/thibaut_colar_resume|My Resume]] (more or less up to date)
   * [[Hockey Teams]] i play in.
   * [[My Bookmarks]], some of my favorite sites / applications.
-  * [[Guestbook|Guestbook / Contact Me]] Drop me a line. 
+  * [[Guestbook|Guestbook / Contact Me]] Drop me a line.
   * [[http://marie.colar.net | Marie Colar]]

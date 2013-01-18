@@ -5,19 +5,19 @@ What i'm working on
   * ButBucket Repository
 [[http://bitbucket.org/tcolar/]]
 
-  * [[fanide:home|FanIDE]] 
+  * [[http://fantomide.colar.net/home|FanIDE]] 
 IDE for the Fan language based on Netbeans. 
 
-  * [[berry:home|Berry4All / BBTether]]
+  * [[http://www.berry4all.com/home|Berry4All / BBTether]]
 An easy to use program for tethering(use as a modem) a blackberry under linux, written in python.
 
   * [[fan|Netbeans Plugin For The Fan Language]]
 A Netbeans plugin for the Fan language.
 
-  * [[jot:Home|JavaOnTracks]]
+  * [[http://www.javaontracks.net/Home|JavaOnTracks]]
 A java Framework/Toolbox with tons of functionalities.
 
-  * [[wiki:Home|JotWiki]]
+  * [[http://www.jotwiki.net/Home|JotWiki]]
 A Wiki based on the JavaOntracks framework.
 This site is running on jotwiki.
 

@@ -45,7 +45,7 @@ Nevertheless, you can do it, it works the same way as with the other files.
 
 Say you want your own "view.html" (the main template use to render wiki pages), you will want to copy it from the default template (/opt/jotwiki/templates/default/view.html) to your own template /opt/jotwiki/templates/mytpl/view.html and edit here
 
-NOTE: The templates pages are fairly clean HTML, with a few [[jot:home | JavaOnTracks tags]] logic tags (<jot:xx></jot:xx>), you want to be careful not to affect those or you might break the logic/page (that should give you an explicit error about what happened, which should help).
+NOTE: The templates pages are fairly clean HTML, with a few [[http://www.javaontracks.net/home | JavaOnTracks tags]] logic tags (<jot:xx></jot:xx>), you want to be careful not to affect those or you might break the logic/page (that should give you an explicit error about what happened, which should help).
 
 =====Sharing the template=====
 

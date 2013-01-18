@@ -1,9 +1,9 @@
-TIP: **See the [[default:Fan|See my other pages/doc about Fantom here]]**
+TIP: **See the [[http://wiki.colar.net/Fan|See my other pages/doc about Fantom here]]**
 
 ======Fantom IDE - FantomIDE======
 
 WARNING: I still maintain this IDE once in a while, but I'm not using it much anymore.
-I now use the pure Fantom IDE, called [[status302:camembert | Camembert]] I've been developing recently.
+I now use the pure Fantom IDE, called [[http://www.status302/camembert | Camembert]] I've been developing recently.
 
 
 =====Netbeans based Standalone IDE / Plugin for the Fantom Language=====
