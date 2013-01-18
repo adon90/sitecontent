@@ -4,8 +4,8 @@
 
 **My Linked-in profile**: [http://www.linkedin.com/in/tcolar](http://www.linkedin.com/in/tcolar)
 
-**Download**: [http://www.status302.com/files/resume.doc](http://www.status302.com/files/resume.doc)
-or [PDF format](http://www.status302.com/files/resume.pdf)
+**Download**: [http://www.status302.com/files/thibaut_colar_resume.doc](http://www.status302.com/files/thibaut_colar_resume.doc)
+or [PDF format](http://www.status302.com/files/thibaut_colar_resume.pdf)
 
 **Last Updated**: January 2013
 <br/>

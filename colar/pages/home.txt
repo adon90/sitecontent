@@ -1,8 +1,10 @@
 ====Home====
+  * [[http://www.status302.com/thibaut_colar_resume|My Resume]]
+
 ===[[My Software]]===
 [[My Software|Here]] you will find information and links to some software I wrote.
   * [[http://www.status302.com/home| Status302]] : My own company, provides software development and consulting.
-  * [[http://www.status302/camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
+  * [[http://www.status302.com/camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
   * [[MameChose|mameChose MAME frontend]] A multiplatform MAME frontend written in Fantom.
   * [[http://fantomide.colar.net/home|FantomIDE]] IDE for the Fantom language based on Netbeans.
   * [[http://www.berry4all.com/home|Berry4all / BBTethter]] An easy to use Python program for tethering a Blackberry (UNIXes).
@@ -28,7 +30,7 @@
 ===[[About Me]]===
 [[About Me|Here]] you will find among other things, my personal and family news, such as:
   * [[http://www.colar.net/photos/|Our family photos]]
-  * [[http://www.status302/thibaut_colar_resume|My Resume]] (more or less up to date)
+  * [[http://www.status302.com/thibaut_colar_resume|My Resume]] (more or less up to date)
   * [[Hockey Teams]] i play in.
   * [[My Bookmarks]], some of my favorite sites / applications.
   * [[Guestbook|Guestbook / Contact Me]] Drop me a line.

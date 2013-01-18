@@ -1,5 +1,5 @@
 ======Camembert - Lightweight Fantom IDE written purely in Fantom======
 
-**Moved** : Please [[http://www.status302/camembert|see here]]
+**Moved** : Please [[http://www.status302.com/camembert|see here]]
 
 

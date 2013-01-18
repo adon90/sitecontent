@@ -7,7 +7,7 @@ It's immediately familiar to a Java / .Net programmer but is much less painful t
 See [[http://fantom.org/]]
 ====Camembert Fantom / Axon IDE====
 A standalone pure-Fantom IDE for Fantom and Axon / Skyspark.
-  - [[http://www.status302/camembert | Camembert IDE]]
+  - [[http://www.status302.com/camembert | Camembert IDE]]
 ====Netbeans Fantom IDE====
 I've been working on a Netbeans IDE based on Netbeans for Fantom:
   - [[http://fantomide.colar.net/home | Fantom IDE]]
