@@ -28,7 +28,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="#">Status302</a>
+                <a class="brand" href="#"><img src="files/302_32_32.png" width=16 height=16/> Status302</a>
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li {{#ap}}home{{/ap}}><a href="home"><i class="icon-home"></i>Home</a></li>
@@ -78,7 +78,7 @@
 {{ & content }}
 <!-- End content -->
 
-{{#hasComments}}
+{{#commentsEnabled}}
 <!-- Comments -->
                 <div class="well comments">
                 <h2> Comments </h2>
@@ -99,7 +99,7 @@
 {{/moreComments}}
                 </div>
 <!-- End comments -->
-{{/hasComments}}
+{{/commentsEnabled}}
 
                 </div>
             </div>
