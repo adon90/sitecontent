@@ -82,9 +82,9 @@ Responsibilities are divided between designing new features, implementing them a
 
 - **Product Manager & Lead Software Engineer. Qarbon.com, San Jose, CA. August 1998 - July 2005**
 
-Joined the company founder after the lead developer and only employee left with the product, ViewletBuilder, in early alpha stage (Java 1.1)
+Joined the company founder after the lead developer and only employee left, with the product ViewletBuilder in early alpha stage (Java 1.1)
 
-Sered as lead developer of the flagship product Leelou / ViewletBuilder [http://www.viewletbuilder.com/](http://www.viewletbuilder.com/) from it's infancy to a larger team.
+Served as lead developer of the flagship product Leelou / ViewletBuilder [http://www.viewletbuilder.com/](http://www.viewletbuilder.com/) from it's infancy to a larger team.
 
 Also served as the de-facto system, web, database and network administrator, ensuring 24x7 uptime.
 
