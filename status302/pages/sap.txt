@@ -1,0 +1,25 @@
+======SAP Development & consulting (Java / CRM)======
+
+We worked on the SAP Java stack for over 7 years, including working with:
+
+  - SAP ISA (Internet Sales) - B2B and B2C E-Commerce
+  - The whole Netweaver Java stack including Web AS, NWDS, NWDI, Portal and more
+  - CRM 5.x and 7.x
+  - the IPC (pricing) engine
+  - Solution Manager
+
+Most of the work done was on improving the SAP E-Commerce offering, that includes greatly enhancing
+the functionalities and performance of the B2B and B2C applications with custom implementations such as
+enhanced pricing, vanity URL's, data caching and much more.
+
+[[http://www.pacificcoast.com|PacificCoast.com]] and [[http://www.sealybedding.com|SealyBedding.com]] are live examples of this work.
+
+We also handled some of the system installation and administration tasks (a.k.a basis), in particular of the java based system.
+
+We also did a lot of work on incorporating / mixing some open soure solutions with the SAP Java stack, for example using Sitemesh and JQuery as well as a more open source and agile development stack bringing much higher developer productivity.
+
+While we don't usually write ABAP code, we are knowledgeable enough to read/debug it as needed.
+
+You can see [[http://wiki.colar.net/sap_tips|many notes and blog entries about our SAP work here.]]
+
+

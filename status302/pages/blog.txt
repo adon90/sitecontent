@@ -1,6 +1,6 @@
 ======Blog======
 ===12/11/12 : Announcing Camembert===
-We have released the first version of [[Camembert]], A lightweight IDE for the [[http://www.fantom.org/|Fantom]] programming language.
+We have released the first version of [[Camembert]], A lightweight IDE written in the [[http://www.fantom.org/|Fantom]] programming language.
 
 This is a Free and Open source project.
 

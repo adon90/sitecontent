@@ -5,15 +5,15 @@ It's multi-platform and can run on many platforms (Linux, Max, Windows...)
 
 It started as a fork the excellent BRIE editor by Brian Frank but has evolved since to add many new features.
 
-More Info: 
-  - [[#Screenshot]] 
-  - [[#Installation]] 
+More Info:
+  - [[#Screenshot]]
+  - [[#Installation]]
   - [[#Features]]
 
 Add-on Plugins: [[Axon plugin]] (For Axon / Sparks development)
 
 ===Screenshot===
-{{cam.png}} 
+{{cam.png}}
 
 ===Installation===
 You must have [[http://www.fantom.org/ | Fantom]] or [[http://www.skyfoundry.com | Skyspark]] environment installed.

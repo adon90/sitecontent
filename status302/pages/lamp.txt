@@ -1,0 +1,22 @@
+======Linux, WebServers, Databases and more======
+
+====System administration====
+We have used and administered Unix systems for a long time, since the late 90's.
+Including a wide varieties of Linux distributions over the years such as Slackware, Redhat(from 3.x), Suse, Gentoo, Debian, Ubuntu, Mint, Arch juts to name a few.
+
+====Web servers====
+We have also used and administered many web and application servers over the years such as Apache, Nginx, Jetty, Tomcat, JBoss, Wisp, SAP WebAS.
+
+====Databases====
+We have also installed, administered and used many databases such as MySql, Postgres and Oracle, as well as some of the newest NoSql solutions such as Neo4J, OrientDb, MongoDb etc...
+
+====Networking====
+We can also find our way around networking software and equipment, such as setting up hardware firewalls, routers and things of that nature.
+
+We are also pretty handy with the software side of networking such as resolving conectivity issues, debugging protocols and setting software rules and firewalls, using tools such as ping, traceroute, dig, tcpDump, wireshark, wget, curl, iptables and more.
+
+Our background in electronic & automation helps us understand better how the devices actually work.
+
+
+
+

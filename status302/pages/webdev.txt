@@ -1,0 +1,25 @@
+======Web and Mobile consulting and development======
+
+We have extensive experience(14+ years) developing both server and client side web applications.
+
+We have worked on everything from small projects to large E-commerce  sites.
+
+That includes working with all those technologies over time:
+
+  - **Java stack** : JSP, Servlets, Velocity, Wicket, Struts, Spring, JSF, Jersey, Guice and more.
+  - **Protocols**: REST, HTTP, SOAP.
+  - **Fantom stack** : Wisp, Draft & Tales frameworks.
+  - **Frontend** : Experience with HTML and many libraries such as JQuery, Backbone.js, D3.js, Twitter Bootstrap and more.
+  - **And more** : Some familiarity with Node.js and Ruby / RoR.
+
+We also have good knowledge of the low level parts of web development, including:
+
+  - Setting up **applications servers** such as Jetty, Tomcat, Jboss, Sap WebAs, and Wisp.
+  - Setting up and operating **web servers** and proxies such as Nginx and Apache.
+  - **Debugging TCP** with tools such as TcpDump, wireshark, wget and curl.
+
+See [[Portfolio]] for some examples of what we have done.
+
+We also have some light experience with Mobile development including HTML5, Java mobile aps and Android development, as well as some knowledge of some mobile development frameworks such as Phonegap and Trigger.io
+
+
