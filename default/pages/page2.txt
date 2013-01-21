@@ -1,0 +1,28 @@
+==== This is an example page in jotwiki format====
+It's a bit more powerful than Markdown IMO :-P
+
+[[page1 | link to page1]]
+
+[[http://www.google.com | link to google]]
+
+See **full** jotwiki syntax here: [[http://www.colar.net/syntax.html]]
+
+An image from the "files" folder: {{smile.gif}}
+a code block:
+<code | Example>
+  while(true)
+    echo("Hello world forever !")
+</code>
+
+Some inline code : ''a += 2''
+
+<html><b>This is an HTML fragment</b></html>
+
+Tip: This is a tip !
+Pay attention!
+
+Warning: **THis is a Dangerous Warning !!**
+
+
+
+

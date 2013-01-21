@@ -1,4 +1,4 @@
-<!-- Very Minimal (but ugly) example template -->
+<!-- Example template (not very pretty but documented) -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,37 +6,90 @@
       <!-- Note the variables: title, genratedDate. They will be filled in by the wiki -->
       <title>{{title}}</title>
       <meta name="date" content='{{generatedDate}}' />
+      <meta name="keywords" content='{{title}}, {{keywords}}'/>
 
       <!-- Note that all template resources should be fetched like this (tpl/*)-->
+      <link rel='stylesheet' type='text/css' href='tpl/bootstrap.min.css' />
       <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
 
-      <!-- You will probably want to include your extra custom css here -->
+      <!-- You might want to include your extra custom css here -->
       <link rel='stylesheet' type='text/css' href='tpl/template.css' />
 
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="robots" content="index,follow" />
   </head>
   <body>
   <div>
-    <div class="top">
-      Links : <!-- Menubar example -->
-      <!-- #ap will call a wiki method that will add "class='active'" if the path matches the arg-->
-      <span {{#ap}}page1{{/ap}}><a href="page1">Page1(.md)</a></span>
-      <span {{#ap}}page2{{/ap}}><a href="page2">Page2(.txt)</a></span>
-      <span {{#ap}}page3{{/ap}}><a href="page3">Page3(.html)</a></span>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container-fluid">
+            <a class="brand" href="#">Fantomato</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                  <!-- #ap will call a wiki lambda that will add "class='active'" if the path matches the arg-->
+                  <li {{#ap}}page1{{/ap}}><a href="page1">Page1(.md)</a></li>
+                  <li {{#ap}}page2{{/ap}}><a href="page2">Page2(.txt)</a></li>
+                  <li {{#ap}}page3{{/ap}}><a href="page3">Page3(.html)</a></li>
+              </ul>
+           </div>
+          </div>
+        </div>
     </div>
 
-    <div class="nav">
-      <!-- Example of importing a subpage-->
-      {{#import}}
-        sub
-      {{/import}}
-    </div>
+    <div class="container-fluid" style="margin-top:60px">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well">
+              <!-- Example of importing a subpage-->
+              {{#import}}
+                sub
+              {{/import}}
+          </div>
+        </div>
+        <div class="span9">
+          <div class="content">
+             <!-- The page content, Note the use of '&' so the content does not get HTML escaped-->
+              {{ & content }}
 
-    <div class="content">
-     <!-- The page content, Note the use of '&' so the content does not get HTML escaped-->
-      {{ & content }}
+              {{#commentsEnabled}}
+              <hr/>
+              <!-- Comments -->
+                              <div class="well comments">
+                              <h2> Comments </h2>
+                                  <a class="button" href='addComment.do'>Add a new Comment</a>
+                              <hr/>
+              {{#comments}}
+                              <div>
+                                <b>Post time:</b> {{date}} <b>By:</b> {{author}}<br/>
+                                <b>Title: {{title}}</b><br/>
+                                <pre>{{text}}</pre>
+                              </div>
+                              <hr/>
+              {{/comments}}
+              {{#moreComments}}
+                              <a href="?allComments=1">View {{commentsLeft}} older comments</a>
+                              <hr/>
+              {{/moreComments}}
+                              </div>
+              <!-- End comments -->
+              {{/commentsEnabled}}
+
+          </div>
+        </div>
+      </div>
     </div>
+        <footer>
+            <p>{{ & footer}}</p>
+        </footer>
   </div>
+
+  <!-- scripts -->
+  {{ & googleAnalytics}}
+
+  {{#addThisEnabled}}
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username={{addThisId}}"></script>
+  {{/addThisEnabled}}
+
   </body>
 </html>
 

@@ -1,0 +1,13 @@
+{"author":"Jane Doe",
+"title":"Come-on John",
+"text":"Don't you have anything better to do than post comments John ?",
+"ts":"2012-01-10T11:43:00-08:00 Los_Angeles"}
+{"author":"John Doe",
+"title":"An example comment",
+"text":"That is a comment\n Nothing fancy really.",
+"ts":"2012-01-10T10:43:00-08:00 Los_Angeles"}
+{"author":"Nobody",
+"title":"I'm a ghost !",
+"text":"I am nobody.",
+"ts":"2012-01-10T08:43:00-08:00 Los_Angeles"}
+
