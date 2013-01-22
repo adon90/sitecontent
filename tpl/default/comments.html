@@ -1,0 +1,24 @@
+              {{#commentsEnabled}}
+              <hr/>
+              <!-- Comments -->
+                              <div class="well comments">
+                              <h2> Comments </h2>
+                                  <a class="button" href='addComment.do'>Add a new Comment</a>
+                              <hr/>
+              {{#comments}}
+                              <div>
+                                <b>Post time:</b> {{date}} <b>By:</b> {{author}}<br/>
+                                <b>Title: {{title}}</b><br/>
+                                <pre>{{text}}</pre>
+                              </div>
+                              <hr/>
+              {{/comments}}
+              {{#moreComments}}
+                              <a href="?allComments=1">View {{commentsLeft}} older comments</a>
+                              <hr/>
+              {{/moreComments}}
+                              </div>
+              <!-- End comments -->
+              {{/commentsEnabled}}
+
+

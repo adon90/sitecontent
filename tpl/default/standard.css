@@ -41,3 +41,15 @@ pre{margin-top:1px;padding-top:1px;padding-bottom:1px;margin-bottom:1px}
     margin-right: 4px;
     float: left;
 }
+
+.comments{
+  background-color : #f6f6ff;
+}
+
+.wrapped_pre {
+ white-space: pre-wrap;
+ white-space: -moz-pre-wrap;
+ white-space: -pre-wrap;
+ white-space: -o-pre-wrap;
+ word-wrap: break-word;
+}

@@ -12,6 +12,7 @@
       <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
       <link rel="stylesheet" type="text/css" href='tpl/jotwiki.css'/>
       <link rel="stylesheet" type="text/css" href='tpl/template.css'/>
+      <script type="text/javascript" src="tpl/jquery.min.js"></script>
       <script type="text/javascript" src="tpl/template.js"></script>
     </head>
 
@@ -64,47 +65,43 @@ menu
     </div>
 
     <div class="page">
-        <div class="page_text">
+      <div class="page_text">
 {{ & content}}
-      <br/><br/>
-      <hr/>
-      <div class="toplink">
-          <a href="#top" class="action top"><img border="0" src='tpl/img/up.gif' alt="toTop"/>&nbsp;Back to top</a>
+        <br/><br/>
+        <hr/>
+        <div class="toplink">
+            <a href="#top" class="action top"><img border="0" src='tpl/img/up.gif' alt="toTop"/>&nbsp;Back to top</a>
+        </div>
+
+        <hr />
+
+        <div class="meta">
+                Last modified: by {{author}}
+        </div>
       </div>
 
-      <hr />
 
-      <div class="meta">
-              Last modified: by {{author}}
-      </div>
-        </div>
-
-
-{{#commentsEnabled}}
-        <!-- comments -->
-        <div class="comments">
-          <div class="commentsTitle">Comments:
-<!--        <jot:if eval="canPostComments()">
-            <a class="button" href='addComment.do'>Add a new Comment</a>
-        </jot:if>-->
-          </div>
-          <hr/>
-{{#comments}}
-        <div class="comment">
-            <b>Post time:</b>{{date}} <b>By:</b>{{author}}<br/>
-            <b>Title: {{title}}</b><br/>
-            {{text}}<br/>
-        </div>
-        <hr/>
-{{/comments}}
-{{#moreComments}}
-                <div class="commentsTitle"><a href="?allComments=1">View {{commentsLeft}} older comments</a></div>
-                <hr/>
-{{/moreComments}}
-        <hr/>
-        </div>
-        <!-- end comments -->
-{{/commentsEnabled}}
+              {{#commentsEnabled}}
+              <hr/>
+              <!-- Comments -->
+                <div class="well comments">
+                <h2> Comments </h2>
+                  <a id="addCommentLink" href='#'>Add a new Comment</a>
+                  <div id="addCommentPane" style="display: none;">
+                    <form id="addCommentForm" class="form-horizontal">
+                      <div class="control-group"><label class="control-label" >Title:</label><div class="controls"><input size="50" class="span9" type="text" name="title" value="My 2 cents"></div></div>
+                      <div class="control-group"><label class="control-label" >Author:</label><div class="controls"><input size=50 type="text"  name="author" value="Guest"></div></div>
+                      <div class="control-group"><label class="control-label" >Text:</label><div class="controls"><textArea cols="80" rows="6" name="text"></textArea></div></div>
+                      <div class="control-group"><div class="controls"><img class="span5" id="captchca" src=""/><input type="text" size="40"  name="captcha" placeHolder="Enter captchca code (4 alphanum)"></div></div>
+                      <div class="control-group"><div class="controls"><button type="submit" class="btn">Submit</button></div></div>
+                    </form>
+                  </div>
+                <div id="comments">
+                  <!-- comments will be filled in by ajax / jquery, see template.js-->
+                </div>
+              </div>
+              <!-- End comments -->
+              {{/commentsEnabled}}
     </div>
       </div>
   </div>
