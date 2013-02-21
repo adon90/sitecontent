@@ -1,8 +1,5 @@
 ======Axon / Skyspark plugin for the Camembert IDE======
 
-WARNING: **Coming soon!**
-
-
 This is a plugin for our Open Source and Free [[camembert|Camembert IDE]].
 
 It provides many features that are specific to Skyspark and Axon development.
@@ -19,12 +16,12 @@ More Info:
 Editing an Axon project (with sync to Skyspark).
 Note the axon documentation help pane on the right side and the "eval" field used to run remote Axon queries.
 
-{{cam_axon1.png}} 
+{{cam_axon1.png}}
 
 ------
 Example of running an Axon/Folio query and looking at the results inline:
 
-{{cam_axon2.png}}  
+{{cam_axon2.png}}
 
 ------
 
@@ -42,8 +39,23 @@ Here are some of the main features:
   - And more ...
 
 ===Installation===
-TIP: Coming soon
+** Make sure you use Fantom 1.0.64 or newer ! **
+
+I recommend installing via fanr rather than from sources as it's more stable.
+
+<code | Install>
+fanr install -r http://repo.status302.com/fanr/ camembertIde
+fanr install -r http://repo.status302.com/fanr/ camAxonPlugin
+</code>
+
+Then run Camembert:
+<code | Install>
+fanr camembert
+</code>
+
+===Getting Started===
+
 
 ===Purchase===
-TIP: Coming soon
+TIP: Coming soon. This is currently in Alpha and can be tried for free.
 

@@ -1,0 +1,103 @@
+Hi, here is some feedback, I got quite a bit of it, hope that's alright.
+
+I have signed up and created a custom AMI for Fantom, based on an existing Linux base AMI, it went well and it's
+very nice to be able to provision and spawn instances so easily on demand.
+
+Overall the process was very easy and painless.
+
+The most difficult part I would say is to actually signup for AWS and figure out the infrastructure options such as pricing, volumes, server types and so on.
+
+A small detail is that the terms "Amazon" and "Marketplace", both being so common make it a bit hard to search and find relevant info at times (Organic search).
+
+EC2 / Marketplace integration:
+
+Since I had to signup for AWS first, I ended up in EC2 and sort of got into the details in there and sort of forgot about Marketplace for a bit.
+
+There are many  points/links between EC2 and Marketplace, yet it felt to me as it could be even more integrated.
+In a way it feels like Marketplace is an "option" of EC2 (once you are in EC2), whereas maybe it should be the other way around.
+
+I'm not sure if I'm explaining myself well, but for example once I was in EC2 and did "new instance",  there is a marketplace "tab"
+in there, but the first time I didn't even notice it.
+
+So maybe Marketplace should me more prevalent or more integrated once in the AWS EC2 console.
+
+On the other hand once you have your account setup and you go buy an AMI directly from marketplace it becomes straightforward at that point.
+
+Creating my own AMI:
+
+That was actually pretty easy.
+
+The 2 things I thought could maybe be improved are:
+
+1) Making a "Secure" AMI is a bit tricky and I think there probably should be some tooling to help with that. Maybe there is and I missed it.
+For example a public AMI should not contain ~/.ssh/authorized_keys but it's difficult to do that because if you remove that file and your host restarts while the ami is built you might get locked out.
+I could see cases where an AMI actually wants to keep those files, but maybe by default they should be removed unless the user specifically asks for them to be kept, or maybe there could be an AMI "security scrubbing" tool.
+
+2) Licensing questions. In the AMI I made I have Installed Sun JDK 6, now when you install that it asks you to agree with the license.
+At that point I'm unsure whether I can make a public AMI from that and waht are the implications.
+
+Enhancement Ideas:
+
+1) "Ami bundles"
+Having worked with SAP environments before, I know that in those scenarios you are actually expected to have many separate instances,
+say 1+ CRM system linked to 1+ Catalog engine linked to 1+ Pricing engine and so on.
+In those scenarios it would make a ton of sense to have preconfigured "AMI bundles".
+
+2) On the other end f the spectrum, It would be nice to be able to create an AMI stack from "parts":
+Say as a customer, I want an AMI with Suse 12 + mySql + Nginx, it would be nice to pick those and get an built "on demand" AMI matching that.
+Obviously that would pretty hard to manage and maintain. Not an easy thing to do.
+But right now I think their could easily be a proliferation of AMI's that are almost the same with just different software permutations and I'm not sure it's better..
+
+Question:
+
+I noticed you use "amznJQ", I'm assuming it's a custom JQuery implementation. I was curious as to how it's different from standard JQuery.
+
+Overall Most of the points I made here are actually about AWS/EC2 and in fact I can see that Marketplace already solved / improved most of them compared to using AWS/EC2 alone.
+
+It's impressive overall.
+
+Have a nice day.
+
+
+
+On Wed, Jan 23, 2013 at 10:48 PM, Stephens, Ryan <ryanstep@amazon.com> wrote:
+Hi Thibaut,
+
+Take as much time as you like to check out the website. There is no hurry at all. And by all means, create an AMI and use AWS to try it out. As a customer I would love to hear your feedback.
+
+Also, two weeks for preparing for the interview is fine. I will ensure it isn’t scheduled prior to February 6th.
+
+-Ryan
+
+From: Thibaut Colar [mailto:tcolar@colar.net]
+Sent: Wednesday, January 23, 2013 9:57 AM
+To: Stephens, Ryan
+Subject: Re: AWS Marketplace
+
+Hi Ryan,
+
+I would like to check out AWS marketplace a bit more before giving some feedback, so if you don't mind that might be a day or two.
+
+I haven't yet used cloud services much, mostly because I have my own server(VPS) but I have toyed a little with Heroku and Nodejitsu.
+It seems Heroku might be both a partner and a competitor of yours, although they might be a little developer oriented rather than business / service ?
+
+I've been involved with the Fantom language for a while and considered several time implementing a cloud service for it, so I might give a try at that(make an AMI), might be a good way to learn and evaluate the system.
+
+I'm definitely open to schedule a phone interview, but if that's acceptable, I would like to have maybe about 2 weeks to prepare. Since I have interviewed at Amazon once before, I know the bar is set high and that I need to brush up on data structures, algorithms and such.
+
+I will get back yo you shortly with more feedback.
+
+Have a nice day.
+
+
+
+On Wed, Jan 23, 2013 at 9:20 AM, Stephens, Ryan <ryanstep@amazon.com> wrote:
+Hi Thibaud,
+
+It was a pleasure speaking with you yesterday. Check out the Marketplace website at http://aws.amazon.com/marketplace. I would love to get your feedback on what we’ve built and how we can improve the customer experience. One of our schedulers should get back to you shortly about scheduling a phone interview. In the meantime, feel free to email me with any questions you may have.
+
+D. Ryan Stephens
+AWS Marketplace
+
+
+

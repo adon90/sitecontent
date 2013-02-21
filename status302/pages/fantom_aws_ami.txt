@@ -1,0 +1,57 @@
+======Fantom server AWS AMI image======
+
+I made a simple public Fantom server stack [[https://aws.amazon.com/Amazon Aws]] EC2 AMI(instance image)
+
+AMI id: **ami-16e96326**
+
+It is available in the AWS store here : [[https://aws.amazon.com/amis/fantom-server]]
+
+I kept it pretty basic because that makes it simpler to customize.
+
+**What's in it**:
+  - Started with the "official" Debian 6 AMI then updated it (01/28/12)
+  - Added Sun Jdk 6 (from standard debian repo)
+  - Added Nginx (0.7.x from standard debian repo)
+  - Added [[http://www.fantom.org/ | fantom]] 1.0.64
+  - Create a Fantom user (no shell) to run the Fantom server process(draft) on port 8080
+  - Configured Nginx to proxy from HTTP port 80 to Fantom on port 8080
+  - Added an init script(/etc/init.d/fantom) that starts the fantom server as the fantom user
+  - Added [[https://bitbucket.org/afrankvt/draft|draft]] and a very small [[https://bitbucket.org/tcolar/draftexample/src | demo WebMod]] as an example
+
+**Volumes**:
+Here are the EBS volumes (partitions) contained:
+
+  - /dev/sda1 - 6GB (/) : OS partition
+  - /dev/sdb1 - 4GB (/data/) : Data partition owned by the fantom user (Fantom server data)
+
+Note that you can easily resize them as needed.
+
+**Starting an instance**:
+
+Go and login into to Amazon web services EC2:
+[[https://console.aws.amazon.com/ec2/v2/home]]
+
+Choose "launch instance" and search for the "Fantom server" ami (ami-16e96326) and deploy it to a server of your choice.
+
+During deployment you should choose or create a ssh key pair, do it and download it
+
+You can start with the quickstart security group, but what's needed is inbound TCP SSH(22) and HTTP(80)
+
+Once the instance is running in EC2 you can try it, for example:
+replace "ec2-54-245-140-190.us-west-2.compute.amazonaws.com" by your actual instance host name.
+
+Try:
+  - ''http://ec2-54-245-140-190.us-west-2.compute.amazonaws.com/''
+  - ''http://ec2-54-245-140-190.us-west-2.compute.amazonaws.com/pub/demo.txt''
+  - ''http://ec2-54-245-140-190.us-west-2.compute.amazonaws.com/echo/hello''
+
+You can ssh to it once you instal the previously downloaded key pair:
+<code | Example>
+mv ~/Downloads/mykey.pem ~/.ssh/
+chmod 400 ~/.ssh/mykey.pem
+ssh-add mykey.pem
+ssh root@ec2-54-245-140-190.us-west-2.compute.amazonaws.com
+</code>
+
+Enjoy !
+

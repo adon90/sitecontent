@@ -3,17 +3,20 @@
 Camembert is a Free, [[https://bitbucket.org/tcolar/camembert|Open source]], lightweight IDE, purely written in Fantom.
 It's multi-platform and can run on many platforms (Linux, Max, Windows...)
 
+It Fantom projects and also some other projects such as Node.js and Maven etc ..
+
 It started as a fork the excellent BRIE editor by Brian Frank but has evolved since to add many new features.
 
+Among other things it support Fantom, Node.js and Axon projects but is also good and flexible
+at editing any other files.
+
 More Info:
-  - [[#Screenshot]]
   - [[#Installation]]
-  - [[#Features]]
+  - [[#Screenshots]]
 
 Add-on Plugins: [[Axon plugin]] (For Axon / Sparks development)
 
-===Screenshot===
-{{cam.png}}
+{{cam_node.png}}
 
 ===Installation===
 You must have [[http://www.fantom.org/ | Fantom]] or [[http://www.skyfoundry.com | Skyspark]] environment installed.
@@ -21,7 +24,7 @@ You must have [[http://www.fantom.org/ | Fantom]] or [[http://www.skyfoundry.com
 Go into that environment and use the fanr command to install Camembert:
 
 <code | Install>
-fanr install -r http://repo.status302.com/fanr/ camembert
+fanr install -r http://repo.status302.com/fanr/ camembertIde
 </code>
 
 Yo can now run it using
@@ -31,22 +34,30 @@ fan camembert
 
 Warning: If you are on 64 bits Linux or 64 bits Windows, you will have to install the SWT jar see [[http://fantom.org/doc/docTools/Setup.html#swt|the SWT chapter here]] fro more info
 
+===Screenshots===
 
-===Features===
-  - Commands for Build / Run / BuildAndRun and terminating running pods.
-  - Fandoc pane with full search / navigation capabilities. Show and seach Fantom dcs quicly.
-  - Better default fonts and added support for themes (all text & colors customization) in theme file.
-  - Commands: New File, Delete File, Move/Rename, Find+Replace and so on.
-  - Support for switching between multiple configs(Fantom environments) : config_myenv1.props.
-  - Alt+Space for quickly switching between last 2 files.
-  - Recognizing pod groups and pods and showing as such in navigator views.
-  - Support for building / searching pod groups.
-  - Added a Menubar to the window to run all the commands.
-  - Edit /reload config functionality, so you can change the config without needing to restart.
-  - Close / Close others on SpaceBar items.
-  - Line numbers in the editor.
-  - Different color for number literals in editor.
-  - Quick Goto command: if only 1 hit, go straight there.
-  - All keyboard shortcuts can be customized.
-  - Plugin infrastructure.
-  - Many bug fixes and more.
+-----
+Home space with lots of projects:
+
+{{cam_home.png}}
+
+-----
+Fantom project
+
+{{cam_fantom.png}}
+
+-----
+Maven Java project
+
+{{cam_maven.png}}
+
+------
+Node.js project
+
+{{cam_node.png}}
+
+-------
+Different theme
+
+{{cam_fantom_blue.png}}
+

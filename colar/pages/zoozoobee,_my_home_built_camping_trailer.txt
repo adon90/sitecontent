@@ -12,7 +12,7 @@ I like building things but I'm by no mean a very skilled professional when it co
 
 Here you will find a log of my build, step by step.
 
-{{IMG_3353.jpg}} 
+{{IMG_3353.jpg}}
 
 ====Research====
 First you need to do some research and figure out what you need.
@@ -48,5 +48,5 @@ FIXME: **TBD**
 
 [[http://www.tnttt.com/viewtopic.php?f=50&t=39021]]**
 
-{{IMG_3349.jpg}} 
+{{IMG_3349.jpg}}
 

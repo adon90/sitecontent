@@ -1,4 +1,4 @@
-## My Resume - Thibaut Colar
+## My Resume - Thibaut Colar (tcolar @ colar.net)
 <br/>
 **My consulting company**: [http://www.status302.com/](http://www.status302.com/)
 
@@ -100,9 +100,18 @@ Managed some remote developers and reported status to the CTO and CEO. Facilitat
 #### OPEN SOURCE SOFTWARE
 <br/>
 
-Author of multiple open-source projects implemented in various languages (Fantom, Java, Python ...).
+Author of many open-source projects implemented in various languages (Fantom, Java, Python ...).
 
-See [http://www.status302.com/portfolio](portfolio) for more information.
+See [http://www.status302.com/portfolio](http://www.status302.com/portfolio) for more info and source links.
+
+*********
+#### BUILDS
+
+Sometimes I also like to build "real" things, from scratch, with my own hands. For example:
+
+A camping trailer(2010), a standing desk(2012), an ice rink(2004), a car MP3 player with Text to Speech(2001)
+
+See [http://wiki.colar.net/my_projects](http://wiki.colar.net/my_projects) for more info.
 
 *********
 #### SKILLS
@@ -118,9 +127,9 @@ Wisp, Nginx, Apache, Jetty, Tomcat, SAP Netweaver / WebAS), MySQL, PostgresQL, N
 
 **Frameworks and libraries:**
 
-Tales, Guice, JQuery, Backbone.js, Netbeans RCP, Struts.
+Tales, Guice, JQuery, Backbone.js, Hibernate, iBatis, Netbeans RCP, Struts and many more.
 
-Developer tools such as Mercurial, Git and the likes.
+Developer tools such as Mercurial, Git, Bug Trackers and the likes.
 
 **Operating Systems:**
 

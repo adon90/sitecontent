@@ -1,4 +1,9 @@
 ======Blog======
+===28/01/13 : Fantom Server Amazon AWS EC2 Image(AMI)===
+I've created a free public Fantom server instance image (AMI).
+
+See [[fantom_aws_ami|more info here]].
+
 ===12/11/12 : Announcing Camembert===
 We have released the first version of [[Camembert]], A lightweight IDE written in the [[http://www.fantom.org/|Fantom]] programming language.
 

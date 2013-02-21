@@ -1,20 +1,47 @@
 ====== My Current and Past Projects ======
-  * [[Ice Rink]] 
-About the rink i made in Spokane
 
-  * [[R C Planes | R/C Planes]]
-About the Remote control planes i'm playing with
+For my Software projects see:
+  [[http://www.status302.com/portfolio]]
 
-  * [[Car Mp3 Player]]
-About the MP3 car player i build way back in 2000.
 
-  * [[Freevo PVR]]
-Same as MythTV PVR but using freevo.
+**Here are a few things I have built with my own hands over the years:**
 
-  * [[MythTV PVR]]
-My Tv recorder  (computer + TV)
+  * [[Classic Arcade]] (2012)
+I Built an oldschool arcade from plywood and an old imac Mini.
+Also made my own UI frontend software for it.
+{{ arcade_small.jpg }}
 
-  * [[Camping Trailer]]
-About building a camping trailer, which i never did :-)
+  * [[Ikea Standing Desk]] (2011)
+Large but affordable, and stylish, if I say so, standing desk I built from Ikea parts.
+{{ ikea_desk_small.jpg }}
 
-  
+  * [[zoozoobee,_my_home_built_camping_trailer|Camping Trailer]] (2010)
+Yes I did build a camping trailer from scratch, that was pretty fun and it's already travelled over 7K miles since.
+
+[[http://www.tnttt.com/viewtopic.php?f=50&t=39021|Detailed build thread with step by step pictures]].
+
+{{ trailer_small.jpg }}
+{{ trailer_small2.jpg }}
+
+  * [[Ice Rink]] (2004)
+When I lived in Spokane (~2004) I built an ice rink in the shop.
+
+{{ rink_small.jpg }}
+
+  * [[R C Planes | R/C Planes]] (2000-2005)
+Some Remote control planes i'm playing with / building.
+Including one with a small camera builtin.
+
+{{ plane_small.png }}
+
+  * [[Car Mp3 Player]] (2000-2002) .... **very** poor English, sorry.
+About the MP3 car player I built way back in 2000, when nobody had one yet.
+It even had a feature to "say" the current song artist/title using text 2 speech (robot voice).
+
+{{ mp3_small.jpg }}
+
+  * [[MythTV PVR]] (2005)
+My Tv recorder  (computer + TV), once again nothing special nowadays but not many people had one then.
+
+
+

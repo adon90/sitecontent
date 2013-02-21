@@ -13,6 +13,7 @@ Consulting and development:
   - [[axon_plugin | Skyspark / Axon IDE plugin]]
 
 ===Latest Blog Entries:===
+  - [[fantom_aws_ami | Amazon EC2 Fantom server Image]]
   - [[blog#12_11_12_announcing_camembert | Announcing Camembert IDE]]
   - [[blog#12_26_12_skyspark_fantom_mac_linux_startup_scripts | Skyspark / Fantom init scripts]]
 

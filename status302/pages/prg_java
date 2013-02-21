@@ -1,0 +1,9 @@
+
+Few random Java bits for now:
+
+- ArrayList : it's an array with a list interface and is best to use most cases.
+But can be slower than LinkedList when the array as to be expanded or items removed.
+- Vector : (kind of an antique) is synchornized while the other two are not (thread safe but slower)
+- LinkedList : is a double linked list (ie: prev linked to next and vice versa).
+Faster "in- ordered" traversal and insertions / deletions.
+Can use quite a bit more memory(x2) especially on a large dataset.

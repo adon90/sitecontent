@@ -1,4 +1,0 @@
-{"author":"TheGeeko61 (Guest)",
-"title":"Thank you",
-"text":"I have just downloaded Fantom onto my Ubuntu 11.10 machine.  I am really excited about replacing my infatuation with Scala by an equal fascination of Fantom!  LOL\n\nThank you for these lessons of getting started quickly.  I appreciate your effort greatly!\n\nI did run into a problem... which I will post here... but I will search for the answer also.\n\nWhen I installed Fantom, I installed it into a system directory:  /opt/fantom.  I do not have write access to that directory; so, I get an error when trying to build the hello pod.\n\nIs there a way to configure the compiler/builder to put my pods in a local directory to which I have write-access?",
-"ts":"2011-11-23T21:43:00-08:00 Los_Angeles"}
