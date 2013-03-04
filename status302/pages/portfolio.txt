@@ -7,7 +7,7 @@ Most commercial work that I have done cannot be shown, but scroll down to see so
 Worked on many projects, including [[http://www.bassg.com/energy-analytics/project-builder-plus.html|Projectuilder+]]
 Also did work for many customers such as Skyspark extensions, custom Fantom applications
 
-Worked on several Axon projects including over 20 sparks and over 60 axon functions.
+Worked on several Axon projects including over 30 sparks and 80 axon functions for some very large companies.
 -----
 ===[[https://www.pacificcoast.com/|Pacific Coast Feather Co]]: (2005 - 2011):===
 SAP ISA / CRM implementations. Java and E-Commerce.

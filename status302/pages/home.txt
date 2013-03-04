@@ -2,7 +2,7 @@
 {{302.png}}
 <html></div>
 <div class="span6"></html>
-{{fantom.png}} 
+{{fantom.png}}
 <html></div>
 </div>
 <div class="row-fluid"><div class="span12" style="color:#000066"></html>
@@ -10,7 +10,7 @@
 <html></div></div><div class="row-fluid"><div class="span4"></html>
 ====Fantom & SkyFoundry====
 We have been involved with Fantom since early 2008. Writing code in Fantom and even an IDE plugin for it.
-We are also familiar with the SkyFoundry platform including Sparks and Axon scripts development and consulting. 
+We are also familiar with the SkyFoundry platform including Sparks and Axon scripts development and consulting.
 [[skyfoundry | More info]]
 <html></div><div class="span4"></html>
 ====Netbeans RCP====
@@ -25,10 +25,10 @@ Experienced with modern web applications and mobile development: HTML5, REST, Ja
 [[WebDev | More info]]
 <html></div><div class="span4"></html>
 ====SAP Java (CRM / ISA)====
-Over 6 years of experience developing on an SAP patform(ERP & CRM), in particular the Java side of things: Netweaver, Internet Sales, CRM, IPC. 
+Over 6 years of experience developing on an SAP patform(ERP & CRM), in particular the Java side of things: Netweaver, Internet Sales, CRM, IPC.
 [[SAP | More info]]
 <html></div><div class="span4"></html>
 ====Linux, Apache, DB====
 Over 10 years of experience using the Linux and Apache stack. Just about every Linux distribution over the years both as a system administrator and as a developer.
 Also have extended experience using various databases, both managing them and using them, such as MySQL, PostgresQL as well as some modern No-SQL databases such as MongoDB, Neo4J and OrientDB.[[LAMP | More info]]
-<html></div></html>
+<html></div></div></html>

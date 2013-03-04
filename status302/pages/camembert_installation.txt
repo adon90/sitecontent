@@ -1,0 +1,88 @@
+======Installing Camembert======
+
+[[Camembert]] is a lightweight IDE.
+This page focuses on the installation process.
+
+Currenty there is no "one-click" installer yet but it's planned.
+
+===Java 6+===
+You must have Java 6 or newer installed
+
+===Fantom===
+You must have [[http://www.fantom.org/ | Fantom]] installed as well.
+
+See the Fantom installation instructions here: [[http://fantom.org/doc/docTools/Setup.html]]
+
+===Camembert===
+
+Once Fantom is properly installed you can use it's fanr command to install Camembert:
+
+<code | Install>
+fanr install -r http://repo.status302.com/fanr/ camembertIde
+</code>
+
+Yo can now run it using
+<code | Run>
+fan camembertIde
+</code>
+
+Warning: If you are on 64 bits Linux or 64 bits Windows, you might have to install the SWT jar see [[http://fantom.org/doc/docTools/Setup.html#swt|the SWT chapter here]] fro more info
+
+
+=====Initial Configuration=====
+
+Upon the first startup Camembert will ask you to pick a folder where it will store all it's configuration files.
+
+Once the application starts you will want to go to Options / Edit config
+In options.props **you will want to set srcDirs** to a comma separated list of folder(workspaces) where yur projects sources are.
+Each folder may contain many different projects, bascially it's just a project worskpace list.
+
+Once you are tyere you might want to check shortcuts.props and the licenses & templates folders (optional)
+
+You can also set the individual plugins (see bellow) and then **restart**
+
+====Plugin Configuration / Usage====
+
+Each plugin(langage support) has it's own config folder as well
+Here are some details on what you might want to configure for each plugin.
+
+===Fantom / Axon Plugin===
+You will want to edit Fantom/env_default.props and set fantm_home etc...
+You can create multiple environment config files, should you have more than one Fantom version you want to work with.
+
+Fantom projects(pods & pod groups) are recognized by the build.fan file.
+
+===Maven Plugin===
+The Maven plugin recognizes Maven projects (by their pom.xml file).
+
+You will want to set the env_home in the Maven/env_default.props file
+Such as the ''mvn'' command is under  env_home/bin/node
+
+===Node.js===
+
+Configure the proper envHome(node.js env root) in Python/env_default.props
+Such as the ''node'' command is under  env_home/bin/node
+
+===Python Plugin===
+
+TODO: Coming soon
+
+Configure the proper envHome in Python/env_default.props
+Such as the ''python'' command is under  env_home/bin/node
+
+===Ruby Plugin===
+
+TODO: Coming soon
+
+Configure the proper rubyPath(ruby command) and riPath(ri command) in Ruby/env_default.props
+
+Make sure the''r'' command works properly, for example with ''ri -T File.new'' so that the documentation panel will work properly.
+If the ri command does not return any docs you might need to setup rdoc-data
+<code | ri setup>
+sudo gem install rdoc-data
+rdoc-data --install      (might have to run with sudo)
+</code>
+
+
+
+
