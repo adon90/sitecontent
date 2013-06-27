@@ -1,37 +1,22 @@
 ====Home====
-  * [[http://www.status302.com/thibaut_colar_resume|My Resume]]
+Hello there, my name is **Thibaut Colar**.
+I'm a software Developer.
 
-===[[My Software]]===
-[[My Software|Here]] you will find information and links to some software I wrote.
-  * [[http://www.status302.com/home| Status302]] : My own company, provides software development and consulting.
-  * [[http://www.status302.com/camembert|Camembert lightweight Fantom IDE]] Pure Fantom lightweight Fantom IDE forked from brie.
-  * [[MameChose|mameChose MAME frontend]] A multiplatform MAME frontend written in Fantom.
-  * [[http://fantomide.colar.net/home|FantomIDE]] IDE for the Fantom language based on Netbeans.
-  * [[http://www.berry4all.com/home|Berry4all / BBTethter]] An easy to use Python program for tethering a Blackberry (UNIXes).
-  * [[http://www.jotwiki.net/home|JOTWiki]] which is a WIKI software i wrote based on JavaOnTracks.
-  * [[http://www.javaontracks.net/home|JavaOnTracks]] which is my own SIMPLE Java framework
+My interests are software, startups, building things, playing and watching hockey, enjoying the outdoors and eating yummy stuff.
 
-===[[My Projects]]===
-[[My Projects|Here]] you will find information about other projects i built/installed/played with, such as:
-  * [[Ikea standing Desk]] A large standing desk made from Ikea parts.
-  * [[Camping Trailer]] A lightweight camping trailer I built.
-  * [[Ice Rink]], the homemade ice rink i build in Spokane (in the winter)
-  * [[R C planes|R/C Planes]], the remote controlled planes i play with.
-  * [[Car MP3 Player]], the custom made MP3 player for my back (way back in 2000 when nobody had one :-)
+I currently work at a cool start-up called [[http://www.rivetandsway.com | Rivet & Sway]] in downtown Seattle.
 
-===[[My Blog & Tips]]===
-[[My Blog|Here]] you will find my thought/docs/tips on stuffs:
-  * [[Geek Blog]], my thought and tips about software related subjects, mostly Java and Linux etc...
-  * [[SAP Tips]], many tips and documentation about SAP/Java (CRM5.0 ISA B2C B2B TREX etc...)
-  * [[Ice Hockey Blog]], opinions and predictions about the NHL and Hockey in General.
-  * [[Martial Arts Blog]], Here you will find info about my progression at TaeKwonDo and Brazilian Jiu-jitsu.
-  * [[General Blog]], general thoughts about the world and news that made me react.
+Here you will find:
+  * [[My Blog]]
+  Where I talk about manny things, mostly realted to **software development** and the **start-up** life.
 
-===[[About Me]]===
-[[About Me|Here]] you will find among other things, my personal and family news, such as:
-  * [[http://www.colar.net/photos/|Our family photos]]
-  * [[http://www.status302.com/thibaut_colar_resume|My Resume]] (more or less up to date)
-  * [[Hockey Teams]] i play in.
-  * [[My Bookmarks]], some of my favorite sites / applications.
-  * [[Guestbook|Guestbook / Contact Me]] Drop me a line.
-  * [[http://marie.colar.net | Marie Colar]]
+  * [[My Software]]
+  Find out about all the **open-source software I've written** and links to my code repos.
+
+  * [[My Projects]]
+  The things I've built over the years, such as a **camping trailer, an arcade, a standing desk** and more.
+
+  * [[About me]]
+  Here you will find more info about me and my family, as well as my **contact info and resume**.
+  Your one stop shop to add me to your spam database !
+

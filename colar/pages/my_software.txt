@@ -1,18 +1,41 @@
 ======My Software======
-  * [[What's cooking| TODO list]]
-What i'm working on  
+**Here you will find my personal open-source projects**
 
-  * ButBucket Repository
-[[http://bitbucket.org/tcolar/]]
+  * My code Repositories
+- [[http://bitbucket.org/tcolar/]]
+- [[http://bitbucket.org/status302/]]
 
-  * [[http://fantomide.colar.net/home|FanIDE]] 
-IDE for the Fan language based on Netbeans. 
+=====Current Software=====
+===Camembert Lightweight IDE===
+[[http://www.status302.com/camembert | Camembert lightweight IDE]] is a Free, Open source, lightweight IDE, written in Fantom. It's multi-platform and can run on many platforms (Linux, Max, Windows...)
+It support multiple project types such as Fantom, Maven, Python, Ruby, Nodejs, Axon and is a useful all around lightweight editor / IDE.
+
+===Fantomato Wiki Engine===
+[[https://bitbucket.org/tcolar/fantomato/src|Fantomato]] is a wiki/site/blog engine written in Fantom.
+It has many features including rendering pages in Markdown, Dokuwiki or HTML syntax.
+The site you are currently looking at is running on it.
+It is a partial port/rewrite of my previous Java blog engine called [[http://www.jotwiki.net/home|jotwiki]] which was implemented in java.
+
+===MameChose M.A.M.E frontend===
+[[http://wiki.colar.net/mamechose|MameChose]] is a Mame(Arcade game emulator) frontend.
+It allows quick indexing / searching / launching of an arcade game collection(roms).
+It is dsigned to have a simple but effective interface that is used only with a joystick and a few buttons.
+The interface is also designed to scale so it can work as well on all arcade monitors(<320x260) as on latest LCD's with a high resolution.
+
+=====Older Software=====
+**The following projects are older and no longer actively maintained.**
+
+  * [[http://fantomide.colar.net/home|FanIDE]]
+IDE for the Fantom language based on Netbeans.
 
   * [[http://www.berry4all.com/home|Berry4All / BBTether]]
 An easy to use program for tethering(use as a modem) a blackberry under linux, written in python.
 
-  * [[fan|Netbeans Plugin For The Fan Language]]
-A Netbeans plugin for the Fan language.
+  * [[https://bitbucket.org/tcolar/saptomcat|Sap Tomcat]]
+Sap Tomcat is a bunch of work I did to allow to run the SAP B2B and B2C java applications
+on a much lighter opensource stack of Tomcat or Jetty + MySql or H2 .
+The standrad SAP web server can be extremely frustrating for development as it's extremely slow to redeploy an application.
+This allowed greatly enhanced developer productivity as well as used of standard tooling (IDE, debuggers, profilers and so on).
 
   * [[http://www.javaontracks.net/Home|JavaOnTracks]]
 A java Framework/Toolbox with tons of functionalities.

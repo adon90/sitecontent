@@ -1,16 +1,15 @@
 ======ZooZooBee, My home built Camping Trailer======
+TIP: **Here is a link to the [[http://www.tnttt.com/viewtopic.php?f=50&t=39021|Detailed build thread with step by step pictures]].**
+
+
 For several years I've been thinking of buying or making a camping trailer.
 
 What I did not want was something big and heavy and need a special tow vehicle.
 I have a Subaru Outback and that had to be the tow vehicles.
-
 I considered many ready to buy options, see [[camping_trailer| my list here]].
-
 But in the end I did not find anything that fit my needs for a reasonable price, so decided to build my own as many have done.
 
 I like building things but I'm by no mean a very skilled professional when it comes to woodworking and things like that.
-
-Here you will find a log of my build, step by step.
 
 {{IMG_3353.jpg}}
 
@@ -34,19 +33,9 @@ This is  350 pages of very detailed instructions on building a camping trailer/t
 ====My Build====
 First, what the heck is ZooZooBee ? My 3 years old saw a drawing of my camper concept and called it that, since It's unique and I did not have anything better, I decided to keep that name.
 
-Here are the steps I took (so far)
+**My full build thread with step by step pictures is here:**
 
-First had to decided on what I wanted to do and "design" it - which can take a while.
-  - [[ZooZooBee camping trailer - Conception / Drafting]]
-
-Here is my design / plan
-FIXME: **TBD**
-  - 07/10 : [[ZooZooBee camping trailer - My design]]
-
-====Build Thread====
-**My full build thread with step by step pictures is here:
-
-[[http://www.tnttt.com/viewtopic.php?f=50&t=39021]]**
+**[[http://www.tnttt.com/viewtopic.php?f=50&t=39021|Detailed build thread with step by step pictures]].**
 
 {{IMG_3349.jpg}}
 

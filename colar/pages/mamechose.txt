@@ -1,10 +1,9 @@
 ======MameChose : Multi platform MAME frontend======
 
 MameChose is a new frontend for the the Multi Arcade Machine Emulator (M.A.M.E)
+**See more info and download from: [[https://bitbucket.org/tcolar/mamechose/overview|Bitbucket]]**
 
-See more info on [[https://bitbucket.org/tcolar/mamechose/overview|Bitbucket]]
+{{random_list.png}}
 
-{{random_list.png}} 
-
-{{1356996522021.jpg}} 
+{{1356996522021.jpg}}
 

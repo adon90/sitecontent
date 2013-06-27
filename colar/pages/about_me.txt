@@ -1,18 +1,29 @@
 ====== About Me ======
-  * Contact me
-You can contact me at [[mailto:tcolar@colar.net]]
-Twitter: [[http://twitter.com/tcolar/]]
+Hello there, my name is Thibaut Colar.
+I'm a software Developer.
 
-  * **My consulting business**:
-[[http://www.status302.com/home]]
+I grew up in a tiny village in France but after college I moved to The SF bay area(1998) where all the interesting geek stuff was happening.
+Since 2005 I've lived in the Seattle area with my wife and 2 kids.
 
-  * My current resume (as of 08/20/2008):
-[[My Resume]]
+My interests are software, startups, building things, playing and watching hockey, enjoying the outdoors and eating yummy stuff.
 
-  * [[My Blog]]
-Hockey, geekiness and stuffs.
+I currently work at a cool start-up named **[[http://www.rivetandsway.com|Rivet & Sway]]** in downtown Seattle.
 
-  * Our photos: 
+In the past I have worked for [[http://www.qarbon.com|Qarbon.com]], [[http://www.pacificcoast.com|Pacific Coast Feather]] and [[http://www.teachscape.com|Teachscape]].
+
+I also have my own consulting company [[http://www.status302.com | Status302 LLC]]
+
+====Contact Info and Resume====
+Here are my contact info:
+  * Email : [[mailto:tcolar@colar.net]]
+  * Twitter: [[http://twitter.com/tcolar/]]
+  * Linked in: [[http://www.linkedin.com/in/tcolar]]
+
+And [[My Resume]] (as of 02/2013).
+See also [[http://www.status302.com/portfolio|My portfolio]] for more info on what I've worked on over the years.
+
+====Family & Hobbies====
+  * Our Family photos:
 [[http://www.colar.net/photos/]]
 
   * The Hockey teams in play in:

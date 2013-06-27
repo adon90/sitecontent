@@ -1,10 +1,5 @@
-====== My Current and Past Projects ======
-
-For my Software projects see:
-  [[http://www.status302.com/portfolio]]
-
-
-**Here are a few things I have built with my own hands over the years:**
+======Projects that I have built======
+**Here are a few things (non-software) that I have built with my own hands over the years:**
 
   * [[Classic Arcade]] (2012)
 I Built an oldschool arcade from plywood and an old imac Mini.
@@ -12,13 +7,11 @@ Also made my own UI frontend software for it.
 {{ arcade_small.jpg }}
 
   * [[Ikea Standing Desk]] (2011)
-Large but affordable, and stylish, if I say so, standing desk I built from Ikea parts.
+Large but affordable and stylish, if I say so, standing desk I built from Ikea parts.
 {{ ikea_desk_small.jpg }}
 
   * [[zoozoobee,_my_home_built_camping_trailer|Camping Trailer]] (2010)
-Yes I did build a camping trailer from scratch, that was pretty fun and it's already travelled over 7K miles since.
-
-[[http://www.tnttt.com/viewtopic.php?f=50&t=39021|Detailed build thread with step by step pictures]].
+I did build a camping trailer from scratch, that was pretty fun and it's already travelled over 10K miles since.
 
 {{ trailer_small.jpg }}
 {{ trailer_small2.jpg }}
