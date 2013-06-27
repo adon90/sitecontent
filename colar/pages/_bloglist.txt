@@ -1,0 +1,21 @@
+====Recent Blog entries:====
+  * [[2013_nhl_playoffs| 2013 NHL playoff picks]]
+
+  * [[acer_v3_551g_x419_ubuntu | Acer V3 551G X419 under Ubuntu]]
+
+  * [[camembert | The camembert lightweight IDE]]
+
+  * [[beautiful_fonts_in_java | Beautiful fonts in Java apps]]
+
+  * [[Awesome window manager | The awesome window manager]]
+
+  * [[Generic init script for Fantom based server processes]]
+
+  * [[Ubuntu 12.04 on Samsung series 7 Chronos laptop]]
+
+  * [[Ikea standing Desk]] I built
+
+  * [[Camping Trailer]] I Built
+
+  * [[status302:Fantom AWS AMI | Fantom AWS image]]
+

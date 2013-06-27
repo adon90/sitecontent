@@ -1,0 +1,29 @@
+======Rivet & Sway======
+
+I joined Rivet and Sway, a cool young startup in April 2013.
+
+Here I'm going to be blogging about the start-up experience, not my first time, as well
+as technological choices and E-commerce.
+
+Here are my blog entries relevant to this:
+
+  * Here is my background and why I'm back at a start-up once again.
+- Startup's are fun - more impact
+- large companies interview fail
+- I like E-commerce
+- Mode freedom
+- Working from home / Own business
+
+  * Why Rivet & way and why I'm excited about.
+
+- Pantheon / drupal / cahing and all the issues that come with it
+- paas reseach / nodejitsu
+- aws and new setup
+- dropbox / owncloud
+
+
+
+- coursera
+- learn to type
+
+

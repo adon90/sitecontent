@@ -1,0 +1,56 @@
+body
+{
+  font-family: 'Ubuntu', serif;
+  font-size: 14px;
+  line-height : 22px;
+}
+
+.sidebar-nav
+{
+  padding: 9px 0;
+}
+.comments
+{
+  background-color:#101010
+}
+
+.fixme{border:2px solid orange ;background-color:transparent;
+  background-image:url(/tpl/img/fixme.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.deleteme{border:2px solid orange ;background-color:transparent;
+  background-image:url(/tpl/img/delete.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.warning{border:2px solid red ;background-color:transparent;
+  background-image:url(/tpl/img/warning.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.note{border:2px solid green ;background-color:transparent;
+  background-image:url(/tpl/img/note.jpg);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.tip{border:2px solid teal ;background-color:transparent;
+  background-image:url(/tpl/img/tip.gif);background-repeat:no-repeat;
+  background-position:center left;padding-left:60px;min-height:30px;}
+.box{background-color: transparent;border-width:0px; border-style: solid;
+  padding:3px;}
+
+.code{overflow:auto;font-weight:normal;color:22ff22;background-color:#000000;
+  border-width:1px;border-style: dashed;border-color:#666666;
+  padding:4px;margin:3px;color:#22ff22}
+
+.code_title{background-color:#111133;color:yellow;font-weight:bold;padding-left:10px}
+
+.code>pre {color:#22ff22;}
+
+.navbar .brand {background-color : #000000; margin 0 0 0 0 padding-left:8px;
+padding-right:8px; padding-top : 0px; padding-bottom:0px}
+
+i {padding-top:3px}
+
+h1{color:#77FF77; border-top:2px solid #000000;}
+h2{color:#88FF88; border-top:2px solid #000000;}
+h3{color:#99FF99; border-top:1px solid #000000;}
+h4{color:#AAFFAA; border-top:1px solid #000000;}
+h5{color:#BBFFBB; border-top:1px solid #000000;}
+h6{color:#CCffCC; border-top:1px solid #000000;}
+
+.addthis_toolbox{margin-top:4px}
+

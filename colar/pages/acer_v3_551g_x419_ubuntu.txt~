@@ -1,0 +1,175 @@
+======Ubuntu Linux on the Acer V3-551G-X419 Laptop======
+
+I bought this laptop In April 2013 for about 590$
+It has pretty good specs for the price and a nice bright and script LED screen.
+It comes with with Windows 8 which I really don't care for.
+I will keep Windows 8 as a dual boot option for the odd case I need it such as aving to use GotToMeeting.
+
+But My main OS is Ubuntu and I decided to use version 12.10 x86_64
+
+Note that you might HAVE to use the 64 its version to match windows8 for dual boot to work with the EFI crap.
+
+====Getting the Ubuntu Install CD to boot====
+
+It's a little difficult to get the CD to boot, because of the secure EFI thing.
+
+Basically you need to go into the BIOS(F2 during boot) and disable secure EFI.
+Also you will want to make sure the boot order is set to boot of the CDROM before the hard drive.
+
+FIXME: Here are pictures of my BIOS settings
+
+Once you get the ubuntu to boot, you can start the typical Ubuntu installation.
+
+====Manual partitioning====
+Because the installer was not able to recognize the windows 8 setup, due to EFI,
+you have to use manual partitioning since you don't get the "Dual boot with windows option)
+
+Once in the partioner (gparted) you want to make some free space by making the main
+windows partition smaller . Then use the free sace to create your linux partitions.
+I created a 90GB ext4 system partiton (/) and a  480GB ext4 home partiton(/home)
+
+Then save to write the new partiton table.
+
+Other than that the Installation process is pretty standrad.
+
+====Battery Life====
+
+Ok, the good news is that while it mostly works out of the box, what you will get is
+a space heater with a battery life of about 1h and 10mn !
+
+To set what is going on and why so much power is used, a useful top is PowerTop
+<code>
+sudo apt-get install powerstat powertop
+sudo powertop
+</code>
+See the Tunable section (ote some versions of powertop work better than other)
+
+Also very useful for power saving is jupiter
+<code>
+sudo apt-get install jupiter
+</code>
+
+Anyway out of the Box with Ubuntu the battery life was barely over an hour with
+the fan blowing hot air like crazy, powertop reporting a consumption over 45 Watts !
+
+The battery being ~50 Watts/hr that's not good !
+
+Anyway, long story short the main issue by far is the Built-in GPU of the graphic card(s) being full on all the time !
+The laptop has 2 built-in cards: a Radeon 7660G and a Radeon 7670M.
+
+Turning off vga switcharoo helps a bit:
+<code>
+echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
+</code>
+
+This brings us down to ~29 Watts, whihc is still pretty poor.
+
+**The proper solution is to use the proper ATI drivers**, there are open source ones
+but I tried those and it did not help all that much, what you really need are the
+propriatery, but free drivers called "AMD Catalyst".
+
+====Installing the AMD Catalysts video drivers====
+
+First make sure you use the latest, in my case it was 13.3 ebta 3
+
+WARNING: I first used the 12.x drivers, and that resulted in X not being abe to start at all !
+
+
+So, download the latest driver:
+[[http://support.amd.com/us/gpudownload/linux/Pages/radeon_linux.aspx]]
+
+To be able to build the driver you will need to have build essentials:
+<code>
+sudo apt-get install build-essential cdbs dh-make dkms execstack dh-modaliases linux-headers-generic fakeroot lib32gcc1
+</code>
+
+Make it executable and then run it as root :
+<code>
+chmod +x ./amd-driver-installer-catalyst-13.3-beta3-linux-x86.x86_64.run
+sudo ./amd-driver-installer-catalyst-13.3-beta3-linux-x86.x86_64.run
+</code>
+
+Choose "Install driver ....",  "ok", "automatic", **"no reboot"** (we will reboot in a bit)
+
+Then run the initial config that will create a xorg.conf file.
+<code>
+sudo aticonfig --initial -f
+</code>
+
+Because we use the beta driver it has a (very annoying) watermark on the screen at all times,
+So here is how to get rid of it:
+<code>
+sudo -s
+echo "66fb27a85ab1edb83099e9ad1326f379:5fd51799689cdc8a01abd894720bc24c57c2119a199cacec79b9d1982b14c24a:539d439d6b86d48106a1d0ce7745cb1856ca46ca3e89d48c07abd9cf7014c71a53cc449a6b80d4d901a0d0ce7245961a51c245913e80d48002fbd8997014c718" > /etc/ati/signature
+exit
+</code>
+
+and then ''reboot''
+
+WARNING: **You will want to reinstall the driver EVERY TIME you upgrade your kernel !!**
+Otherwise X might not start.
+
+
+====Brightness not working====
+The brightness button have no effect, you can manually set the brigtness using xrandr
+
+Pass a value between 0 and 1 (1 being 100%)
+<code>
+xrandr --output LVDS --brightness 0.7
+</code>
+You could map the keyboards shortcuts to those commands in your window manager of choice.
+
+**UPDATE: Here is what works to fix the brightness keys and also fix 'suspend' under 13.04**
+add ''acpi_osi='' (for suspend) and ''acpi_backlight=vendor''(for brithness keys) to grub.
+Edit the grub file and add those as in the line below:
+<code | sudo vi /etc/default/grub>
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_backlight=vendor acpi_osi="
+</code>
+Then run ''sudo update-gru'' and reboot !
+
+After all this and a bit of tweaking with powertop I was able to get the power
+usage around 8 to 10 watts, **giving 5 to 6 hours of battery life !**
+====Dual screens====
+I use arandr to switch between 1 or 2 screens (one "under" the other)
+
+One thing is the default xorg.conf config did not allow to stack them under each other at full resolution.
+All that needs to be done here is configure a erger Virtual screen size in /etc/X11/xorg.conf
+See:
+[[http://www.thinkwiki.org/wiki/Xorg_RandR_1.2#Sample_Fn-F7_script]]
+====Boot keys====
+Useful boot keys:
+  - Esc : To gte the grub menu
+  - F2 : To go into boot setup
+  - F12 : To get into the windows boot menu (EFI), van be useful to force-boot windows
+
+====Bluetooth====
+Bluetooth does not appear to work properly, I have not resolved this yet.
+
+See the bug report here:
+[[http://ubuntuforums.org/showthread.php?t=2133947]]
+
+TIP: **After upgrading to Ubuntu 13.04 and it now works properly**
+
+
+====Java 7====
+installed google-chrome + java7
+<code>
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
+</code>
+
+====About the laptop====
+It's a good bang for the buck, it's not as good as my samsung series 7, but then again it's 400$ cheaper !
+
+What I like :
+  - Great performance for the price
+  - Good keyboard
+  - Very bright and sharp LED screen
+
+What I don't like :
+  - Tiny trackpad
+  - Not very beautiful
+  - Glossy "mirror" screen, would much prefer a mate finish
+  - A bit bulky / heavy.
+
