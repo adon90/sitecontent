@@ -5,6 +5,9 @@
 // On document ready
 $(document).ready(function() {
 
+  // highlight.js
+  $('.code pre').each(function(i, e) {hljs.highlightBlock(e)});
+
   // Enable comment form toggle pane link
   $("#addCommentLink").click(function() {
       $("#addCommentPane").toggle();
