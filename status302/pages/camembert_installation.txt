@@ -46,8 +46,13 @@ You can also set the individual plugins (see bellow) and then **restart**
 Each plugin(langage support) has it's own config folder as well
 Here are some details on what you might want to configure for each plugin.
 
+Note: It's possible to "Force" a project to use a given plugin by creating a fie named cam.props in the project folder.
+The file contet would be for example : ''prj.type = Go'' meaning te Go plugin will claim it.
+
 ===Fantom / Axon Plugin===
-You will want to edit Fantom/env_default.props and set fantm_home etc...
+Fantom projects are recognized by their build.fan file
+
+You will want to edit Fantom/env_default.props and set fantom_home etc...
 You can create multiple environment config files, should you have more than one Fantom version you want to work with.
 
 Fantom projects(pods & pod groups) are recognized by the build.fan file.
@@ -58,26 +63,40 @@ The Maven plugin recognizes Maven projects (by their pom.xml file).
 You will want to set the env_home in the Maven/env_default.props file
 Such as the ''mvn'' command is under  env_home/bin/node
 
+==Gradle Plugin===
+The Gradle plugin recognizes Gradle projects (by their build.gradle file).
+
+You will want to set the env_home in the Gradle/env_default.props file
+Such as the env_home for the Graddle home dir.
+
 ===Node.js===
+Node projects are recognized by their package.json file.
 
 Configure the proper envHome(node.js env root) in Python/env_default.props
 Such as the ''node'' command is under  env_home/bin/node
 
 ===Python Plugin===
-
-TODO: Coming soon
+Python projects are recognized by the __init__.py file
 
 Configure the proper envHome in Python/env_default.props
 Such as the ''python'' command is under  env_home/bin/node
 
+Note: Currently the documtntation panel only works correty when using python(pydoc) 3.x
+
+===Go Plugin===
+There are no simple way to auto detect G proects, so you need to create cam.props in the project folder:
+''echo "prj.type = Go" > cam.props''
+
+Configure the proper envHome in Go/env_default.props
+
 ===Ruby Plugin===
 
-TODO: Coming soon
+Ruby projects are recognized by the 'Rakefile' file.
 
 Configure the proper rubyPath(ruby command) and riPath(ri command) in Ruby/env_default.props
 
-Make sure the''r'' command works properly, for example with ''ri -T File.new'' so that the documentation panel will work properly.
-If the ri command does not return any docs you might need to setup rdoc-data
+Make sure the''ri'' command works properly, for example with ''ri -T File.new'' so that the documentation panel will work properly.
+If the ri command does not return any docs you might need to setup rdoc-data first
 <code | ri setup>
 sudo gem install rdoc-data
 rdoc-data --install      (might have to run with sudo)

@@ -1,5 +1,5 @@
 ====Recent Blog entries:====
-  * [[2013_nhl_playoffs| 2013 NHL playoff picks]]
+  * [[golang_revel_init_script | Upstart init script for Go / Revel apps]]
 
   * [[acer_v3_551g_x419_ubuntu | Acer V3 551G X419 under Ubuntu]]
 

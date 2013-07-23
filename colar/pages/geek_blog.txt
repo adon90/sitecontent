@@ -2,6 +2,7 @@ My Blogs:
 |[[Geek Blog]]|[[SAP tips|SAP Blog]]|[[Ice Hockey Blog]]|[[Martial arts blog]]|[[General blog]]|
 
 ======Geek Blog======
+===7/23/13: [[golang_revel_init_script | Upstart init script for Go / Revel apps]]===
 ===10/16/12: [[Beautiful fonts in Java]]===
 ===10/16/12: [[Awesome window manager]]===
 ===9/16/12: [[Generic init script for Fantom based server processes]]===
@@ -57,7 +58,7 @@ My long analysis of Linux after 10 years of use, and what i think about most dis
 ===10/28/07: [[Cleanup your Imac (G5 PPC)]] ===
 ===09/22/07: [[FVWM-crystal on Debian/Ubuntu]] ===
 ===08/24/07: [[Tethering With Blackberry Pearl On Linux]]===
-===07/17/07: [[Netgear KWGR614 Piece of junk, D-Link DIR-665 much better]]=== 
+===07/17/07: [[Netgear KWGR614 Piece of junk, D-Link DIR-665 much better]]===
 ===07/03/07: [[Daily stats with AWStats]]===
 ===06/20/07: [[Bookmarking options and custom home page]]===
 Finding a good bookmarking site and creating a usefull browser home page.
@@ -111,7 +112,7 @@ wget -S http://www.somesite.com/
 === 09/20/06: [[Adding custom bug status in mantis]] ===
 === 03/15/06 [[Enabling java 1.5 on mac]] ===
 === 03/01/06 Creating a ssh connection to linux in Exceed ===
-In Exceed connections / xstart 
+In Exceed connections / xstart
 Create  a new connection
 Method: Secure shell
 enter host etc ...
@@ -122,7 +123,7 @@ and select only "keybaord interactive"
 Save.
 === 10/02/05 [[Resizing a vmware image]] ===
 ===05/02/05 [[installing sun java on debian or ubuntu]]===
-===03/02/05	convert avi to divx===
+===03/02/05 convert avi to divx===
 <code bash>
 mencoder MVI_0081.AVI -o output.avi -ovc lavc -oac copy -lavcopts vcodec=mpeg4:vbitrate=200:vhq:vpass=1
 </code>
@@ -141,7 +142,7 @@ select * from ad_referers order by value desc limit 10;
 That happens usually when doing a cat of a binary file for example, then whatever you type appears in a 'symbol' font, that is very messed up.
 to fix that run on the broken shell:
 <code bash>
-echo -ne '\033)K' 
+echo -ne '\033)K'
 </code>
 
 ===08/27/04 Fixing an unix shell that doesn't echo keystrokes anymore===
