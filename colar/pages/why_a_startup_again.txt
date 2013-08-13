@@ -1,0 +1,37 @@
+======Why a start-up again======
+
+My first Job after college was at a brand new start-up [[http://qarbon.com/ | Qarbon.com]] in 1998.
+It was just the founder and a dev who had left with the product in beta and that's when I joined in.
+
+**There are a few reasons while I joined that start-up:**
+  - They where making a Desktop product in Java and back then when C or even Cobol where still the norm, that was awesome.
+  - They where set to move from France to the bay area where the cool stuff happens (happened ?)
+  - I wanted an exciting job where I would get rewarded for what I do (rather than say my age or what school I went to).
+
+**Because I joined so early, I was relied on for just about everything, things like:**
+  - Writing the software (obviously) and coming up with idea and solutions
+  - Managing all company servers, app servers, web servers, file servers, DNS server, backup servers all of it.
+  - Managing / administering things like Firewalls, T1 connection and basically any piece of hardware we had, at the office and at a Colo.
+  - Be a constant through the highs and lows and very very lows of the company.
+
+**Every once in a while there where crazy stuff to do, things that could only happen at a start-up, for example:**
+  - Finding out our new T1 stopped working when ATT(?) rerouted it to the wrong floor and spending half the night of thanksgiving day getting it troubleshooted with the technician. We happened to be in a "fun" building for that too as it was one of the Largest connectivity nodes in San Jose where a whole elevator shaft had been re-purposed just to hold cable/fibers.
+  - Having to replace our main server power supply on a weekend, only Fry's was open and they only have AT power supplies and not ATX so had to solder my ow connector !
+  - Those are two that I remember of the top of my head but there where many things like those.
+
+At a start-up there is nowhere to hide, you are it, especially early on, so you get to take both the credit and the blame.
+
+Less meetings ! Seriously some larger company are just completely ridiculous when it comes to this, as a software dev / architect it can difficult to just stop in the middle of what you are working on for meetings.
+
+Also being part of a small team is just way more fun, everybody knows one another and there is much less politics.
+
+Small start-up tend to be much more focused on the product and customers which is just way more fun and satisfying than a larger company where sometimes it's more about "Ok, how else can we squeeze more money out of the same old thing".
+
+You also get to learn a lot and be on your toes so it's much less likely you will get bored or stop learning, on the other you also often become too busy to do much else, so that's a bit of a trade-off.
+
+After 7 years at Qarbon I got a bit burnt out and also wanted something more stable while my kids where very young, but now after another 7 more years I was really craving being back at a start-up.
+
+I had also been working from home for over 3 years and, believe it or not, I got tired of it, It's nice to socialize and have a cleaner work/family break sometimes.
+
+That's how I came to join in April 2013 [[rivet_and_sway | Rivet & Sway]], a pretty cool E-commerce start-up.
+

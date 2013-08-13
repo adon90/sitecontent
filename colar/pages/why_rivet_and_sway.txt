@@ -1,0 +1,43 @@
+======Why Rivet & Sway======
+
+In April 2013 I stopped doing my own consulting  at [[http://www.status302.com/]] and joined [[rivet_and_sway | Rivet & Sway]].
+
+You can see here more details as of [[why a startup again]].
+
+In any case after deciding I would really like to work a start-up again I contacted a recruiter and interviewed with a few,
+some I was not very interested in. I can be a bit choosy, I do need to believe in the vision, products & especially the team and it needs to be at least "ethical" in my view.
+
+**Here are 3 start-ups I interviewed with and really liked:**
+
+  - [[http://www.vamo.com/ | Vamo]]:
+It was still named at the time, but I would have loved working there because it is a very new startup with strong backing and the founder, Ari Steinberg seems Brilliant and has an amazing academic and professional pedigree while at the same time he is super humble and pragmatic.
+I would have loved working with him and I also really really liked what Vamo is trying to do, simplify travel, unfortunately I pulled an interview fail, this was quite disappointing as those where questions I could very easy have done well at, honestly, but once again in the interview setting I did not do great, ho well :-/
+
+  - [[http://www.oneoceancorp.com/|One Ocean]]:
+That was another interesting startup, although much more established. They also do a lot of open source stuff and use a lot of the "hot" technologies such as large cloud computing, big data and so on.
+I didn't really get too far with them as I took a position at Rivet & Sway before finishing the interview process with them.Digital Ocean.
+
+=====Rivet & Sway=====
+So anyway off to the start-up I picked and that picked me back: [[http://rivetandsway.com | Rivet & Sway]]
+
+[[http://rivetandsway.com | Rivet & Sway]] is a new online eye-ware company trying to disrupt the marketplace and change the way you purchase glasses.
+Better products,better styles, better price, better customer service, focused on women, and much more convenient.
+
+**ere are some of the things I like the most about Rivet & Sway:**
+  - The CEO [[http://johnlusk.net/ | John Lusk]], author of [[http://johnlusk.net/my-book/ | The MouseDriver Chronicles]] has strong credentials and start-up experience and definitely seem like someone I will probably learn a lot from.
+  - The Team : The team throughout is made of people that are very good and experienced at what they do, whether it's creative, marketing, social. Sure this is the goal of all start-ups but still it's evident here.
+  - Big Market: The eye-ware market is close to a 100 BILLIONS market, yet one parent company runs most of it.
+  - Disrupting a monopoly business :  Yeah the eye-ware industry is basically [[http://www.cbsnews.com/video/watch/?id=50149025n|one big monopoly, as seen on 60 mutes]]. I really really don't like monopolies and would love to disrupt this.
+  - Focused on specific niche : Rivet & way is focusing on women's glasses, I think that's a god thing to target and satisfy a specific range of customers, especially for a smaller company, this allows us to be focused and have better content.
+  - "Real" products : I do like working for a company making actual physical products, it can be more gratifying than a pure-software company and you learn more about business in general.
+  - Opportunity for myself to be the technology leader, obviously at a start-up you take more risks, but the potential is much higher.
+  - Opportunity & need to replace the existing platform (Drupal) : Designing and implementing a scalable platform and software stock is what I love to do and I'm really looking forward to build another successful implementation that is stable and reliable for years.
+
+On the other hand I was quite concerned that they based their whole E-commerce solution on Drupal, a dated version at that, it's probably fine for a "static" site, but I find it to be quite terrible for E-commerce.
+It does not scale well, it's very fragile, it's very very slow and requires multiple layers of caching, it's also very hard to maintain.
+There are many many many reasons while it's bad, and I need to post about this soon, but here is a "teaser" : It stored code in database tables, unversioned .... yeah really !
+
+I'm also a bit concerned the company already went this far without a technology leader in house, this really makes it feel like technology is an afterthought and I think it can be a very bad mistake for an **E**-commerce company.
+
+Of course I see my role as to resolve those concerns so obviously I'm confident this will improve soon :)
+
