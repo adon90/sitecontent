@@ -1,7 +1,7 @@
 ======[[My Blog & Tips]]======
 Here you will find my thought/docs/tips on stuffs:
 
-  * [[rivet_and_sway | Rivet & Sway]], blogging about the start-up life and E-commerce & technology challenges.
+  * [[rivet_and_sway | Rivet & Sway]], blogging about the start-up life and E-commerce & technology chices.
 
   * [[Geek Blog]], my thought and tips about software related subjects, mostly Java and Linux etc...
 
@@ -10,8 +10,6 @@ Here you will find my thought/docs/tips on stuffs:
   * [[SAP Tips]], many tips and documentation about SAP/Java (CRM5.0 ISA B2C B2B TREX etc...)
 
   * [[Ice Hockey Blog]], opinions and predictions about the NHL and Hockey in General.
-
-  * [[Martial Arts Blog]], Here you will find info about my progression at TaeKwonDo and Brazilian Jiu-jitsu.
 
   * [[General Blog]], general thoughts about the world and news that made me react.
 

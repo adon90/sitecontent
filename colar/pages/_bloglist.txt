@@ -1,21 +1,25 @@
 ====Recent Blog entries:====
+  * [[why_rivet_and_sway | Why I joined Rivet & Sway]]
+
   * [[golang_revel_init_script | Upstart init script for Go / Revel apps]]
+
+  * [[why_a_startup_again | Why I want to work for a start-up once again]]
+
+  * [[Ikea standing Desk]] I built
 
   * [[acer_v3_551g_x419_ubuntu | Acer V3 551G X419 under Ubuntu]]
 
   * [[camembert | The camembert lightweight IDE]]
 
-  * [[beautiful_fonts_in_java | Beautiful fonts in Java apps]]
-
-  * [[Awesome window manager | The awesome window manager]]
-
   * [[Generic init script for Fantom based server processes]]
 
   * [[Ubuntu 12.04 on Samsung series 7 Chronos laptop]]
 
-  * [[Ikea standing Desk]] I built
-
   * [[Camping Trailer]] I Built
 
   * [[status302:Fantom AWS AMI | Fantom AWS image]]
+
+  * [[beautiful_fonts_in_java | Beautiful fonts in Java apps]]
+
+  * [[Awesome window manager | The awesome window manager]]
 

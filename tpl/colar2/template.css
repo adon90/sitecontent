@@ -3,6 +3,7 @@ body
   font-family: 'Ubuntu', serif;
   font-size: 14px;
   line-height : 22px;
+  color : #e8f8f2;
 }
 
 .sidebar-nav
@@ -53,6 +54,8 @@ h5{color:#BBFFBB; border-top:1px solid #000000;}
 h6{color:#CCffCC; border-top:1px solid #000000;}
 
 .addthis_toolbox{margin-top:4px}
+
+a {color:#9999FF}
 
 .nav-list > li > a {color:#FFEEDD}
 .nav-list > li > a > b {color:#CCBB55}

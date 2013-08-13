@@ -1,29 +1,24 @@
 ======Rivet & Sway======
 
-I joined Rivet and Sway, a cool young startup in April 2013.
+In April 2013 I joined Rivet and Sway, a cool young startup trying to disrupt the eye-ware <del>market</del>monopoly.
 
-Here I'm going to be blogging about the start-up experience, not my first time, as well
-as technological choices and E-commerce.
+{{rs/layer_cake.jpg}}
 
-Here are my blog entries relevant to this:
+Here I'm going to be writing about being back at a start-up after a hiatus.
 
-  * Here is my background and why I'm back at a start-up once again.
-- Startup's are fun - more impact
-- large companies interview fail
-- I like E-commerce
-- Mode freedom
-- Working from home / Own business
+- [[Why a startup again]] ?
+- [[why_rivet_and_sway | Why Rivet & Sway]] ?
 
-  * Why Rivet & way and why I'm excited about.
+=====What Am I working on=====
 
-- Pantheon / drupal / cahing and all the issues that come with it
-- paas reseach / nodejitsu
-- aws and new setup
-- dropbox / owncloud
+I am going to blog into much more details about all this soon, once I find the time.
 
-
-
-- coursera
-- learn to type
-
+Here are some things I had to work on so far:
+- Migrate from our unreliable and expensive Drupal PAAS provider to a better solution (AWS)
+- Scaling Drupal (Many steps to that, platform & software stack)
+- Developer workflow tools for Drupal. (Implemented in GO)
+- Researched alternatives to using Dropbox in the company setting
+- Operational enhancements: As our order volume is growing rapidly it became important to optimize operations (Order processing, Shipping, EDI, inventory).
+- Mobile optimization.
+- Researching and specifying a new platform roadmap (Replace Drupal)
 

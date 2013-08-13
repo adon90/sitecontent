@@ -1,8 +1,7 @@
 ====Home====
-Hello there, my name is **Thibaut Colar**.
-I'm a software Developer.
+Hello there, my name is **Thibaut Colar**, I'm a software Architect & Developer.
 
-My interests are software, startups, building things, playing and watching hockey, enjoying the outdoors and eating yummy stuff.
+My interests are software, start-ups, building things, playing and watching hockey, enjoying the outdoors and eating yummy stuff.
 
 I currently work at a cool start-up called [[http://www.rivetandsway.com | Rivet & Sway]] in downtown Seattle.
 
