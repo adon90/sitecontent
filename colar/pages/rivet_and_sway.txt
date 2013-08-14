@@ -1,6 +1,6 @@
 ======Rivet & Sway======
 
-In April 2013 I joined Rivet and Sway, a cool young startup trying to disrupt the eye-ware <del>market</del>monopoly.
+In April 2013 I joined [[http://rivetandsway.com | Rivet & Sway]], a cool young startup trying to disrupt the eye-ware <del>market</del> monopoly.
 
 {{rs/layer_cake.jpg}}
 
@@ -10,7 +10,6 @@ Here I'm going to be writing about being back at a start-up after a hiatus.
 - [[why_rivet_and_sway | Why Rivet & Sway]] ?
 
 =====What Am I working on=====
-
 I am going to blog into much more details about all this soon, once I find the time.
 
 Here are some things I had to work on so far:
