@@ -63,7 +63,7 @@ The Maven plugin recognizes Maven projects (by their pom.xml file).
 You will want to set the env_home in the Maven/env_default.props file
 Such as the ''mvn'' command is under  env_home/bin/node
 
-==Gradle Plugin===
+===Gradle Plugin===
 The Gradle plugin recognizes Gradle projects (by their build.gradle file).
 
 You will want to set the env_home in the Gradle/env_default.props file
@@ -81,7 +81,8 @@ Python projects are recognized by the __init__.py file
 Configure the proper envHome in Python/env_default.props
 Such as the ''python'' command is under  env_home/bin/node
 
-Note: Currently the documtntation panel only works correty when using python(pydoc) 3.x
+Note: You need to manually run the doc indexing in the plugind/Python menu
+
 
 ===Go Plugin===
 There are no simple way to auto detect G proects, so you need to create cam.props in the project folder:
@@ -89,8 +90,10 @@ There are no simple way to auto detect G proects, so you need to create cam.prop
 
 Configure the proper envHome in Go/env_default.props
 
-===Ruby Plugin===
+Note: You need to manually run the doc indexing in the plugind/Go menu
 
+
+===Ruby Plugin===
 Ruby projects are recognized by the 'Rakefile' file.
 
 Configure the proper rubyPath(ruby command) and riPath(ri command) in Ruby/env_default.props

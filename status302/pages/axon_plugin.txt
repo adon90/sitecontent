@@ -1,6 +1,6 @@
 ======Axon / Skyspark plugin for the Camembert IDE======
 
-This is a plugin for our Open Source and Free [[camembert|Camembert IDE]].
+This is a FREE plugin for our Open Source and Free [[camembert|Camembert IDE]].
 
 It provides many features that are specific to Skyspark and Axon development.
 
@@ -9,7 +9,7 @@ It provides a much more productive development environment in comparison to usin
 More Info:
   - [[#Screenshots]]
   - [[#Features]]
-  - [[#Installation]] (& Free trial)
+  - [[#Installation]]
   - [[#Purchase]]
 
 ===Screenshots===
@@ -53,9 +53,4 @@ Then run Camembert:
 fanr camembert
 </code>
 
-===Getting Started===
-
-
-===Purchase===
-TIP: Coming soon. This is currently in Alpha and can be tried for free.
 
