@@ -1,4 +1,6 @@
 ====Recent Blog entries:====
+  * [[camembert_golang | Enhanced Go support in Camembert]]
+
   * [[why_rivet_and_sway | Why I joined Rivet & Sway]]
 
   * [[golang_revel_init_script | Upstart init script for Go / Revel apps]]

@@ -3,7 +3,7 @@
 [[Camembert]] is a lightweight IDE.
 This page focuses on the installation process.
 
-Currenty there is no "one-click" installer yet but it's planned.
+Currenty there is no "one-click" installer yet but someday there will be.
 
 ===Java 6+===
 You must have Java 6 or newer installed
@@ -88,10 +88,10 @@ Note: You need to manually run the doc indexing in the plugind/Python menu
 There are no simple way to auto detect G proects, so you need to create cam.props in the project folder:
 ''echo "prj.type = Go" > cam.props''
 
-Configure the proper envHome in Go/env_default.props
+Configure the proper envHome(go distro path) in Go/env_default.props
+Also setup goPath in there (projects workspace)
 
-Note: You need to manually run the doc indexing in the plugind/Go menu
-
+Note: You should manually run the doc indexing in the plugins/Go menu at least once.
 
 ===Ruby Plugin===
 Ruby projects are recognized by the 'Rakefile' file.

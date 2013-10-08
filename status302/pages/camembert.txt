@@ -3,14 +3,14 @@
 Camembert is a Free, [[https://bitbucket.org/tcolar/camembert|Open source]], lightweight IDE, written in Fantom.
 It's multi-platform and can run on many platforms (Linux, Max, Windows...)
 
-It supports Fantom projects but also many other projects such as Node.js ,Maven, Python, Ruby, Go etc...
+It supports Fantom projects but also many other projects such as Go, Node.js ,Maven, Python, Ruby etc...
 
-It started as a fork the BRIE Fantom editor by Brian Frank but has evolved a lot since to add many new features.
+It started as a fork of the BRIE Fantom editor by Brian Frank but has evolved a lot since to add many new features.
 
 The focus is on being a "simple" editor yet provide built-in access to each language documentation as well as running commands.
 Over time I have come to realize that the most advanced IDE's, while very effective, tend to make you a bit lazy and often
 you will learn a lot more by looking at the proper API documentation than just using completion "blindly".
-On the other many lightweight editor do not give any built-in access to the documentation at all so if you are somewhet new to a language it will be difficult.
+On the other many hand lightweight editor do not give any built-in access to the documentation at all so if you are somewhet new to a language it will be difficult.
 
 More Info:
   - [[#Installation]]
@@ -32,6 +32,11 @@ Home space with lots of projects:
 Fantom project
 
 {{cam_fantom.png}}
+
+-----
+Go project
+
+{{cam_go.png}}
 
 -----
 Maven Java project

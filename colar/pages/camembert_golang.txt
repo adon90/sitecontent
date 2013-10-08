@@ -1,0 +1,22 @@
+======Camembert IDE Go / Golang support======
+
+I have added more and more language support to [[status302:Camembert]] to the point that now I use to edit and work
+on just about all projects (Fantom, Go, Python, Ruby etc...).
+
+Lately I've done quite a bit of code in GO at [[Rivet and Sway]] lately, so I've beefed up a bit the Go support in Camembert.
+
+Here are some of the current features:
+  - Syntax highlighting.
+  - Build/Test/Run commands.
+  - Integrated documentation pane with search (godoc).
+  - Run/build output goes to console and error can be cliked to go directly to source location.
+  - Navigation panel: Shows structs, functions and vars with "hot links".
+  - GoFmt support can be called manually or automatically when .go files are saved.
+  - and probably more stuff I'm not thinking about right now ...
+
+Screenshot:
+
+{{cam_go.png}}
+
+
+
