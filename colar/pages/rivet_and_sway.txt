@@ -18,6 +18,7 @@ Here are some things I had to work on so far:
 - Developer workflow tools for Drupal. (Implemented in GO)
 - Researched alternatives to using Dropbox in the company setting
 - Operational enhancements: As our order volume is growing rapidly it became important to optimize operations (Order processing, Shipping, EDI, inventory).
-- Mobile optimization.
 - Researching and specifying a new platform roadmap (Replace Drupal)
+- Mobile optimization.
+- New Point Of Sale(in store) E-commerce solution, developed very quickly with Go + Revel & Zurb Fundation4.
 

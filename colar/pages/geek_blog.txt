@@ -2,6 +2,8 @@ My Blogs:
 |[[Geek Blog]]|[[SAP tips|SAP Blog]]|[[Ice Hockey Blog]]|[[Martial arts blog]]|[[General blog]]|
 
 ======Geek Blog======
+===10/14/13: [[golang | My detailed thoughts about Go, so far]]===
+===9/4/2013: [[camembert_golang | Enhanced Go support in Camembert]]===
 ===7/23/13: [[golang_revel_init_script | Upstart init script for Go / Revel apps]]===
 ===10/16/12: [[Beautiful fonts in Java]]===
 ===10/16/12: [[Awesome window manager]]===

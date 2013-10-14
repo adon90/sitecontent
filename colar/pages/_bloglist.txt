@@ -1,4 +1,6 @@
 ====Recent Blog entries:====
+  * [[golang | My detailed thoughts about Go, so far]]
+
   * [[camembert_golang | Enhanced Go support in Camembert]]
 
   * [[why_rivet_and_sway | Why I joined Rivet & Sway]]
@@ -19,9 +21,5 @@
 
   * [[Camping Trailer]] I Built
 
-  * [[status302:Fantom AWS AMI | Fantom AWS image]]
-
   * [[beautiful_fonts_in_java | Beautiful fonts in Java apps]]
-
-  * [[Awesome window manager | The awesome window manager]]
 
