@@ -1,0 +1,140 @@
+======Golang / Go - My favorite things======
+This is a subset of my [[golang | Golang page]].
+
+This page focuses on the features of Go I like best.
+
+====Designed by very smart people====
+[[http://en.wikipedia.org/wiki/Go_(programming_language)|Robert Griesemer, Rob Pike, and Ken Thompson]].
+
+This explains why it looks a bit old school & C-ish at fisrt, but at the same time you can see it's designed by a very experienced and opinionated team.
+
+====Composition over inheritance====
+Go does is not an Object oriented language, obviously that's a big change for most, instead it encourages structure composition and encapsulation.
+
+Most of us who have dealt with large J2EE projects know that Objects and Inheritance is not always all that great or flexible and composition is more flexible.
+There is no objects or inheritance in Go but only composition and encapsulation.
+
+I haven't seen many NON-OO languages that are easy to use and productive, Golang shines here.
+<code | Encapsulation example>
+package main
+
+type Engine struct {
+  Cylinders int
+}
+type Car struct {
+  Engine // encapsulate engine and thus it's fields and methods such as Cylinder
+  Brand string
+}
+type Semi struct{
+  Engine // encapsulate engine and thus it's fields and methods such as Cylinder
+  Axles int
+}
+</code>
+
+====Interfaces / Duck typing====
+Go also has interfaces, but it's very lose and flexible.
+A structure only needs to implement the interface methods to be considered a valid implementation.
+This provide an idiom very similar to duck typing, while keeping most of the static typing benefits.
+It's also quite handy when doing mockup objects and the like.
+
+<code | Go Interface>
+type Duck interface {
+  Quack() string
+  Walk()
+}
+// Platypus can "Walk" and "Quack" like a duck so it qualifies as a duck.
+type Platipus struct{
+  func Quack() {
+    return "Quack !"
+  }
+  func Walk() {}
+}
+func main() {
+  var duck Duck
+  duck = Platipus{} // Platifus does "fit" duck
+  duck.Quack()
+}
+</code>
+
+====No JVM====
+  I've been a JVM guy since 1997, used mostly JVM languages ever since, and while the JVM is a great platform with fantastic tooling it also has drawbacks.
+
+  It's quite large and slow to start-up, it's not truly open-source(well Oracle's impl anyway) and installing it can be a pain, licensing coomplications on Unixes, crapware on windows and it's gone downhill even more since Oracle has taken over.
+
+  GoLang doesn't need any VM per say, it just compiles standalone binaries but still makes it quite easy to cross-compile when needed.
+
+  Go is also fully and truly  open-source.
+
+====Static & strong typing system====
+Personally I've always been a proponent of that because it provides better tooling, better perfomance, better maintability and also more predictible runtime bahvior.
+
+So biggest drawback is usually productivity, I feel that C++ and Java(J2EE) have pushed up the usage of dynamic langugaes because they somewhat fail here.
+
+Go also shines here, it feels a lot like a dynamic language because:
+  - Consise syntax, not quite as nice as say Python, but pretty close, definitely much less verbose than Java.
+  - Type inference: This makes declaring types rarely required and thus feels much more dynamic, ''i := 5;  s:="hello"''
+  - The fact that it's not OO also cuts down a lot on the boilerplate code, again more concise.
+  - Can return multiple values from functions, this helps cut down the need for small "data holding" classes/structures.
+  - The compiler is very, **VERY** fast, meaning that you basically don't notice it. Most programs compile faster than the JVM interpreter even takes to start.
+
+Yet it's 100% statically typed with strong typing, giving best in class tooling and type safety.
+
+====Trully open-source yet supported by Google====
+A langugage has a much better chance of adoption & success if it's open-source.
+It also has a much better chnace of success if it's pushed by a big company.
+
+Go has both and not many languages can say that, I think this will really help it having a chnace to grow it's adoption.
+
+====Pointers====
+Ok, honestly to see pointers being brought back was a big turn-off at first, but here you get the pointer performance aspects without most of the pitfalls.
+
+Pointers allow the programmer the power to chose whether they rather pass given values by copy or by reference.
+
+Some built-in types are automatically passed by reference(as a pointer) without having to specify it a pointer, this makes the syntax much less verbose.
+Such types are Slices, Maps and more.
+
+There is no pointer arithmetic, this prevents a lot of dangerous and complex issues that tend to crop up in C++.
+
+====Performance====
+Go was clearly designed for performance and it's alreday close to Java's.
+That might not sound great but Java is really optimized nowadays and when it came out it was considered really slow, so the fact that Go is already in the ballpark of Java is very encouraging.
+
+Also that means Java is already at leas 20x faster than Ruby, Python or Php.
+
+Because it compiles into a binary it has the potential to get performance close to C++ eventually.
+
+It's also designed for highly concurrent systems and use much less meory than most other modern languages (10x less than Javais not uncommon)
+
+With all that said Go is garbage collected so you don't have to manually deal wth memory, and eben though the garbage collector hasn't been optimized muhc yet it's already very effective.
+
+====Opinionated====
+Go is **VERY** opinionated, for the mots part there is only one diomatic way to do things and anything else is discouraged.
+Even the Syntax is strongly enforced as goFmt is applied by the compiler and if you stray it won't even compile.
+
+It is also highy recommanded to apply goFmt when saving go sources.
+
+This obviously will annoy some people, especially those who ike to write things a specific way.
+For example I've always preferred Allman brackets, as I find it's more symetrical, but if i try to use that in Go, it won't even compile !
+
+But at the end of the day I do prefer such a strongly enforced syntax, it makes code more readable, it makes all tooling much simpler to implement ad it makes sharing code with others a much better experience.
+
+So personally I'm all for it, it might be annoying for the first few days but it's muhc better over time.
+
+====Easy to learn====
+As just mentioned the "one way to write it" philosophy helps a lot learning since almost all code is consistent with idiomatic Go.
+
+The syntax is efficient and very lightweight, for example there is only one kind of loop(for) and the number ok keywords is very ery small.
+
+It's definitely a change from OO languages but you could argue that Go is an easier language to pick up especially for somebody who is not an OO expert yet.
+
+====Little things====
+  - Fully Unicode, variables can be named using any unicode characters.
+  - log.Print : ''log.Print()'' and friends does display the source name and line it's called from, that's super useful.
+  - package management :''go get'', ''go install'' can pull Go packages directly from DVCS which is nice.
+
+
+So in the end Go is a well designed language, it's very performant and maintainable and one of the most Productive static type language out there.
+
+Highly recommanded for any server side application especialy one that needs to scale.
+
+

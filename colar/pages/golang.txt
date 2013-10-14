@@ -1,0 +1,39 @@
+======Go / Golang======
+<code>
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Printf("Hello, world.\n")
+}
+</code>
+=====First impression=====
+When I first looked at Go(~2010), I was not too excited for a few reasons:
+
+  - At a quick glance it looks a bit "archaic" and very C-ish
+  - Limited syntactic sugar compare to say Groovy, Python or Scala.
+  - After using Fantom for years it did not seem quite as "nice" and pragmatic.
+  - Pointers ? Really ? Somebody thught it was a good idea to bring that back.
+
+In fact that made me "ignore" it for a few years until I got back to it.
+
+**Now that I have used it almost FT for the 3+ months, I can say it's one of the most
+productive language I've used and one of the very best balance of productivity vs performance especially for a compiled langugage.**
+
+I've got a lot to say about Go, so follow those links for more details:
+
+  - [[Golang - My Favorite things]]
+
+  - [[Golang - Gotchas and questionable items]]
+
+=====Outlook=====
+I think the outlook for Go is good.
+
+  - It's starting to pick up steam lately.
+  - Reminds me of Java back then : Built for enterprise & easy to learn.
+  - Open source & supported by Google.
+  - Performance potential is fantastic.
+  - Highly productive and built for  the future : GoRoutines etc....
+
+

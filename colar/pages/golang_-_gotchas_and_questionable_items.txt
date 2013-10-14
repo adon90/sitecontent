@@ -1,0 +1,61 @@
+=====Go / Golang - Gotchas and questionable items=====
+This is a subset of my [[golang | Golang page]].
+
+This page focuses on the features of Go I found confusing at first or are maybe questionable decisons.
+
+====Implied pointers====
+While working with pointers is Go is fairly easy, one slightly trick aspect is to rember which types are implied pointers (passed by reference).
+Once you now them it's not biggie.
+
+Items that are always passed by reference (as a pointer):
+  - pointers (obviously)
+  - maps
+  - slices (but NOT arrays !)
+  - channels
+
+This is quite practical as you don't have to deal with the pointer syntax as often but definitely good to know.
+
+====Fatal means fatal====
+Using log.Fatal causes the whole program to end/panic, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
+
+====Upper / Lower case varables====
+In go a varable starting with a lowercase letter is "package private" while one starting with an uppercase is public.
+I like this, it's a simple and clean convention but it's easy to forget the uppercase letter, especially when using coming from languages.
+
+This might not bite you right away, but for example if using relflection to populate an object (ex: JSON), you will find the hard way it causes issues.
+
+====For loops====
+There are several types of for loops, but a common idiom is to use it with range to iterate over items.
+I often make this mistake:
+<code>
+items := []str{"a","b","c"}
+for item := range items {
+  log.Print(item)
+}
+</code>
+This would print ''0 1 2'' not ''a b c'' because range returns a tuple (index, val)
+
+So in this case I would want to use ''for _, item := range items {'' to ignore the index and use the value.
+
+Pretty simple, but probably the most common mistake I still make.
+
+====Variable definitions====
+The two simple syntax mistakes I still often make when declaring variables are:
+  - Putting the var type before the var name. Unlike most anguages the go way is ''var foo string''
+  - When defining arrays the proper synatx is ''var foo []string'', again most other languages would have the array brackets after 'string'
+
+====Error handing -> "disapearing" error====
+TODO
+====Versioning====
+TODO
+====interfaces Implementations====
+TODO
+====No Generics====
+TODO
+====No autocasting / autoboxing====
+TODO
+====Interoperability: C/C++ only====
+TODO
+
+
+
