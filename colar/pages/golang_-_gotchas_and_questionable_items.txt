@@ -1,10 +1,10 @@
 =====Go / Golang - Gotchas and questionable items=====
 This is a subset of my [[golang | Golang page]].
 
-This page focuses on the features of Go I found confusing at first or are maybe questionable decisons.
+This page focuses on the features of Go I found confusing at first or are maybe questionable decisions.
 
 ====Implied pointers====
-While working with pointers is Go is fairly easy, one slightly trick aspect is to rember which types are implied pointers (passed by reference).
+While working with pointers is Go is fairly easy, one slightly tricky aspect is to remember which types are implied pointers (passed by reference).
 Once you now them it's not biggie.
 
 Items that are always passed by reference (as a pointer):
@@ -18,11 +18,11 @@ This is quite practical as you don't have to deal with the pointer syntax as oft
 ====Fatal means fatal====
 Using log.Fatal causes the whole program to end/panic, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
 
-====Upper / Lower case varables====
-In go a varable starting with a lowercase letter is "package private" while one starting with an uppercase is public.
+====Upper / Lower case variables====
+In go a variable starting with a lowercase letter is "package private" while one starting with an uppercase is public.
 I like this, it's a simple and clean convention but it's easy to forget the uppercase letter, especially when using coming from languages.
 
-This might not bite you right away, but for example if using relflection to populate an object (ex: JSON), you will find the hard way it causes issues.
+This might not bite you right away, but for example if using reflection to populate an object (ex: JSON), you will find the hard way it causes issues.
 
 ====For loops====
 There are several types of for loops, but a common idiom is to use it with range to iterate over items.
@@ -41,21 +41,112 @@ Pretty simple, but probably the most common mistake I still make.
 
 ====Variable definitions====
 The two simple syntax mistakes I still often make when declaring variables are:
-  - Putting the var type before the var name. Unlike most anguages the go way is ''var foo string''
-  - When defining arrays the proper synatx is ''var foo []string'', again most other languages would have the array brackets after 'string'
+  - Putting the var type before the var name. Unlike most language the go way is ''var foo string''
+  - When defining arrays the proper syntax is ''var foo []string'', again most other languages would have the array brackets after 'string'
 
-====Error handing -> "disapearing" error====
-TODO
+====Error handing====
+Go does not have exceptions instead you return and handle errors.
+
+One positive is that it prevents the "catch all" try/catch you will often see in Java which often does not handle or even logs the error properly.
+
+On the other hand it's also fairly easy in Go to ignore an error, accidentally or not.
+
+That could happen if you assign the error to _, in which case it's your fault.
+
+But for methods that on return an error the compiler does not force yo to assign or handle it in which case it might just "vanish" and it will be difficult to find what the issue is !
+
+I highly recommend using a tool such as this one to find any unhanded errors:
+[[https://github.com/kisielk/errcheck]]
+
 ====Versioning====
-TODO
+''go get'' and ''go install'' are very cool, however they do not support versionning.
+
+In my opinion that is a **huge** oversight and as Go is growing this will very soon become an issue.
+
+I think This blog post by Dave Cheney covers this very well and I basically agree with all he said:
+[[http://dave.cheney.net/2013/10/10/why-i-think-go-package-management-is-important]]
+
 ====interfaces Implementations====
-TODO
+Because a type implements an interface just by implementing it's method but without directly being marked as an implementation it seem there is no simple way to find all the implementations of an interface, unless I'm missing something.
+
+I suppose a tool could do it using reflection, but it seem to be a drawback as you can't simply do a quick search / grep as you could in many other languages since the Implementation does not have to mention the interface by name.
+
+I would probably use a convention of "naming" the interface in the implementation doc(godoc) to help with this.
+
+====No auto-casting / auto-boxing====
+There is no syntactic sugar here, you need to be specific about your intent either by casting or type assertion.
+<code>
+a := 23 // int
+b := float64(a) // casting to float64
+c := a.(float64) // dummy type assertion example
+n := 5 + 5.5 // doesn't compile : int + float
+n2 := float64(5) + 5.5 // ok
+</code>
+
+Really it's not that bad as it's much more explicit but sometimes it can be a little tedious.
+
+====Interoperability====
+Go is compiling to native code it can't easily interop with other languages(ie: JVM based) and so is for the most part limited to interop with C/C++ libraries.
+
+While there are tons of C/C++ libraries that can be leverage, I feel they are often more dated or kludgey to work with than what I would find for say the JVM.
+
+====Not very "functional" / global methods====
+The standard Go libraries are a little low on functionalities sometimes.
+
+You won't find much heavy "objects"(well structs) with lots and lots of methods.
+Most likely for performance reasons they decided to keep structs lightweight but sometimes that feels less convenient.
+
+So for example you can't use mystring.Contains("a") instead you have to call a static method in the strings package:
+<code>
+text := "abc"
+found := text.Contains("a") // Can't do this
+// instead have to do this:
+import("strings")
+found := strings.Contains(text, "a")
+</code>
+
+It's not that bad but at times it can feel a bit cumbersome and old school.
+
+Go also supports functional programming, unfortunately it seem to not be leveraged all that much in the standard API's.
+<code | Example functional programming>
+// Declare a function matching the strings.IndexFunc argument signature
+func containsZ(c int) bool {
+  return c == 'Z'
+}
+
+// Leverage the IndexFunc of the string package to use our custom function
+index := strings.IndexFunc("abcd", containsZ)
+</code>
+This is cool, but you you will not find very many such "functional" methods in the standard package, I wish there where much more, as found in Fantom:
+[[http://fantom.org/doc/sys/List]]  This is very powerful.
+
 ====No Generics====
-TODO
-====No autocasting / autoboxing====
-TODO
-====Interoperability: C/C++ only====
-TODO
+Ok, I saved that one for last :)
 
+I know from my experience with the Fantom language that generics are something people feel strongly about .
 
+My stance is that basically I do like the idea of generics but I haven't really seen any implementation that's nice and easy.
+The syntax for generics itself is usually quite ugly and it greatly, greatly, complicates the compiler and any tooling.
+
+So so far I still think that is a trade-off that is not really worth the hassle for the most part.
+
+Like Fantom, Go does provide built-in somewhat "generic" collections (map and slices) and for the most part that is enough, this is really what generics are most commonly used for, unless f course you are developing a fancy collection library of your own.
+
+So in some rare case you will have to do a switch based on type, it's a bit ugly I guess but then again rarely needed.
+
+In those case you can make use of "interface{}" and a switch statement on the type, but that's really a bit clunky.
+<code>
+// Dummy example of dealing with a "generic" type
+var obj interface{} // "everything" is an interface{}
+switch obj.Kind(){
+  case reflect.String:
+    log.Printf("String: %s", obj.(string))
+  case reflect.Int:
+    log.Printf("Int: %d", obj.(int))
+  default:
+    log.Print(obj)
+}
+</code>
+
+I can live with it but I think Fantom does a better job than Go at making me NOT miss generics.
 

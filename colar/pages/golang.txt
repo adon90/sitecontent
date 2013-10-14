@@ -14,14 +14,14 @@ When I first looked at Go(~2010), I was not too excited for a few reasons:
   - At a quick glance it looks a bit "archaic" and very C-ish
   - Limited syntactic sugar compare to say Groovy, Python or Scala.
   - After using Fantom for years it did not seem quite as "nice" and pragmatic.
-  - Pointers ? Really ? Somebody thught it was a good idea to bring that back.
+  - Pointers ? Really ? Somebody thought it was a good idea to bring that back.
 
 In fact that made me "ignore" it for a few years until I got back to it.
 
 **Now that I have used it almost FT for the 3+ months, I can say it's one of the most
-productive language I've used and one of the very best balance of productivity vs performance especially for a compiled langugage.**
+productive language I have used and one of the very best balance of productivity vs performance especially for a compiled language.**
 
-I've got a lot to say about Go, so follow those links for more details:
+I have got a lot to say about Go, so follow those links for more details:
 
   - [[Golang - My Favorite things]]
 
