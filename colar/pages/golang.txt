@@ -18,7 +18,7 @@ When I first looked at Go(~2010), I was not too excited for a few reasons:
 
 In fact that made me "ignore" it for a few years until I got back to it.
 
-**Now that I have used it almost FT for the 3+ months, I can say it's one of the most
+**Now that I have used it almost FT for the 3+ months at [[rivet and sway|Rivet & Sway]], I can say it's one of the most
 productive language I have used and one of the very best balance of productivity vs performance especially for a compiled language.**
 
 I have got a lot to say about Go, so follow those links for more details:
