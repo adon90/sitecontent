@@ -54,3 +54,4 @@ pre{margin-top:1px;padding-top:1px;padding-bottom:1px;margin-bottom:1px}
  word-wrap: break-word;
 }
 
+#editor { font: 120% "Lucida Console", Monaco, monospace;}

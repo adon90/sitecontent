@@ -69,14 +69,6 @@ function openAddThis(publisher)
   return;
 }
 
-/*function buttonHelp(text)
-{
-  document.getElementById("buttonHelpSpan").firstChild.nodeValue = text;
-}
-function toggle(objName)
-{
-  var obj=document.getElementById(objName);
-  obj.style.display=(obj.style.display!='block')? 'block' : 'none';
-}
-*/
+
+
 
