@@ -16,7 +16,7 @@ Items that are always passed by reference (as a pointer):
 This is quite practical as you don't have to deal with the pointer syntax as often but definitely good to know.
 
 ====Fatal means fatal====
-Using log.Fatal causes the whole program to end/panic, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
+Using ''log.Fatal'' causes the whole program to end/panic, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
 
 ====Upper / Lower case variables====
 In go a variable starting with a lowercase letter is "package private" while one starting with an uppercase is public.
