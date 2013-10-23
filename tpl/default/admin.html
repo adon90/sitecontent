@@ -38,9 +38,9 @@
             <select id="page" name="page" style="width:100%">
               <option value="-">-- Page --</option>
             </select><br/>
-            <input type="button" class="btn btn-primary" value="New Page">
-            <input type="button" class="btn btn-warning" value="Rename Page">
-            <input type="button" class="btn btn-danger" value="Delete Page">
+            <input id="newPage" type="button" class="btn btn-primary" value="New Page">
+            <input id="renamePage" type="button" class="btn btn-warning" value="Rename">
+            <input id="deletePage" type="button" class="btn btn-danger" value="Delete">
           </div>
           <div class="well">
             <h3>Page Options:</h3>
@@ -54,9 +54,17 @@
             <select id="file" name="file" style="width:100%">
               <option value="-">-- File --</option>
             </select><br/>
-            <input id="openFile" type="button" class="btn btn-success" value="View File">
-            <input type="button" class="btn btn-primary" value="Add File">
-            <input type="button" class="btn btn-danger" value="Delete File">
+            <input id="openFile" type="button" class="btn btn-success" value="View">
+            <input id="deleteFile"  type="button" class="btn btn-danger" value="Delete"><br>
+            <form action="_/upload" method="POST" enctype='multipart/form-data'>
+              <table>
+              <tr><td>
+              <input type="file" id="filename" name="filename"/>
+              </td><td>
+              <input type="submit" class="btn btn-primary" value="Add File">
+              </tr>
+              </table>
+            </form>
           </div>
           <div class="well">
             <h3>Page Comments:</h3>

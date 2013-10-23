@@ -7,6 +7,9 @@ $(document).ready(function() {
   var editor = new EpicEditor(opts).load();
 
   $("#page").click(function(){
+    if($("#page").val() == "-"){
+      return;
+    }
     getFile(editor, "pages", $("#page").val());
   });
 
@@ -20,6 +23,62 @@ $(document).ready(function() {
 
   $("#storage").click(function(){
     getStorage(editor);
+  });
+
+  $("#newPage").click(function(){
+    var namespace = $("#namespace").val();
+    var pname = prompt('Page name?', $("#NewPage.md").val());
+    if(pname){
+      $.post('./_/newPage', {ns : namespace, name : pname}, function(data) {
+          listPages();
+          listOptions();
+          // Open the new file
+          getFile(editor, "pages", data);
+        }).error(function(data) {
+          alert(data.responseText);
+        });
+    }
+  });
+
+  $("#renamePage").click(function(){
+    var target = $("#namespace").val()+"/pages/"+$("#page").val();
+    var newName = prompt('New name ?', $("#page").val());
+    if(newName){
+      $.post('./_/rename', {name : newName, file : target}, function(data) {
+          alert(data);
+          listPages();
+          listOptions();
+          listComments();
+        }).error(function(data) {
+          alert(data.responseText);
+        });
+    }
+  });
+
+  $("#deletePage").click(function(){
+    var target = $("#namespace").val()+"/pages/"+$("#page").val();
+    if (confirm('Delete '+target+' ?')) {
+      $.post('./_/remove', {type : "page", file : target}, function(data) {
+        alert(data);
+        listPages();
+        listOptions();
+        listComments();
+      }).error(function(data) {
+        alert(data.responseText);
+      });
+    }
+  });
+
+  $("#deleteFile").click(function(){
+    var target = $("#namespace").val()+"/files/"+$("#file").val();
+    if (confirm('Delete '+target+' ?')) {
+      $.post('./_/remove', {type : "file", file : target}, function(data) {
+        alert(data);
+        listFiles();
+      }).error(function(data) {
+        alert(data.responseText);
+      });
+    }
   });
 
   $("#namespace").click(function(){
@@ -62,9 +121,15 @@ $(document).ready(function() {
   listFiles();
   listComments();
   listStorages(editor);
+
+  // Keep session alive as long as admin page is open
+  setInterval('keepAlive();', '1500000'); // Every 25mn
 });
 
-// Admin stuff
+function keepAlive(){
+  $.get('./_/keepAlive');
+}
+
 function listPages(){
   $.post('./_/nsPages', {} ,
     function( data ) {
