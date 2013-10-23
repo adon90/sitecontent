@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>Admin page</title>
+      <meta name="robots" content="noindex,nofollow" />
+      <link rel='stylesheet' type='text/css' href='tpl/bootstrap.min.css' />
+      <link rel='stylesheet' type='text/css' href='tpl/standard.css' />
+      <link rel='stylesheet' type='text/css' href='tpl/template.css' />
+      <script type="text/javascript" src="tpl/jquery.min.js"></script>
+      <script type="text/javascript" src="tpl/template.js"></script>
+ </head>
+  <body>
+  <div>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container-fluid">
+            <a class="brand" href="#">Fantomato Admin</a>
+            <div class="nav-collapse">
+           </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top:60px">
+      <div class="row-fluid">
+        <div class="span12">
+          <form action="_adminLogin" method="POST">
+            <fieldset>
+              <div class="control-group">
+                <legend>Login</legend>
+                <label>Username</label>
+              </div>
+              <div class="control-group">
+                <input name="login" type="text"/>
+                <label>Password</label>
+                <input name="password" type="password"/>
+              </div>
+              <div class="control-group">
+                <input type="submit" class="btn btn-primary" value="Log-in"/>
+              </div>
+          </form>
+        <div>
+      </div>
+    </div>
+  </body>
+</html>
+
