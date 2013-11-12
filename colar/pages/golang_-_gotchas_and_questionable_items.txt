@@ -5,7 +5,7 @@ This page focuses on the features of Go I found confusing at first or are maybe 
 
 ====Implied pointers====
 While working with pointers is Go is fairly easy, one slightly tricky aspect is to remember which types are implied pointers (passed by reference).
-Once you now them it's not biggie.
+Once you now them it's not a big deal.
 
 Items that are always passed by reference (as a pointer):
   - pointers (obviously)
@@ -13,16 +13,16 @@ Items that are always passed by reference (as a pointer):
   - slices (but NOT arrays !)
   - channels
 
-This is quite practical as you don't have to deal with the pointer syntax as often but definitely good to know.
+This is quite practical as you don't have to deal with the pointer syntax as often but definitely good to memorize.
 
 ====Fatal means fatal====
-Using ''log.Fatal'' causes the whole program to end/panic, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
+Using ''log.Fatal'' means FATAL. It causes the whole program to end, that got me at first as I thought it was as in Java and just meant to log with the fatal "level".
 
 ====Upper / Lower case variables====
 In go a variable starting with a lowercase letter is "package private" while one starting with an uppercase is public.
-I like this, it's a simple and clean convention but it's easy to forget the uppercase letter, especially when using coming from languages.
+I like this, it's a simple and clean convention but it's easy to forget the uppercase letter, especially when using other languages in parallel.
 
-This might not bite you right away, but for example if using reflection to populate an object (ex: JSON), you will find the hard way it causes issues.
+This might not bite you right away, but for example if using reflection to populate an object (ex: JSON), you will find the hard way that your lower case var will not be set !
 
 ====For loops====
 There are several types of for loops, but a common idiom is to use it with range to iterate over items.
@@ -53,7 +53,7 @@ On the other hand it's also fairly easy in Go to ignore an error, accidentally o
 
 That could happen if you assign the error to _, in which case it's your fault.
 
-But for methods that on return an error the compiler does not force yo to assign or handle it in which case it might just "vanish" and it will be difficult to find what the issue is !
+But for methods that only return an error the compiler does not force you to assign or handle it in which case it might just "vanish" and it will be difficult to find what the issue is !
 
 I highly recommend using a tool such as this one to find any unhanded errors:
 [[https://github.com/kisielk/errcheck]]
@@ -66,12 +66,12 @@ In my opinion that is a **huge** oversight and as Go is growing this will very s
 I think This blog post by Dave Cheney covers this very well and I basically agree with all he said:
 [[http://dave.cheney.net/2013/10/10/why-i-think-go-package-management-is-important]]
 
-====interfaces Implementations====
+====Interfaces Implementations====
 Because a type implements an interface just by implementing it's method but without directly being marked as an implementation it seem there is no simple way to find all the implementations of an interface, unless I'm missing something.
 
 I suppose a tool could do it using reflection, but it seem to be a drawback as you can't simply do a quick search / grep as you could in many other languages since the Implementation does not have to mention the interface by name.
 
-I would probably use a convention of "naming" the interface in the implementation doc(godoc) to help with this.
+I will probably use a convention of "naming" the interface in the implementation doc(godoc) to help with this.
 
 ====No auto-casting / auto-boxing====
 There is no syntactic sugar here, you need to be specific about your intent either by casting or type assertion.
@@ -91,7 +91,7 @@ Go is compiling to native code it can't easily interop with other languages(ie: 
 While there are tons of C/C++ libraries that can be leverage, I feel they are often more dated or kludgey to work with than what I would find for say the JVM.
 
 ====Not very "functional" / global methods====
-The standard Go libraries are a little low on functionalities sometimes.
+The standard Go libraries are a little low on functionality sometimes.
 
 You won't find much heavy "objects"(well structs) with lots and lots of methods.
 Most likely for performance reasons they decided to keep structs lightweight but sometimes that feels less convenient.

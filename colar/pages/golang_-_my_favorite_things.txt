@@ -32,7 +32,7 @@ type Semi struct{
 </code>
 
 ====Interfaces / Duck typing====
-Go also has interfaces, but it's very lose and flexible.
+Go also has interfaces, but it's very loose and flexible.
 A structure only needs to implement the interface methods to be considered a valid implementation.
 This provide an idiom very similar to duck typing, while keeping most of the static typing benefits.
 It's also quite handy when doing mock-up objects and the like.
@@ -57,20 +57,20 @@ func main() {
 </code>
 
 ====No JVM====
-  I've been a JVM guy since 1997, used mostly JVM languages ever since, and while the JVM is a great platform with fantastic tooling it also has drawbacks.
+I've been a JVM guy since 1997, used mostly JVM languages ever since, and while the JVM is a great platform with fantastic tooling it also has drawbacks.
 
   It's quite large and slow to start-up, it's not truly open-source(well Oracle's impl anyway) and installing it can be a pain, licensing complications on Unixes, crapware on windows and it's gone downhill even more since Oracle has taken over.
 
-  GoLang doesn't need any VM per say, it just compiles standalone binaries but still makes it quite easy to cross-compile when needed.
+  GoLang doesn't need any VM, it just compiles standalone binaries but still makes it quite easy to cross-compile when needed.
 
   Go is also fully and truly  open-source.
 
 ====Static & strong typing system====
 Personally I have always been a proponent of that because it provides better tooling, better performance, better maintainability and also more predictable runtime behavior.
 
-So biggest drawback is usually productivity, I feel that C++ and Java(J2EE) have pushed up the usage of dynamic langugaes because they somewhat fail here.
+So biggest drawback is usually productivity, I feel that C++ and Java(J2EE) have pushed up the usage of dynamic languagaes because they somewhat fail here.
 
-Go also shines here, it feels a lot like a dynamic language because:
+Go also shines in regards to this, it feels a lot like a dynamic language because:
   - Concise syntax, not quite as nice as say Python, but pretty close, definitely much less verbose than Java.
   - Type inference: This makes declaring types rarely required and thus feels much more dynamic, ''i := 5;  s:="hello"''
   - The fact that it's not OO also cuts down a lot on the boilerplate code, again more concise.
@@ -99,13 +99,13 @@ There is no pointer arithmetic, this prevents a lot of dangerous and complex iss
 Go was clearly designed for performance and it's already close to Java's.
 That might not sound great but Java is really optimized nowadays and when it came out it was considered really slow, so the fact that Go is already in the ballpark of Java is very encouraging.
 
-Also that means Java is already at leas 20x faster than Ruby, Python or PHP.
+Also that means Go is already at least 20x faster than Ruby, Python or PHP.
 
 Because it compiles into a binary it has the potential to get performance close to C++ eventually.
 
 It's also designed for highly concurrent systems and use much less memory than most other modern languages (10x less than Java is not uncommon)
 
-With all that said Go is garbage collected so you don't have to manually deal with memory, and even though the garbage collector has not been optimized much yet it's already very effective.
+With all that said Go is garbage collected so you don't have to manually deal with memory, and even though the garbage collector has not been optimized much yet it's already effective.
 
 ====Opinionated====
 Go is **VERY** opinionated, for the mots part there is only one idiomatic way to do things and anything else is discouraged.
@@ -123,9 +123,9 @@ So personally I'm all for it, it might be annoying for the first few days but it
 ====Easy to learn====
 As just mentioned the "one way to write it" philosophy helps a lot learning since almost all code is consistent with idiomatic Go.
 
-The syntax is efficient and very lightweight, for example there is only one kind of loop(for) and the number ok keywords is very very small.
+The syntax is efficient and very lightweight, for example there is only one kind of loop(for) and the number of keywords is very small.
 
-It's definitely a change from OO languages but you could argue that Go is an easier language to pick up especially for somebody who is not an OO expert yet.
+It's definitely a change from OO languages but you could argue that Go is an easier language to pick up especially for somebody who is not an OO "tainted" yet.
 
 ====Little things====
   - Fully Unicode, variables can be named using any unicode characters.
